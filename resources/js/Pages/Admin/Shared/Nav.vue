@@ -26,6 +26,14 @@
                   <MenuItems class="origin-top-right absolute right-0 mt-2 w-48 rounded-md shadow-lg py-1 bg-white ring-1 ring-black ring-opacity-5 focus:outline-none">
                     <MenuItem v-slot="{ active }">
                         <Link 
+                            href="/company-profile" 
+                            as="a"
+                            :class="[active ? 'bg-gray-100' : '', 'block px-4 py-2 text-sm text-gray-700']"
+                            >Company Profile
+                        </Link>
+                    </MenuItem>
+                    <MenuItem v-slot="{ active }">
+                        <Link 
                             href="/settings" 
                             as="a"
                             :class="[active ? 'bg-gray-100' : '', 'block px-4 py-2 text-sm text-gray-700']"
@@ -72,6 +80,7 @@
             </div>
           </div>
           <div class="mt-3 px-2 space-y-1">
+            <Link as="a" href="/company-profile" class="block px-3 py-2 rounded-md text-base font-medium text-gray-400 hover:text-white hover:bg-gray-700">Company Profile</Link>
             <Link as="a" href="/setting" class="block px-3 py-2 rounded-md text-base font-medium text-gray-400 hover:text-white hover:bg-gray-700">Settings</Link>
             <Link as="button" href="/logout" method="post" class="block px-3 py-2 rounded-md text-base font-medium text-gray-400 hover:text-white hover:bg-gray-700">Logout</Link>
           </div>
@@ -94,8 +103,7 @@ const user = {
 }
 const navigation = [
   { name: 'Dashboard', href: '/dashboard', component: 'Admin/Dashboard'},
-  { name: 'Company Profile', href: '/company-profile', component: 'Admin/CompanyProfile'},
-  { name: 'Lawyers', href: '/lawyers', component: 'Admin/Lawyers'},
-  { name: 'Clerks', href: '/clerks', component: 'Admin/Clerks'},
+  { name: 'Lawyers', href: '/lawyers', component: 'Admin/Lawyers/Index'},
+  { name: 'Clerks', href: '/clerks', component: 'Admin/Clerks/Index'},
 ]
 </script>

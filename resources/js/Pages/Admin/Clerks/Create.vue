@@ -8,7 +8,7 @@
             <div class="mb-6">
                 <label 
                     for="name" 
-                    class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300"
+                    class="block mb-2 text-sm font-medium text-gray-900"
                     >
                     Name
                 </label>
@@ -16,17 +16,17 @@
                     v-model="form.name"
                     type="text" 
                     id="name" 
-                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
+                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" 
                     placeholder="" 
                     required
                 />
-                <p v-if="form.errors.name" v-text="form.errors.name" class="mt-2 text-sm text-red-600 dark:text-red-500"></p>
+                <p v-if="form.errors.name" v-text="form.errors.name" class="mt-2 text-sm text-red-600"></p>
             </div>
 
             <div class="mb-6">
                 <label 
                     for="identification_num" 
-                    class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300"
+                    class="block mb-2 text-sm font-medium text-gray-900"
                     >
                     Identification Number
                 </label>
@@ -34,17 +34,17 @@
                     v-model="form.identification_num"
                     type="text" 
                     id="identification_num" 
-                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
+                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" 
                     placeholder="" 
                     required
                 />
-                <p v-if="form.errors.identification_num" v-text="form.errors.identification_num" class="mt-2 text-sm text-red-600 dark:text-red-500"></p>
+                <p v-if="form.errors.identification_num" v-text="form.errors.identification_num" class="mt-2 text-sm text-red-600"></p>
             </div>
 
             <div class="mb-6">
                 <label 
                     for="employee_id" 
-                    class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300"
+                    class="block mb-2 text-sm font-medium text-gray-900"
                     >
                     Employee ID
                 </label>
@@ -52,17 +52,17 @@
                     v-model="form.employee_id"
                     type="text" 
                     id="employee_id" 
-                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
+                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" 
                     placeholder="" 
                     required
                 />
-                <p v-if="form.errors.employee_id" v-text="form.errors.employee_id" class="mt-2 text-sm text-red-600 dark:text-red-500"></p>
+                <p v-if="form.errors.employee_id" v-text="form.errors.employee_id" class="mt-2 text-sm text-red-600"></p>
             </div>
 
             <div class="mb-6">
                 <label 
                     for="email" 
-                    class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300"
+                    class="block mb-2 text-sm font-medium text-gray-900"
                     >
                     Email Address
                 </label>
@@ -70,17 +70,17 @@
                     v-model="form.email"
                     type="email" 
                     id="email" 
-                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
+                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" 
                     placeholder="" 
                     required
                 />
-                <p v-if="form.errors.email" v-text="form.errors.email" class="mt-2 text-sm text-red-600 dark:text-red-500"></p>
+                <p v-if="form.errors.email" v-text="form.errors.email" class="mt-2 text-sm text-red-600"></p>
             </div>
 
             <div class="mb-6">
                 <label 
                     for="password" 
-                    class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300"
+                    class="block mb-2 text-sm font-medium text-gray-900"
                     >
                     Password
                 </label>
@@ -88,19 +88,28 @@
                     v-model="form.password"
                     type="password" 
                     id="password" 
-                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
+                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" 
                     required  
                 />
-                <p v-if="form.errors.password" v-text="form.errors.password" class="mt-2 text-sm text-red-600 dark:text-red-500"></p>
+                <p v-if="form.errors.password" v-text="form.errors.password" class="mt-2 text-sm text-red-600"></p>
             </div>
 
             <button 
                 type="submit" 
-                class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+                class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center"
                 :disabled="form.processing"
                 >
                 Submit
             </button>
+
+            <Link 
+                href="/clerks"
+                as="button"  
+                class="ml-2 text-gray-900 focus:outline-none bg-white border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-200 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center"
+                :disabled="form.processing"
+                >
+                Cancel
+            </Link>
         </form>
       </div>
     </main>  

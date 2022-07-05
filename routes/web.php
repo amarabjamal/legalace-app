@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Request;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\ClerkController;
+use App\Http\Controllers\CompanyController;
 
 /*
 |--------------------------------------------------------------------------
@@ -73,18 +74,20 @@ Route::middleware('auth')->group(function () {
     // Route::get('/clerks', function () {
     //     return Inertia::render('Admin/Clerks');
     // });
-    
-    Route::get('/company-profile', function () {
-        return Inertia::render('Admin/CompanyProfile');
-    });
+
+    Route::resource('company-profile', CompanyController::class)->except(['show', 'edit', 'destroy']);
+    Route::get('company-profile/edit', [CompanyController::class, 'edit'])->name('company-profile.edit');
+    // Route::get('/company-profile', function () {
+    //     return Inertia::render('Admin/CompanyProfile');
+    // });
     
     Route::get('/settings', function () {
         return Inertia::render('Admin/Settings');
     });
     
-    Route::post('/logout', function () {
-        dd('logging out');
-    });
+    // Route::post('/logout', function () {
+    //     dd('logging out');
+    // });
 
 });
 

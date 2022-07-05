@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\Clerk;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
@@ -14,7 +15,8 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        \App\Models\User::factory(100)->create();
+        //\App\Models\User::factory(100)->create();
+        Clerk::factory(90)->create();
 
         // \App\Models\User::factory()->create([
         //     'name' => 'Test User',

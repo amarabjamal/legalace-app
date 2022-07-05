@@ -107,7 +107,7 @@ class ClerkController extends Controller
             'email' => $request->email,
         ]);
 
-        return redirect('/clerks');
+        return redirect()->route('clerks.index')->with('message', 'Successfully added new clerk account.');
     }
 
     /**
@@ -120,6 +120,6 @@ class ClerkController extends Controller
     {
         $clerk->delete();   
 
-        return redirect('/clerks');
+        return redirect()->route('clerks.index')->with('message', 'Successfully deleted the clerk account.');
     }
 }
