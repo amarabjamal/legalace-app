@@ -2,9 +2,8 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Models\User;
 use Inertia\Inertia;
-use App\Models\Clerk;
+use App\Models\User;
 use App\Models\Company;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -14,12 +13,11 @@ class DashboardController extends Controller
 {
     public function index()
     {
-        $userId = Auth::id();
+        $user = Auth::user();
 
-        $companyProfile = Company::where('user_id', '=', $userId)->get();
+        $companyProfile = Company::where('id', '=', $user->company_profile_id)->get();
         
         return Inertia::render('Admin/Dashboard', [
-            'total_clerks' => Clerk::all()->count(),
             'total_users' => User::all()->count(),
             'isCompanyProfileConfigured' => sizeof($companyProfile) >= 1 ? true : false,
         ]);
