@@ -33,7 +33,7 @@ return new class extends Migration
             $table->string('employee_id')->unique();
             $table->string('contact_num');
             $table->date('birthdate');
-            $table->foreignId('company_profile_id')->constrained("company_profile", "id");
+            $table->foreignId('company_profile_id')->constrained("companies", "id");
             $table->rememberToken();
             $table->timestamps();
         });
@@ -46,7 +46,8 @@ return new class extends Migration
 
         Schema::create('user_role', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
+            $table->foreignId('user_id')->constrained("users", "id");
+            $table->foreignId('role_id')->constrained("roles", "id");
         });
         
     }
