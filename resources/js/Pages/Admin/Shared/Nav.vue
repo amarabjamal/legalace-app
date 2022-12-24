@@ -24,6 +24,13 @@
                 </div>
                 <transition enter-active-class="transition ease-out duration-100" enter-from-class="transform opacity-0 scale-95" enter-to-class="transform opacity-100 scale-100" leave-active-class="transition ease-in duration-75" leave-from-class="transform opacity-100 scale-100" leave-to-class="transform opacity-0 scale-95">
                   <MenuItems class="origin-top-right absolute right-0 mt-2 w-48 rounded-md shadow-lg py-1 bg-white ring-1 ring-black ring-opacity-5 focus:outline-none">
+                    <MenuItem>
+                        <span
+                          :class="[active ? 'bg-gray-100' : '', 'block border-b-2 px-4 py-2 text-sm text-gray-700']"
+                          >
+                          <span>Signed in as</span><br/><span class="font-bold">{{ $page.props.auth.user.username }}</span>
+                        </span>
+                    </MenuItem>
                     <MenuItem v-slot="{ active }">
                         <Link 
                             href="/company-profile" 
@@ -45,7 +52,7 @@
                             href="/logout" 
                             as="button"
                             method="post"
-                            :class="[active ? 'bg-gray-100' : '', 'block px-4 py-2 text-sm text-gray-700']"
+                            :class="[active ? 'bg-gray-100' : '', 'min-w-full block px-4 py-2 text-sm text-gray-700 text-left']"
                             >Logout
                         </Link>
                     </MenuItem>

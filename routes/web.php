@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\DashboardController;
 use App\Models\User;
 use Inertia\Inertia;
 use Illuminate\Support\Facades\Route;
@@ -7,6 +8,7 @@ use Illuminate\Support\Facades\Request;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\ClerkController;
 use App\Http\Controllers\CompanyController;
+use Illuminate\Support\Facades\Auth;
 
 /*
 |--------------------------------------------------------------------------
@@ -21,17 +23,29 @@ use App\Http\Controllers\CompanyController;
 
 Route::get('login', [LoginController::class, 'create'])->name('login');
 Route::post('login', [LoginController::class, 'store']);
-Route::post('logout', [LoginController::class, 'destroy'])->middleware('auth');
+Route::post('logout', [LoginController::class, 'destroy'])->middleware('auth:admin');
 
-Route::middleware('auth')->group(function () {
+Route::get('/register', function () {
+    return Inertia::render('Auth/Register');
+});
+Route::post('/register', function () {
+    // validate the request
+    $attributes = Request::validate([
+        'name' => 'required',
+        'email' => ['required', 'email'],
+        'password' => 'required',
+    ]);
+    // create the user
+    User::create($attributes);
+    // redirect
+    return redirect('/login');
+});
 
-    Route::get('/', function () {
-        return Inertia::render('Admin/Dashboard');
-    });
+Route::middleware('auth:admin')->group(function () {
+
+    Route::get('/', [DashboardController::class, 'index']);
     
-    Route::get('/dashboard', function () {
-        return Inertia::render('Admin/Dashboard');
-    });
+    Route::get('/dashboard', [DashboardController::class, 'index']);
     
     Route::get('/lawyers', function () {
         return Inertia::render('Admin/Lawyers/Index', [
@@ -82,7 +96,8 @@ Route::middleware('auth')->group(function () {
     // });
     
     Route::get('/settings', function () {
-        return Inertia::render('Admin/Settings');
+        $userId = Auth::id();
+        return Inertia::render('Admin/Settings', [$userId]);
     });
     
     // Route::post('/logout', function () {
