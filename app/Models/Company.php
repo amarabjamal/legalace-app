@@ -9,12 +9,21 @@ class Company extends Model
 {
     use HasFactory;
 
+    protected $table = 'companies';
+    protected $primaryKey = 'id';
+    protected $attributes = [
+        'name' => "Default",
+        'reg_no' => "Default",
+        'address' => "Default",
+        'email' => "Default",
+        'website' => "Default",
+    ];
+
     protected $fillable = [
         'name',
-        'registration_no',
+        'reg_no',
         'address',
         'email',
         'website',
-        'user_id'
     ];
 }

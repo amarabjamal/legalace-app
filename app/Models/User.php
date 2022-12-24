@@ -21,6 +21,11 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'id_num',
+        'employee_id',
+        'contact_num',
+        'birthdate',
+        'company_profile_id',
     ];
 
     /**
@@ -45,5 +50,6 @@ class User extends Authenticatable
     public function setPasswordAttribute($value)
     {
         $this->attributes['password'] = bcrypt($value);
+        
     }
 }
