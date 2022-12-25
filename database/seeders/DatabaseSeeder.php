@@ -8,6 +8,8 @@ use Illuminate\Database\Seeder;
 use App\Models\Role;
 use App\Models\User;
 use App\Models\Company;
+use App\Models\Client;
+use Illuminate\Support\Facades\DB;
 
 
 class DatabaseSeeder extends Seeder
@@ -32,6 +34,21 @@ class DatabaseSeeder extends Seeder
         foreach($roles as $role) {
             Role::factory()->create(['name' => $role]);
         }
+
+        $id_type = [
+            [
+                'name' =>'Malaysian Identification Card',
+                'slug' => 'myic'
+            ],
+            [
+                'name' =>'Passport',
+                'slug' => 'passport'
+            ],
+        ];
+
+        DB::table('id_types')->insert($id_type);
+        Client::factory(10)->create();
+
         // Role::factory()->create([
         //     'name' => 'Admin'
         // ]);
