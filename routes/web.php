@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Request;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\ClerkController;
 use App\Http\Controllers\CompanyController;
+use App\Http\Controllers\Lawyer\DashboardController as LawyerDashboardController;
 use Illuminate\Support\Facades\Auth;
 
 /*
@@ -41,7 +42,7 @@ Route::post('/register', function () {
     return redirect('/login');
 });
 
-Route::middleware('auth:admin')->group(function () {
+Route::middleware('admin')->group(function () {
 
     Route::get('/', [DashboardController::class, 'index']);
     
@@ -106,3 +107,8 @@ Route::middleware('auth:admin')->group(function () {
 
 });
 
+Route::middleware('lawyer')->group(function () {
+    Route::get('/', [LawyerDashboardController::class, 'index']);
+    
+    Route::get('/dashboard', [LawyerDashboardController::class, 'index']);
+});

@@ -26,4 +26,8 @@ class Company extends Model
         'email',
         'website',
     ];
+
+    public function user() {
+        return $this->hasMany(User::class);
+    }
 }

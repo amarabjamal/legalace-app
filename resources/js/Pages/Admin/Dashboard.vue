@@ -25,6 +25,8 @@
                 <p class="font-normal text-gray-700 dark:text-gray-400">Total Clerks</p>
                 <h5 class="mb-2 text-4xl font-bold tracking-tight text-gray-900 dark:text-white">{{ $page.props.total_clerks }}</h5>
             </Link>
+
+            <h5 class="mb-2 text-4xl font-bold tracking-tight text-gray-900 dark:text-white">Roles: {{ $page.props.role }}</h5>
         </div>
       </div>
     </main>
