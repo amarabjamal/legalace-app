@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Inertia\Inertia;
+use App\Models\Client;
 
 class ClientController extends Controller
 {
@@ -16,16 +17,16 @@ class ClientController extends Controller
 
     public function create()
     {
-        // $userId = Auth::id();
+        $userId = Auth::id();
 
-        // $companyProfile = Company::where('user_id', '=', $userId)->get();
+        $client = Client::where('user_id', '=', $userId)->get();
 
-        // if (sizeof($companyProfile) < 1)
-        // {
+        if (sizeof($client) < 1)
+        {
             return Inertia::render('Lawyer/Client/Create');
-        // }
+        }
         
-        // return redirect()->route('company-profile.index');
+        return redirect()->route('clients.index');
     }
 
 }

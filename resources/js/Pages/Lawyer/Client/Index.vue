@@ -71,14 +71,29 @@ import Layout from "../Shared/Layout";
 import Header from "../Shared/Header";
 import Sidebar from "../Shared/Sidebar";
 import Pagination from "../Shared/Pagination";
+import { Inertia } from "@inertiajs/inertia";
+import throttle from 'lodash/throttle';
+import { ref, watch } from "vue";
 
 
 export default { 
+    setup(props) {
+        let searchClients = ref(props.filters.search);
+
+        watch(searchClients, throttle(value => {
+            Inertia.get('/clients', { search: value }, {
+                preserveState: true,
+                replace: true,
+            });
+        }, 500));
+
+        return { searchClients };
+    },
     props: { 
         clients: Object,
         filters: Object
      },
-    components: { Head, Header, Sidebar, Pagination },
+    components: { Head, Header, Sidebar, Pagination, ref },
     layout: Layout,
 };
 </script>
