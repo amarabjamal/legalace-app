@@ -33,7 +33,7 @@ return new class extends Migration
             $table->string('employee_id')->unique();
             $table->string('contact_num');
             $table->date('birthdate');
-            $table->foreignId('company_profile_id')->constrained("companies", "id");
+            $table->foreignId('company_id')->constrained("companies", "id");
             $table->rememberToken();
             $table->timestamps();
         });

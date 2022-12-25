@@ -21,18 +21,22 @@ class DashboardController extends Controller
             array_push($roles, $userRole->role->name);
         }
 
-        $companyProfile = Company::where('id', '=', $user->company_profile_id)->get();
+        // $companyProfile = Company::where('id', '=', $user->company_id)->get();
+        $company = $user->company;
+        $companyName = $user->company->name;
 
         if($roles !== null) {
             if(in_array("admin", $roles)){
                 return Inertia::render('Admin/Dashboard', [
                     'total_users' => User::all()->count(),
-                    'isCompanyProfileConfigured' => sizeof($companyProfile) >= 1 ? true : false,
+                    'isCompanyProfileConfigured' => sizeof($company) >= 1 ? true : false,
                     'role' => $roles
                 ]);
             }
             else if(in_array("lawyer", $roles)){
                 return Inertia::render('Lawyer/Dashboard', [
+                    'user' => $user,
+                    'company' => $companyName,
                     'role' => $roles
                 ]);
             }

@@ -27,7 +27,7 @@ class UserFactory extends Factory
             'employee_id'=>fake()->numerify('CL####'),
             'contact_num'=>'',
             'birthdate'=>'2000-12-05',
-            'company_profile_id'=>1,
+            'company_id'=>1,
             'remember_token' => Str::random(10),
         ];
     }

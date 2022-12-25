@@ -22,7 +22,7 @@ class DashboardController extends Controller
             array_push($roles, $userRole->role->name);
         }
 
-        $companyProfile = Company::where('id', '=', $user->company_profile_id)->get();
+        $companyProfile = Company::where('id', '=', $user->company_id)->get();
         
         return Inertia::render('Admin/Dashboard', [
             'total_users' => User::all()->count(),
