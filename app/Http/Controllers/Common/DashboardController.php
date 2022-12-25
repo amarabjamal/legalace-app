@@ -29,7 +29,7 @@ class DashboardController extends Controller
             if(in_array("admin", $roles)){
                 return Inertia::render('Admin/Dashboard', [
                     'total_users' => User::all()->count(),
-                    'isCompanyProfileConfigured' => sizeof($company) >= 1 ? true : false,
+                    'isCompanyProfileConfigured' => $company != null ? true : false,
                     'role' => $roles
                 ]);
             }
