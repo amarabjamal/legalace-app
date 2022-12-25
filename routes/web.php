@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\ManageUsers;
 use App\Models\User;
 use Inertia\Inertia;
 use Illuminate\Support\Facades\Route;
@@ -43,63 +44,19 @@ Route::post('/register', function () {
 
 Route::middleware('admin')->group(function () {
     
-    Route::get('/lawyers', function () {
-        return Inertia::render('Admin/Lawyers/Index', [
-            'users' => User::query()
-                ->when(Request::input('search'), function ($query, $search) {
-                    $query->where('name', 'like', "%{$search}%");
-                })
-                ->paginate(10)
-                ->withQueryString()
-                ->through(fn($user) => [
-                    'id' => $user->id,
-                    'name' => $user->name
-                ]),
-            'filters' => Request::only(['search']),
-        ]);
-    });
-    
-    Route::get('/lawyers/create', function () {
-        return Inertia::render('Admin/Lawyers/Create');
-    });
+    Route::resources([
+        'users' => ManageUsers::class,
+    ]);
 
-    Route::get('/lawyers/:id/edit', function () {
-        return Inertia::render('Admin/Lawyers/Edit');
-    });
-    
-    Route::post('/lawyers', function () {
-        // validate the request
-        $attributes = Request::validate([
-            'name' => 'required',
-            'email' => ['required', 'email'],
-            'password' => 'required',
-        ]);
-        // create the user
-        User::create($attributes);
-        // redirect
-        return redirect('/lawyers');
-    });
-
-    Route::resource('clerks', ClerkController::class)->except('show');
-    // Route::get('/clerks', function () {
-    //     return Inertia::render('Admin/Clerks');
-    // });
+   // Route::resource('clerks', ClerkController::class)->except('show');
 
     Route::resource('company-profile', CompanyController::class)->except(['show', 'edit', 'destroy']);
     Route::get('company-profile/edit', [CompanyController::class, 'edit'])->name('company-profile.edit');
-    // Route::get('/company-profile', function () {
-    //     return Inertia::render('Admin/CompanyProfile');
-    // });
     
     Route::get('/settings', function () {
         $userId = Auth::id();
         return Inertia::render('Admin/Settings', [$userId]);
     });
-    
-    // Route::post('/logout', function () {
-    //     dd('logging out');
-    // });
-
 });
 
 
