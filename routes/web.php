@@ -1,14 +1,13 @@
 <?php
 
-use App\Http\Controllers\Admin\DashboardController;
 use App\Models\User;
 use Inertia\Inertia;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Request;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\ClerkController;
+use App\Http\Controllers\Common\DashboardController;
 use App\Http\Controllers\CompanyController;
-use App\Http\Controllers\Lawyer\DashboardController as LawyerDashboardController;
 use Illuminate\Support\Facades\Auth;
 
 /*
@@ -43,10 +42,6 @@ Route::post('/register', function () {
 });
 
 Route::middleware('admin')->group(function () {
-
-    Route::get('/', [DashboardController::class, 'index']);
-    
-    Route::get('/dashboard', [DashboardController::class, 'index']);
     
     Route::get('/lawyers', function () {
         return Inertia::render('Admin/Lawyers/Index', [
@@ -107,8 +102,10 @@ Route::middleware('admin')->group(function () {
 
 });
 
-Route::middleware('lawyer')->group(function () {
-    Route::get('/', [LawyerDashboardController::class, 'index']);
+
+//Common routes for all users
+Route::middleware('is.valid.user')->group(function () {
+    Route::get('/', [DashboardController::class, 'index']);
     
-    Route::get('/dashboard', [LawyerDashboardController::class, 'index']);
+    Route::get('/dashboard', [DashboardController::class, 'index']);
 });
