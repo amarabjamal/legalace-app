@@ -21,8 +21,6 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        //\App\Models\User::factory(100)->create();
-        // Clerk::factory(90)->create();
         Company::factory(10)->create();
         User::factory(10)->create();
 
@@ -35,7 +33,7 @@ class DatabaseSeeder extends Seeder
             Role::factory()->create(['name' => $role]);
         }
 
-        $id_type = [
+        $id_types = [
             [
                 'name' =>'Malaysian Identification Card',
                 'slug' => 'myic'
@@ -46,19 +44,20 @@ class DatabaseSeeder extends Seeder
             ],
         ];
 
-        DB::table('id_types')->insert($id_type);
+        $user_role = [
+            [
+                'user_id' => 1,
+                'role_id' => 1
+            ],
+            [
+                'user_id' => 2,
+                'role_id' => 2
+            ]
+        ];
+
+        DB::table('user_role')->insert($user_role);
+
+        DB::table('id_types')->insert($id_types);
         Client::factory(10)->create();
-
-        // Role::factory()->create([
-        //     'name' => 'Admin'
-        // ]);
-        // Role::factory()->create([
-        //     'name'=>'Lawyer'
-        // ]);
-
-        // \App\Models\User::factory()->create([
-        //     'name' => 'Test User',
-        //     'email' => 'test@example.com',
-        // ]);
     }
 }
