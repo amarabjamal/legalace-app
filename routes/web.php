@@ -1,6 +1,7 @@
 <?php
 
 use App\Models\User;
+use App\Models\Client;
 use Inertia\Inertia;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Request;
@@ -8,6 +9,7 @@ use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\ClerkController;
 use App\Http\Controllers\Common\DashboardController;
 use App\Http\Controllers\CompanyController;
+use App\Http\Controllers\ClientController;
 use Illuminate\Support\Facades\Auth;
 
 /*
@@ -109,3 +111,27 @@ Route::middleware('is.valid.user')->group(function () {
     
     Route::get('/dashboard', [DashboardController::class, 'index']);
 });
+
+// Route::get('/clients', [ClientController::class, 'index']);
+Route::get('/clients', function () {
+    return Inertia::render('Lawyer/Client/Index', [
+        'clients' => Client::query()
+            ->when(Request::input('search'), function ($query, $search) {
+                $query->where('name', 'like', "%{$search}%");
+            })
+            ->paginate(10)
+            ->withQueryString()
+            ->through(fn($user) => [
+                'id' => $user->id,
+                'name' => $user->name
+            ]),
+        'filters' => Request::only(['search']),
+    ]);
+});
+Route::get('/clients/create', function () {
+    return Inertia::render('Lawyer/Client/Create');
+});
+
+// Route::get('/clients/:id/edit', function () {
+//     return Inertia::render('Admin/Lawyers/Edit');
+// });
