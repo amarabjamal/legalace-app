@@ -8,7 +8,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 
-class User extends Authenticatable
+class Clerk extends Authenticatable
 {
     use HasApiTokens, HasFactory, Notifiable;
 
@@ -19,13 +19,10 @@ class User extends Authenticatable
      */
     protected $fillable = [
         'name',
+        'identification_num',
+        'employee_id',
         'email',
         'password',
-        'id_num',
-        'employee_id',
-        'contact_num',
-        'birthdate',
-        'company_id',
     ];
 
     /**
@@ -35,10 +32,6 @@ class User extends Authenticatable
      */
     protected $hidden = [
         'password',
-        'remember_token',
-        'email_verified_at',
-        'created_at',
-        'updated_at'
     ];
 
     /**
@@ -48,24 +41,10 @@ class User extends Authenticatable
      */
     protected $casts = [
         'email_verified_at' => 'datetime',
-        'birthdate' => 'date',
     ];
 
     public function setPasswordAttribute($value)
     {
         $this->attributes['password'] = bcrypt($value);
-        
-    }
-
-    public function userRoles() {
-        return $this->hasMany(UserRole::class);
-    }
-
-    public function company() {
-        return $this->belongsTo(Company::class);
-    }
-
-    public function clients() {
-        return $this->hasMany(Client::class);
     }
 }

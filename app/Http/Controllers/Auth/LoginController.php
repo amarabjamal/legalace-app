@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Auth;
 use Inertia\Inertia;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 
 class LoginController extends Controller
@@ -24,7 +25,25 @@ class LoginController extends Controller
         if (Auth::attempt($credentials)) {
             $request->session()->regenerate();
  
-            return redirect()->intended('dashboard');
+            $userRoles = User::findOrFail(Auth::id())->userRoles;
+            $roles = array();
+
+            foreach($userRoles as $userRole) {
+                array_push($roles, $userRole->role->name);
+            }
+
+            if($roles != null) {   
+                if(Auth::check() && in_array("admin", $roles)){
+                    return redirect()->intended('dashboard');
+                } elseif(Auth::check() && in_array("lawyer", $roles)){
+                    return redirect()->intended('dashboard');
+                }
+            } else {
+                return back()->withErrors([
+                    'email' => 'The user is no assigned a role.',
+                ]);
+            }
+            
         }
  
         return back()->withErrors([

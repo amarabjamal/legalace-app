@@ -5,6 +5,10 @@ use Inertia\Inertia;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Request;
 use App\Http\Controllers\Auth\LoginController;
+use App\Http\Controllers\ClerkController;
+use App\Http\Controllers\Common\DashboardController;
+use App\Http\Controllers\CompanyController;
+use Illuminate\Support\Facades\Auth;
 
 /*
 |--------------------------------------------------------------------------
@@ -19,17 +23,25 @@ use App\Http\Controllers\Auth\LoginController;
 
 Route::get('login', [LoginController::class, 'create'])->name('login');
 Route::post('login', [LoginController::class, 'store']);
-Route::post('logout', [LoginController::class, 'destroy'])->middleware('auth');
+Route::post('logout', [LoginController::class, 'destroy'])->middleware('auth:admin');
 
-Route::middleware('auth')->group(function () {
+Route::get('/register', function () {
+    return Inertia::render('Auth/Register');
+});
+Route::post('/register', function () {
+    // validate the request
+    $attributes = Request::validate([
+        'name' => 'required',
+        'email' => ['required', 'email'],
+        'password' => 'required',
+    ]);
+    // create the user
+    User::create($attributes);
+    // redirect
+    return redirect('/login');
+});
 
-    Route::get('/', function () {
-        return Inertia::render('Admin/Dashboard');
-    });
-    
-    Route::get('/dashboard', function () {
-        return Inertia::render('Admin/Dashboard');
-    });
+Route::middleware('admin')->group(function () {
     
     Route::get('/lawyers', function () {
         return Inertia::render('Admin/Lawyers/Index', [
@@ -67,17 +79,21 @@ Route::middleware('auth')->group(function () {
         // redirect
         return redirect('/lawyers');
     });
-    
-    Route::get('/clerks', function () {
-        return Inertia::render('Admin/Clerks');
-    });
-    
-    Route::get('/company-profile', function () {
-        return Inertia::render('Admin/CompanyProfile');
-    });
+
+    Route::resource('clerks', ClerkController::class)->except('show');
+    // Route::get('/clerks', function () {
+    //     return Inertia::render('Admin/Clerks');
+    // });
+
+    Route::resource('company-profile', CompanyController::class)->except(['show', 'edit', 'destroy']);
+    Route::get('company-profile/edit', [CompanyController::class, 'edit'])->name('company-profile.edit');
+    // Route::get('/company-profile', function () {
+    //     return Inertia::render('Admin/CompanyProfile');
+    // });
     
     Route::get('/settings', function () {
-        return Inertia::render('Admin/Settings');
+        $userId = Auth::id();
+        return Inertia::render('Admin/Settings', [$userId]);
     });
     
     // Route::post('/logout', function () {
@@ -86,3 +102,10 @@ Route::middleware('auth')->group(function () {
 
 });
 
+
+//Common routes for all users
+Route::middleware('is.valid.user')->group(function () {
+    Route::get('/', [DashboardController::class, 'index']);
+    
+    Route::get('/dashboard', [DashboardController::class, 'index']);
+});
