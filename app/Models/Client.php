@@ -15,6 +15,7 @@ class Client extends Model
     'phone_number',
     'address',
     'timestamps',
+    'created_by'
     ];
 
     use HasFactory;

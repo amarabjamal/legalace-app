@@ -41,6 +41,15 @@
                             Name
                         </th>
                         <th scope="col" class="px-6 py-3">
+                            ID Num
+                        </th>
+                        <th scope="col" class="px-6 py-3">
+                            Email
+                        </th>
+                        <th scope="col" class="px-6 py-3">
+                            Phone num
+                        </th>
+                        <th scope="col" class="px-6 py-3">
                             <span class="sr-only">Edit</span>
                         </th>
                     </tr>
@@ -54,8 +63,18 @@
                         <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
                             {{ user.name }}
                         </th>
+                        <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
+                            {{ user.id_num }}
+                        </th>
+                        <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
+                            {{ user.email }}
+                        </th>
+                        <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
+                            {{ user.phone_num }}
+                        </th>
                         <td class="px-6 py-4 text-right">
-                            <Link :href="`/lawyers/${ user.id }/edit`" class="font-medium text-blue-600 hover:underline">Edit</Link>
+                            <Link :href="`/clients/${ user.id }/edit`" class="font-medium text-blue-600 hover:underline">Edit</Link>
+                            <Link @click="deleteUser(user)" as="button" class="ml-3 font-medium text-red-600 hover:underline">Delete</Link>
                         </td>
                     </tr>
                 </tbody>
@@ -95,5 +114,12 @@ export default {
      },
     components: { Head, Header, Sidebar, Pagination, ref },
     layout: Layout,
+    methods: {
+        deleteUser(client) {
+            if (confirm('Are you sure you want to delete this client?')) {
+                Inertia.delete(`/clients/${ client.id }`);
+            }
+        }
+    },
 };
 </script>
