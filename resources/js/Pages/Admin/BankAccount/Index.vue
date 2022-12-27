@@ -31,78 +31,80 @@
                     </h4>
     
                     <Link href="/bankaccounts/create">
-                        <button class="px-4 py-2 ml-3 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-purple-600 border border-transparent rounded-lg active:bg-purple-600 hover:bg-purple-700 focus:outline-none focus:shadow-outline-purple">
+                        <button class="px-4 py-2 ml-3 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-blue-800 border border-transparent rounded-lg active:bg-blue-900 hover:bg-blue-900 focus:outline-none focus:shadow-outline-blue">
                             Register New Bank Account
                         </button>
                     </Link>
                 </div>
 
                 <div class="grid gap-6 mb-8 md:grid-cols-2">
-                    <div v-for="bankAccount in bankAccounts" class="min-w-0 p-4 bg-white rounded-lg shadow-xs dark:bg-gray-800">
+                    <div v-for="bankAccount in bankAccounts" class="min-w-0 p-4 bg-white  shadow-xs dark:bg-gray-800">
                         <h4 class="mb-4 font-semibold text-gray-600 dark:text-gray-300">
                         {{ bankAccount.account_name }}
                         </h4>
                         <p class="text-gray-600 dark:text-gray-400">
-                            <table>
+                            <table class="border-separate border-spacing-2">
                                 <tr>
                                     <td width="150px">
                                         Bank Name
                                     </td>
-                                    <td>
-                                        : {{ bankAccount.bank_name }}
+                                    <td class="font-bold">
+                                        <span class="font-bold">{{ bankAccount.bank_name }}</span>
                                     </td>
                                 </tr>
                                 <tr>
                                     <td>
                                         Account Number
                                     </td>
-                                    <td>
-                                        : {{ bankAccount.account_number }}
+                                    <td class="font-bold">
+                                        {{ bankAccount.account_number }}
                                     </td>
                                 </tr>
                                 <tr>
                                     <td>
                                         Bank Address
                                     </td>
-                                    <td>
-                                        : {{ bankAccount.bank_address }}
+                                    <td class="font-bold">
+                                        {{ bankAccount.bank_address }}
                                     </td>
                                 </tr>
                                 <tr>
                                     <td>
                                         SWIFT Code
                                     </td>
-                                    <td>
-                                        : {{ bankAccount.swift_code }}
+                                    <td class="font-bold">
+                                        {{ bankAccount.swift_code }}
                                     </td>
                                 </tr>
                                 <tr>
                                     <td>
                                         Account Type
                                     </td>
-                                    <td>
-                                        : {{ bankAccount.account_type.name }}
+                                    <td class="font-bold">
+                                        {{ bankAccount.account_type.name }}
                                     </td>
                                 </tr>
                                 <tr>
                                     <td>
                                         Lable
                                     </td>
-                                    <td>
-                                        : {{ bankAccount.label }}
+                                    <td class="font-bold">
+                                        {{ bankAccount.label }}
                                     </td>
                                 </tr>
                                 <tr>
                                     <td>
                                         Created By
                                     </td>
-                                    <td>
-                                        : {{ bankAccount.created_by.name }}
+                                    <td class="font-bold">
+                                        {{ bankAccount.created_by.name }} {{ bankAccount.created_by.name == $page.props.auth.user.name ? '(You)' : null }}
                                     </td>
                                 </tr>
                             </table>
-                            <Link :href="`/bankaccounts/${ bankAccount.id }/edit`">Edit</Link>
-                            <Link @click="deleteBankAccount(bankAccount)" as="button" class="ml-3 font-medium text-red-600 hover:underline">Delete</Link>
+                            <div class="flex justify-end mt-3 p-2 pr-4">
+                                <Link :href="`/bankaccounts/${ bankAccount.id }/edit`">Edit</Link>
+                                <Link @click="deleteBankAccount(bankAccount)" as="button" class="ml-3 font-medium text-red-600 hover:underline">Delete</Link>
+                            </div>
                         </p>
                     </div>
                 </div>
