@@ -10,7 +10,7 @@
                 <h2
                 class="my-6 text-2xl font-semibold text-gray-700 dark:text-gray-200"
                 >
-                Manage bank accounts
+                Manage Bank Accounts
                 </h2>
     
                 <!-- Main Content Start -->
@@ -81,7 +81,7 @@
                                         Account Type
                                     </td>
                                     <td>
-                                        : {{ bankAccount.account_type }}
+                                        : {{ bankAccount.account_type.name }}
                                     </td>
                                 </tr>
                                 <tr>
@@ -97,11 +97,12 @@
                                         Created By
                                     </td>
                                     <td>
-                                        : {{ bankAccount.created_by }}
+                                        : {{ bankAccount.created_by.name }}
                                     </td>
                                 </tr>
                             </table>
                             <Link :href="`/bankaccounts/${ bankAccount.id }/edit`">Edit</Link>
+                            <Link @click="deleteBankAccount(bankAccount)" as="button" class="ml-3 font-medium text-red-600 hover:underline">Delete</Link>
                         </p>
                     </div>
                 </div>
@@ -116,11 +117,19 @@ import { Head, Link } from "@inertiajs/inertia-vue3";
 import Layout from "../Shared/Layout";
 import Header from "../Shared/Header";
 import Sidebar from "../Shared/Sidebar";
+import { Inertia } from "@inertiajs/inertia";
 
 export default { 
     props: { 
         bankAccounts: Object,
      },
+     methods: {
+        deleteBankAccount(bankAccount) {
+            if (confirm('Are you sure you want to delete this bank account?')) {
+                Inertia.delete(`/bankaccounts/${ bankAccount.id }`);
+            }
+        }
+    },
     components: { Head, Header, Sidebar, Link },
     layout: Layout,
 };

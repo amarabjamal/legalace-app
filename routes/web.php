@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Request;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Common\DashboardController;
+use App\Http\Controllers\Common\ProfileController;
 use Illuminate\Support\Facades\Auth;
 
 /*
@@ -64,6 +65,7 @@ Route::middleware('admin')->group(function () {
 //Common routes for all users
 Route::middleware('is.valid.user')->group(function () {
     Route::get('/', [DashboardController::class, 'index']);
-    
     Route::get('/dashboard', [DashboardController::class, 'index']);
+
+    Route::get('/profile', [ProfileController::class, 'index']);
 });

@@ -18,6 +18,11 @@ class ManageBankAccount extends Controller
 
         $bankAccountConditions = [ 'company_id' => $companyID ];
         $bankAccounts = BankAccount::where($bankAccountConditions)->get();
+        
+        foreach($bankAccounts as $bankAccount) {
+            $bankAccount->accountType;
+            $bankAccount->createdBy;
+        }
 
         return Inertia::render('Admin/BankAccount/Index', [
             'bankAccounts' => $bankAccounts,
@@ -78,5 +83,13 @@ class ManageBankAccount extends Controller
          ]);
  
          return redirect()->route('bankaccounts.index')->with('message', 'Successfully updated the bank account (' . $request->account_name . ').');
+    }
+
+    public function destroy(BankAccount $bankaccount)
+    {
+        //Add conditional checking before delete
+        $bankaccount->delete();   
+
+        return redirect()->route('bankaccounts.index')->with('message', 'Successfully deleted the bank account.');
     }
 }

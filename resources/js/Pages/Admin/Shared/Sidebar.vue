@@ -16,13 +16,17 @@
               <img :src="'/images/app/logo.png'" width="120" alt="legalace logo">
           </Link>
           </div>
+          <div  class="flex justify-left pl-6 pt-6 text-sm">
+            <span>Hello, <strong>{{ $page.props.auth.user.name }}</strong>!</span>
+          </div>
           <ul class="mt-6">
             <li class="relative px-6 py-3">
               <Link
                 class="inline-flex items-center w-full text-sm font-semibold transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200"
                 href="/"
               >
-                <span class="ml-4">Dashboard - Home</span>
+                <HomeIcon class="inline-block h-5 w-5"></HomeIcon>
+                <span class="ml-4">Dashboard</span>
             </Link>
             </li>
           </ul>
@@ -33,7 +37,8 @@
                 class="inline-flex items-center w-full text-sm font-semibold transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200"
                 href="/company"
               >
-                <span class="ml-4">Manage Company Profile</span>
+                <OfficeBuildingIcon class="inline-block h-5 w-5"></OfficeBuildingIcon>
+                <span class="ml-4">Company Profile</span>
             </Link>
             </li>
             <li class="relative px-6 py-3">
@@ -41,7 +46,8 @@
                 class="inline-flex items-center w-full text-sm font-semibold transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200"
                 href="/users"
               >
-                <span class="ml-4">Manage User Accounts</span>
+                <UsersIcon class="inline-block h-5 w-5"></UsersIcon>
+                <span class="ml-4">User Accounts</span>
             </Link>
             </li>
             <li class="relative px-6 py-3">
@@ -49,7 +55,8 @@
                 class="inline-flex items-center w-full text-sm font-semibold transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200"
                 href="/bankaccounts"
               >
-                <span class="ml-4">Manage Bank Accounts</span>
+                <CreditCardIcon class="inline-block h-5 w-5"></CreditCardIcon>
+                <span class="ml-4">Bank Accounts</span>
             </Link>
             </li>
             <li class="relative px-6 py-3">
@@ -57,7 +64,8 @@
                 class="inline-flex items-center w-full text-sm font-semibold transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200"
                 href="/voucherapprovals"
               >
-                <span class="ml-4">Approve Vouchers</span>
+                <InboxInIcon class="inline-block h-5 w-5"></InboxInIcon> 
+                <span class="ml-4">Voucher Requests</span>
             </Link>
             </li>
           </ul>
@@ -68,9 +76,10 @@
 
 <script>
 import { Link } from '@inertiajs/inertia-vue3';
+import { HomeIcon, UsersIcon, CreditCardIcon, InboxInIcon, OfficeBuildingIcon } from "@heroicons/vue/outline";
 
 export default {
-    components: { Link },
+    components: { Link, HomeIcon, UsersIcon, CreditCardIcon, InboxInIcon, OfficeBuildingIcon },
     data() {
       return {
         navLinks : [

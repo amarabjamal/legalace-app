@@ -35,7 +35,7 @@ class BankAccount extends Model
         return $this->belongsTo(AccountType::class, 'account_type', 'id');
     }
 
-    public function user() {
+    public function createdBy() {
         return $this->belongsTo(User::class, 'created_by', 'id');
     }
 
