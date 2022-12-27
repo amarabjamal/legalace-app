@@ -131,6 +131,7 @@ class ManageUsers extends Controller
         }
 
         $filteredUser = [
+            'id' => $user->id,
             'name' => $user->name,
             'email' => $user->email,
             'id_num' => $user->id_num,
@@ -148,102 +149,105 @@ class ManageUsers extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, User $user)
+    public function update(Request $request,User $user)
     {
         //Validate the request
-        // $email = User::where([
-        //     ['email', '=' , $request->email],
-        //     ['id', '!=' , $user->id],
-        // ])->first();
-        // $id_num = User::where([
-        //     ['id_num', '=' , $request->id_num],
-        //     ['id', '!=' , $user->id],
-        // ])->first();
-        // $employee_id = User::where([
-        //     ['employee_id', '=' , $request->employee_id],
-        //     ['id', '!=' , $user->id],
-        // ])->first();
-        // $errors = array();
+        $email = User::where([
+            ['email', '=' , $request->email],
+            ['id', '!=' , $user->id],
+        ])->first();
+        $id_num = User::where([
+            ['id_num', '=' , $request->id_num],
+            ['id', '!=' , $user->id],
+        ])->first();
+        $employee_id = User::where([
+            ['employee_id', '=' , $request->employee_id],
+            ['id', '!=' , $user->id],
+        ])->first();
+        $errors = array();
 
-        // if($email == null && $id_num == null && $employee_id == null) {
+        if($email == null && $id_num == null && $employee_id == null) {
 
-            // $userRoles = $user->userRoles;
+            $userRoles = $user->userRoles;
+            $roles = array();
 
-            // $roles = array();
+            foreach($userRoles as $userRole) {
+                array_push($roles, $userRole->role->name);
+            }
 
-            // foreach($userRoles as $userRole) {
-            //     array_push($roles, $userRole->role->name);
-            // }
-
-            // if(in_array('admin', $roles)) {
-            //     $alreadyAdmin = true;
-            // }
+            if(in_array('admin', $roles)) {
+                $alreadyAdmin = true;
+            } else {
+                $alreadyAdmin = false;
+            }
             
-            // if(in_array('lawyer', $roles)) {
-            //     $alreadyLawyer = true;
-            // }
+            if(in_array('lawyer', $roles)) {
+                $alreadyLawyer = true;
+            } else {
+                $alreadyLawyer = false;
+            }
 
-            // if($request->isAdmin == true) {
-            //     $isAdmin = true;
-            // } else {
-            //     $isAdmin = false;
-            // }
+            if($request->isAdmin == true) {
+                $isAdmin = true;
+            } else {
+                $isAdmin = false;
+            }
     
-            // if($request->isLawyer == true) {
-            //     $isLawyer = true;
-            // } else {
-            //     $isLawyer = false;
-            // }
+            if($request->isLawyer == true) {
+                $isLawyer = true;
+            } else {
+                $isLawyer = false;
+            }
             
-            // $user->update([
-            //     'name' => $request->name,
-            //     'email' => $request->email,
-            //     'id_num' => $request->id_num,
-            //     'employee_id' => $request->employee_id,
-            //     'contact_num' => $request->contact_num,
-            //     'birthdate' => $request->birthdate,
-            //     'updated_at' => now(),
-            // ]);
+            $user->update([
+                'name' => $request->name,
+                'email' => $request->email,
+                'id_num' => $request->id_num,
+                'employee_id' => $request->employee_id,
+                'contact_num' => $request->contact_num,
+                'birthdate' => $request->birthdate,
+                'updated_at' => now(),
+            ]);
 
-            // if($isAdmin && !$alreadyAdmin) { //Add admin role to the user
-            //     UserRole::create([
-            //         'user_id' => $user->id,
-            //         'role_id' => 1,
-            //     ]);
-            // } else if(!$isAdmin && $alreadyAdmin) { //Remove admin role from the user
-            //     UserRole::where([
-            //         ['user_id', '=', $user->id],
-            //         ['role_id', '=', 1],
-            //     ])->delete();
-            // }
+            if($isAdmin && !$alreadyAdmin) { //Add admin role to the user
+                UserRole::create([
+                    'user_id' => $user->id,
+                    'role_id' => 1,
+                ]);
+            } else if(!$isAdmin && $alreadyAdmin) { //Remove admin role from the user
+                UserRole::where([
+                    ['user_id', '=', $user->id],
+                    ['role_id', '=', 1],
+                ])->delete();
+            }
 
-            // if($isLawyer && !$alreadyLawyer) { //Add lawyer role to the user
-            //     UserRole::create([
-            //         'user_id' => $user->id,
-            //         'role_id' => 2,
-            //     ]);
-            // } else if(!$isLawyer && $alreadyLawyer) { //Remove lawyer role from the user
-            //     UserRole::where([
-            //         ['user_id', '=', $user->id],
-            //         ['role_id', '=', 2],
-            //     ])->delete();
-            // }
+            if($isLawyer && !$alreadyLawyer) { //Add lawyer role to the user
+                UserRole::create([
+                    'user_id' => $user->id,
+                    'role_id' => 2,
+                ]);
+            } else if(!$isLawyer && $alreadyLawyer) { //Remove lawyer role from the user
+                UserRole::where([
+                    ['user_id', '=', $user->id],
+                    ['role_id', '=', 2],
+                ])->delete();
+            }
     
-        //     return redirect()->route('users.index')->with('message', 'Successfully updated the user account.');
+            return redirect()->route('users.index')->with('message', 'Successfully updated the user account.');
 
-        // } else {
-        //     if($email != null) {
-        //         $errors += ['email' => 'Email already in use.'];
-        //     } 
-        //     if($employee_id != null) {
-        //         $errors += ['employee_id' => 'Employee ID already in use.'];
-        //     } 
-        //     if($id_num != null) {
-        //         $errors += ['id_num' => 'Identification Number already in use.'];
-        //     } 
+        } else {
+            if($email != null) {
+                $errors += ['email' => 'Email already in use.'];
+            } 
+            if($employee_id != null) {
+                $errors += ['employee_id' => 'Employee ID already in use.'];
+            } 
+            if($id_num != null) {
+                $errors += ['id_num' => 'Identification Number already in use.'];
+            } 
  
-        //     return back()->withErrors($errors);
-        // }
+            return back()->withErrors($errors);
+        }
     }
 
     /**
@@ -252,6 +256,10 @@ class ManageUsers extends Controller
     public function destroy(User $user)
     {
         //Add conditional checking before delete
+        $userRoles = $user->userRoles;
+        foreach($userRoles as $userRole) {
+            $userRole->delete();
+        }
         $user->delete();   
 
         return redirect()->route('users.index')->with('message', 'Successfully deleted the user account.');

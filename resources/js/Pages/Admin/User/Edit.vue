@@ -1,5 +1,5 @@
 <template>
-    <Head title="Edit user - {{ $props.user.name }}" />
+    <Head :title="'Edit user | '+$props.user.name" />
     <Sidebar/>
 
     <div class="flex flex-col flex-1">

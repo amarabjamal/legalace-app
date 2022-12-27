@@ -217,7 +217,7 @@
             <img
               class="object-cover w-8 h-8 rounded-full"
               :src="'/images/profileImage/default.png'"
-              alt=""
+              alt="user profile image"
               aria-hidden="true"
             />
           </button>

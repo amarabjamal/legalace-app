@@ -14,7 +14,7 @@
               href="/"
             >
               <img :src="'/images/app/logo.png'" width="120" alt="legalace logo">
-          </Link>
+            </Link>
           </div>
           <div  class="flex justify-left pl-6 pt-6 text-sm">
             <span>Hello, <strong>{{ $page.props.auth.user.name }}</strong>!</span>
@@ -29,8 +29,6 @@
                 <span class="ml-4">Dashboard</span>
             </Link>
             </li>
-          </ul>
-          <ul>
             <!-- <NavLink v-for="link in navLinks" :key="link.name" :href="link.href" :active="$page.component === link.component">{{ link.name }}</NavLink> -->
             <li class="relative px-6 py-3">
               <Link

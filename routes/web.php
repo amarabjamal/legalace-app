@@ -75,6 +75,4 @@ Route::middleware('is.valid.user')->group(function () {
 
 Route::middleware('lawyer')->group(function () {
     Route::resource('clients', ClientController::class);
-
-
 });
