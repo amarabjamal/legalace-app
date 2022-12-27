@@ -125,7 +125,7 @@
         <div
           class="relative w-full max-w-xl mr-6 focus-within:text-purple-500"
         >
-          Dashboard
+          {{title}}
         </div>
       </div>
       <ul class="flex items-center flex-shrink-0 space-x-6">
