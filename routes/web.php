@@ -1,14 +1,15 @@
 <?php
 
+use App\Http\Controllers\Admin\ApproveVoucher;
+use App\Http\Controllers\Admin\ManageBankAccount;
+use App\Http\Controllers\Admin\ManageCompany;
 use App\Http\Controllers\Admin\ManageUsers;
 use App\Models\User;
 use Inertia\Inertia;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Request;
 use App\Http\Controllers\Auth\LoginController;
-use App\Http\Controllers\ClerkController;
 use App\Http\Controllers\Common\DashboardController;
-use App\Http\Controllers\CompanyController;
 use Illuminate\Support\Facades\Auth;
 
 /*
@@ -46,12 +47,12 @@ Route::middleware('admin')->group(function () {
     
     Route::resources([
         'users' => ManageUsers::class,
+        'bankaccounts' => ManageBankAccount::class,
+        'voucherapprovals' => ApproveVoucher::class,
     ]);
 
-   // Route::resource('clerks', ClerkController::class)->except('show');
-
-    Route::resource('company-profile', CompanyController::class)->except(['show', 'edit', 'destroy']);
-    Route::get('company-profile/edit', [CompanyController::class, 'edit'])->name('company-profile.edit');
+    Route::resource('company', ManageCompany::class)->except(['show','edit', 'destroy']);
+    Route::get('company/edit', [ManageCompany::class, 'edit'])->name('company.edit');
     
     Route::get('/settings', function () {
         $userId = Auth::id();

@@ -25,131 +25,148 @@
                     </button>
                 </div>
                 
-                <form @submit.prevent="submit">
-                    <div class="mb-6">
-                        <label 
-                            for="name" 
-                            class="block mb-2 text-sm font-medium text-gray-900"
-                            >
-                            Name
-                        </label>
-                        <input 
-                            v-model="form.name"
-                            type="text" 
-                            id="name" 
-                            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" 
-                            placeholder="" 
-                            required
-                        />
-                        <p v-if="form.errors.name" v-text="form.errors.name" class="mt-2 text-sm text-red-600"></p>
-                    </div>
+                <div class="px-4 py-3 mb-8 bg-white rounded-lg shadow-md dark:bg-gray-800">
+                    <form @submit.prevent="submit">
+                        <div class="mb-6">
+                            <label 
+                                for="name" 
+                                class="block mb-2 text-sm font-medium text-gray-900"
+                                >
+                                Name
+                            </label>
+                            <input 
+                                v-model="form.name"
+                                type="text" 
+                                id="name" 
+                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" 
+                                placeholder="" 
+                                required
+                            />
+                            <p v-if="form.errors.name" v-text="form.errors.name" class="mt-2 text-sm text-red-600"></p>
+                        </div>
+    
+                        <div class="mb-6">
+                            <label 
+                                for="email" 
+                                class="block mb-2 text-sm font-medium text-gray-900"
+                                >
+                                Email Address
+                            </label>
+                            <input 
+                                v-model="form.email"
+                                type="email" 
+                                id="email" 
+                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" 
+                                placeholder="" 
+                                required
+                            />
+                            <p v-if="form.errors.email" v-text="form.errors.email" class="mt-2 text-sm text-red-600"></p>
+                        </div>
+    
+                        <div class="mb-6">
+                            <label 
+                                for="id_num" 
+                                class="block mb-2 text-sm font-medium text-gray-900"
+                                >
+                                Identification Number
+                            </label>
+                            <input 
+                                v-model="form.id_num"
+                                type="text" 
+                                id="identification_num" 
+                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" 
+                                placeholder="" 
+                                required
+                            />
+                            <p v-if="form.errors.id_num" v-text="form.errors.id_num" class="mt-2 text-sm text-red-600"></p>
+                        </div>
+    
+                        <div class="mb-6">
+                            <label 
+                                for="employee_id" 
+                                class="block mb-2 text-sm font-medium text-gray-900"
+                                >
+                                Employee ID
+                            </label>
+                            <input 
+                                v-model="form.employee_id"
+                                type="text" 
+                                id="employee_id" 
+                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" 
+                                placeholder="" 
+                                required
+                            />
+                            <p v-if="form.errors.employee_id" v-text="form.errors.employee_id" class="mt-2 text-sm text-red-600"></p>
+                        </div>
 
-                    <div class="mb-6">
-                        <label 
-                            for="email" 
-                            class="block mb-2 text-sm font-medium text-gray-900"
-                            >
-                            Email Address
-                        </label>
-                        <input 
-                            v-model="form.email"
-                            type="email" 
-                            id="email" 
-                            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" 
-                            placeholder="" 
-                            required
-                        />
-                        <p v-if="form.errors.email" v-text="form.errors.email" class="mt-2 text-sm text-red-600"></p>
-                    </div>
+                        <div class="mb-6">
+                            <label 
+                                for="role" 
+                                class="block mb-2 text-sm font-medium text-gray-900"
+                                >
+                                Role
+                            </label>
 
-                    <div class="mb-6">
-                        <label 
-                            for="id_num" 
-                            class="block mb-2 text-sm font-medium text-gray-900"
+                            <input v-model="form.isAdmin" :checked="form.isAdmin" type="checkbox" id="isAdmin" value="admin" >
+                            <label for="isAdmin"> Administrator</label><br/>
+                            <input v-model="form.isLawyer" :checked="form.isLawyer" type="checkbox" id="isLawyer" value="lawyer">
+                            <label for="isLawyer"> Lawyer</label><br/>
+                            <p v-if="form.errors.role" v-text="form.errors.role" class="mt-2 text-sm text-red-600"></p>
+                        </div>
+    
+                        <div class="mb-6">
+                            <label 
+                                for="contact_num" 
+                                class="block mb-2 text-sm font-medium text-gray-900"
+                                >
+                                Contact Number
+                            </label>
+                            <input 
+                                v-model="form.contact_num"
+                                type="text" 
+                                id="contact_num" 
+                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" 
+                                placeholder="" 
+                                required
+                            />
+                            <p v-if="form.errors.contact_num" v-text="form.errors.contact_num" class="mt-2 text-sm text-red-600"></p>
+                        </div>
+    
+                        <div class="mb-6">
+                            <label 
+                                for="birthdate" 
+                                class="block mb-2 text-sm font-medium text-gray-900"
+                                >
+                                Birthdate
+                            </label>
+                            <input 
+                                v-model="form.birthdate"
+                                type="date" 
+                                id="birthdate" 
+                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" 
+                                placeholder="" 
+                                required
+                            />
+                            <p v-if="form.errors.birthdate" v-text="form.errors.birthdate" class="mt-2 text-sm text-red-600"></p>
+                        </div>
+    
+                        <button 
+                            type="submit" 
+                            class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center"
+                            :disabled="form.processing"
                             >
-                            Identification Number
-                        </label>
-                        <input 
-                            v-model="form.id_num"
-                            type="text" 
-                            id="identification_num" 
-                            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" 
-                            placeholder="" 
-                            required
-                        />
-                        <p v-if="form.errors.id_num" v-text="form.errors.id_num" class="mt-2 text-sm text-red-600"></p>
-                    </div>
-
-                    <div class="mb-6">
-                        <label 
-                            for="employee_id" 
-                            class="block mb-2 text-sm font-medium text-gray-900"
+                            Save
+                        </button>
+                        <Link 
+                            href="/users"
+                            as="button"  
+                            class="ml-2 text-gray-900 focus:outline-none bg-white border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-200 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center"
+                            :disabled="form.processing"
                             >
-                            Employee ID
-                        </label>
-                        <input 
-                            v-model="form.employee_id"
-                            type="text" 
-                            id="employee_id" 
-                            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" 
-                            placeholder="" 
-                            required
-                        />
-                        <p v-if="form.errors.employee_id" v-text="form.errors.employee_id" class="mt-2 text-sm text-red-600"></p>
-                    </div>
-
-                    <div class="mb-6">
-                        <label 
-                            for="contact_num" 
-                            class="block mb-2 text-sm font-medium text-gray-900"
-                            >
-                            Contact Number
-                        </label>
-                        <input 
-                            v-model="form.contact_num"
-                            type="text" 
-                            id="employee_id" 
-                            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" 
-                            placeholder="" 
-                            required
-                        />
-                        <p v-if="form.errors.contact_num" v-text="form.errors.contact_num" class="mt-2 text-sm text-red-600"></p>
-                    </div>
-
-                    <div class="mb-6">
-                        <label 
-                            for="birthdate" 
-                            class="block mb-2 text-sm font-medium text-gray-900"
-                            >
-                            Birthdate
-                        </label>
-                        <input 
-                            v-model="form.birthdate"
-                            type="text" 
-                            id="employee_id" 
-                            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" 
-                            placeholder="" 
-                            required
-                        />
-                        <p v-if="form.errors.birthdate" v-text="form.errors.birthdate" class="mt-2 text-sm text-red-600"></p>
-                    </div>
-
-                    <button 
-                        type="submit" 
-                        class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center"
-                        :disabled="form.processing"
-                        >
-                        Save
-                    </button>
-                    <Link 
-                        href="/clerks"
-                        as="button"  
-                        class="ml-2 text-gray-900 focus:outline-none bg-white border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-200 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center"
-                        :disabled="form.processing"
-                        >
-                        Cancel
-                    </Link>
-                </form>
+                            Cancel
+                        </Link>
+                    </form>
+                </div>
                 <!-- Main Content End -->
           </div>
         </main>
@@ -170,6 +187,8 @@ export default {
             email: props.user.email,
             id_num: props.user.id_num,
             employee_id: props.user.employee_id,
+            isAdmin: props.user.isAdmin,
+            isLawyer: props.user.isLawyer,
             contact_num: props.user.contact_num,
             birthdate: props.user.birthdate,
         });
