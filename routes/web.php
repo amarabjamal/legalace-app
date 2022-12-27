@@ -5,12 +5,14 @@ use App\Http\Controllers\Admin\ManageBankAccount;
 use App\Http\Controllers\Admin\ManageCompany;
 use App\Http\Controllers\Admin\ManageUsers;
 use App\Models\User;
+use App\Models\Client;
 use Inertia\Inertia;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Request;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Common\DashboardController;
 use App\Http\Controllers\Common\ProfileController;
+use App\Http\Controllers\Lawyer\ClientController;
 use Illuminate\Support\Facades\Auth;
 
 /*
@@ -68,4 +70,11 @@ Route::middleware('is.valid.user')->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index']);
 
     Route::get('/profile', [ProfileController::class, 'index']);
+});
+
+
+Route::middleware('lawyer')->group(function () {
+    Route::resource('clients', ClientController::class);
+
+
 });
