@@ -143,7 +143,7 @@
                         </button>
 
                         <Link 
-                            href="/users"
+                            href="/bankaccounts"
                             as="button"  
                             class="ml-2 text-gray-900 focus:outline-none bg-white border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-200 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center"
                             :disabled="form.processing"

@@ -81,7 +81,7 @@ class ManageCompany extends Controller
 
         $company->update([
             'name' => $request->name,
-            'reg_no' => $request->registration_num,
+            'reg_no' => $request->reg_no,
             'address' => $request->address,
             'email' => $request->email,
             'website' => $request->website,

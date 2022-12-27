@@ -21081,7 +21081,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
   }, " Submit ", 8
   /* PROPS */
   , _hoisted_35), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_Link, {
-    href: "/users",
+    href: "/bankaccounts",
     as: "button",
     "class": "ml-2 text-gray-900 focus:outline-none bg-white border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-200 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center",
     disabled: $setup.form.processing
