@@ -113,25 +113,33 @@ Route::middleware('is.valid.user')->group(function () {
 });
 
 // Route::get('/clients', [ClientController::class, 'index']);
-Route::get('/clients', function () {
-    return Inertia::render('Lawyer/Client/Index', [
-        'clients' => Client::query()
-            ->when(Request::input('search'), function ($query, $search) {
-                $query->where('name', 'like', "%{$search}%");
-            })
-            ->paginate(10)
-            ->withQueryString()
-            ->through(fn($user) => [
-                'id' => $user->id,
-                'name' => $user->name
-            ]),
-        'filters' => Request::only(['search']),
-    ]);
-});
-Route::get('/clients/create', function () {
-    return Inertia::render('Lawyer/Client/Create');
-});
+Route::middleware('lawyer')->group(function () {
+    Route::resource('clients', ClientController::class);
 
-// Route::get('/clients/:id/edit', function () {
-//     return Inertia::render('Admin/Lawyers/Edit');
-// });
+    // Route::get('/clients', function () {
+        
+    // });
+    // Route::get('/clients/create', function () {
+    //     return Inertia::render('Lawyer/Client/Create');
+    // });
+
+    // Route::get('/clients/:id/edit', function () {
+    //     return Inertia::render('Lawyer/Client/Edit');
+    // });
+    // Route::post('/clients', function () {
+    //     // validate the request
+    //     $attributes = Request::validate([
+    //         'name' => 'required',
+    //         'id_types_id'=>'required',
+    //         'id_num'=>'required',
+    //         'email' => ['required', 'email'],
+    //         'phone_number'=>'required',
+    //         'address' => 'required',
+    //         'created_by'=>'nullable',
+    //     ]);
+    //     // create the user
+    //     Client::create($attributes);
+    //     // redirect
+    //     return redirect('/clients');
+    // });
+});

@@ -63,6 +63,11 @@ class ClientController extends Controller
 
     public function update(Request $request, Client $client)
     {
+        $email = Client::where([
+            ['email', '=',$request->email],
+            ['id', '!=', $client->id],
+        ])->first();
+
         $client->update([
             'name' => $request->name,
             'id_types_id'=> $request->id_types_id,
