@@ -18,26 +18,31 @@ class IsValidUser
      */
     public function handle(Request $request, Closure $next)
     {
-        $userRoles = User::findOrFail(Auth::id())->userRoles;
-        $roles = array();
+        if(Auth::check() == true) {
 
-        foreach($userRoles as $userRole) {
-            array_push($roles, $userRole->role->name);
-        }
-
-        if($roles !== null) {
-            if(auth::check() && (in_array("admin", $roles) || in_array("lawyer", $roles))){
-                return $next($request);
+            $userRoles = User::findOrFail(Auth::id())->userRoles;
+            $roles = array();
+    
+            foreach($userRoles as $userRole) {
+                array_push($roles, $userRole->role->name);
             }
-            else {
+    
+            if($roles !== null) {
+                if(auth::check() && (in_array("admin", $roles) || in_array("lawyer", $roles))){
+                    return $next($request);
+                }
+                else {
+                    return redirect()->route('login')->withErrors([
+                        'invalid_role' => 'The user is not an admin',
+                    ]);
+                }
+            } else {
                 return redirect()->route('login')->withErrors([
-                    'invalid_role' => 'The user is not an admin',
+                    'invalid_role' => 'The user is not assigned a role',
                 ]);
             }
         } else {
-            return redirect()->route('login')->withErrors([
-                'invalid_role' => 'The user is not assigned a role',
-            ]);
+            return redirect()->route('login');
         }
     }
 }
