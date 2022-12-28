@@ -88,7 +88,7 @@ class ManageCompany extends Controller
             'updated_at' => now(),
         ]);
 
-        return redirect()->route('company.index')->with('message', 'Successfully updated your company profile.' . $company->name);
+        return redirect()->route('company.index')->with('message', 'Successfully updated your company profile. ' . $company->name);
     }
 
     public function destroy(Company $company)

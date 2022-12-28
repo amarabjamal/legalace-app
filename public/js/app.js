@@ -21692,12 +21692,12 @@ var _hoisted_4 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementV
 
 var _hoisted_5 = {
   key: 0,
-  "class": "flex p-4 mb-4 bg-green-100 rounded-lg",
+  "class": "flex p-4 mb-4 bg-blue-100 rounded-lg",
   role: "alert"
 };
 
 var _hoisted_6 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("svg", {
-  "class": "flex-shrink-0 w-5 h-5 text-green-700",
+  "class": "flex-shrink-0 w-5 h-5 text-blue-900",
   fill: "currentColor",
   viewBox: "0 0 20 20",
   xmlns: "http://www.w3.org/2000/svg"
@@ -21710,7 +21710,7 @@ var _hoisted_6 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementV
 );
 
 var _hoisted_7 = {
-  "class": "ml-3 text-sm font-medium text-green-700"
+  "class": "ml-3 text-sm font-medium text-blue-900"
 };
 
 var _hoisted_8 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("span", {
@@ -21853,7 +21853,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     onClick: _cache[0] || (_cache[0] = function ($event) {
       return _ctx.$page.props.flash.message = '';
     }),
-    "class": "ml-auto -mx-1.5 -my-1.5 bg-green-100 text-green-500 rounded-lg focus:ring-2 focus:ring-green-400 p-1.5 hover:bg-green-200 inline-flex h-8 w-8"
+    "class": "ml-auto -mx-1.5 -my-1.5 bg-blue-100 text-blue-500 rounded-lg focus:ring-2 focus:ring-blue-400 p-1.5 hover:bg-blue-200 inline-flex h-8 w-8"
   }, _hoisted_10)])) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_11, [_hoisted_12, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_Link, {
     href: "/bankaccounts/create"
   }, {
@@ -21878,9 +21878,11 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     /* TEXT */
     )]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("tr", null, [_hoisted_30, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("td", _hoisted_31, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(bankAccount.label), 1
     /* TEXT */
-    )]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("tr", null, [_hoisted_32, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("td", _hoisted_33, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(bankAccount.created_by.name) + " " + (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(bankAccount.created_by.name == _ctx.$page.props.auth.user.name ? '(You)' : null), 1
+    )]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("tr", null, [_hoisted_32, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("td", null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("span", _hoisted_33, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(bankAccount.created_by.name), 1
     /* TEXT */
-    )])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_34, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_Link, {
+    ), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)((0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(bankAccount.created_by.name == _ctx.$page.props.auth.user.name ? '(You)' : null), 1
+    /* TEXT */
+    )])])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_34, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_Link, {
       href: "/bankaccounts/".concat(bankAccount.id, "/edit")
     }, {
       "default": (0,vue__WEBPACK_IMPORTED_MODULE_0__.withCtx)(function () {
@@ -22505,12 +22507,12 @@ var _hoisted_4 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementV
 
 var _hoisted_5 = {
   key: 0,
-  "class": "flex p-4 mb-4 bg-green-100 rounded-lg",
+  "class": "flex p-4 mb-4 bg-blue-100 rounded-lg",
   role: "alert"
 };
 
 var _hoisted_6 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("svg", {
-  "class": "flex-shrink-0 w-5 h-5 text-green-700",
+  "class": "flex-shrink-0 w-5 h-5 text-blue-900",
   fill: "currentColor",
   viewBox: "0 0 20 20",
   xmlns: "http://www.w3.org/2000/svg"
@@ -22523,7 +22525,7 @@ var _hoisted_6 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementV
 );
 
 var _hoisted_7 = {
-  "class": "ml-3 text-sm font-medium text-green-700"
+  "class": "ml-3 text-sm font-medium text-blue-900"
 };
 
 var _hoisted_8 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("span", {
@@ -22661,7 +22663,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     onClick: _cache[0] || (_cache[0] = function ($event) {
       return _ctx.$page.props.flash.message = '';
     }),
-    "class": "ml-auto -mx-1.5 -my-1.5 bg-green-100 text-green-500 rounded-lg focus:ring-2 focus:ring-green-400 p-1.5 hover:bg-green-200 inline-flex h-8 w-8"
+    "class": "ml-auto -mx-1.5 -my-1.5 bg-blue-100 text-blue-500 rounded-lg focus:ring-2 focus:ring-blue-400 p-1.5 hover:bg-blue-200 inline-flex h-8 w-8"
   }, _hoisted_10)])) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true), _hoisted_11, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_12, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_13, [_hoisted_14, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_Link, {
     href: "/company/edit",
     "class": "text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center"
@@ -24925,12 +24927,12 @@ var _hoisted_4 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementV
 
 var _hoisted_5 = {
   key: 0,
-  "class": "flex p-4 mb-4 bg-green-100 rounded-lg",
+  "class": "flex p-4 mb-4 bg-blue-100 rounded-lg",
   role: "alert"
 };
 
 var _hoisted_6 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("svg", {
-  "class": "flex-shrink-0 w-5 h-5 text-green-700",
+  "class": "flex-shrink-0 w-5 h-5 text-blue-900",
   fill: "currentColor",
   viewBox: "0 0 20 20",
   xmlns: "http://www.w3.org/2000/svg"
@@ -24943,7 +24945,7 @@ var _hoisted_6 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementV
 );
 
 var _hoisted_7 = {
-  "class": "ml-3 text-sm font-medium text-green-700"
+  "class": "ml-3 text-sm font-medium text-blue-900"
 };
 
 var _hoisted_8 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("span", {
@@ -25068,8 +25070,8 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     onClick: _cache[0] || (_cache[0] = function ($event) {
       return _ctx.$page.props.flash.message = '';
     }),
-    "class": "ml-auto -mx-1.5 -my-1.5 bg-green-100 text-green-500 rounded-lg focus:ring-2 focus:ring-green-400 p-1.5 hover:bg-green-200 inline-flex h-8 w-8"
-  }, _hoisted_10)])) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)(" User object :{{ users }} <br/><br/>\n                Filters: {{ filters }} "), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_11, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_12, [_hoisted_13, (0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)((0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("input", {
+    "class": "ml-auto -mx-1.5 -my-1.5 bg-blue-100 text-blue-500 rounded-lg focus:ring-2 focus:ring-blue-400 p-1.5 hover:bg-blue-200 inline-flex h-8 w-8"
+  }, _hoisted_10)])) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_11, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_12, [_hoisted_13, (0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)((0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("input", {
     "onUpdate:modelValue": _cache[1] || (_cache[1] = function ($event) {
       return $setup.searchUsers = $event;
     }),
@@ -25223,17 +25225,85 @@ var _hoisted_11 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElement
 /* HOISTED */
 );
 
-var _hoisted_12 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("h4", {
-  "class": "mb-4 text-lg font-semibold text-gray-600 dark:text-gray-300"
-}, " Approved Vouchers ", -1
+var _hoisted_12 = {
+  "class": "relative overflow-x-auto shadow-md"
+};
+var _hoisted_13 = {
+  "class": "w-full text-sm text-left text-gray-500"
+};
+
+var _hoisted_14 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("thead", {
+  "class": "text-xs text-gray-200 uppercase bg-blue-900"
+}, [/*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("tr", null, [/*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("th", {
+  scope: "col",
+  "class": "px-6 py-3"
+}, " No. "), /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("th", {
+  scope: "col",
+  "class": "px-6 py-3"
+}, " Title "), /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("th", {
+  scope: "col",
+  "class": "px-6 py-3"
+}, " Type "), /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("th", {
+  scope: "col",
+  "class": "px-6 py-3 text-right"
+}, " Amount(MYR) "), /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("th", {
+  scope: "col",
+  "class": "px-6 py-3"
+}, " Requestor "), /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("th", {
+  scope: "col",
+  "class": "px-6 py-3"
+}, [/*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("span", null, "Actions")])])], -1
 /* HOISTED */
 );
 
-var _hoisted_13 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("h4", {
-  "class": "mb-4 text-lg font-semibold text-gray-600 dark:text-gray-300"
-}, " Rejected Vouchers ", -1
+var _hoisted_15 = {
+  "class": "bg-white border-b"
+};
+
+var _hoisted_16 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("td", {
+  scope: "row",
+  "class": "px-6 py-4 font-medium text-gray-900 whitespace-nowrap"
+}, " 1 ", -1
 /* HOISTED */
 );
+
+var _hoisted_17 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("td", {
+  scope: "row",
+  "class": "px-6 py-4 font-medium text-gray-900 whitespace-nowrap"
+}, " Disbursement item #5367 ", -1
+/* HOISTED */
+);
+
+var _hoisted_18 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("td", {
+  scope: "row",
+  "class": "px-6 py-4 font-medium text-gray-900 whitespace-nowrap"
+}, " Claim Voucher ", -1
+/* HOISTED */
+);
+
+var _hoisted_19 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("td", {
+  scope: "row",
+  "class": "px-6 py-4 font-medium text-gray-900 whitespace-nowrap text-right"
+}, " 1,300.00 ", -1
+/* HOISTED */
+);
+
+var _hoisted_20 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("td", {
+  scope: "row",
+  "class": "px-6 py-4 font-medium text-gray-900 whitespace-nowrap"
+}, " Wayne Howe ", -1
+/* HOISTED */
+);
+
+var _hoisted_21 = {
+  "class": "px-6 py-4"
+};
+
+var _hoisted_22 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)("Approve");
+
+var _hoisted_23 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)("Reject");
+
+var _hoisted_24 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createStaticVNode)("<h4 class=\"mb-4 mt-6 text-lg font-semibold text-gray-600 dark:text-gray-300\"> Approved Vouchers </h4><div class=\"relative overflow-x-auto shadow-md\"><table class=\"w-full text-sm text-left text-gray-500\"><thead class=\"text-xs text-gray-200 uppercase bg-blue-900\"><tr><th scope=\"col\" class=\"px-6 py-3\"> No. </th><th scope=\"col\" class=\"px-6 py-3\"> Title </th><th scope=\"col\" class=\"px-6 py-3\"> Type </th><th scope=\"col\" class=\"px-6 py-3 text-right\"> Amount(MYR) </th><th scope=\"col\" class=\"px-6 py-3\"> Requestor </th><th scope=\"col\" class=\"px-6 py-3\"><span>Status</span></th></tr></thead><tbody><tr class=\"bg-white border-b\"><td scope=\"row\" class=\"px-6 py-4 font-medium text-gray-900 whitespace-nowrap\"> 1 </td><td scope=\"row\" class=\"px-6 py-4 font-medium text-gray-900 whitespace-nowrap\"> Disbursement item #5367 </td><td scope=\"row\" class=\"px-6 py-4 font-medium text-gray-900 whitespace-nowrap\"> Claim Voucher </td><td scope=\"row\" class=\"px-6 py-4 font-medium text-gray-900 whitespace-nowrap text-right\"> 1,300.00 </td><td scope=\"row\" class=\"px-6 py-4 font-medium text-gray-900 whitespace-nowrap\"> Wayne Howe </td><td class=\"px-6 py-4\"> Approved </td></tr><tr class=\"bg-white border-b\"><td scope=\"row\" class=\"px-6 py-4 font-medium text-gray-900 whitespace-nowrap\"> 2 </td><td scope=\"row\" class=\"px-6 py-4 font-medium text-gray-900 whitespace-nowrap\"> Disbursement item #5367 </td><td scope=\"row\" class=\"px-6 py-4 font-medium text-gray-900 whitespace-nowrap\"> Claim Voucher </td><td scope=\"row\" class=\"px-6 py-4 font-medium text-gray-900 whitespace-nowrap text-right\"> 1,300.00 </td><td scope=\"row\" class=\"px-6 py-4 font-medium text-gray-900 whitespace-nowrap\"> Wayne Howe </td><td class=\"px-6 py-4\"> Paid </td></tr></tbody></table></div><h4 class=\"mb-4 mt-6 text-lg font-semibold text-gray-600 dark:text-gray-300\"> Rejected Vouchers </h4><div class=\"relative overflow-x-auto shadow-md\"><table class=\"w-full text-sm text-left text-gray-500\"><thead class=\"text-xs text-gray-200 uppercase bg-blue-900\"><tr><th scope=\"col\" class=\"px-6 py-3\"> No. </th><th scope=\"col\" class=\"px-6 py-3\"> Title </th><th scope=\"col\" class=\"px-6 py-3\"> Type </th><th scope=\"col\" class=\"px-6 py-3 text-right\"> Amount(MYR) </th><th scope=\"col\" class=\"px-6 py-3\"> Requestor </th><th scope=\"col\" class=\"px-6 py-3\"><span>Status</span></th></tr></thead><tbody><tr class=\"bg-white border-b\"><td scope=\"row\" class=\"px-6 py-4 font-medium text-gray-900 whitespace-nowrap\"> 1 </td><td scope=\"row\" class=\"px-6 py-4 font-medium text-gray-900 whitespace-nowrap\"> Disbursement item #5367 </td><td scope=\"row\" class=\"px-6 py-4 font-medium text-gray-900 whitespace-nowrap\"> Claim Voucher </td><td scope=\"row\" class=\"px-6 py-4 font-medium text-gray-900 whitespace-nowrap text-right\"> 1,300.00 </td><td scope=\"row\" class=\"px-6 py-4 font-medium text-gray-900 whitespace-nowrap\"> Wayne Howe </td><td class=\"px-6 py-4\"> Rejected </td></tr><tr class=\"bg-white border-b\"><td scope=\"row\" class=\"px-6 py-4 font-medium text-gray-900 whitespace-nowrap\"> 2 </td><td scope=\"row\" class=\"px-6 py-4 font-medium text-gray-900 whitespace-nowrap\"> Disbursement item #5367 </td><td scope=\"row\" class=\"px-6 py-4 font-medium text-gray-900 whitespace-nowrap\"> Claim Voucher </td><td scope=\"row\" class=\"px-6 py-4 font-medium text-gray-900 whitespace-nowrap text-right\"> 1,300.00 </td><td scope=\"row\" class=\"px-6 py-4 font-medium text-gray-900 whitespace-nowrap\"> Wayne Howe </td><td class=\"px-6 py-4\"> Rejected </td></tr></tbody></table></div>", 4);
 
 function render(_ctx, _cache, $props, $setup, $data, $options) {
   var _component_Head = (0,vue__WEBPACK_IMPORTED_MODULE_0__.resolveComponent)("Head");
@@ -25241,6 +25311,8 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
   var _component_Sidebar = (0,vue__WEBPACK_IMPORTED_MODULE_0__.resolveComponent)("Sidebar");
 
   var _component_Header = (0,vue__WEBPACK_IMPORTED_MODULE_0__.resolveComponent)("Header");
+
+  var _component_Link = (0,vue__WEBPACK_IMPORTED_MODULE_0__.resolveComponent)("Link");
 
   return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_Head, {
     title: "Approve Vouchers"
@@ -25254,7 +25326,33 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
       return _ctx.$page.props.flash.message = '';
     }),
     "class": "ml-auto -mx-1.5 -my-1.5 bg-green-100 text-green-500 rounded-lg focus:ring-2 focus:ring-green-400 p-1.5 hover:bg-green-200 inline-flex h-8 w-8"
-  }, _hoisted_10)])) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true), _hoisted_11, _hoisted_12, _hoisted_13, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)(" Main Content End ")])])])], 64
+  }, _hoisted_10)])) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true), _hoisted_11, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_12, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("table", _hoisted_13, [_hoisted_14, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("tbody", null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("tr", _hoisted_15, [_hoisted_16, _hoisted_17, _hoisted_18, _hoisted_19, _hoisted_20, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("td", _hoisted_21, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_Link, {
+    onClick: _cache[1] || (_cache[1] = function ($event) {
+      return _ctx.approve(_ctx.voucher);
+    }),
+    as: "button",
+    "class": "font-medium text-blue-600 hover:underline"
+  }, {
+    "default": (0,vue__WEBPACK_IMPORTED_MODULE_0__.withCtx)(function () {
+      return [_hoisted_22];
+    }),
+    _: 1
+    /* STABLE */
+
+  }), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_Link, {
+    onClick: _cache[2] || (_cache[2] = function ($event) {
+      return _ctx.reject(_ctx.voucher);
+    }),
+    as: "button",
+    "class": "ml-3 font-medium text-red-600 hover:underline"
+  }, {
+    "default": (0,vue__WEBPACK_IMPORTED_MODULE_0__.withCtx)(function () {
+      return [_hoisted_23];
+    }),
+    _: 1
+    /* STABLE */
+
+  })])])])])]), _hoisted_24, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)(" Main Content End ")])])])], 64
   /* STABLE_FRAGMENT */
   );
 }
