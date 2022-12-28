@@ -54,9 +54,18 @@ class ManageUsers extends Controller
     public function store(Request $request)
     {
         //Validate the request
-        $email = User::where('email', $request->email)->first();
-        $id_num = User::where('id_num', $request->id_num)->first();
-        $employee_id = User::where('employee_id', $request->employee_id)->first();
+        $email = User::where([
+            ['email', '=' , $request->email],
+            ['company_id', '=' , Auth::user()->company_id],
+        ])->first();
+        $id_num = User::where([
+            ['id_num', '=' , $request->id_num],
+            ['company_id', '=' , Auth::user()->company_id],
+        ])->first();
+        $employee_id = User::where([
+            ['employee_id', '=' , $request->employee_id],
+            ['company_id', '=' , Auth::user()->company_id],
+        ])->first();
         $errors = array();
 
         if($request->isAdmin == true) {
@@ -155,14 +164,17 @@ class ManageUsers extends Controller
         $email = User::where([
             ['email', '=' , $request->email],
             ['id', '!=' , $user->id],
+            ['company_id', '=' , Auth::user()->company_id],
         ])->first();
         $id_num = User::where([
             ['id_num', '=' , $request->id_num],
             ['id', '!=' , $user->id],
+            ['company_id', '=' , Auth::user()->company_id],
         ])->first();
         $employee_id = User::where([
             ['employee_id', '=' , $request->employee_id],
             ['id', '!=' , $user->id],
+            ['company_id', '=' , Auth::user()->company_id],
         ])->first();
         $errors = array();
 

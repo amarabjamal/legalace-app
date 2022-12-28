@@ -10,9 +10,11 @@ use Inertia\Inertia;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Request;
 use App\Http\Controllers\Auth\LoginController;
+use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\Common\DashboardController;
 use App\Http\Controllers\Common\ProfileController;
 use App\Http\Controllers\Lawyer\ClientController;
+use App\Http\Controllers\Lawyer\ManageCaseFile;
 use Illuminate\Support\Facades\Auth;
 
 /*
@@ -30,24 +32,19 @@ Route::get('login', [LoginController::class, 'create'])->name('login');
 Route::post('login', [LoginController::class, 'store']);
 Route::post('logout', [LoginController::class, 'destroy'])->middleware('auth:admin');
 
-Route::get('/register', function () {
-    return Inertia::render('Auth/Register');
-});
-Route::post('/register', function () {
-    // validate the request
-    $attributes = Request::validate([
-        'name' => 'required',
-        'email' => ['required', 'email'],
-        'password' => 'required',
-    ]);
-    // create the user
-    User::create($attributes);
-    // redirect
-    return redirect('/login');
+Route::get('register', [RegisterController::class, 'create'])->name('register');
+Route::post('register', [RegisterController::class, 'store']);
+
+//Common routes for all users
+Route::middleware('is.valid.user')->group(function () {
+    Route::get('/', [DashboardController::class, 'index']);
+    Route::get('/dashboard', [DashboardController::class, 'index']);
+
+    Route::get('/profile', [ProfileController::class, 'index']);
 });
 
-Route::middleware('admin')->group(function () {
-    
+//Routes for Administrator ONLY
+Route::middleware('is.admin')->group(function () {
     Route::resources([
         'users' => ManageUsers::class,
         'bankaccounts' => ManageBankAccount::class,
@@ -63,16 +60,9 @@ Route::middleware('admin')->group(function () {
     });
 });
 
-
-//Common routes for all users
-Route::middleware('is.valid.user')->group(function () {
-    Route::get('/', [DashboardController::class, 'index']);
-    Route::get('/dashboard', [DashboardController::class, 'index']);
-
-    Route::get('/profile', [ProfileController::class, 'index']);
-});
-
-
-Route::middleware('lawyer')->group(function () {
+//Routes for Lawyer ONLY
+Route::middleware('is.lawyer')->group(function () {
     Route::resource('clients', ClientController::class);
+
+    Route::resource('casefiles', ManageCaseFile::class);
 });
