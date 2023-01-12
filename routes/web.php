@@ -4,6 +4,7 @@ use App\Http\Controllers\Admin\ApproveVoucher;
 use App\Http\Controllers\Admin\ManageBankAccount;
 use App\Http\Controllers\Admin\ManageCompany;
 use App\Http\Controllers\Admin\ManageUsers;
+use App\Http\Controllers\Auth\ForgotPasswordController;
 use App\Models\User;
 use App\Models\Client;
 use Inertia\Inertia;
@@ -34,6 +35,8 @@ Route::post('logout', [LoginController::class, 'destroy'])->middleware('auth:adm
 
 Route::get('register', [RegisterController::class, 'create'])->name('register');
 Route::post('register', [RegisterController::class, 'store']);
+
+Route::get('forgotpassword', [ForgotPasswordController::class, 'index'])->name('forgotpassword');
 
 //Common routes for all users
 Route::middleware('is.valid.user')->group(function () {

@@ -125,7 +125,9 @@
                                     Wayne Howe
                                 </td>
                                 <td class="px-6 py-4">
-                                    Approved
+                                    <span class="px-2 py-1 font-semibold leading-tight text-green-700 bg-green-100 rounded-full dark:bg-green-700 dark:text-green-100">
+                                        Approved
+                                    </span>
                                 </td>
                             </tr>
                             <tr class="bg-white border-b">
@@ -145,7 +147,9 @@
                                     Wayne Howe
                                 </td>
                                 <td class="px-6 py-4">
-                                    Paid
+                                    <span class="px-2 py-1 font-semibold leading-tight text-green-700 bg-green-100 rounded-full dark:bg-green-700 dark:text-green-100">
+                                        Paid
+                                    </span>
                                 </td>
                             </tr>
                         </tbody>
@@ -198,7 +202,9 @@
                                     Wayne Howe
                                 </td>
                                 <td class="px-6 py-4">
-                                    Rejected
+                                    <span class="px-2 py-1 font-semibold leading-tight text-gray-700 bg-gray-100 rounded-full dark:text-gray-100 dark:bg-gray-700">
+                                        Rejected
+                                    </span>
                                 </td>
                             </tr>
                             <tr class="bg-white border-b">
@@ -218,7 +224,9 @@
                                     Wayne Howe
                                 </td>
                                 <td class="px-6 py-4">
-                                    Rejected
+                                    <span class="px-2 py-1 font-semibold leading-tight text-gray-700 bg-gray-100 rounded-full dark:text-gray-100 dark:bg-gray-700">
+                                        Rejected
+                                    </span>
                                 </td>
                             </tr>
                         </tbody>

@@ -10,7 +10,7 @@
                 <h2
                 class="my-6 text-2xl font-semibold text-gray-700 dark:text-gray-200"
                 >
-                Manage User Accounts
+                Manage Case Files
                 </h2>
     
                 <!-- Main Content Start -->
@@ -41,7 +41,7 @@
                         href="/users/create" 
                         class="h-min text-white bg-blue-800 hover:bg-blue-900 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2"
                         >
-                        New user
+                        Create New Case File
                     </Link>
                 </div>
 
@@ -50,43 +50,44 @@
                         <thead class="text-xs text-gray-200 uppercase bg-blue-900">
                             <tr>
                                 <th scope="col" class="px-6 py-3">
-                                    Name
+                                    No.
                                 </th>
                                 <th scope="col" class="px-6 py-3">
-                                    Identification Number
+                                    Matter
                                 </th>
                                 <th scope="col" class="px-6 py-3">
-                                    Employee ID
+                                    Type
                                 </th>
                                 <th scope="col" class="px-6 py-3">
-                                    Email
+                                    File No.
                                 </th>
                                 <th scope="col" class="px-6 py-3">
-                                    <span class="sr-only">Edit</span>
+                                    Status
+                                </th>
+                                <th scope="col" class="px-6 py-3">
+                                    <span>Actions</span>
                                 </th>
                             </tr>
                         </thead>
                         <tbody>
-                            <tr 
-                                v-for="user in users.data"
-                                :key="user.id"
-                                class="bg-white border-b"
-                            >
+                            <tr class="bg-white border-b" >
                                 <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
-                                    {{ user.name }}
+                                    1
                                 </th>
                                 <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
-                                    {{ user.id_num }}
+                                    Defamation
                                 </th>
                                 <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
-                                    {{ user.employee_id }}
+                                    L
                                 </th>
                                 <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
-                                    {{ user.email }}
+                                    File No.
                                 </th>
-                                <td class="px-6 py-4 text-right">
-                                    <Link :href="`/users/${ user.id }/edit`" class="font-medium text-blue-600 hover:underline">Edit</Link>
-                                    <Link @click="deleteUser(user)" as="button" class="ml-3 font-medium text-red-600 hover:underline">Delete</Link>
+                                <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
+                                    Status
+                                </th>
+                                <td class="px-6 py-4">
+                                    View
                                 </td>
                             </tr>
                         </tbody>
@@ -94,7 +95,7 @@
                 </div>
 
                 <!-- Paginator -->
-                <Pagination :links="users.links" :total="users.total" :from="users.from" :to="users.to"/>
+                <!-- <Pagination :links="users.links" :total="users.total" :from="users.from" :to="users.to"/> -->
                 <!-- Main Content End -->
           </div>
         </main>
@@ -107,36 +108,9 @@ import Layout from "../Shared/Layout";
 import Header from "../Shared/Header";
 import Sidebar from "../Shared/Sidebar";
 import Pagination from "../Shared/Pagination";
-import { ref, watch } from "vue";
-import { Inertia } from "@inertiajs/inertia";
-import throttle from 'lodash/throttle';
 
 export default { 
-    setup(props) {
-        let searchUsers = ref(props.filters.search);
-
-        watch(searchUsers, throttle(value => {
-            Inertia.get('/users', { search: value }, {
-                preserveState: true,
-                replace: true,
-            });
-        }, 500));
-
-        return { searchUsers };
-    },
-    props: { 
-        users: Object,
-        filters: Object,
-        message: String,
-     },
-    methods: {
-        deleteUser(user) {
-            if (confirm('Are you sure you want to delete this user account?')) {
-                Inertia.delete(`/users/${ user.id }`);
-            }
-        }
-    },
-    components: { Head, Header, Sidebar, Pagination, ref },
+    components: { Head, Header, Sidebar, Pagination},
     layout: Layout,
 };
 </script>

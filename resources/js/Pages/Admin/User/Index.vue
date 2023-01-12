@@ -33,7 +33,7 @@
                         <input 
                             v-model="searchUsers"
                             type="text" 
-                            class="block p-2 pl-10 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500" 
+                            class="block p-2 pl-10 w-full text-sm text-gray-900 bg-gray-50 dark:bg-gray-800 rounded-lg border border-gray-300 dark:border-gray-800 focus:ring-blue-500 focus:border-blue-500" 
                             placeholder="Search">
                     </div>
                     
@@ -41,7 +41,7 @@
                         href="/users/create" 
                         class="h-min text-white bg-blue-800 hover:bg-blue-900 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2"
                         >
-                        New user
+                        Register New User
                     </Link>
                 </div>
 
@@ -62,31 +62,31 @@
                                     Email
                                 </th>
                                 <th scope="col" class="px-6 py-3">
-                                    <span class="sr-only">Edit</span>
+                                    Actions
                                 </th>
                             </tr>
                         </thead>
-                        <tbody>
+                        <tbody class="bg-white  dark:bg-gray-800">
                             <tr 
                                 v-for="user in users.data"
                                 :key="user.id"
-                                class="bg-white border-b"
+                                class="border-b dark:border-b-gray-700 text-gray-700 dark:text-gray-400"
                             >
-                                <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
+                                <th scope="row" class="px-6 py-4 font-medium whitespace-nowrap">
                                     {{ user.name }}
                                 </th>
-                                <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
+                                <th scope="row" class="px-6 py-4 font-medium whitespace-nowrap">
                                     {{ user.id_num }}
                                 </th>
-                                <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
+                                <th scope="row" class="px-6 py-4 font-medium whitespace-nowrap">
                                     {{ user.employee_id }}
                                 </th>
-                                <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
+                                <th scope="row" class="px-6 py-4 font-medium whitespace-nowrap">
                                     {{ user.email }}
                                 </th>
-                                <td class="px-6 py-4 text-right">
-                                    <Link :href="`/users/${ user.id }/edit`" class="font-medium text-blue-600 hover:underline">Edit</Link>
-                                    <Link @click="deleteUser(user)" as="button" class="ml-3 font-medium text-red-600 hover:underline">Delete</Link>
+                                <td class="px-6 py-4">
+                                    <Link :href="`/users/${ user.id }/edit`" class="font-medium hover:text-blue-600"><PencilIcon class="inline-block h-5 w-5"/></Link>
+                                    <Link @click="deleteUser(user)" as="button" class="ml-3 font-medium hover:text-red-600"><TrashIcon class="inline-block h-5 w-5"/></Link>
                                 </td>
                             </tr>
                         </tbody>
@@ -110,6 +110,7 @@ import Pagination from "../Shared/Pagination";
 import { ref, watch } from "vue";
 import { Inertia } from "@inertiajs/inertia";
 import throttle from 'lodash/throttle';
+import { PencilIcon, TrashIcon } from "@heroicons/vue/outline";
 
 export default { 
     setup(props) {
@@ -136,7 +137,7 @@ export default {
             }
         }
     },
-    components: { Head, Header, Sidebar, Pagination, ref },
+    components: { Head, Header, Sidebar, Pagination, ref, PencilIcon, TrashIcon },
     layout: Layout,
 };
 </script>

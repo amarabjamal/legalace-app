@@ -1,6 +1,6 @@
 <template>
 
-    <Head title="Sign In"/>
+    <Head title="Forgot Password"/>
 
     <div class="flex items-center min-h-screen p-6 bg-gray-50 dark:bg-gray-900">
       <div
@@ -26,7 +26,7 @@
               <h1
                 class="mb-4 text-xl font-semibold text-gray-700 dark:text-gray-200"
               >
-                Sign in to your account
+                Forgot password
               </h1>
               
               <form @submit.prevent="submit">
@@ -48,48 +48,24 @@
                     <p v-if="form.errors.email" v-text="form.errors.email" class="mt-2 text-sm text-red-600"></p>
                 </div>
 
-                <div class="mb-6">
-                    <label 
-                        for="password" 
-                        class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-200"
-                        >
-                        Password
-                    </label>
-                    <input 
-                        v-model="form.password"
-                        type="password" 
-                        id="password" 
-                        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-300 dark:focus:shadow-outline-gray" 
-                        required  
-                    />
-                    <p v-if="form.errors.password" v-text="form.errors.password" class="mt-2 text-sm text-red-600"></p>
-                </div>
-
                 <button 
                     type="submit" 
                     class="block w-full px-4 py-2 mt-4 text-sm font-medium leading-5 text-center text-white transition-colors duration-150 bg-blue-700 border border-transparent rounded-lg active:bg-blue-800 hover:bg-blue-900 focus:outline-none focus:shadow-outline-purple"
                     :disabled="form.processing"
                     >
-                    Sign In
+                    Recover password
                 </button>
             </form>
 
-              <p class="mt-4">
+            <p class="mt-4">
                 <Link
-                  class="text-sm font-medium text-blue-700 dark:text-blue-400 hover:text-blue-900"
-                  href="/forgotpassword"
+                    class="text-sm font-medium text-blue-700 dark:text-blue-400 hover:text-blue-900"
+                    href="/login"
                 >
-                  Forgot your password?
-              </Link>
-              </p>
-              <p class="mt-1">
-                <Link
-                  class="text-sm font-medium text-blue-700 dark:text-blue-400 hover:text-blue-900"
-                  href="/register"
-                >
-                  Create account
-              </Link>
-              </p>
+                    <ArrowCircleLeftIcon class="inline-block h-4 w-4"/> Back to login
+                </Link>
+            </p>
+
             </div>
           </div>
         </div>
@@ -99,19 +75,20 @@
 
 <script>
 import { useForm } from "@inertiajs/inertia-vue3";
+import { ArrowCircleLeftIcon } from "@heroicons/vue/outline";
 
 export default {
     setup () {
         let form = useForm({
             email: '',
-            password: ''
         });
 
         let submit = () => {
-            form.post('/login');
+            form.post('/forgotpassword');
         };
 
         return { form, submit };
     },
+    components: { ArrowCircleLeftIcon },
 };
 </script>
