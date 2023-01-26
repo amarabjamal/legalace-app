@@ -2,7 +2,9 @@
 
     <Head title="Sign In"/>
 
-    <div class="flex items-center min-h-screen p-6 bg-gray-50 dark:bg-gray-900">
+    <div 
+      class="auth-layout flex items-center min-h-screen p-6 bg-gray-50 dark:bg-gray-900"
+      >
       <div
         class="flex-1 h-full max-w-4xl mx-auto overflow-hidden bg-white rounded-lg shadow-xl dark:bg-gray-800"
       >
@@ -67,7 +69,7 @@
 
                 <button 
                     type="submit" 
-                    class="block w-full px-4 py-2 mt-4 text-sm font-medium leading-5 text-center text-white transition-colors duration-150 bg-blue-700 border border-transparent rounded-lg active:bg-blue-800 hover:bg-blue-900 focus:outline-none focus:shadow-outline-purple"
+                    class="standard-button block w-full px-4 py-2 mt-4 text-sm font-medium leading-5 text-center text-white transition-colors duration-150 border border-transparent rounded-lg focus:outline-none"
                     :disabled="form.processing"
                     >
                     Sign In

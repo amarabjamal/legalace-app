@@ -17,7 +17,12 @@
             </Link>
           </div>
           <div  class="flex justify-left pl-6 pt-6 text-sm">
-            <span>Hello, <strong>{{ $page.props.auth.user.name }}</strong>!</span>
+            <span>
+              Hello, <strong>{{ $page.props.auth.user.name }}</strong>!<br/>
+              <div  class="flex justify-left pl-6 pt-2">
+                <span v-for="role in $page.props.auth.user.roles" class="px-2 py-1 m-1 font-semibold leading-tight text-green-700 bg-green-100 rounded-full dark:bg-green-700 dark:text-green-100">{{ role }}</span>
+              </div>
+            </span>
           </div>
           <ul class="mt-6">
             <li class="relative px-6 py-3">

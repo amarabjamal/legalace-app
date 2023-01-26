@@ -38,7 +38,7 @@
                     </div>
                     
                     <Link 
-                        href="/users/create" 
+                        href="/casefiles/create" 
                         class="h-min text-white bg-blue-800 hover:bg-blue-900 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2"
                         >
                         Create New Case File
@@ -49,7 +49,7 @@
                     <table class="w-full text-sm text-left text-gray-500">
                         <thead class="text-xs text-gray-200 uppercase bg-blue-900">
                             <tr>
-                                <th scope="col" class="px-6 py-3">
+                                <th scope="col" class="px-6 py-3 w-1">
                                     No.
                                 </th>
                                 <th scope="col" class="px-6 py-3">
@@ -61,33 +61,49 @@
                                 <th scope="col" class="px-6 py-3">
                                     File No.
                                 </th>
-                                <th scope="col" class="px-6 py-3">
+                                <th scope="col" class="px-6 py-3 w-5">
                                     Status
                                 </th>
-                                <th scope="col" class="px-6 py-3">
+                                <th scope="col" class="px-6 py-3 w-5">
                                     <span>Actions</span>
                                 </th>
                             </tr>
                         </thead>
-                        <tbody>
-                            <tr class="bg-white border-b" >
-                                <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
-                                    1
+                        <tbody class="bg-white  dark:bg-gray-800">
+                            <tr 
+                                v-if="case_files == null"
+                                class="border-b dark:border-b-gray-700 text-gray-700 dark:text-gray-400"
+                            >
+                                <td 
+                                    scope="row" 
+                                    colspan="6" 
+                                    class="px-6 py-4 font-medium text-center text-gray-500 bg-gray-100 whitespace-nowrap"
+                                >
+                                    No records found.
+                                </td>
+                            </tr>
+                            <tr 
+                                v-else
+                                v-for="case_file in case_files"
+                                class="border-b dark:border-b-gray-700 text-gray-700 dark:text-gray-400"
+                            >
+                                <th scope="row" class="px-6 py-4 font-medium whitespace-nowrap">
+                                    {{ case_file.id }}
                                 </th>
-                                <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
-                                    Defamation
+                                <th scope="row" class="px-6 py-4 font-medium whitespace-nowrap">
+                                    {{ case_file.matter }}
                                 </th>
-                                <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
-                                    L
+                                <th scope="row" class="px-6 py-4 font-medium whitespace-nowrap">
+                                    {{ case_file.type }}
                                 </th>
-                                <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
-                                    File No.
+                                <th scope="row" class="px-6 py-4 font-medium whitespace-nowrap">
+                                    {{ case_file.file_no }}
                                 </th>
-                                <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
-                                    Status
+                                <th scope="row" class="px-6 py-4 font-medium whitespace-nowrap">
+                                    On-going
                                 </th>
                                 <td class="px-6 py-4">
-                                    View
+                                    <Link :href="`casefiles/${case_file.id}`" class="font-medium hover:text-blue-600">View</Link>
                                 </td>
                             </tr>
                         </tbody>
@@ -111,6 +127,9 @@ import Pagination from "../Shared/Pagination";
 
 export default { 
     components: { Head, Header, Sidebar, Pagination},
+    props: {
+        case_files: Object,
+    },
     layout: Layout,
 };
 </script>

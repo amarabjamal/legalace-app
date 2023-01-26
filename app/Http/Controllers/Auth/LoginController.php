@@ -10,12 +10,12 @@ use Illuminate\Support\Facades\Auth;
 
 class LoginController extends Controller
 {
-    public function create()
+    public function index()
     {
         return Inertia::render('Auth/Login');
     }
 
-    public function store(Request $request)
+    public function login(Request $request)
     {
         $credentials = $request->validate([
             'email' => ['required', 'email'],
@@ -29,7 +29,7 @@ class LoginController extends Controller
             $roles = array();
 
             foreach($userRoles as $userRole) {
-                array_push($roles, $userRole->role->name);
+                array_push($roles, $userRole->role->slug);
             }
 
             if($roles != null) {   
@@ -51,7 +51,7 @@ class LoginController extends Controller
         ])->onlyInput('email');
     }
 
-    public function destroy()
+    public function logout()
     {
         Auth::logout();
 

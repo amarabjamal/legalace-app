@@ -61,6 +61,10 @@ class User extends Authenticatable
         return $this->hasMany(UserRole::class);
     }
 
+    public function idType() {
+        return $this->belongsTo(IDType::class);
+    }
+
     public function company() {
         return $this->belongsTo(Company::class);
     }

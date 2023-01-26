@@ -21,18 +21,6 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        Company::factory(10)->create();
-        User::factory(10)->create();
-
-        $roles = [
-            'admin',
-            'lawyer'
-        ];
-
-        foreach($roles as $role) {
-            Role::factory()->create(['name' => $role]);
-        }
-
         $id_types = [
             [
                 'name' =>'Malaysian Identification Card',
@@ -43,6 +31,23 @@ class DatabaseSeeder extends Seeder
                 'slug' => 'passport'
             ],
         ];
+
+        DB::table('id_types')->insert($id_types);
+        Company::factory(10)->create();
+        User::factory(10)->create();
+
+        $roles = [
+            [
+                'name' => 'Admin',
+                'slug' => 'admin',
+            ],
+            [
+                'name' => 'Lawyer',
+                'slug' => 'lawyer',
+            ],
+        ];
+
+        DB::table('roles')->insert($roles);
 
         $user_role = [
             [
@@ -78,6 +83,17 @@ class DatabaseSeeder extends Seeder
                 'created_by' => 1,
                 'company_id' => 1,
             ],
+            [
+                'account_name' => 'AC Partnership',
+                'bank_name' => 'Maybank Berhad',
+                'account_number' => '167239581253',
+                'bank_address' => 'Maybank@UM, Universiti Malaya, 50603 Kuala Lumpur, WP Kuala Lumpur',
+                'swift_code' => 'MBBEMYKLXXX',
+                'account_type' => 2,
+                'label' => 'Client Account 1',
+                'created_by' => 1,
+                'company_id' => 1,
+            ],
         ];
 
         DB::table('user_role')->insert($user_role);
@@ -86,7 +102,6 @@ class DatabaseSeeder extends Seeder
 
         DB::table('bank_accounts')->insert($bankAccounts);
 
-        DB::table('id_types')->insert($id_types);
         Client::factory(10)->create();
     }
 }

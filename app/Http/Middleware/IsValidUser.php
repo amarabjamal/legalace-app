@@ -23,7 +23,7 @@ class IsValidUser
             $roles = array();
     
             foreach($userRoles as $userRole) {
-                array_push($roles, $userRole->role->name);
+                array_push($roles, $userRole->role->slug);
             }
     
             if($roles !== null) {

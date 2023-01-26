@@ -136,7 +136,7 @@ class ManageUsers extends Controller
         $roles = array();
 
         foreach($userRoles as $userRole) {
-            array_push($roles, $userRole->role->name);
+            array_push($roles, $userRole->role->slug);
         }
 
         $filteredUser = [
@@ -184,7 +184,7 @@ class ManageUsers extends Controller
             $roles = array();
 
             foreach($userRoles as $userRole) {
-                array_push($roles, $userRole->role->name);
+                array_push($roles, $userRole->role->slug);
             }
 
             if(in_array('admin', $roles)) {

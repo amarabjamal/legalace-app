@@ -11,7 +11,8 @@ class Role extends Model
     protected $table = 'roles';
     protected $primaryKey= 'id';
     protected $fillable = [
-        'name'
+        'name',
+        'slug'
     ];
 
     public function userRoles() {

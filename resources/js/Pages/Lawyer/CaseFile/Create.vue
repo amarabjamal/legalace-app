@@ -1,5 +1,5 @@
 <template>
-    <Head :title="'Edit user | '+$props.user.name" />
+    <Head title="Create Case File" />
     <Sidebar/>
 
     <div class="flex flex-col flex-1">
@@ -10,7 +10,7 @@
                 <h2
                 class="my-6 text-2xl font-semibold text-gray-700 dark:text-gray-200"
                 >
-                Edit user - {{ $props.user.name }}
+                Create Case File
                 </h2>
     
                 <!-- Main Content Start -->
@@ -29,136 +29,112 @@
                     <form @submit.prevent="submit">
                         <div class="mb-6">
                             <label 
-                                for="name" 
+                                for="matter" 
                                 class="block mb-2 text-sm font-medium text-gray-900"
                                 >
-                                Name
+                                Matter
                             </label>
                             <input 
-                                v-model="form.name"
+                                v-model="form.matter"
                                 type="text" 
-                                id="name" 
+                                id="matter" 
                                 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" 
                                 placeholder="" 
                                 required
                             />
-                            <p v-if="form.errors.name" v-text="form.errors.name" class="mt-2 text-sm text-red-600"></p>
-                        </div>
-    
-                        <div class="mb-6">
-                            <label 
-                                for="email" 
-                                class="block mb-2 text-sm font-medium text-gray-900"
-                                >
-                                Email Address
-                            </label>
-                            <input 
-                                v-model="form.email"
-                                type="email" 
-                                id="email" 
-                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" 
-                                placeholder="" 
-                                required
-                            />
-                            <p v-if="form.errors.email" v-text="form.errors.email" class="mt-2 text-sm text-red-600"></p>
-                        </div>
-    
-                        <div class="mb-6">
-                            <label 
-                                for="id_num" 
-                                class="block mb-2 text-sm font-medium text-gray-900"
-                                >
-                                Identification Number
-                            </label>
-                            <input 
-                                v-model="form.id_num"
-                                type="text" 
-                                id="identification_num" 
-                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" 
-                                placeholder="" 
-                                required
-                            />
-                            <p v-if="form.errors.id_num" v-text="form.errors.id_num" class="mt-2 text-sm text-red-600"></p>
-                        </div>
-    
-                        <div class="mb-6">
-                            <label 
-                                for="employee_id" 
-                                class="block mb-2 text-sm font-medium text-gray-900"
-                                >
-                                Employee ID
-                            </label>
-                            <input 
-                                v-model="form.employee_id"
-                                type="text" 
-                                id="employee_id" 
-                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" 
-                                placeholder="" 
-                                required
-                            />
-                            <p v-if="form.errors.employee_id" v-text="form.errors.employee_id" class="mt-2 text-sm text-red-600"></p>
+                            <p v-if="form.errors.matter" v-text="form.errors.matter" class="mt-2 text-sm text-red-600"></p>
                         </div>
 
                         <div class="mb-6">
                             <label 
-                                for="role" 
+                                for="type" 
                                 class="block mb-2 text-sm font-medium text-gray-900"
                                 >
-                                Role
-                            </label>
-
-                            <input v-model="form.isAdmin" :checked="form.isAdmin" type="checkbox" id="isAdmin" value="admin" >
-                            <label for="isAdmin"> Administrator</label><br/>
-                            <input v-model="form.isLawyer" :checked="form.isLawyer" type="checkbox" id="isLawyer" value="lawyer">
-                            <label for="isLawyer"> Lawyer</label><br/>
-                            <p v-if="form.errors.role" v-text="form.errors.role" class="mt-2 text-sm text-red-600"></p>
-                        </div>
-    
-                        <div class="mb-6">
-                            <label 
-                                for="contact_num" 
-                                class="block mb-2 text-sm font-medium text-gray-900"
-                                >
-                                Contact Number
+                                Type
                             </label>
                             <input 
-                                v-model="form.contact_num"
+                                v-model="form.type"
                                 type="text" 
-                                id="contact_num" 
+                                id="type" 
                                 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" 
                                 placeholder="" 
                                 required
                             />
-                            <p v-if="form.errors.contact_num" v-text="form.errors.contact_num" class="mt-2 text-sm text-red-600"></p>
+                            <p v-if="form.errors.type" v-text="form.errors.type" class="mt-2 text-sm text-red-600"></p>
                         </div>
-    
+
                         <div class="mb-6">
                             <label 
-                                for="birthdate" 
+                                for="file_no" 
                                 class="block mb-2 text-sm font-medium text-gray-900"
                                 >
-                                Birthdate
+                                File No.
                             </label>
                             <input 
-                                v-model="form.birthdate"
-                                type="date" 
-                                id="birthdate" 
+                                v-model="form.file_no"
+                                type="text" 
+                                id="file_no" 
                                 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" 
                                 placeholder="" 
                                 required
                             />
-                            <p v-if="form.errors.birthdate" v-text="form.errors.birthdate" class="mt-2 text-sm text-red-600"></p>
+                            <p v-if="form.errors.file_no" v-text="form.errors.file_no" class="mt-2 text-sm text-red-600"></p>
                         </div>
-    
+
+                        <div class="mb-6">
+                            <label 
+                                for="client_id" 
+                                class="block mb-2 text-sm font-medium text-gray-700 dark:text-gray-200"
+                                >
+                                Client
+                            </label>
+                            <select 
+                                v-model="form.client_id"
+                                id="client_id" 
+                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
+                                required
+                            >
+                                <option disabled value="">Please select your client</option>
+                                <option v-for="client in clients" :value="client.id">{{client.name}}</option>
+                            </select>
+                            <p v-if="form.errors.client_id" v-text="form.errors.client_id" class="mt-2 text-sm text-red-600"></p>
+                        </div>
+
+                        <div class="mb-6">
+                            <label 
+                                for="lawyer_ids" 
+                                class="block mb-2 text-sm font-medium text-gray-700 dark:text-gray-200"
+                                >
+                                Lawyer
+                            </label>
+                            <select 
+                                v-model="form.lawyer_ids"
+                                id="lawyer_ids" 
+                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
+                                multiple
+                            >
+                                <option disabled value="">Add lawyer</option>
+                                <option v-for="lawyer in lawyers" :value="lawyer.id">{{lawyer.name}}</option>
+                            </select>
+                            <p v-if="form.errors.lawyer_ids" v-text="form.errors.lawyer_ids" class="mt-2 text-sm text-red-600"></p>
+                        </div>
+
+                        <!-- <div>
+                            <label class="typo__label">Tagging</label>
+                            <multiselect v-model="value" tag-placeholder="Add this as new tag" placeholder="Search or add a tag" label="name" track-by="code" :options="options" :multiple="true" :taggable="true" @tag="addTag"></multiselect>
+                            <pre class="language-json"><code>{{ value  }}</code></pre>
+                        </div>    -->
+
                         <button 
                             type="submit" 
                             class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center"
                             :disabled="form.processing"
                             >
-                            Save
+                            Submit
                         </button>
+
                         <Link 
-                            href="/users"
+                            href="/casefiles"
                             as="button"  
                             class="ml-2 text-gray-900 focus:outline-none bg-white border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-200 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center"
                             :disabled="form.processing"
@@ -167,7 +143,6 @@
                         </Link>
                     </form>
                 </div>
-                <!-- Main Content End -->
           </div>
         </main>
     </div>
@@ -178,31 +153,52 @@ import { Head } from "@inertiajs/inertia-vue3";
 import Layout from "../Shared/Layout";
 import Header from "../Shared/Header";
 import Sidebar from "../Shared/Sidebar";
+import Pagination from "../Shared/Pagination";
 import { useForm } from "@inertiajs/inertia-vue3";
+import Multiselect from "vue-multiselect";
 
 export default { 
-    setup(props) {
+    setup () {
         let form = useForm({
-            name: props.user.name,
-            email: props.user.email,
-            id_num: props.user.id_num,
-            employee_id: props.user.employee_id,
-            isAdmin: props.user.isAdmin,
-            isLawyer: props.user.isLawyer,
-            contact_num: props.user.contact_num,
-            birthdate: props.user.birthdate.substring(0, 10),
+            matter: '',
+            type: '',
+            file_no: '',
+            client_id: '',
         });
 
         let submit = () => {
-            form.put(`/users/${props.user.id}`);
+            form.post('/casefiles');
         };
 
         return { form, submit };
     },
-    props: { 
-        user: Object,
-     },
-    components: { Head, Header, Sidebar },
+    components: { Head, Header, Sidebar, Pagination, Multiselect },
+    props: {
+        clients: Object,
+        lawyers: Object,
+    },
+    data () {
+        return {
+            value: [
+                { name: 'Javascript', code: 'js' }
+            ],
+            options: [
+                { name: 'Vue.js', code: 'vu' },
+                { name: 'Javascript', code: 'js' },
+                { name: 'Open Source', code: 'os' }
+            ]
+        }
+    },
+    methods: {
+        addTag (newTag) {
+        const tag = {
+            name: newTag,
+            code: newTag.substring(0, 2) + Math.floor((Math.random() * 10000000))
+        }
+        this.options.push(tag)
+        this.value.push(tag)
+        }
+    },
     layout: Layout,
 };
 </script>

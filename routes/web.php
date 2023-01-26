@@ -5,15 +5,13 @@ use App\Http\Controllers\Admin\ManageBankAccount;
 use App\Http\Controllers\Admin\ManageCompany;
 use App\Http\Controllers\Admin\ManageUsers;
 use App\Http\Controllers\Auth\ForgotPasswordController;
-use App\Models\User;
-use App\Models\Client;
 use Inertia\Inertia;
 use Illuminate\Support\Facades\Route;
-use Illuminate\Support\Facades\Request;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\Common\DashboardController;
 use App\Http\Controllers\Common\ProfileController;
+use App\Http\Controllers\Email\MailController;
 use App\Http\Controllers\Lawyer\ClientController;
 use App\Http\Controllers\Lawyer\ManageCaseFile;
 use Illuminate\Support\Facades\Auth;
@@ -29,12 +27,14 @@ use Illuminate\Support\Facades\Auth;
 |
 */
 
-Route::get('login', [LoginController::class, 'create'])->name('login');
-Route::post('login', [LoginController::class, 'store']);
-Route::post('logout', [LoginController::class, 'destroy'])->middleware('auth:admin');
+Route::get('/sendmail', [MailController::class, 'index']);
 
-Route::get('register', [RegisterController::class, 'create'])->name('register');
-Route::post('register', [RegisterController::class, 'store']);
+Route::get('login', [LoginController::class, 'index'])->name('login');
+Route::post('login', [LoginController::class, 'login']);
+Route::post('logout', [LoginController::class, 'logout'])->middleware('auth:admin');
+
+Route::get('register', [RegisterController::class, 'index'])->name('register');
+Route::post('register', [RegisterController::class, 'registerNewAccount']);
 
 Route::get('forgotpassword', [ForgotPasswordController::class, 'index'])->name('forgotpassword');
 
