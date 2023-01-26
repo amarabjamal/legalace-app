@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Lawyer;
 
+use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use App\Models\Client;
@@ -67,6 +68,7 @@ class ClientController extends Controller
             ['email', '=',$request->email],
             ['id', '!=', $client->id],
         ])->first();
+        $errors = array();
 
         $client->update([
             'name' => $request->name,
@@ -77,7 +79,7 @@ class ClientController extends Controller
             'address' => $request->address,
         ]);
 
-        return redirect()->route('clients.index')->with('message', 'Successfully added new client.');
+        return redirect()->route('clients.index')->with('message', 'Successfully updated the client.');
     }
 
     public function destroy(Client $client)

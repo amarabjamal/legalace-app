@@ -6,13 +6,12 @@
         <Header title="Client" />
         <main class="h-full pb-16 overflow-y-auto mx-3 my-4">
             
-            <!-- <div class="container px-6 mx-auto grid">
+            <div class="container px-6 mx-auto grid">
                 <h2
                 class="my-6 text-2xl font-semibold text-gray-700 dark:text-gray-200"
                 >
                 Client List
                 </h2>
-          </div> -->
           <div class="flex justify-between items-end mb-3">
             <div class="relative">
                 <div class="flex absolute inset-y-0 left-0 items-center pl-3 pointer-events-none">
@@ -79,6 +78,9 @@
                     </tr>
                 </tbody>
             </table>
+            </div>
+            <!-- Paginator -->
+            <Pagination :links="clients.links" :total="clients.total" :from="clients.from" :to="clients.to"/>
         </div>
         </main>
     </div>
