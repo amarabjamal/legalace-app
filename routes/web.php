@@ -13,6 +13,10 @@ use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Common\DashboardController;
 use App\Http\Controllers\Common\ProfileController;
 use App\Http\Controllers\Lawyer\ClientController;
+use App\Http\Controllers\Lawyer\FirmAccountController;
+use App\Http\Controllers\Lawyer\ClientAccountController;
+use App\Http\Controllers\Lawyer\AccountReportingController;
+use App\Http\Controllers\Lawyer\OperationalCostController;
 use Illuminate\Support\Facades\Auth;
 
 /*
@@ -75,4 +79,9 @@ Route::middleware('is.valid.user')->group(function () {
 
 Route::middleware('lawyer')->group(function () {
     Route::resource('clients', ClientController::class);
+    Route::resource('firm-account', FirmAccountController::class);
+    Route::resource('client-account', ClientAccountController::class);
+    Route::resource('account-reporting', AccountReportingController::class);
+    Route::resource('operational-cost', OperationalCostController::class);
+
 });
