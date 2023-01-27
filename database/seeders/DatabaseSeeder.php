@@ -9,8 +9,12 @@ use App\Models\Role;
 use App\Models\User;
 use App\Models\Company;
 use App\Models\Client;
+use App\Models\FirmAccount;
+use App\Models\ClientAccount;
+use App\Models\AccountReporting;
+use App\Models\OperationalCost;
 use Illuminate\Support\Facades\DB;
-
+use PHPUnit\Framework\Constraint\Operator;
 
 class DatabaseSeeder extends Seeder
 {
@@ -88,5 +92,9 @@ class DatabaseSeeder extends Seeder
 
         DB::table('id_types')->insert($id_types);
         Client::factory(10)->create();
+        FirmAccount::factory(10)->create();
+        ClientAccount::factory(10)->create();
+        AccountReporting::factory(10)->create();
+        OperationalCost::factory(10)->create();
     }
 }

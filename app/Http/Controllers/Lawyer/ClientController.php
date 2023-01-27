@@ -68,6 +68,7 @@ class ClientController extends Controller
             ['email', '=',$request->email],
             ['id', '!=', $client->id],
         ])->first();
+        $errors = array();
 
         $client->update([
             'name' => $request->name,
@@ -78,7 +79,7 @@ class ClientController extends Controller
             'address' => $request->address,
         ]);
 
-        return redirect()->route('clients.index')->with('message', 'Successfully added new client.');
+        return redirect()->route('clients.index')->with('message', 'Successfully updated the client.');
     }
 
     public function destroy(Client $client)

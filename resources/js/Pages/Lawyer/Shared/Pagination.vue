@@ -2,7 +2,7 @@
     <nav class="flex justify-between mt-10" aria-label="Page navigation">
         <!-- Help text -->
         <span class="text-sm text-gray-700">
-            Showing <span class="font-semibold text-gray-900">{{ from }}</span> to <span class="font-semibold text-gray-900">{{ to }}</span> of <span class="font-semibold text-gray-900">{{ total }}</span> Entries
+            Showing <span class="font-semibold text-gray-900 dark:text-gray-300">{{ from }}</span> to <span class="font-semibold text-gray-900 dark:text-gray-300">{{ to }}</span> of <span class="font-semibold text-gray-900 dark:text-gray-300">{{ total }}</span> Entries
         </span>
         <!-- Buttons -->
         <ul class="inline-flex -space-x-px">
