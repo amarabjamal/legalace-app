@@ -21,16 +21,8 @@ class RegisterController extends Controller
     }
 
     public function registerNewAccount(Request $request) {
-        //dd($request);
         // validate the request
-        // $attributes = FacadesRequest::validate([
-        //     'name' => 'required',
-        //     'email' => ['required', 'email'],
-        //     'password' => 'required',
-        // ]);
-
-        // validate the request
-        $company_attributes = FacadesRequest::validate([
+        $validatedAttributes = FacadesRequest::validate([
             'name' => 'required',
             'email' => ['required', 'email'],
             'id_type' => 'required',
@@ -46,23 +38,39 @@ class RegisterController extends Controller
             'password' => 'required',
         ]);
 
-        dd($company_attributes);
-
-        //Validate user
         $errors = array();
 
         DB::beginTransaction();
 
         try {
             $companyID = DB::table('companies')->insertGetId([
-
+                'name' => $validatedAttributes['company_name'],
+                'reg_no' => $validatedAttributes['reg_no'],
+                'address' => $validatedAttributes['address'],
+                'email' => $validatedAttributes['company_email'],
+                'website' => $validatedAttributes['website'],
+                'created_at' => now(),
+                'updated_at' => now(),
             ]);
 
-            if($companyID != null) {
-                $isSucceed = DB::table('users')->insert([
+            $userID = DB::table('users')->insertGetId([
+                'name' => $validatedAttributes['name'],
+                'email' => $validatedAttributes['email'],
+                'password' => bcrypt($validatedAttributes['password']),
+                'id_types_id' => $validatedAttributes['id_type'],
+                'id_num' => $validatedAttributes['id_num'],
+                'employee_id' => $validatedAttributes['employee_id'],
+                'contact_num' => $validatedAttributes['contact_num'],
+                'birthdate' => $validatedAttributes['birthdate'],
+                'company_id' => $companyID,
+                'created_at' => now(),
+                'updated_at' => now(),
+            ]);
 
-                ]);
-            }
+            $isSucceed = DB::table('user_role')->insert([
+                'user_id' => $userID,
+                'role_id' => 1,
+            ]);
 
             if($isSucceed) {
                 DB::commit();
@@ -74,9 +82,12 @@ class RegisterController extends Controller
             DB::rollback();
             throw $e;
         }
-        // // create the user
-        // User::create($attributes);
-        // redirect
-        // return redirect('/login');
+
+        return redirect('/login')->with('infoMessage', 'Account has been succesfully registered. Please verify your email.');
+    }
+
+    public function testInfoMessage() {
+        
+        return redirect('/login')->with('infoMessage', 'Account has been succesfully registered. Please verify your email.');
     }
 }

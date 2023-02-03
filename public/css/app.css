@@ -99,7 +99,8 @@ a:hover {
 }
 
 .auth-layout {
-    background:conic-gradient(from 90deg at 50% 50%, rgba(80, 82, 122, 1) 31%, rgba(255, 255, 255, 1) 55%, rgba(80, 82, 122, 1) 100%);
+    /* background:conic-gradient(from 90deg at 50% 50%, rgba(80, 82, 122, 1) 31%, rgba(255, 255, 255, 1) 55%, rgba(80, 82, 122, 1) 100%); */
+    background-color: #f2f2f2;
 }
 /*
 ! tailwindcss v3.1.4 | MIT License | https://tailwindcss.com
@@ -1376,13 +1377,13 @@ video {
   --tw-text-opacity: 1;
   color: rgb(220 38 38 / var(--tw-text-opacity));
 }
-.text-red-500{
-  --tw-text-opacity: 1;
-  color: rgb(239 68 68 / var(--tw-text-opacity));
-}
 .text-blue-900{
   --tw-text-opacity: 1;
   color: rgb(30 58 138 / var(--tw-text-opacity));
+}
+.text-red-500{
+  --tw-text-opacity: 1;
+  color: rgb(239 68 68 / var(--tw-text-opacity));
 }
 .text-purple-600{
   --tw-text-opacity: 1;

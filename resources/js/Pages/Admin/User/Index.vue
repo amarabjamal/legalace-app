@@ -67,7 +67,9 @@
                             </tr>
                         </thead>
                         <tbody class="bg-white  dark:bg-gray-800">
+                            <tr v-if="users.data.length == 0 "><td colspan="5" class="text-center">No data found.</td></tr>
                             <tr 
+                                v-else
                                 v-for="user in users.data"
                                 :key="user.id"
                                 class="border-b dark:border-b-gray-700 text-gray-700 dark:text-gray-400"
@@ -94,7 +96,7 @@
                 </div>
 
                 <!-- Paginator -->
-                <Pagination :links="users.links" :total="users.total" :from="users.from" :to="users.to"/>
+                <Pagination v-if="users.data.length > 0"  :links="users.links" :total="users.total" :from="users.from" :to="users.to"/>
                 <!-- Main Content End -->
           </div>
         </main>

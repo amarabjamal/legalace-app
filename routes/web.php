@@ -35,6 +35,7 @@ Route::post('logout', [LoginController::class, 'logout'])->middleware('auth:admi
 
 Route::get('register', [RegisterController::class, 'index'])->name('register');
 Route::post('register', [RegisterController::class, 'registerNewAccount']);
+Route::get('/testInfoMessage', [RegisterController::class, 'testInfoMessage']);
 
 Route::get('forgotpassword', [ForgotPasswordController::class, 'index'])->name('forgotpassword');
 

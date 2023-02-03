@@ -19,6 +19,8 @@ class ManageUsers extends Controller
     {
 
         $users = User::query()
+                            ->where('company_id', '=', Auth::user()->company_id)
+                            ->where('id', '!=', Auth::id())
                             ->when($request->input('search'), function ($query, $search) {
                                 $query->where('name', 'like', "%{$search}%");
                             })
