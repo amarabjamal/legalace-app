@@ -203,11 +203,13 @@ export default {
     position: relative;
     left: 250px;
     background-color: rgb(249, 250, 251);
+    background-image: linear-gradient(90deg, rgb(239, 246, 255) 0%, rgba(253, 242, 248, 1) 100%);
     min-height: 100vh;
     width: calc(100% - 250px);
     padding: 10px 14px;
     transition: var(--tran-05);
 }
+	
 nav.close ~ .dashboard{
     left: 73px;
     width: calc(100% - 73px);

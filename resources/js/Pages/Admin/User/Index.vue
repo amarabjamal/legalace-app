@@ -43,58 +43,62 @@
                     </Link>
                 </div>
 
-                <div class="relative overflow-x-auto shadow-md">
-                    <table class="w-full text-sm text-left text-gray-500">
-                        <thead class="text-xs text-gray-200 uppercase bg-blue-900">
-                            <tr>
-                                <th scope="col" class="px-6 py-3">
-                                    Name
-                                </th>
-                                <th scope="col" class="px-6 py-3">
-                                    Identification Number
-                                </th>
-                                <th scope="col" class="px-6 py-3">
-                                    Employee ID
-                                </th>
-                                <th scope="col" class="px-6 py-3">
-                                    Email
-                                </th>
-                                <th scope="col" class="px-6 py-3">
-                                    Actions
-                                </th>
+                <!-- Employee Table -->
+                <div class="w-full overflow-hidden rounded-lg shadow-md">
+                    <div class="w-full overflow-x-auto">
+                        <table class="w-full whitespace-no-wrap">
+                        <thead>
+                            <tr class="text-xs font-semibold tracking-wide text-left text-gray-500 uppercase border-b dark:border-gray-700 bg-gray-50 dark:text-gray-400 dark:bg-gray-800">
+                            <th class="px-4 py-3">Employee</th>
+                            <th class="px-4 py-3">Employee ID</th>
+                            <th class="px-4 py-3">Access</th>
+                            <th class="px-4 py-3">Email</th>
+                            <th class="px-4 py-3">Actions</th>
                             </tr>
                         </thead>
-                        <tbody class="bg-white  dark:bg-gray-800">
-                            <tr v-if="users.data.length == 0 "><td colspan="5" class="text-center">No data found.</td></tr>
-                            <tr 
-                                v-else
-                                v-for="user in users.data"
-                                :key="user.id"
-                                class="border-b dark:border-b-gray-700 text-gray-700 dark:text-gray-400"
+                        <tbody class="bg-white divide-y dark:divide-gray-700 dark:bg-gray-800">
+                            <tr v-for="user in users.data"
+                                :key="user.id" 
+                                class="text-gray-700 dark:text-gray-400"
                             >
-                                <th scope="row" class="px-6 py-4 font-medium whitespace-nowrap">
-                                    {{ user.name }}
-                                </th>
-                                <th scope="row" class="px-6 py-4 font-medium whitespace-nowrap">
-                                    {{ user.id_num }}
-                                </th>
-                                <th scope="row" class="px-6 py-4 font-medium whitespace-nowrap">
+                                <td class="px-4 py-3">
+                                    <div class="flex items-center text-sm">
+                                    <!-- Avatar with inset shadow -->
+                                    <div class="relative hidden w-8 h-8 mr-3 rounded-full md:block">
+                                        <img class="object-cover w-full h-full rounded-full" :src="'/images/profileImage/default.png'" alt="" loading="lazy">
+                                        <div class="absolute inset-0 rounded-full shadow-inner" aria-hidden="true"></div>
+                                    </div>
+                                    <div>
+                                        <p class="font-semibold">{{ user.name }}</p>
+                                        <p class="text-xs text-gray-600 dark:text-gray-400">
+                                        Roles
+                                        </p>
+                                    </div>
+                                    </div>
+                                </td>
+                                <td class="px-4 py-3 text-sm">
                                     {{ user.employee_id }}
-                                </th>
-                                <th scope="row" class="px-6 py-4 font-medium whitespace-nowrap">
+                                </td>
+                                <td class="px-4 py-3 text-xs">
+                                    <span class="px-2 py-1 font-semibold leading-tight text-green-700 bg-green-100 rounded-full dark:bg-green-700 dark:text-green-100">
+                                        Enabled
+                                    </span>
+                                </td>
+                                <td class="px-4 py-3 text-sm">
                                     {{ user.email }}
-                                </th>
-                                <td class="px-6 py-4">
-                                    <Link :href="`/users/${ user.id }/edit`" class="font-medium hover:text-blue-600"><PencilIcon class="inline-block h-5 w-5"/></Link>
-                                    <Link @click="deleteUser(user)" as="button" class="ml-3 font-medium hover:text-red-600"><TrashIcon class="inline-block h-5 w-5"/></Link>
+                                </td>
+                                <td class="px-4 py-3">
+                                    <div class="flex items-center space-x-4 text-sm">
+                                        <Link :href="`/users/${ user.id }/edit`" class="font-medium hover:text-blue-600"><PencilIcon class="inline-block h-5 w-5"/></Link>
+                                        <Link @click="deleteUser(user)" as="button" class="ml-3 font-medium hover:text-red-600"><TrashIcon class="inline-block h-5 w-5"/></Link>
+                                    </div>
                                 </td>
                             </tr>
                         </tbody>
-                    </table>
+                        </table>
+                    </div>
+                    <TablePagination v-if="users.data.length > 0"  :links="users.links" :total="users.total" :from="users.from" :to="users.to"/>
                 </div>
-
-                <!-- Paginator -->
-                <Pagination v-if="users.data.length > 0"  :links="users.links" :total="users.total" :from="users.from" :to="users.to"/>
                 <!-- Main Content End -->
           </div>
         </main>
@@ -105,6 +109,7 @@
 import { Head } from "@inertiajs/inertia-vue3";
 import Layout from "../Shared/Layout";
 import Pagination from "../Shared/Pagination";
+import TablePagination from "../Shared/TablePagination";
 import { ref, watch } from "vue";
 import { Inertia } from "@inertiajs/inertia";
 import throttle from 'lodash/throttle';
@@ -135,7 +140,7 @@ export default {
             }
         }
     },
-    components: { Head, Pagination, ref, PencilIcon, TrashIcon },
+    components: { Head, Pagination, TablePagination, ref, PencilIcon, TrashIcon },
     layout: Layout,
 };
 </script>
