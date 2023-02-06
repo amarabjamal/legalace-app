@@ -1,9 +1,7 @@
 <template>
     <Head title="Register Bank Account" />
-    <Sidebar/>
 
     <div class="flex flex-col flex-1">
-        <Header title="" />
         <main class="h-full pb-16 overflow-y-auto">
             
             <div class="container px-6 mx-auto grid">
@@ -161,8 +159,6 @@
 <script>
 import { Head } from "@inertiajs/inertia-vue3";
 import Layout from "../Shared/Layout";
-import Header from "../Shared/Header";
-import Sidebar from "../Shared/Sidebar";
 import { useForm } from "@inertiajs/inertia-vue3";
 
 export default { 
@@ -183,7 +179,7 @@ export default {
 
         return { form, submit };
     },
-    components: { Head, Header, Sidebar },
+    components: { Head },
     layout: Layout,
 };
 </script>

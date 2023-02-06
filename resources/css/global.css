@@ -1,4 +1,6 @@
 @import url("https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,400;0,500;0,700;1,400;1,500;1,700&display=swap");
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500;600&display=swap');
+@import url('https://unicons.iconscout.com/release/v4.0.0/css/line.css');
 
 :root {
     /* Component Color */
@@ -39,6 +41,23 @@
 
     /* Other Variables */
     --font-default: "Roboto", sans-serif;
+
+    /* ===== Colors ===== */
+    --primary-color: #0E4BF1;
+    --panel-color: #FFF;
+    --text-color: #000;
+    --black-light-color: #707070;
+    --border-color: #e6e5e5;
+    --toggle-color: #DDD;
+    --box1-color: #4DA3FF;
+    --box2-color: #FFE6AC;
+    --box3-color: #E7D1FC;
+    --title-icon-color: #fff;
+    
+    /* ====== Transition ====== */
+    --tran-05: all 0.5s ease;
+    --tran-03: all 0.3s ease;
+    --tran-03: all 0.2s ease;
 }
 
 html,
@@ -67,35 +86,6 @@ a:hover {
 
 .bg-primary {
     background-color: var(--color-primary) !important;
-}
-
-.logo {
-    width: 150px;
-    box-shadow: var(--shadow-lg);
-}
-
-.zoom {
-    transition: transform .2s;
-  }
-  
-  .zoom:hover {
-    transform: scale(1.1);
-  }
-
-.sidebar {
-    background-color: var(--color-secondary) !important;
-}
-
-.sidebar-text {
-    color: #fff;
-}
-
-.sidebar-link {
-    color: #fff;
-}
-
-.sidebar-link:hover {
-    color: #fff;
 }
 
 .auth-layout {

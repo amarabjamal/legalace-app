@@ -1,96 +1,233 @@
 <template>
-    <div
-      class="flex h-screen bg-gray-50 dark:bg-gray-900"
-      :class="{ 'overflow-hidden': isSideMenuOpen}"
-    >
-            <!-- Desktop sidebar -->
-    <aside
-        class="z-20 hidden w-64 overflow-y-auto bg-white dark:bg-gray-800 md:block flex-shrink-0"
-      >
-        <div class="py-4 text-gray-500 dark:text-gray-400">
-          <div class="flex justify-left px-7 pt-3">
-            <Link
-              class="ml-6 text-lg font-bold text-gray-800 dark:text-gray-200"
-              href="/"
-            >
-              <img :src="'/images/app/logo.png'" width="120" alt="legalace logo">
-            </Link>
-          </div>
-          <div  class="flex justify-left pl-6 pt-6 text-sm">
-            <span>
-              Hello, <strong>{{ $page.props.auth.user.name }}</strong>!<br/>
-              <div  class="flex justify-left pl-6 pt-2">
-                <span v-for="role in $page.props.auth.user.roles" class="px-2 py-1 m-1 font-semibold leading-tight text-green-700 bg-green-100 rounded-full dark:bg-green-700 dark:text-green-100">{{ role }}</span>
-              </div>
-            </span>
-          </div>
-          <ul class="mt-6">
-            <li class="relative px-6 py-3">
-              <Link
-                class="inline-flex items-center w-full text-sm font-semibold transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200"
-                href="/"
-              >
-                <HomeIcon class="inline-block h-5 w-5"></HomeIcon>
-                <span class="ml-4">Dashboard</span>
-            </Link>
-            </li>
-            <!-- <NavLink v-for="link in navLinks" :key="link.name" :href="link.href" :active="$page.component === link.component">{{ link.name }}</NavLink> -->
-            <li class="relative px-6 py-3">
-              <Link
-                class="inline-flex items-center w-full text-sm font-semibold transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200"
-                href="/company"
-              >
-                <OfficeBuildingIcon class="inline-block h-5 w-5"></OfficeBuildingIcon>
-                <span class="ml-4">Company Profile</span>
-            </Link>
-            </li>
-            <li class="relative px-6 py-3">
-              <Link
-                class="inline-flex items-center w-full text-sm font-semibold transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200"
-                href="/users"
-              >
-                <UsersIcon class="inline-block h-5 w-5"></UsersIcon>
-                <span class="ml-4">User Accounts</span>
-            </Link>
-            </li>
-            <li class="relative px-6 py-3">
-              <Link
-                class="inline-flex items-center w-full text-sm font-semibold transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200"
-                href="/bankaccounts"
-              >
-                <CreditCardIcon class="inline-block h-5 w-5"></CreditCardIcon>
-                <span class="ml-4">Bank Accounts</span>
-            </Link>
-            </li>
-            <li class="relative px-6 py-3">
-              <Link
-                class="inline-flex items-center w-full text-sm font-semibold transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200"
-                href="/voucherapprovals"
-              >
-                <InboxInIcon class="inline-block h-5 w-5"></InboxInIcon> 
-                <span class="ml-4">Voucher Requests</span>
-            </Link>
-            </li>
-          </ul>
+    <nav :class="`${!isSidebarOpen ? 'close' : ''}`">
+        <div class="menu-items">
+            <ul class="nav-links">
+                <li>
+                    <Link href="/">
+                        <i class="uil uil-estate"></i>
+                        <span class="link-name">Dashboard</span>
+                    </Link>
+                </li>
+                <li>
+                    <Link href="/company">
+                        <i class="uil uil-building"></i>
+                        <span class="link-name">Company Profile</span>
+                    </Link>
+                </li>
+                <li>
+                    <Link href="/users">
+                        <i class="uil uil-users-alt"></i>
+                        <span class="link-name">User Accounts</span>
+                    </Link>
+                </li>
+                <li>
+                    <Link href="/bankaccounts">
+                        <i class="uil uil-credit-card"></i>
+                        <span class="link-name">Bank Accounts</span>
+                    </Link>
+                </li>
+                <li>
+                    <Link href="/voucherapprovals">
+                        <i class="uil uil-inbox"></i>
+                        <span class="link-name">Voucher Requests</span>
+                    </Link>
+                </li>
+            </ul>
+            
+            <ul class="logout-mode">
+                <li>
+                    <Link href="/logout" method="post">
+                        <i class="uil uil-signout"></i>
+                        <span class="link-name">Logout</span>
+                    </Link>
+                </li>
+            </ul>
         </div>
-      </aside>
-    </div>
+    </nav>
 </template>
 
 <script>
-import { Link } from '@inertiajs/inertia-vue3';
 import { HomeIcon, UsersIcon, CreditCardIcon, InboxInIcon, OfficeBuildingIcon } from "@heroicons/vue/outline";
 
 export default {
-    components: { Link, HomeIcon, UsersIcon, CreditCardIcon, InboxInIcon, OfficeBuildingIcon },
     data() {
-      return {
-        navLinks : [
-            { name: 'Dashboard', href: '/dashboard', component: 'Admin/Dashboard'},
-            { name: 'Lawyers', href: '/lawyers', component: 'Admin/Lawyers/Index'},
-            { name: 'Clerks', href: '/clerks', component: 'Admin/Clerks/Index'},
-        ],
-      }
+        return {
+            isSidebarOpen : true,
+        }
+    },
+    props: {
+        isSidebarOpen: Boolean,
+    },
+    components: { 
+        HomeIcon, 
+        UsersIcon, 
+        CreditCardIcon, 
+        InboxInIcon, 
+        OfficeBuildingIcon
+    },
+    methods: {
+    }
+};
+</script>
+
+<style scoped>
+
+nav{
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 250px;
+    padding: 10px 14px;
+    background-color: var(--panel-color);
+    border-right: 1px solid var(--border-color);
+    transition: var(--tran-05);
+}
+nav.close{
+    width: 73px;
+}
+nav .logo-name{
+    display: flex;
+    align-items: center;
+}
+nav .logo-image{
+    display: flex;
+    justify-content: center;
+    min-width: 45px;
+}
+nav .logo-image img{
+    width: 40px;
+    object-fit: cover;
+    border-radius: 50%;
+}
+
+nav .logo-name .logo_name{
+    font-size: 22px;
+    font-weight: 600;
+    color: var(--text-color);
+    margin-left: 14px;
+    transition: var(--tran-05);
+}
+nav.close .logo_name{
+    opacity: 0;
+    pointer-events: none;
+}
+nav .menu-items{
+    margin-top: 40px;
+    height: calc(100% - 90px);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+.menu-items li{
+    list-style: none;
+}
+.menu-items li a{
+    display: flex;
+    align-items: center;
+    height: 50px;
+    text-decoration: none;
+    position: relative;
+}
+.nav-links li a:hover:before{
+    content: "";
+    position: absolute;
+    left: -7px;
+    height: 5px;
+    width: 5px;
+    border-radius: 50%;
+    background-color: var(--primary-color);
+}
+body.dark li a:hover:before{
+    background-color: var(--text-color);
+}
+.menu-items li a i{
+    font-size: 24px;
+    min-width: 45px;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--black-light-color);
+}
+.menu-items li a svg{
+    min-width: 25px;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--black-light-color);
+}
+.menu-items li a .link-name{
+    font-size: 18px;
+    font-weight: 400;
+    color: var(--black-light-color);    
+    transition: var(--tran-05);
+}
+nav.close li a .link-name{
+    opacity: 0;
+    pointer-events: none;
+}
+.nav-links li a:hover i,
+.nav-links li a:hover .link-name{
+    color: var(--primary-color);
+}
+body.dark .nav-links li a:hover i,
+body.dark .nav-links li a:hover .link-name{
+    color: var(--text-color);
+}
+.menu-items .logout-mode{
+    padding-top: 10px;
+    border-top: 1px solid var(--border-color);
+}
+
+@media (max-width: 1000px) {
+    nav{
+        width: 73px;
+    }
+    nav.close{
+        width: 250px;
+    }
+    nav .logo_name{
+        opacity: 0;
+        pointer-events: none;
+    }
+    nav.close .logo_name{
+        opacity: 1;
+        pointer-events: auto;
+    }
+    nav li a .link-name{
+        opacity: 0;
+        pointer-events: none;
+    }
+    nav.close li a .link-name{
+        opacity: 1;
+        pointer-events: auto;
     }
 }
-</script>
+
+@media (max-width: 400px) {
+    nav{
+        width: 0px;
+    }
+    nav.close{
+        width: 73px;
+    }
+    nav .logo_name{
+        opacity: 0;
+        pointer-events: none;
+    }
+    nav.close .logo_name{
+        opacity: 0;
+        pointer-events: none;
+    }
+    nav li a .link-name{
+        opacity: 0;
+        pointer-events: none;
+    }
+    nav.close li a .link-name{
+        opacity: 0;
+        pointer-events: none;
+    }
+}
+</style>
