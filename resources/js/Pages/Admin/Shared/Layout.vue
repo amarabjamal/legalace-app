@@ -202,7 +202,7 @@ export default {
 .dashboard{
     position: relative;
     left: 250px;
-    background-color: rgb(249 250 251);
+    background-color: rgb(249, 250, 251);
     min-height: 100vh;
     width: calc(100% - 250px);
     padding: 10px 14px;

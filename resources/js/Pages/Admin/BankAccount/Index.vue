@@ -36,7 +36,7 @@
                 </div>
 
                 <div class="grid gap-6 mb-8 md:grid-cols-2">
-                    <div v-for="bankAccount in bankAccounts" class="min-w-0 p-4 bg-white  shadow-xs dark:bg-gray-800">
+                    <div v-for="bankAccount in bankAccounts" class="min-w-0 p-4 bg-white  shadow dark:bg-gray-800">
                         <h4 class="mb-4 font-semibold text-gray-600 dark:text-gray-300">
                         {{ bankAccount.account_name }}
                         </h4>
