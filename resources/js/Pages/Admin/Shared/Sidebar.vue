@@ -128,6 +128,7 @@ nav .menu-items{
     height: 50px;
     text-decoration: none;
     position: relative;
+    border-radius: 15px;
 }
 .nav-links li a:hover:before{
     content: "";
@@ -136,7 +137,7 @@ nav .menu-items{
     height: 5px;
     width: 5px;
     border-radius: 50%;
-    background-color: var(--primary-color);
+    background-color: #b7b7b7;
 }
 body.dark li a:hover:before{
     background-color: var(--text-color);
@@ -150,27 +151,24 @@ body.dark li a:hover:before{
     justify-content: center;
     color: var(--black-light-color);
 }
-.menu-items li a svg{
-    min-width: 25px;
-    height: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: var(--black-light-color);
-}
+
 .menu-items li a .link-name{
     font-size: 18px;
     font-weight: 400;
     color: var(--black-light-color);    
-    transition: var(--tran-05);
 }
 nav.close li a .link-name{
     opacity: 0;
     pointer-events: none;
 }
+
+.nav-links li a:hover {
+    background-color: var(--color-primary);
+}
+
 .nav-links li a:hover i,
 .nav-links li a:hover .link-name{
-    color: var(--primary-color);
+    color: #ffffff;
 }
 body.dark .nav-links li a:hover i,
 body.dark .nav-links li a:hover .link-name{
@@ -179,6 +177,10 @@ body.dark .nav-links li a:hover .link-name{
 .menu-items .logout-mode{
     padding-top: 10px;
     border-top: 1px solid var(--border-color);
+}
+
+nav.close .nav-links li a:hover {
+    
 }
 
 @media (max-width: 1000px) {

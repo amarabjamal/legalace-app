@@ -5,11 +5,19 @@
         <main class="h-full pb-16 overflow-y-auto">
             
             <div class="container px-6 mx-auto grid">
-                <h2
-                class="my-6 text-2xl font-semibold text-gray-700 dark:text-gray-200"
-                >
-                Manage Bank Accounts
-                </h2>
+                <div class="flex justify-between items-center mb-4">
+                    <h2 class="my-6 text-2xl font-semibold text-gray-700 dark:text-gray-200" >
+                        Manage Bank Accounts
+                    </h2>
+
+                    <div class="flex items-center">
+                        <Link href="/bankaccounts/create">
+                            <button class="px-4 py-2 ml-3 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-blue-500 border border-transparent rounded-lg active:bg-blue-900 hover:bg-blue-600 focus:outline-none focus:shadow-outline-blue">
+                                Add Bank Account
+                            </button>
+                        </Link>
+                    </div>
+                </div>
     
                 <!-- Main Content Start -->
                 <div v-if="$page.props.flash.message" class="flex p-4 mb-4 bg-blue-100 rounded-lg" role="alert">
@@ -22,25 +30,16 @@
                         <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg>
                     </button>
                 </div>
-                
-                <div class="flex items-center mb-4">
-                    <h4 class="text-lg font-semibold text-gray-600 dark:text-gray-300">
-                        Bank Accounts
-                    </h4>
-    
-                    <Link href="/bankaccounts/create">
-                        <button class="px-4 py-2 ml-3 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-blue-800 border border-transparent rounded-lg active:bg-blue-900 hover:bg-blue-900 focus:outline-none focus:shadow-outline-blue">
-                            Register New Bank Account
-                        </button>
-                    </Link>
-                </div>
 
                 <div class="grid gap-6 mb-8 md:grid-cols-2">
-                    <div v-for="bankAccount in bankAccounts" class="min-w-0 p-4 bg-white  shadow dark:bg-gray-800">
-                        <h4 class="mb-4 font-semibold text-gray-600 dark:text-gray-300">
-                        {{ bankAccount.account_name }}
+                    <div 
+                        v-for="bankAccount in bankAccounts" 
+                        class="min-w-0 bg-white  shadow-md rounded-lg overflow-hidden dark:bg-gray-800"
+                    >
+                        <h4 class="mb-4 p-4 uppercase font-semibold text-gray-500 border-b dark:border-gray-700 bg-gray-50 dark:text-gray-400 dark:bg-gray-800">
+                        {{ bankAccount.label }}
                         </h4>
-                        <p class="text-gray-600 dark:text-gray-400">
+                        <p class="text-gray-600 p-2 dark:text-gray-400">
                             <table class="border-separate border-spacing-2">
                                 <tr>
                                     <td width="150px">
@@ -48,6 +47,14 @@
                                     </td>
                                     <td class="font-bold">
                                         <span class="font-bold">{{ bankAccount.bank_name }}</span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        Account Name
+                                    </td>
+                                    <td class="font-bold">
+                                        {{ bankAccount.account_name }}
                                     </td>
                                 </tr>
                                 <tr>
@@ -84,18 +91,10 @@
                                 </tr>
                                 <tr>
                                     <td>
-                                        Lable
-                                    </td>
-                                    <td class="font-bold">
-                                        {{ bankAccount.label }}
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>
                                         Created By
                                     </td>
                                     <td>
-                                        <span class="font-bold">{{ bankAccount.created_by.name }} </span>{{ bankAccount.created_by.name == $page.props.auth.user.name ? '(You)' : null }}
+                                        <span class="font-bold">{{ bankAccount.created_by.name }}</span> <span v-if="bankAccount.created_by.name == $page.props.auth.user.name" class="text-sm text-gray-400">(You)</span>
                                     </td>
                                 </tr>
                             </table>

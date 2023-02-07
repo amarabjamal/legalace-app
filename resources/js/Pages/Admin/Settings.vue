@@ -44,10 +44,9 @@
 <script>
 import { Head } from "@inertiajs/inertia-vue3";
 import Layout from "./Shared/Layout";
-import Header from "./Shared/Header";
 
 export default { 
-    components: { Head, Header },
+    components: { Head },
     layout: Layout,
 };
 </script>

@@ -22,22 +22,17 @@
                         <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg>
                     </button>
                 </div>
-                
-                <h4 class="mb-4 text-lg font-semibold text-gray-600 dark:text-gray-300">
-                    Company Profile
-                </h4>
-
-                <div class="bg-white shadow overflow-hidden">
-                    <div class="flex justify-between items-center px-4 py-5 sm:px-6">
+ 
+                <div class="bg-white shadow-md overflow-hidden rounded-lg">
+                    <div class="flex justify-between items-center px-4 py-5 sm:px-6 border-b dark:border-gray-700 bg-gray-50 dark:bg-gray-800">
                         <div>
-                            <h3 class="text-lg leading-6 font-medium text-gray-900">Company Profile</h3>
-                            <p class="mt-1 max-w-2xl text-sm text-gray-500">Company details and information.</p>
+                            <h3 class="text-lg leading-6 font-medium text-gray-500 dark:text-gray-400 ">Company Profile</h3>
                         </div>
 
                         <div>
                             <Link
                                 href="/company/edit"
-                                class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center"
+                                class="text-white bg-blue-500 hover:bg-blue-600 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center"
                                 >
                                 Update
                             </Link>
@@ -45,37 +40,34 @@
                     </div>
                     <div class="border-t border-gray-200">
                     <dl>
-                        <div class="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                        <div class="bg-white border-b px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
                             <dt class="text-sm font-medium text-gray-500">Company Name</dt>
                             <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
                                 {{ company.name }}
                             </dd>
                         </div>
-                        <div class="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                        <div class="bg-white border-b px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
                             <dt class="text-sm font-medium text-gray-500">Registration Number</dt>
                             <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
                                 {{ company.reg_no }}
                             </dd>
                         </div>
-                        <div class="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                        <div class="bg-white border-b px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
                             <dt class="text-sm font-medium text-gray-500">Office Address</dt>
                             <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
                                 {{ company.address }}
                             </dd>
                         </div>
-                        <div class="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                        <div class="bg-white border-b px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
                             <dt class="text-sm font-medium text-gray-500">Email Address</dt>
                             <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
                                 {{ company.email }}
                             </dd>
                         </div>
-                        <div class="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                        <div class="bg-white border-b px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
                             <dt class="text-sm font-medium text-gray-500">Website URL</dt>
                             <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
                                 {{ company.website }}
-                                <a :href="'//'+company.website" target="_blank">
-                                    <ExternalLinkIcon class="inline-block mb-1 h-5 w-5"/>
-                                </a>
                             </dd>
                         </div>
                     </dl>

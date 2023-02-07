@@ -13,8 +13,8 @@
                         :is="link.url ? 'Link' : 'span'"
                         :href="link.url" 
                         v-html="link.label"    
-                        class="px-3 py-1 rounded-md focus:outline-none focus:shadow-outline-purple"
-                        :class="{ 'text-white transition-colors duration-150 bg-purple-600 border border-r-0 border-purple-60' : link.active }"
+                        class="px-3 py-1 rounded-md focus:outline-none focus:shadow-outline-blue"
+                        :class="{ 'text-white transition-colors duration-150 bg-blue-500 border border-r-0 border-blue-50' : link.active }"
                     />
                 </li>
             </ul>

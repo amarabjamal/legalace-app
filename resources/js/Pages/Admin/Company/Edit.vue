@@ -8,7 +8,7 @@
                 <h2
                 class="my-6 text-2xl font-semibold text-gray-700 dark:text-gray-200"
                 >
-                Edit company profile - {{ $props.company.name }}
+                Edit company profile
                 </h2>
     
                 <!-- Main Content Start -->
@@ -100,7 +100,7 @@
                                     </div>
                                 </dd>
                             </div>
-                            <div class="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                            <div class="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
                                 <dt class="text-sm font-medium text-gray-500">Email Address</dt>
                                 <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
                                     <!-- Input -->
@@ -116,7 +116,7 @@
                                     </div>
                                 </dd>
                             </div>
-                            <div class="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                            <div class="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
                                 <dt class="text-sm font-medium text-gray-500">Website URL</dt>
                                 <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
                                     <!-- Input -->

@@ -5,11 +5,31 @@
         <main class="h-full pb-16 overflow-y-auto">
             
             <div class="container px-6 mx-auto grid">
-                <h2
-                class="my-6 text-2xl font-semibold text-gray-700 dark:text-gray-200"
-                >
-                Manage User Accounts
-                </h2>
+                <div class="flex justify-between items-center mb-4">
+                    <h2 class="my-6 text-2xl font-semibold text-gray-700 dark:text-gray-200">
+                        Manage User Accounts
+                    </h2>
+
+                    <div class="flex justify-end items-center w-6/12">
+                        <div class="relative">
+                            <div class="flex absolute inset-y-0 left-0 items-center pl-4 pointer-events-none">
+                                <svg class="w-5 h-5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+                            </div>
+                            <input 
+                                v-model="searchUsers"
+                                type="text" 
+                                class="block p-2 pl-10 ease-in-out duration-150 w-0 focus:w-full text-sm text-gray-900 bg-gray-50 dark:bg-gray-800 rounded-lg border border-gray-300 dark:border-gray-800 focus:ring-blue-500 focus:border-blue-500" 
+                                placeholder="Search">
+                        </div>
+                        
+                        <Link 
+                            href="/users/create" 
+                            class="h-min text-white bg-blue-500 hover:bg-blue-600 hover:text-white focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2 mx-2"
+                        >
+                            Add Employee
+                        </Link>
+                    </div>
+                </div>
     
                 <!-- Main Content Start -->
                 <div v-if="$page.props.flash.message" class="flex p-4 mb-4 bg-blue-100 rounded-lg" role="alert">
@@ -21,26 +41,6 @@
                         <span class="sr-only">Close</span>
                         <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg>
                     </button>
-                </div>
-                
-                <div class="flex justify-between items-center mb-3">
-                    <div class="relative">
-                        <div class="flex absolute inset-y-0 left-0 items-center pl-3 pointer-events-none">
-                            <svg class="w-5 h-5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
-                        </div>
-                        <input 
-                            v-model="searchUsers"
-                            type="text" 
-                            class="block p-2 pl-10 w-full text-sm text-gray-900 bg-gray-50 dark:bg-gray-800 rounded-lg border border-gray-300 dark:border-gray-800 focus:ring-blue-500 focus:border-blue-500" 
-                            placeholder="Search">
-                    </div>
-                    
-                    <Link 
-                        href="/users/create" 
-                        class="h-min text-white bg-blue-800 hover:bg-blue-900 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2"
-                        >
-                        Register New User
-                    </Link>
                 </div>
 
                 <!-- Employee Table -->
@@ -57,7 +57,12 @@
                             </tr>
                         </thead>
                         <tbody class="bg-white divide-y dark:divide-gray-700 dark:bg-gray-800">
-                            <tr v-for="user in users.data"
+                            <tr v-if="users.data.length <= 0">
+                                <td colspan="5" class="text-center p-3 bg-gray-100 text-gray-500">No data found.</td>
+                            </tr>
+                            <tr 
+                                v-else
+                                v-for="user in users.data"
                                 :key="user.id" 
                                 class="text-gray-700 dark:text-gray-400"
                             >

@@ -17,7 +17,7 @@
                 <!-- Notifications menu -->
                 <li class="relative">
                 <button
-                    class="relative align-middle rounded-md focus:outline-none focus:shadow-outline-purple"
+                    class="relative align-middle rounded-md text-white focus:outline-none focus:shadow-outline-purple"
                     @click="toggleNotificationsMenu"
                     aria-label="Notifications"
                     aria-haspopup="true"
@@ -83,7 +83,7 @@
                 <!-- Profile menu -->
                 <li class="relative">
                 <button
-                    class="align-middle rounded-full focus:shadow-outline-purple focus:outline-none"
+                    class="align-middle rounded-full border-white border focus:shadow-outline-blue focus:outline-none"
                     @click="toggleProfileMenu"
                     aria-label="Account"
                     aria-haspopup="true"
@@ -202,8 +202,9 @@ export default {
 .dashboard{
     position: relative;
     left: 250px;
-    background-color: rgb(249, 250, 251);
-    background-image: linear-gradient(90deg, rgb(239, 246, 255) 0%, rgba(253, 242, 248, 1) 100%);
+    /* background-color: rgb(239, 246, 255); */
+    background-color: rgb(246, 250, 255);
+    /* background-image: linear-gradient(90deg, rgb(239, 246, 255) 0%, rgba(253, 242, 248, 1) 100%); */
     min-height: 100vh;
     width: calc(100% - 250px);
     padding: 10px 14px;
@@ -223,7 +224,7 @@ nav.close ~ .dashboard{
     justify-content: space-between;
     align-items: center;
     padding: 10px 14px;
-    background-color: rgb(255, 255, 255, 0.1);
+    background-color: rgb(60, 61, 91, 1.0);
     backdrop-filter: blur( 8px );
     -webkit-backdrop-filter: blur( 8px );
     transition: var(--tran-05);
@@ -236,7 +237,7 @@ nav.close ~ .dashboard .top{
 }
 .dashboard .top .sidebar-toggle{
     font-size: 26px;
-    color: var(--text-color);
+    color: #fff;
     cursor: pointer;
 }
 

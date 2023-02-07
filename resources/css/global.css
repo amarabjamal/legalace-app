@@ -66,13 +66,22 @@ body {
     font-family: var(--font-default);
 }
 
-a {
+.bg-primary {
+    background-color: var(--color-primary) !important;
+}
+
+.auth-layout {
+    /* background:conic-gradient(from 90deg at 50% 50%, rgba(80, 82, 122, 1) 31%, rgba(255, 255, 255, 1) 55%, rgba(80, 82, 122, 1) 100%); */
+    background-color: #f2f2f2;
+}
+
+.auth-layout a {
     color: var(--color-link);
     cursor: pointer;
     text-decoration: none;
     transition: color 0.1s ease-in-out;
 }
-a:hover {
+.auth-layout a:hover {
     color: var(--color-link-hover);
 }
 
@@ -83,13 +92,4 @@ a:hover {
 
 .standard-button:hover {
     background-color: var(--color-secondary);
-}
-
-.bg-primary {
-    background-color: var(--color-primary) !important;
-}
-
-.auth-layout {
-    /* background:conic-gradient(from 90deg at 50% 50%, rgba(80, 82, 122, 1) 31%, rgba(255, 255, 255, 1) 55%, rgba(80, 82, 122, 1) 100%); */
-    background-color: #f2f2f2;
 }
