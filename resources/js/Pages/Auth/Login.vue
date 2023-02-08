@@ -79,7 +79,7 @@
                   class="text-sm font-medium text-blue-700 dark:text-blue-400 hover:text-blue-900"
                   href="/"
                 >
-                  Forgot your password?
+                  <!-- Forgot your password? -->
               </Link>
               </p>
               <p class="mt-1">
@@ -87,7 +87,7 @@
                   class="text-sm font-medium text-blue-700 dark:text-blue-400 hover:text-blue-900"
                   href="/register"
                 >
-                  Create account
+                  <!-- Create account -->
               </Link>
               </p>
             </div>

@@ -39,7 +39,7 @@
                 <span class="ml-4">Clients</span>
               </Link>
             </li>
-            <li class="relative px-6 py-3">
+            <!-- <li class="relative px-6 py-3">
               <Link
                 class="inline-flex items-center w-full text-sm font-semibold transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200"
                 href="/"
@@ -56,7 +56,7 @@
                 <UsersIcon class="inline-block h-5 w-5"></UsersIcon>
                 <span class="ml-4">Vouchers</span>
               </Link>
-            </li>
+            </li> -->
             <li class="relative px-6 py-3">
               <a
                 class="inline-flex items-center w-full text-sm font-semibold transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200"

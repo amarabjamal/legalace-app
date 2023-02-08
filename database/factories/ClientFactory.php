@@ -21,7 +21,7 @@ class ClientFactory extends Factory
             'id_types_id'=>1,
             'id_num'=>fake()->numerify('######-##-####'),
             'email'=>fake()->safeEmail(),
-            'phone_number'=> '',
+            'phone_number'=> fake()->numerify('###-#######'),
             'address' => '',
             'created_by' => 1,
         ];

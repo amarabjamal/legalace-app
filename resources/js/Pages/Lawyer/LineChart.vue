@@ -1,33 +1,27 @@
 <template>
-    <Bar
-      id="my-chart-id"
+    <Line
+      id="line-chart-id"
       :options="chartOptions"
       :data="chartData"
     />
   </template>
   
   <script>
-  import { Bar } from 'vue-chartjs'
-  import { Chart as ChartJS, Title, Tooltip, Legend, BarElement, CategoryScale, LinearScale } from 'chart.js'
+  import { Line } from 'vue-chartjs'
+  import { Chart as ChartJS, Title, Tooltip, Legend, PointElement, LineElement, CategoryScale, LinearScale, Colors } from 'chart.js'
   
-  ChartJS.register(Title, Tooltip, Legend, BarElement, CategoryScale, LinearScale)
+  ChartJS.register(Title, Tooltip, Legend, CategoryScale, LinearScale, Colors, PointElement, LineElement)
   
   export default {
-    name: 'BarChart',
-    components: { Bar },
-    props: {
-      eachCost: Object,
-    },
+    name: 'LineChart',
+    components: { Line },
     data() {
       return {
         chartData: {
           labels: [ 'January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September'],
           datasets: [ { 
-            label: 'Account Balance',
-            backgroundColor: '#f87979',
-            color: '#000',
-            borderColor: '#ffffff',
-            data: [40, 20, 12, 12, 55, 20, 12, 33, 71] } ]
+            label: 'Cost',
+            data: [10, 56, 32, 47, 55, 20, 12, 33, 11] } ]
         },
         chartOptions: {
           responsive: true,
@@ -45,9 +39,12 @@
             
           },
           plugins: {
+            colors:{
+              enabled: true,
+            },
             title: {
                   display: true,
-                  text: 'Firm Account',
+                  text: 'Operational cost',
                   font: {
                         size: 18,
                   },
@@ -68,10 +65,6 @@
           },
         },
       }
-    },
-    mounted(){
-
-      console.log(this.eachCost)
     }
   }
   </script>

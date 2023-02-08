@@ -172,7 +172,7 @@ export default {
         return { form, submit };
     },
     props: { 
-        firmAccounts: Object,
+        operationalCosts: Object,
      },
     components: { Head, Header, Sidebar },
     layout: Layout,

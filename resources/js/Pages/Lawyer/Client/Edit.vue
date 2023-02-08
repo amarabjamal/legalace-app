@@ -149,7 +149,8 @@ export default {
         });
 
         let submit = () => {
-            form.post('/clients');
+            form.put(`/clients/${props.client.id}`);
+
         };
 
         return { form, submit };

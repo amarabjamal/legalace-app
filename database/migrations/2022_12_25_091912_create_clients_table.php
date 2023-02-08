@@ -24,7 +24,7 @@ return new class extends Migration
             $table->string('name');
             $table->foreignId('id_types_id')->constrained("id_types","id");
             $table->string('id_num', 1000);
-            $table->string('email')->unique();
+            $table->string('email');
             $table->string('phone_number');
             $table->string('address', 1000);
             $table->timestamps();

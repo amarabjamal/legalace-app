@@ -32,7 +32,7 @@
                             </div>
                             <div>
                             <p class="mb-2 text-sm font-medium text-gray-600 dark:text-gray-400">
-                                Total clientss
+                                Total clients
                             </p>
                             <p class="text-lg font-semibold text-gray-700 dark:text-gray-200">
                                 {{ totalClient }}
@@ -64,15 +64,15 @@
                             </div>
                             <div>
                             <p class="mb-2 text-sm font-medium text-gray-600 dark:text-gray-400">
-                                New sales
+                                Operational cost
                             </p>
                             <p class="text-lg font-semibold text-gray-700 dark:text-gray-200">
-                                376
+                                RM {{ totalCost }}
                             </p>
                             </div>
                         </div>
                         <!-- Card -->
-                        <div class="flex items-center p-8 bg-white rounded-lg shadow-xs dark:bg-gray-800">
+                        <!-- <div class="flex items-center p-8 bg-white rounded-lg shadow-xs dark:bg-gray-800">
                             <div class="p-3 mr-4 text-teal-500 bg-teal-100 rounded-full dark:text-teal-100 dark:bg-teal-500">
                             <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
                                 <path fill-rule="evenodd" d="M18 5v8a2 2 0 01-2 2h-5l-5 4v-4H4a2 2 0 01-2-2V5a2 2 0 012-2h12a2 2 0 012 2zM7 8H5v2h2V8zm2 0h2v2H9V8zm6 0h-2v2h2V8z" clip-rule="evenodd"></path>
@@ -86,57 +86,17 @@
                                 35
                             </p>
                             </div>
-                        </div>
+                        </div> -->
                     </div>
                 </div>
-                <!-- <charts-css
-                    heading="Coffee count"
-                    type="bar"
-                    :labels="['Mon', 'Tue', 'Wed',]"
-                    :datasets="[ { values: [4, 2, 70,] } ]"
-                /> -->
-                <!-- <table class="charts-css column show-heading show-labels show-primary-axis show-4-secondary-axes show-data-axes data-spacing-15 hide-data">
-
-                    <caption> Chart Heading </caption>
-
-                    <thead>
-                    <tr>
-                        <th scope="col"> Year </th>
-                        <th scope="col"> Value </th>
-                    </tr>
-                    </thead>
-
-                    <tbody>
-                    <tr>
-                        <th> 2016 </th>
-                        <td style="--size:0.2;"></td>
-                    </tr>
-                    <tr>
-                        <th> 2017 </th>
-                        <td style="--size:0.4;"></td>
-                    </tr>
-                    <tr>
-                        <th> 2018 </th>
-                        <td style="--size:0.6;"></td>
-                    </tr>
-                    <tr>
-                        <th> 2019 </th>
-                        <td style="--size:0.8;"></td>
-                    </tr>
-                    <tr>
-                        <th> 2020 </th>
-                        <td style="--size:1.0;"></td>
-                    </tr>
-                    </tbody>
-
-                </table> -->
-                <div class="container px-6 mx-auto bg-white grid">
+            
+                <div class="container px-6 mx-auto bg-white grid rounded-2xl">
                     <div class="grid gap-6 mb-8 md:grid-cols-1 xl:grid-cols-2">
                         <div class="flex items-center p-8 bg-white rounded-lg shadow-xs dark:bg-white">
                             <BarChart/>
                         </div>
                         <div class="flex items-center p-8 bg-white rounded-lg shadow-xs dark:bg-white">
-                            <BarChart/>
+                            <LineChart/>
                         </div>
                     </div>
                 </div>
@@ -151,13 +111,19 @@ import Layout from "./Shared/Layout";
 import Header from "./Shared/Header";
 import Sidebar from "./Shared/Sidebar";
 import BarChart from "./BarChart.vue";
+import LineChart from "./LineChart.vue";
 
 export default { 
-    components: { Head, Header, Sidebar, BarChart },
+    components: { Head, Header, Sidebar, BarChart, LineChart },
     layout: Layout,
     props: { 
         firmAccBalance: Object,
         totalClient: Object,
+        totalCost: Object,
+        eachCost: Object,
      },
+     mounted(){
+        // console.log(this.eachCost);
+     }
 };
 </script>

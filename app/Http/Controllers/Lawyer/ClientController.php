@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 use Inertia\Inertia;
 use App\Models\Client;
 use Illuminate\Support\Facades\Auth;
-
+use Throwable;
 class ClientController extends Controller
 {
     public function index(Request $request)
@@ -16,14 +16,16 @@ class ClientController extends Controller
             ->when($request->input('search'), function ($query, $search) {
                 $query->where('name', 'like', "%{$search}%");
             })
+            ->orderBy('name', 'asc')
             ->paginate(10)
             ->withQueryString()
             ->through(fn($user) => [
                 'id' => $user->id,
                 'name' => $user->name,
                 'email' => $user->email,
-                'phone_num' => $user->phone_num,
-                'id_num' => $user->id_num
+                'phone_num' => $user->phone_number,
+                'id_num' => $user->id_num,
+                'address' => $user->address
             ]);
         $filters = $request->only(['search']);
     
@@ -88,6 +90,23 @@ class ClientController extends Controller
         $client->delete();   
 
         return redirect()->route('clients.index')->with('message', 'Successfully deleted the client.');
+    }
+
+    public function render($request, Throwable $e)
+    {
+        $response = parent::render($request, $e);
+
+        if (! app()->environment(['local', 'testing']) && in_array($response->status(), [500, 503, 404, 403])) {
+            return Inertia::render('Error', ['status' => $response->status()])
+                ->toResponse($request)
+                ->setStatusCode($response->status());
+        } elseif ($response->status() === 419) {
+            return back()->with([
+                'message' => 'The page expired, please try again.',
+            ]);
+        }
+
+        return $response;
     }
 
 }

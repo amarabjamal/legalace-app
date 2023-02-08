@@ -7,6 +7,7 @@ use App\Models\Company;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Inertia\Inertia;
 
 class DashboardController extends Controller
@@ -25,6 +26,13 @@ class DashboardController extends Controller
         $company = $user->company;
         $companyName = $user->company->name;
 
+        $totalClient = DB::table('client_accounts')->count();
+        $totalCost = DB::table('operational_costs')->sum('amount');
+        $firmAccBalance = DB::table('firm_account')->sum('balance');
+
+        $eachCost = DB::table('operational_costs')->select('amount')->get();
+        // dd($eachCost);
+
         if($roles !== null) {
             if(in_array("admin", $roles)){
                 return Inertia::render('Admin/Dashboard', [
@@ -37,7 +45,11 @@ class DashboardController extends Controller
                 return Inertia::render('Lawyer/Dashboard', [
                     'user' => $user,
                     'company' => $companyName,
-                    'role' => $roles
+                    'role' => $roles,
+                    'totalClient' => $totalClient,
+                    'firmAccBalance' => $firmAccBalance,
+                    'totalCost' => $totalCost,
+                    'eachCost' => $eachCost,
                 ]);
             }
         } else {

@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 use Inertia\Inertia;
 use App\Models\AccountReporting;
 use Illuminate\Support\Facades\Auth;
-
+use Throwable;
 class AccountReportingController extends Controller
 {
     public function index(Request $request)
@@ -45,20 +45,37 @@ class AccountReportingController extends Controller
         
     }
 
-    public function edit(Client $client)
+    public function edit(AccountReporting $accountReporting)
     {
         
     }
 
-    public function update(Request $request, Client $client)
+    public function update(Request $request, AccountReporting $accountReporting)
     {
         
     }
 
-    public function destroy(ClientAccount $clientAccount)
+    public function destroy(AccountReporting $accountReporting)
     {
-        $clientAccount->delete();   
+        $accountReporting->delete();   
 
         return redirect()->route('client-account.index')->with('message', 'Successfully deleted the client.');
+    }
+
+    public function render($request, Throwable $e)
+    {
+        $response = parent::render($request, $e);
+
+        if (! app()->environment(['local', 'testing']) && in_array($response->status(), [500, 503, 404, 403])) {
+            return Inertia::render('Error', ['status' => $response->status()])
+                ->toResponse($request)
+                ->setStatusCode($response->status());
+        } elseif ($response->status() === 419) {
+            return back()->with([
+                'message' => 'The page expired, please try again.',
+            ]);
+        }
+
+        return $response;
     }
 }
