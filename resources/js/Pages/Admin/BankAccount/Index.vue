@@ -11,7 +11,7 @@
                     </h2>
 
                     <div class="flex items-center">
-                        <Link href="/bankaccounts/create">
+                        <Link href="/admin/bankaccounts/create">
                             <button class="px-4 py-2 ml-3 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-blue-500 border border-transparent rounded-lg active:bg-blue-900 hover:bg-blue-600 focus:outline-none focus:shadow-outline-blue">
                                 Add Bank Account
                             </button>
@@ -86,7 +86,7 @@
                                         Account Type
                                     </td>
                                     <td class="font-bold">
-                                        {{ bankAccount.account_type.name }}
+                                        {{ bankAccount.bank_account_type.name }}
                                     </td>
                                 </tr>
                                 <tr>
@@ -99,7 +99,7 @@
                                 </tr>
                             </table>
                             <div class="flex justify-end mt-3 p-2 pr-4">
-                                <Link :href="`/bankaccounts/${ bankAccount.id }/edit`">Edit</Link>
+                                <Link :href="`/admin/bankaccounts/${ bankAccount.id }/edit`">Edit</Link>
                                 <Link @click="deleteBankAccount(bankAccount)" as="button" class="ml-3 font-medium text-red-600 hover:underline">Delete</Link>
                             </div>
                         </p>
@@ -123,7 +123,7 @@ export default {
      methods: {
         deleteBankAccount(bankAccount) {
             if (confirm('Are you sure you want to delete this bank account?')) {
-                Inertia.delete(`/bankaccounts/${ bankAccount.id }`);
+                Inertia.delete(`/admin/bankaccounts/${ bankAccount.id }`);
             }
         }
     },

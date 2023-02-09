@@ -15,28 +15,12 @@ class Role extends Model
         'slug'
     ];
 
+    public $timestamps = false;
+
     public const IS_ADMIN = 1;
     public const IS_LAWYER = 2;
 
     public function userRoles() {
         return $this->hasMany(UserRole::class);
-    }
-
-    // have to be fix
-    public $timestamp = false;
-
-    public function setUpdatedAt($value) {
-        
-    }
-    
-    public function getUpdatedAt() {
-
-    }
-    public function setCreatedAt($value) {
-        
-    }
-    
-    public function getCreatedAt() {
-
     }
 }

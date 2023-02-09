@@ -39,4 +39,20 @@ class ProfileController extends Controller
             ]);
         }
     }
+
+    public function showAdminProfile() {
+        $user = Auth::user();
+
+        return Inertia::render('Admin/Profile', [
+            'user' => $user,
+        ]);
+    } 
+
+    public function showLawyerProfile() {
+        $user = Auth::user();
+        
+        return Inertia::render('Lawyer/Profile', [
+            'user' => $user,
+        ]);
+    }
 }

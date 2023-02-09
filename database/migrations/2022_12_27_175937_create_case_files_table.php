@@ -17,7 +17,7 @@ return new class extends Migration
             $table->id();
             $table->String('matter');
             $table->String('type');
-            $table->String('file_no');
+            $table->String('file_number');
             $table->boolean('no_conflict_checked');
             $table->foreignId('client_id')->constrained('clients', 'id');
             $table->foreignId('created_by')->constrained('users', 'id');

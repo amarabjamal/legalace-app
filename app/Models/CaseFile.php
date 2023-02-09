@@ -13,12 +13,10 @@ class CaseFile extends Model
     protected $fillable = [
         'matter',
         'type',
-        'file_no',
+        'file_number',
         'no_conflict_checked',
         'client_id',
         'created_by',
-        'created_at',
-        'updated_at',
     ];
     protected $hidden = [
         'created_at',

@@ -22,12 +22,13 @@ class UserFactory extends Factory
             'email' => fake()->safeEmail(),
             'email_verified_at' => now(),
             'password' => 'password', // password
-            'id_types_id' => 1,
-            'id_num' => fake()->numerify('######-##-####'),
-            'employee_id'=>fake()->numerify('CL####'),
-            'contact_num'=>'',
+            'id_type_id' => 1,
+            'id_number' => fake()->numerify('######-##-####'),
+            'employee_id'=> fake()->numerify('CL####'),
+            'contact_number'=> fake()->numerify('011-########'),
             'birthdate'=>'2000-12-05',
-            'company_id'=>1,
+            'is_active' => true,
+            'company_id'=> 1,
             'remember_token' => Str::random(10),
         ];
     }

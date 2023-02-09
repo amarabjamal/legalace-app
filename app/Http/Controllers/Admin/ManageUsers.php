@@ -30,7 +30,7 @@ class ManageUsers extends Controller
                             ->through(fn($user) => [
                                 'id' => $user->id,
                                 'name' => $user->name,
-                                'id_num' => $user->id_num,
+                                'id_number' => $user->id_number,
                                 'employee_id' => $user->employee_id,
                                 'email' => $user->email,
                             ]);
@@ -60,8 +60,8 @@ class ManageUsers extends Controller
             ['email', '=' , $request->email],
             ['company_id', '=' , Auth::user()->company_id],
         ])->first();
-        $id_num = User::where([
-            ['id_num', '=' , $request->id_num],
+        $id_number = User::where([
+            ['id_number', '=' , $request->id_number],
             ['company_id', '=' , Auth::user()->company_id],
         ])->first();
         $employee_id = User::where([
@@ -82,15 +82,15 @@ class ManageUsers extends Controller
             $isLawyer = false;
         }
 
-        if($email == null && $id_num == null && $employee_id == null) {
+        if($email == null && $id_number == null && $employee_id == null) {
 
             $user = User::create([
                         'name' => $request->name,
                         'email' => $request->email,
                         'password' => 'defaultpassword',
-                        'id_num' => $request->id_num,
+                        'id_number' => $request->id_number,
                         'employee_id' => $request->employee_id,
-                        'contact_num' => $request->contact_num,
+                        'contact_number' => $request->contact_number,
                         'birthdate' => $request->birthdate,
                         'company_id' => Auth::user()->company_id,
                         'created_at' => now(),
@@ -111,7 +111,7 @@ class ManageUsers extends Controller
                 ]);
             }
 
-            return redirect()->route('users.index')->with('message', 'Successfully added new user account.');
+            return redirect()->route('admin.users.index')->with('message', 'Successfully added new user account.');
 
         } else {
             if($email != null) {
@@ -120,8 +120,8 @@ class ManageUsers extends Controller
             if($employee_id != null) {
                 $errors += ['employee_id' => 'Employee ID already in use.'];
             } 
-            if($id_num != null) {
-                $errors += ['id_num' => 'Identification Number already in use.'];
+            if($id_number != null) {
+                $errors += ['id_number' => 'Identification Number already in use.'];
             } 
  
             return back()->withErrors($errors);
@@ -145,11 +145,11 @@ class ManageUsers extends Controller
             'id' => $user->id,
             'name' => $user->name,
             'email' => $user->email,
-            'id_num' => $user->id_num,
+            'id_number' => $user->id_number,
             'employee_id' => $user->employee_id,
             'isAdmin' => in_array('admin', $roles),
             'isLawyer' => in_array('lawyer', $roles),
-            'contact_num' => $user->contact_num,
+            'contact_number' => $user->contact_number,
             'birthdate' => $user->birthdate,
         ];
         return Inertia::render('Admin/User/Edit', [
@@ -168,8 +168,8 @@ class ManageUsers extends Controller
             ['id', '!=' , $user->id],
             ['company_id', '=' , Auth::user()->company_id],
         ])->first();
-        $id_num = User::where([
-            ['id_num', '=' , $request->id_num],
+        $id_number = User::where([
+            ['id_number', '=' , $request->id_number],
             ['id', '!=' , $user->id],
             ['company_id', '=' , Auth::user()->company_id],
         ])->first();
@@ -180,7 +180,7 @@ class ManageUsers extends Controller
         ])->first();
         $errors = array();
 
-        if($email == null && $id_num == null && $employee_id == null) {
+        if($email == null && $id_number == null && $employee_id == null) {
 
             $userRoles = $user->userRoles;
             $roles = array();
@@ -216,9 +216,9 @@ class ManageUsers extends Controller
             $user->update([
                 'name' => $request->name,
                 'email' => $request->email,
-                'id_num' => $request->id_num,
+                'id_number' => $request->id_number,
                 'employee_id' => $request->employee_id,
-                'contact_num' => $request->contact_num,
+                'contact_number' => $request->contact_number,
                 'birthdate' => $request->birthdate,
                 'updated_at' => now(),
             ]);
@@ -247,7 +247,7 @@ class ManageUsers extends Controller
                 ])->delete();
             }
     
-            return redirect()->route('users.index')->with('message', 'Successfully updated the user account.');
+            return redirect()->route('admin.users.index')->with('message', 'Successfully updated the user account.');
 
         } else {
             if($email != null) {
@@ -256,8 +256,8 @@ class ManageUsers extends Controller
             if($employee_id != null) {
                 $errors += ['employee_id' => 'Employee ID already in use.'];
             } 
-            if($id_num != null) {
-                $errors += ['id_num' => 'Identification Number already in use.'];
+            if($id_number != null) {
+                $errors += ['id_number' => 'Identification Number already in use.'];
             } 
  
             return back()->withErrors($errors);
@@ -276,6 +276,6 @@ class ManageUsers extends Controller
         }
         $user->delete();   
 
-        return redirect()->route('users.index')->with('message', 'Successfully deleted the user account.');
+        return redirect()->route('admin.users.index')->with('message', 'Successfully deleted the user account.');
     }
 }

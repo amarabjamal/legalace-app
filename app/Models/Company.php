@@ -11,17 +11,10 @@ class Company extends Model
 
     protected $table = 'companies';
     protected $primaryKey = 'id';
-    protected $attributes = [
-        'name' => "Default",
-        'reg_no' => "Default",
-        'address' => "Default",
-        'email' => "Default",
-        'website' => "Default",
-    ];
 
     protected $fillable = [
         'name',
-        'reg_no',
+        'reg_number',
         'address',
         'email',
         'website',

@@ -31,7 +31,7 @@
 
                         <div>
                             <Link
-                                href="/company/edit"
+                                href="/admin/company/edit"
                                 class="text-white bg-blue-500 hover:bg-blue-600 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center"
                                 >
                                 Update
@@ -49,7 +49,7 @@
                         <div class="bg-white border-b px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
                             <dt class="text-sm font-medium text-gray-500">Registration Number</dt>
                             <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-                                {{ company.reg_no }}
+                                {{ company.reg_number }}
                             </dd>
                         </div>
                         <div class="bg-white border-b px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">

@@ -14,17 +14,11 @@ class WorkDescription extends Model
         'description',
         'fee',
         'quotation_id',
-        'created_at',
-        'updated_at',
     ];
     protected $hidden = [
         'created_at',
         'updated_at',
     ];
-
-    public function createdBy() {
-        return $this->belongsTo(User::class);
-    }
 
     public function quotation() {
         return $this->belongsTo(Quotation::class);

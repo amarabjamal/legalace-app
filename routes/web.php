@@ -39,34 +39,71 @@ Route::get('/testInfoMessage', [RegisterController::class, 'testInfoMessage']);
 
 Route::get('forgotpassword', [ForgotPasswordController::class, 'index'])->name('forgotpassword');
 
-//Common routes for all users
-Route::middleware('is.valid.user')->group(function () {
-    Route::get('/', [DashboardController::class, 'index']);
-    Route::get('/dashboard', [DashboardController::class, 'index']);
 
-    Route::get('/profile', [ProfileController::class, 'index']);
-});
 
-//Routes for Administrator ONLY
-Route::middleware('is.admin')->group(function () {
-    Route::resources([
-        'users' => ManageUsers::class,
-        'bankaccounts' => ManageBankAccount::class,
-        'voucherapprovals' => ApproveVoucher::class,
-    ]);
+Route::group(['middleware' => 'auth'], function() {
+    //Common routes for all users
+    // Route::middleware('is.valid.user')->group(function () {
+    //     Route::get('/', [DashboardController::class, 'index']);
+    //     Route::get('/dashboard', [DashboardController::class, 'index']);
+    //     Route::get('/profile', [ProfileController::class, 'index']);
+    // });
 
-    Route::resource('company', ManageCompany::class)->except(['show','edit', 'destroy']);
-    Route::get('company/edit', [ManageCompany::class, 'edit'])->name('company.edit');
+    //Routes for Administrator ONLY
+    Route::group(['middleware' => 'check.role:admin', 'prefix' => 'admin', 'as' => 'admin.'], function() {
+        Route::get('/', [DashboardController::class, 'showAdminDashboard']);
+        Route::get('/dashboard', [DashboardController::class, 'showAdminDashboard']);
+        Route::get('/profile', [ProfileController::class, 'showAdminProfile']);
+
+        Route::resources([
+            'users' => ManageUsers::class,
+            'bankaccounts' => ManageBankAccount::class,
+            'voucherapprovals' => ApproveVoucher::class,
+        ]);
     
-    Route::get('/settings', function () {
-        $userId = Auth::id();
-        return Inertia::render('Admin/Settings', [$userId]);
+        Route::resource('company', ManageCompany::class)->except(['show','edit', 'destroy']);
+        Route::get('company/edit', [ManageCompany::class, 'edit'])->name('company.edit');
+        
+        Route::get('/settings', function () {
+            $userId = Auth::id();
+            return Inertia::render('Admin/Settings', [$userId]);
+        });
+    });
+
+    //Routes for Lawyer ONLY
+    Route::group(['middleware' => 'check.role:lawyer', 'prefix' => 'lawyer', 'as' => 'lawyer.'], function() {
+        Route::get('/', [DashboardController::class, 'showLawyerDashboard']);
+        Route::get('/dashboard', [DashboardController::class, 'showLawyerDashboard']);
+        Route::get('/profile', [ProfileController::class, 'showLawyerProfile']);
+
+        Route::resource('clients', ClientController::class);
+        Route::resource('casefiles', ManageCaseFile::class);
     });
 });
 
-//Routes for Lawyer ONLY
-Route::middleware('is.lawyer')->group(function () {
-    Route::resource('clients', ClientController::class);
 
-    Route::resource('casefiles', ManageCaseFile::class);
-});
+
+
+// //Routes for Administrator ONLY
+// Route::middleware('is.admin')->group(function () {
+//     Route::resources([
+//         'users' => ManageUsers::class,
+//         'bankaccounts' => ManageBankAccount::class,
+//         'voucherapprovals' => ApproveVoucher::class,
+//     ]);
+
+//     Route::resource('company', ManageCompany::class)->except(['show','edit', 'destroy']);
+//     Route::get('company/edit', [ManageCompany::class, 'edit'])->name('company.edit');
+    
+//     Route::get('/settings', function () {
+//         $userId = Auth::id();
+//         return Inertia::render('Admin/Settings', [$userId]);
+//     });
+// });
+
+//Routes for Lawyer ONLY
+// Route::middleware('is.lawyer')->group(function () {
+//     Route::resource('clients', ClientController::class);
+
+//     Route::resource('casefiles', ManageCaseFile::class);
+// });

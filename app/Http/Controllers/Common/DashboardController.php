@@ -45,4 +45,37 @@ class DashboardController extends Controller
             ]);
         }
     }
+
+    public function showAdminDashboard() {
+        $user = Auth::user();
+        $userRoles = User::findOrFail($user->id)->userRoles;
+        $roles = array();
+
+        foreach($userRoles as $userRole) {
+            array_push($roles, $userRole->role->slug);
+        }
+
+        return Inertia::render('Admin/Dashboard', [
+            'total_users' => User::all()->count(),
+            'role' => $roles
+        ]);
+    }
+
+    public function showLawyerDashboard() {
+        $user = Auth::user();
+        $userRoles = User::findOrFail($user->id)->userRoles;
+        $roles = array();
+
+        foreach($userRoles as $userRole) {
+            array_push($roles, $userRole->role->slug);
+        }
+
+        $companyName = $user->company->name;
+
+        return Inertia::render('Lawyer/Dashboard', [
+            'user' => $user,
+            'company' => $companyName,
+            'role' => $roles
+        ]);
+    }
 }

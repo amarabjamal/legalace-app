@@ -19572,12 +19572,12 @@ __webpack_require__.r(__webpack_exports__);
       account_number: props.bankAccount.account_number,
       bank_address: props.bankAccount.bank_address,
       swift_code: props.bankAccount.swift_code,
-      account_type: props.bankAccount.account_type.slug,
+      bank_account_type: props.bankAccount.bank_account_type.slug,
       label: props.bankAccount.label
     });
 
     var submit = function submit() {
-      form.put("/bankaccounts/".concat(props.bankAccount.id));
+      form.put("/admin/bankaccounts/".concat(props.bankAccount.id));
     };
 
     return {
@@ -19621,56 +19621,13 @@ __webpack_require__.r(__webpack_exports__);
   methods: {
     deleteBankAccount: function deleteBankAccount(bankAccount) {
       if (confirm('Are you sure you want to delete this bank account?')) {
-        _inertiajs_inertia__WEBPACK_IMPORTED_MODULE_2__.Inertia["delete"]("/bankaccounts/".concat(bankAccount.id));
+        _inertiajs_inertia__WEBPACK_IMPORTED_MODULE_2__.Inertia["delete"]("/admin/bankaccounts/".concat(bankAccount.id));
       }
     }
   },
   components: {
     Head: _inertiajs_inertia_vue3__WEBPACK_IMPORTED_MODULE_0__.Head,
     Link: _inertiajs_inertia_vue3__WEBPACK_IMPORTED_MODULE_0__.Link
-  },
-  layout: _Shared_Layout__WEBPACK_IMPORTED_MODULE_1__["default"]
-});
-
-/***/ }),
-
-/***/ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./resources/js/Pages/Admin/Company/Create.vue?vue&type=script&lang=js":
-/*!*********************************************************************************************************************************************************************************************************!*\
-  !*** ./node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./resources/js/Pages/Admin/Company/Create.vue?vue&type=script&lang=js ***!
-  \*********************************************************************************************************************************************************************************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
-/* harmony export */ });
-/* harmony import */ var _inertiajs_inertia_vue3__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @inertiajs/inertia-vue3 */ "./node_modules/@inertiajs/inertia-vue3/dist/index.js");
-/* harmony import */ var _Shared_Layout__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../Shared/Layout */ "./resources/js/Pages/Admin/Shared/Layout.vue");
-
-
-
-/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
-  setup: function setup() {
-    var form = (0,_inertiajs_inertia_vue3__WEBPACK_IMPORTED_MODULE_0__.useForm)({
-      name: '',
-      registration_num: '',
-      email: '',
-      website: '',
-      address: ''
-    });
-
-    var submit = function submit() {
-      form.post('/company-profile');
-    };
-
-    return {
-      form: form,
-      submit: submit
-    };
-  },
-  components: {
-    Head: _inertiajs_inertia_vue3__WEBPACK_IMPORTED_MODULE_0__.Head
   },
   layout: _Shared_Layout__WEBPACK_IMPORTED_MODULE_1__["default"]
 });
@@ -19697,14 +19654,14 @@ __webpack_require__.r(__webpack_exports__);
   setup: function setup(props) {
     var form = (0,_inertiajs_inertia_vue3__WEBPACK_IMPORTED_MODULE_0__.useForm)({
       name: props.company.name,
-      reg_no: props.company.reg_no,
+      reg_number: props.company.reg_number,
       address: props.company.address,
       email: props.company.email,
       website: props.company.website
     });
 
     var submit = function submit() {
-      form.put("/company/".concat(props.company.id));
+      form.put("/admin/company/".concat(props.company.id));
     };
 
     return {
@@ -19967,16 +19924,16 @@ __webpack_require__.r(__webpack_exports__);
     var form = (0,_inertiajs_inertia_vue3__WEBPACK_IMPORTED_MODULE_0__.useForm)({
       name: '',
       email: '',
-      id_num: '',
+      id_number: '',
       employee_id: '',
       isAdmin: '',
       isLawyer: '',
-      contact_num: '',
+      contact_number: '',
       birthdate: ''
     });
 
     var submit = function submit() {
-      form.post('/users');
+      form.post('/admin/users');
     };
 
     return {
@@ -20013,16 +19970,16 @@ __webpack_require__.r(__webpack_exports__);
     var form = (0,_inertiajs_inertia_vue3__WEBPACK_IMPORTED_MODULE_0__.useForm)({
       name: props.user.name,
       email: props.user.email,
-      id_num: props.user.id_num,
+      id_number: props.user.id_number,
       employee_id: props.user.employee_id,
       isAdmin: props.user.isAdmin,
       isLawyer: props.user.isLawyer,
-      contact_num: props.user.contact_num,
+      contact_number: props.user.contact_number,
       birthdate: props.user.birthdate.substring(0, 10)
     });
 
     var submit = function submit() {
-      form.put("/users/".concat(props.user.id));
+      form.put("/admin/users/".concat(props.user.id));
     };
 
     return {
@@ -20074,7 +20031,7 @@ __webpack_require__.r(__webpack_exports__);
   setup: function setup(props) {
     var searchUsers = (0,vue__WEBPACK_IMPORTED_MODULE_4__.ref)(props.filters.search);
     (0,vue__WEBPACK_IMPORTED_MODULE_4__.watch)(searchUsers, lodash_throttle__WEBPACK_IMPORTED_MODULE_6___default()(function (value) {
-      _inertiajs_inertia__WEBPACK_IMPORTED_MODULE_5__.Inertia.get('/users', {
+      _inertiajs_inertia__WEBPACK_IMPORTED_MODULE_5__.Inertia.get('/admin/users', {
         search: value
       }, {
         preserveState: true,
@@ -20093,7 +20050,7 @@ __webpack_require__.r(__webpack_exports__);
   methods: {
     deleteUser: function deleteUser(user) {
       if (confirm('Are you sure you want to delete this user account?')) {
-        _inertiajs_inertia__WEBPACK_IMPORTED_MODULE_5__.Inertia["delete"]("/users/".concat(user.id));
+        _inertiajs_inertia__WEBPACK_IMPORTED_MODULE_5__.Inertia["delete"]("/admin/users/".concat(user.id));
       }
     }
   },
@@ -21409,7 +21366,7 @@ var _hoisted_27 = {
 };
 
 var _hoisted_28 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("label", {
-  "for": "account_type",
+  "for": "bank_account_type",
   "class": "block mb-2 text-sm font-medium text-gray-900 dark:text-white"
 }, " Account Type ", -1
 /* HOISTED */
@@ -21551,16 +21508,16 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
   /* PROPS */
   , _hoisted_26)) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true)]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_27, [_hoisted_28, (0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)((0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("select", {
     "onUpdate:modelValue": _cache[6] || (_cache[6] = function ($event) {
-      return $setup.form.account_type = $event;
+      return $setup.form.bank_account_type = $event;
     }),
-    id: "account_type",
+    id: "bank_account_type",
     "class": "bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:outline-none focus:border-purple-400 focus:shadow-outline-purple block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500",
     required: ""
   }, _hoisted_31, 512
   /* NEED_PATCH */
-  ), [[vue__WEBPACK_IMPORTED_MODULE_0__.vModelSelect, $setup.form.account_type]]), $setup.form.errors.account_type ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("p", {
+  ), [[vue__WEBPACK_IMPORTED_MODULE_0__.vModelSelect, $setup.form.bank_account_type]]), $setup.form.errors.bank_account_type ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("p", {
     key: 0,
-    textContent: (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($setup.form.errors.account_type),
+    textContent: (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($setup.form.errors.bank_account_type),
     "class": "mt-2 text-sm text-red-600"
   }, null, 8
   /* PROPS */
@@ -21588,7 +21545,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
   }, " Submit ", 8
   /* PROPS */
   , _hoisted_36), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_Link, {
-    href: "/bankaccounts",
+    href: "/admin/bankaccounts",
     as: "button",
     "class": "ml-2 text-gray-900 focus:outline-none bg-white border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-200 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center",
     disabled: $setup.form.processing
@@ -21794,7 +21751,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
   return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_Head, {
     title: "Manage bank accounts"
   }), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_1, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("main", _hoisted_2, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_3, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_4, [_hoisted_5, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_6, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_Link, {
-    href: "/bankaccounts/create"
+    href: "/admin/bankaccounts/create"
   }, {
     "default": (0,vue__WEBPACK_IMPORTED_MODULE_0__.withCtx)(function () {
       return [_hoisted_7];
@@ -21823,12 +21780,12 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     /* TEXT */
     )]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("tr", null, [_hoisted_28, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("td", _hoisted_29, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(bankAccount.swift_code), 1
     /* TEXT */
-    )]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("tr", null, [_hoisted_30, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("td", _hoisted_31, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(bankAccount.account_type.name), 1
+    )]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("tr", null, [_hoisted_30, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("td", _hoisted_31, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(bankAccount.bank_account_type.name), 1
     /* TEXT */
     )]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("tr", null, [_hoisted_32, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("td", null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("span", _hoisted_33, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(bankAccount.created_by.name), 1
     /* TEXT */
     ), _hoisted_34, bankAccount.created_by.name == _ctx.$page.props.auth.user.name ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("span", _hoisted_35, "(You)")) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true)])])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_36, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_Link, {
-      href: "/bankaccounts/".concat(bankAccount.id, "/edit")
+      href: "/admin/bankaccounts/".concat(bankAccount.id, "/edit")
     }, {
       "default": (0,vue__WEBPACK_IMPORTED_MODULE_0__.withCtx)(function () {
         return [_hoisted_37];
@@ -21857,269 +21814,6 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
   }), 256
   /* UNKEYED_FRAGMENT */
   ))]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)(" Main Content End ")])])])], 64
-  /* STABLE_FRAGMENT */
-  );
-}
-
-/***/ }),
-
-/***/ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!./node_modules/vue-loader/dist/templateLoader.js??ruleSet[1].rules[2]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./resources/js/Pages/Admin/Company/Create.vue?vue&type=template&id=54ab9bf7":
-/*!*************************************************************************************************************************************************************************************************************************************************************************************!*\
-  !*** ./node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!./node_modules/vue-loader/dist/templateLoader.js??ruleSet[1].rules[2]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./resources/js/Pages/Admin/Company/Create.vue?vue&type=template&id=54ab9bf7 ***!
-  \*************************************************************************************************************************************************************************************************************************************************************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "render": () => (/* binding */ render)
-/* harmony export */ });
-/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.esm-bundler.js");
-
-var _hoisted_1 = {
-  "class": "mt-10"
-};
-var _hoisted_2 = {
-  "class": "max-w-7xl mx-auto py-6 sm:px-6 lg:px-8"
-};
-var _hoisted_3 = {
-  key: 0,
-  "class": "flex p-4 mb-4 bg-blue-100 rounded-lg",
-  role: "alert"
-};
-
-var _hoisted_4 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("svg", {
-  "class": "flex-shrink-0 w-5 h-5 text-blue-700",
-  fill: "currentColor",
-  viewBox: "0 0 20 20",
-  xmlns: "http://www.w3.org/2000/svg"
-}, [/*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("path", {
-  "fill-rule": "evenodd",
-  d: "M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z",
-  "clip-rule": "evenodd"
-})], -1
-/* HOISTED */
-);
-
-var _hoisted_5 = {
-  "class": "ml-3 text-sm font-medium text-blue-700"
-};
-
-var _hoisted_6 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("span", {
-  "class": "sr-only"
-}, "Close", -1
-/* HOISTED */
-);
-
-var _hoisted_7 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("svg", {
-  "class": "w-5 h-5",
-  fill: "currentColor",
-  viewBox: "0 0 20 20",
-  xmlns: "http://www.w3.org/2000/svg"
-}, [/*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("path", {
-  "fill-rule": "evenodd",
-  d: "M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z",
-  "clip-rule": "evenodd"
-})], -1
-/* HOISTED */
-);
-
-var _hoisted_8 = [_hoisted_6, _hoisted_7];
-var _hoisted_9 = {
-  "class": "bg-white shadow overflow-hidden sm:rounded-lg"
-};
-var _hoisted_10 = {
-  "class": "flex justify-between items-center px-4 py-5 sm:px-6"
-};
-
-var _hoisted_11 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", null, [/*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("h3", {
-  "class": "text-lg leading-6 font-medium text-gray-900"
-}, "Company Profile"), /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("p", {
-  "class": "mt-1 max-w-2xl text-sm text-gray-500"
-}, "Company details and information.")], -1
-/* HOISTED */
-);
-
-var _hoisted_12 = ["disabled"];
-var _hoisted_13 = {
-  "class": "border-t border-gray-200"
-};
-var _hoisted_14 = {
-  "class": "bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6"
-};
-
-var _hoisted_15 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("dt", {
-  "class": "text-sm font-medium text-gray-500"
-}, "Company Name", -1
-/* HOISTED */
-);
-
-var _hoisted_16 = {
-  "class": "mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2"
-};
-var _hoisted_17 = ["textContent"];
-var _hoisted_18 = {
-  "class": "bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6"
-};
-
-var _hoisted_19 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("dt", {
-  "class": "text-sm font-medium text-gray-500"
-}, "Registration Number", -1
-/* HOISTED */
-);
-
-var _hoisted_20 = {
-  "class": "mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2"
-};
-var _hoisted_21 = ["textContent"];
-var _hoisted_22 = {
-  "class": "bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6"
-};
-
-var _hoisted_23 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("dt", {
-  "class": "text-sm font-medium text-gray-500"
-}, "Email Address", -1
-/* HOISTED */
-);
-
-var _hoisted_24 = {
-  "class": "mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2"
-};
-var _hoisted_25 = ["textContent"];
-var _hoisted_26 = {
-  "class": "bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6"
-};
-
-var _hoisted_27 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("dt", {
-  "class": "text-sm font-medium text-gray-500"
-}, "Website URL", -1
-/* HOISTED */
-);
-
-var _hoisted_28 = {
-  "class": "mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2"
-};
-var _hoisted_29 = ["textContent"];
-var _hoisted_30 = {
-  "class": "bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6"
-};
-
-var _hoisted_31 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("dt", {
-  "class": "text-sm font-medium text-gray-500"
-}, "Office Address", -1
-/* HOISTED */
-);
-
-var _hoisted_32 = {
-  "class": "mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2"
-};
-var _hoisted_33 = ["textContent"];
-function render(_ctx, _cache, $props, $setup, $data, $options) {
-  var _component_Head = (0,vue__WEBPACK_IMPORTED_MODULE_0__.resolveComponent)("Head");
-
-  return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_Head, {
-    title: "Configure Company Profile"
-  }), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("main", _hoisted_1, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_2, [_ctx.$page.props.flash.message ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_3, [_hoisted_4, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_5, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(_ctx.$page.props.flash.message), 1
-  /* TEXT */
-  ), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("button", {
-    type: "button",
-    onClick: _cache[0] || (_cache[0] = function ($event) {
-      return _ctx.$page.props.flash.message = '';
-    }),
-    "class": "ml-auto -mx-1.5 -my-1.5 bg-blue-100 text-blue-500 rounded-lg focus:ring-2 focus:ring-blue-400 p-1.5 hover:bg-blue-200 inline-flex h-8 w-8"
-  }, _hoisted_8)])) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("form", {
-    onSubmit: _cache[6] || (_cache[6] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.withModifiers)(function () {
-      return $setup.submit && $setup.submit.apply($setup, arguments);
-    }, ["prevent"]))
-  }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_9, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_10, [_hoisted_11, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("button", {
-    type: "submit",
-    "class": "text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center",
-    disabled: $setup.form.processing
-  }, " Save ", 8
-  /* PROPS */
-  , _hoisted_12)])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_13, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("dl", null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_14, [_hoisted_15, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("dd", _hoisted_16, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)(" Input "), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)((0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("input", {
-    "onUpdate:modelValue": _cache[1] || (_cache[1] = function ($event) {
-      return $setup.form.name = $event;
-    }),
-    type: "text",
-    "class": "bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5",
-    placeholder: "",
-    required: ""
-  }, null, 512
-  /* NEED_PATCH */
-  ), [[vue__WEBPACK_IMPORTED_MODULE_0__.vModelText, $setup.form.name]]), $setup.form.errors.name ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("p", {
-    key: 0,
-    textContent: (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($setup.form.errors.name),
-    "class": "mt-2 text-sm text-red-600"
-  }, null, 8
-  /* PROPS */
-  , _hoisted_17)) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true)])])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_18, [_hoisted_19, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("dd", _hoisted_20, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)(" Input "), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)((0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("input", {
-    "onUpdate:modelValue": _cache[2] || (_cache[2] = function ($event) {
-      return $setup.form.registration_num = $event;
-    }),
-    type: "text",
-    "class": "bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5",
-    placeholder: "",
-    required: ""
-  }, null, 512
-  /* NEED_PATCH */
-  ), [[vue__WEBPACK_IMPORTED_MODULE_0__.vModelText, $setup.form.registration_num]]), $setup.form.errors.registration_num ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("p", {
-    key: 0,
-    textContent: (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($setup.form.errors.registration_num),
-    "class": "mt-2 text-sm text-red-600"
-  }, null, 8
-  /* PROPS */
-  , _hoisted_21)) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true)])])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_22, [_hoisted_23, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("dd", _hoisted_24, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)(" Input "), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)((0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("input", {
-    "onUpdate:modelValue": _cache[3] || (_cache[3] = function ($event) {
-      return $setup.form.email = $event;
-    }),
-    type: "email",
-    "class": "bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5",
-    placeholder: "",
-    required: ""
-  }, null, 512
-  /* NEED_PATCH */
-  ), [[vue__WEBPACK_IMPORTED_MODULE_0__.vModelText, $setup.form.email]]), $setup.form.errors.email ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("p", {
-    key: 0,
-    textContent: (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($setup.form.errors.email),
-    "class": "mt-2 text-sm text-red-600"
-  }, null, 8
-  /* PROPS */
-  , _hoisted_25)) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true)])])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_26, [_hoisted_27, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("dd", _hoisted_28, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)(" Input "), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)((0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("input", {
-    "onUpdate:modelValue": _cache[4] || (_cache[4] = function ($event) {
-      return $setup.form.website = $event;
-    }),
-    type: "text",
-    "class": "bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5",
-    placeholder: "",
-    required: ""
-  }, null, 512
-  /* NEED_PATCH */
-  ), [[vue__WEBPACK_IMPORTED_MODULE_0__.vModelText, $setup.form.website]]), $setup.form.errors.website ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("p", {
-    key: 0,
-    textContent: (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($setup.form.errors.website),
-    "class": "mt-2 text-sm text-red-600"
-  }, null, 8
-  /* PROPS */
-  , _hoisted_29)) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true)])])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_30, [_hoisted_31, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("dd", _hoisted_32, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)(" Input "), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)((0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("input", {
-    "onUpdate:modelValue": _cache[5] || (_cache[5] = function ($event) {
-      return $setup.form.address = $event;
-    }),
-    type: "text",
-    "class": "bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5",
-    placeholder: "",
-    required: ""
-  }, null, 512
-  /* NEED_PATCH */
-  ), [[vue__WEBPACK_IMPORTED_MODULE_0__.vModelText, $setup.form.address]]), $setup.form.errors.address ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("p", {
-    key: 0,
-    textContent: (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($setup.form.errors.address),
-    "class": "mt-2 text-sm text-red-600"
-  }, null, 8
-  /* PROPS */
-  , _hoisted_33)) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true)])])])])])])], 32
-  /* HYDRATE_EVENTS */
-  )])])], 64
   /* STABLE_FRAGMENT */
   );
 }
@@ -22309,7 +22003,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
       return $setup.submit && $setup.submit.apply($setup, arguments);
     }, ["prevent"]))
   }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_11, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_12, [_hoisted_13, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_Link, {
-    href: "/company",
+    href: "admin/company",
     as: "button",
     "class": "mr-2 text-gray-900 focus:outline-none bg-white border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-200 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center",
     disabled: $setup.form.processing
@@ -22346,7 +22040,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
   /* PROPS */
   , _hoisted_20)) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true)])])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_21, [_hoisted_22, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("dd", _hoisted_23, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)(" Input "), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)((0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("input", {
     "onUpdate:modelValue": _cache[2] || (_cache[2] = function ($event) {
-      return $setup.form.reg_no = $event;
+      return $setup.form.reg_number = $event;
     }),
     type: "text",
     "class": "bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5",
@@ -22354,9 +22048,9 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     required: ""
   }, null, 512
   /* NEED_PATCH */
-  ), [[vue__WEBPACK_IMPORTED_MODULE_0__.vModelText, $setup.form.reg_no]]), $setup.form.errors.reg_no ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("p", {
+  ), [[vue__WEBPACK_IMPORTED_MODULE_0__.vModelText, $setup.form.reg_number]]), $setup.form.errors.reg_number ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("p", {
     key: 0,
-    textContent: (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($setup.form.errors.reg_no),
+    textContent: (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($setup.form.errors.reg_number),
     "class": "mt-2 text-sm text-red-600"
   }, null, 8
   /* PROPS */
@@ -22588,7 +22282,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     }),
     "class": "ml-auto -mx-1.5 -my-1.5 bg-blue-100 text-blue-500 rounded-lg focus:ring-2 focus:ring-blue-400 p-1.5 hover:bg-blue-200 inline-flex h-8 w-8"
   }, _hoisted_10)])) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_11, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_12, [_hoisted_13, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_Link, {
-    href: "/company/edit",
+    href: "/admin/company/edit",
     "class": "text-white bg-blue-500 hover:bg-blue-600 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center"
   }, {
     "default": (0,vue__WEBPACK_IMPORTED_MODULE_0__.withCtx)(function () {
@@ -22599,7 +22293,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
 
   })])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_15, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("dl", null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_16, [_hoisted_17, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("dd", _hoisted_18, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($props.company.name), 1
   /* TEXT */
-  )]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_19, [_hoisted_20, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("dd", _hoisted_21, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($props.company.reg_no), 1
+  )]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_19, [_hoisted_20, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("dd", _hoisted_21, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($props.company.reg_number), 1
   /* TEXT */
   )]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_22, [_hoisted_23, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("dd", _hoisted_24, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($props.company.address), 1
   /* TEXT */
@@ -22627,69 +22321,15 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.esm-bundler.js");
 
-var _hoisted_1 = {
-  "class": "flex flex-col flex-1"
-};
-var _hoisted_2 = {
-  key: 0,
-  "class": "flex p-4 mb-4 bg-blue-100 rounded-lg",
-  role: "alert"
-};
 
-var _hoisted_3 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("svg", {
-  "class": "flex-shrink-0 w-5 h-5 text-blue-700",
-  fill: "currentColor",
-  viewBox: "0 0 20 20",
-  xmlns: "http://www.w3.org/2000/svg"
-}, [/*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("path", {
-  "fill-rule": "evenodd",
-  d: "M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z",
-  "clip-rule": "evenodd"
-})], -1
-/* HOISTED */
-);
-
-var _hoisted_4 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", {
-  "class": "ml-3 text-sm font-medium text-blue-700"
-}, " You have not configured your Company Profile yet. Click on your Profile Picture > Company Profile to insert your company info. ", -1
-/* HOISTED */
-);
-
-var _hoisted_5 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("span", {
-  "class": "sr-only"
-}, "Close", -1
-/* HOISTED */
-);
-
-var _hoisted_6 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("svg", {
-  "class": "w-5 h-5",
-  fill: "currentColor",
-  viewBox: "0 0 20 20",
-  xmlns: "http://www.w3.org/2000/svg"
-}, [/*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("path", {
-  "fill-rule": "evenodd",
-  d: "M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z",
-  "clip-rule": "evenodd"
-})], -1
-/* HOISTED */
-);
-
-var _hoisted_7 = [_hoisted_5, _hoisted_6];
-
-var _hoisted_8 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createStaticVNode)("<main class=\"h-full pb-16 overflow-y-auto\"><div class=\"container px-6 mx-auto grid\"><h2 class=\"my-6 text-2xl font-semibold text-gray-700 dark:text-gray-200\"> Dashboard </h2><!-- Cards --><div class=\"grid gap-6 mb-8 md:grid-cols-2 xl:grid-cols-4\"><!-- Card --><div class=\"flex items-center p-4 bg-white rounded-lg shadow dark:bg-gray-800\"><div class=\"p-3 mr-4 text-orange-500 bg-orange-100 rounded-full dark:text-orange-100 dark:bg-orange-500\"><svg class=\"w-5 h-5\" fill=\"currentColor\" viewBox=\"0 0 20 20\"><path d=\"M13 6a3 3 0 11-6 0 3 3 0 016 0zM18 8a2 2 0 11-4 0 2 2 0 014 0zM14 15a4 4 0 00-8 0v3h8v-3zM6 8a2 2 0 11-4 0 2 2 0 014 0zM16 18v-3a5.972 5.972 0 00-.75-2.906A3.005 3.005 0 0119 15v3h-3zM4.75 12.094A5.973 5.973 0 004 15v3H1v-3a3 3 0 013.75-2.906z\"></path></svg></div><div><p class=\"mb-2 text-sm font-medium text-gray-600 dark:text-gray-400\"> Total Employees </p><p class=\"text-lg font-semibold text-gray-700 dark:text-gray-200\"> 6389 </p></div></div><!-- Card --><div class=\"flex items-center p-4 bg-white rounded-lg shadow dark:bg-gray-800\"><div class=\"p-3 mr-4 text-orange-500 bg-orange-100 rounded-full dark:text-orange-100 dark:bg-orange-500\"><svg class=\"w-5 h-5\" fill=\"currentColor\" viewBox=\"0 0 20 20\"><path d=\"M13 6a3 3 0 11-6 0 3 3 0 016 0zM18 8a2 2 0 11-4 0 2 2 0 014 0zM14 15a4 4 0 00-8 0v3h8v-3zM6 8a2 2 0 11-4 0 2 2 0 014 0zM16 18v-3a5.972 5.972 0 00-.75-2.906A3.005 3.005 0 0119 15v3h-3zM4.75 12.094A5.973 5.973 0 004 15v3H1v-3a3 3 0 013.75-2.906z\"></path></svg></div><div><p class=\"mb-2 text-sm font-medium text-gray-600 dark:text-gray-400\"> Total clients </p><p class=\"text-lg font-semibold text-gray-700 dark:text-gray-200\"> 6389 </p></div></div><!-- Card --><div class=\"flex items-center p-4 bg-white rounded-lg shadow dark:bg-gray-800\"><div class=\"p-3 mr-4 text-green-500 bg-green-100 rounded-full dark:text-green-100 dark:bg-green-500\"><svg class=\"w-5 h-5\" fill=\"currentColor\" viewBox=\"0 0 20 20\"><path fill-rule=\"evenodd\" d=\"M4 4a2 2 0 00-2 2v4a2 2 0 002 2V6h10a2 2 0 00-2-2H4zm2 6a2 2 0 012-2h8a2 2 0 012 2v4a2 2 0 01-2 2H8a2 2 0 01-2-2v-4zm6 4a2 2 0 100-4 2 2 0 000 4z\" clip-rule=\"evenodd\"></path></svg></div><div><p class=\"mb-2 text-sm font-medium text-gray-600 dark:text-gray-400\"> Account balance </p><p class=\"text-lg font-semibold text-gray-700 dark:text-gray-200\"> $ 46,760.89 </p></div></div><!-- Card --><div class=\"flex items-center p-4 bg-white rounded-lg shadow dark:bg-gray-800\"><div class=\"p-3 mr-4 text-blue-500 bg-blue-100 rounded-full dark:text-blue-100 dark:bg-blue-500\"><svg class=\"w-5 h-5\" fill=\"currentColor\" viewBox=\"0 0 20 20\"><path d=\"M3 1a1 1 0 000 2h1.22l.305 1.222a.997.997 0 00.01.042l1.358 5.43-.893.892C3.74 11.846 4.632 14 6.414 14H15a1 1 0 000-2H6.414l1-1H14a1 1 0 00.894-.553l3-6A1 1 0 0017 3H6.28l-.31-1.243A1 1 0 005 1H3zM16 16.5a1.5 1.5 0 11-3 0 1.5 1.5 0 013 0zM6.5 18a1.5 1.5 0 100-3 1.5 1.5 0 000 3z\"></path></svg></div><div><p class=\"mb-2 text-sm font-medium text-gray-600 dark:text-gray-400\"> New sales </p><p class=\"text-lg font-semibold text-gray-700 dark:text-gray-200\"> 376 </p></div></div><!-- Card --><div class=\"flex items-center p-4 bg-white rounded-lg shadow dark:bg-gray-800\"><div class=\"p-3 mr-4 text-teal-500 bg-teal-100 rounded-full dark:text-teal-100 dark:bg-teal-500\"><svg class=\"w-5 h-5\" fill=\"currentColor\" viewBox=\"0 0 20 20\"><path fill-rule=\"evenodd\" d=\"M18 5v8a2 2 0 01-2 2h-5l-5 4v-4H4a2 2 0 01-2-2V5a2 2 0 012-2h12a2 2 0 012 2zM7 8H5v2h2V8zm2 0h2v2H9V8zm6 0h-2v2h2V8z\" clip-rule=\"evenodd\"></path></svg></div><div><p class=\"mb-2 text-sm font-medium text-gray-600 dark:text-gray-400\"> Pending contacts </p><p class=\"text-lg font-semibold text-gray-700 dark:text-gray-200\"> 35 </p></div></div></div><!-- New Table --><div class=\"w-full overflow-hidden rounded-lg shadow\"><div class=\"w-full overflow-x-auto\"><table class=\"w-full whitespace-no-wrap\"><thead><tr class=\"text-xs font-semibold tracking-wide text-left text-gray-500 uppercase border-b dark:border-gray-700 bg-gray-50 dark:text-gray-400 dark:bg-gray-800\"><th class=\"px-4 py-3\">Client</th><th class=\"px-4 py-3\">Amount</th><th class=\"px-4 py-3\">Status</th><th class=\"px-4 py-3\">Date</th></tr></thead><tbody class=\"bg-white divide-y dark:divide-gray-700 dark:bg-gray-800\"><tr class=\"text-gray-700 dark:text-gray-400\"><td class=\"px-4 py-3\"><div class=\"flex items-center text-sm\"><!-- Avatar with inset shadow --><div class=\"relative hidden w-8 h-8 mr-3 rounded-full md:block\"><img class=\"object-cover w-full h-full rounded-full\" src=\"https://images.unsplash.com/flagged/photo-1570612861542-284f4c12e75f?ixlib=rb-1.2.1&amp;q=80&amp;fm=jpg&amp;crop=entropy&amp;cs=tinysrgb&amp;w=200&amp;fit=max&amp;ixid=eyJhcHBfaWQiOjE3Nzg0fQ\" alt=\"\" loading=\"lazy\"><div class=\"absolute inset-0 rounded-full shadow-inner\" aria-hidden=\"true\"></div></div><div><p class=\"font-semibold\">Hans Burger</p><p class=\"text-xs text-gray-600 dark:text-gray-400\"> 10x Developer </p></div></div></td><td class=\"px-4 py-3 text-sm\"> $ 863.45 </td><td class=\"px-4 py-3 text-xs\"><span class=\"px-2 py-1 font-semibold leading-tight text-green-700 bg-green-100 rounded-full dark:bg-green-700 dark:text-green-100\"> Approved </span></td><td class=\"px-4 py-3 text-sm\"> 6/10/2020 </td></tr><tr class=\"text-gray-700 dark:text-gray-400\"><td class=\"px-4 py-3\"><div class=\"flex items-center text-sm\"><!-- Avatar with inset shadow --><div class=\"relative hidden w-8 h-8 mr-3 rounded-full md:block\"><img class=\"object-cover w-full h-full rounded-full\" src=\"https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-0.3.5&amp;q=80&amp;fm=jpg&amp;crop=entropy&amp;cs=tinysrgb&amp;w=200&amp;facepad=3&amp;fit=facearea&amp;s=707b9c33066bf8808c934c8ab394dff6\" alt=\"\" loading=\"lazy\"><div class=\"absolute inset-0 rounded-full shadow-inner\" aria-hidden=\"true\"></div></div><div><p class=\"font-semibold\">Jolina Angelie</p><p class=\"text-xs text-gray-600 dark:text-gray-400\"> Unemployed </p></div></div></td><td class=\"px-4 py-3 text-sm\"> $ 369.95 </td><td class=\"px-4 py-3 text-xs\"><span class=\"px-2 py-1 font-semibold leading-tight text-orange-700 bg-orange-100 rounded-full dark:text-white dark:bg-orange-600\"> Pending </span></td><td class=\"px-4 py-3 text-sm\"> 6/10/2020 </td></tr><tr class=\"text-gray-700 dark:text-gray-400\"><td class=\"px-4 py-3\"><div class=\"flex items-center text-sm\"><!-- Avatar with inset shadow --><div class=\"relative hidden w-8 h-8 mr-3 rounded-full md:block\"><img class=\"object-cover w-full h-full rounded-full\" src=\"https://images.unsplash.com/photo-1551069613-1904dbdcda11?ixlib=rb-1.2.1&amp;q=80&amp;fm=jpg&amp;crop=entropy&amp;cs=tinysrgb&amp;w=200&amp;fit=max&amp;ixid=eyJhcHBfaWQiOjE3Nzg0fQ\" alt=\"\" loading=\"lazy\"><div class=\"absolute inset-0 rounded-full shadow-inner\" aria-hidden=\"true\"></div></div><div><p class=\"font-semibold\">Sarah Curry</p><p class=\"text-xs text-gray-600 dark:text-gray-400\"> Designer </p></div></div></td><td class=\"px-4 py-3 text-sm\"> $ 86.00 </td><td class=\"px-4 py-3 text-xs\"><span class=\"px-2 py-1 font-semibold leading-tight text-red-700 bg-red-100 rounded-full dark:text-red-100 dark:bg-red-700\"> Denied </span></td><td class=\"px-4 py-3 text-sm\"> 6/10/2020 </td></tr><tr class=\"text-gray-700 dark:text-gray-400\"><td class=\"px-4 py-3\"><div class=\"flex items-center text-sm\"><!-- Avatar with inset shadow --><div class=\"relative hidden w-8 h-8 mr-3 rounded-full md:block\"><img class=\"object-cover w-full h-full rounded-full\" src=\"https://images.unsplash.com/photo-1551006917-3b4c078c47c9?ixlib=rb-1.2.1&amp;q=80&amp;fm=jpg&amp;crop=entropy&amp;cs=tinysrgb&amp;w=200&amp;fit=max&amp;ixid=eyJhcHBfaWQiOjE3Nzg0fQ\" alt=\"\" loading=\"lazy\"><div class=\"absolute inset-0 rounded-full shadow-inner\" aria-hidden=\"true\"></div></div><div><p class=\"font-semibold\">Rulia Joberts</p><p class=\"text-xs text-gray-600 dark:text-gray-400\"> Actress </p></div></div></td><td class=\"px-4 py-3 text-sm\"> $ 1276.45 </td><td class=\"px-4 py-3 text-xs\"><span class=\"px-2 py-1 font-semibold leading-tight text-green-700 bg-green-100 rounded-full dark:bg-green-700 dark:text-green-100\"> Approved </span></td><td class=\"px-4 py-3 text-sm\"> 6/10/2020 </td></tr><tr class=\"text-gray-700 dark:text-gray-400\"><td class=\"px-4 py-3\"><div class=\"flex items-center text-sm\"><!-- Avatar with inset shadow --><div class=\"relative hidden w-8 h-8 mr-3 rounded-full md:block\"><img class=\"object-cover w-full h-full rounded-full\" src=\"https://images.unsplash.com/photo-1546456073-6712f79251bb?ixlib=rb-1.2.1&amp;q=80&amp;fm=jpg&amp;crop=entropy&amp;cs=tinysrgb&amp;w=200&amp;fit=max&amp;ixid=eyJhcHBfaWQiOjE3Nzg0fQ\" alt=\"\" loading=\"lazy\"><div class=\"absolute inset-0 rounded-full shadow-inner\" aria-hidden=\"true\"></div></div><div><p class=\"font-semibold\">Wenzel Dashington</p><p class=\"text-xs text-gray-600 dark:text-gray-400\"> Actor </p></div></div></td><td class=\"px-4 py-3 text-sm\"> $ 863.45 </td><td class=\"px-4 py-3 text-xs\"><span class=\"px-2 py-1 font-semibold leading-tight text-gray-700 bg-gray-100 rounded-full dark:text-gray-100 dark:bg-gray-700\"> Expired </span></td><td class=\"px-4 py-3 text-sm\"> 6/10/2020 </td></tr><tr class=\"text-gray-700 dark:text-gray-400\"><td class=\"px-4 py-3\"><div class=\"flex items-center text-sm\"><!-- Avatar with inset shadow --><div class=\"relative hidden w-8 h-8 mr-3 rounded-full md:block\"><img class=\"object-cover w-full h-full rounded-full\" src=\"https://images.unsplash.com/photo-1502720705749-871143f0e671?ixlib=rb-0.3.5&amp;q=80&amp;fm=jpg&amp;crop=entropy&amp;cs=tinysrgb&amp;w=200&amp;fit=max&amp;s=b8377ca9f985d80264279f277f3a67f5\" alt=\"\" loading=\"lazy\"><div class=\"absolute inset-0 rounded-full shadow-inner\" aria-hidden=\"true\"></div></div><div><p class=\"font-semibold\">Dave Li</p><p class=\"text-xs text-gray-600 dark:text-gray-400\"> Influencer </p></div></div></td><td class=\"px-4 py-3 text-sm\"> $ 863.45 </td><td class=\"px-4 py-3 text-xs\"><span class=\"px-2 py-1 font-semibold leading-tight text-green-700 bg-green-100 rounded-full dark:bg-green-700 dark:text-green-100\"> Approved </span></td><td class=\"px-4 py-3 text-sm\"> 6/10/2020 </td></tr><tr class=\"text-gray-700 dark:text-gray-400\"><td class=\"px-4 py-3\"><div class=\"flex items-center text-sm\"><!-- Avatar with inset shadow --><div class=\"relative hidden w-8 h-8 mr-3 rounded-full md:block\"><img class=\"object-cover w-full h-full rounded-full\" src=\"https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?ixlib=rb-1.2.1&amp;q=80&amp;fm=jpg&amp;crop=entropy&amp;cs=tinysrgb&amp;w=200&amp;fit=max&amp;ixid=eyJhcHBfaWQiOjE3Nzg0fQ\" alt=\"\" loading=\"lazy\"><div class=\"absolute inset-0 rounded-full shadow-inner\" aria-hidden=\"true\"></div></div><div><p class=\"font-semibold\">Maria Ramovic</p><p class=\"text-xs text-gray-600 dark:text-gray-400\"> Runner </p></div></div></td><td class=\"px-4 py-3 text-sm\"> $ 863.45 </td><td class=\"px-4 py-3 text-xs\"><span class=\"px-2 py-1 font-semibold leading-tight text-green-700 bg-green-100 rounded-full dark:bg-green-700 dark:text-green-100\"> Approved </span></td><td class=\"px-4 py-3 text-sm\"> 6/10/2020 </td></tr><tr class=\"text-gray-700 dark:text-gray-400\"><td class=\"px-4 py-3\"><div class=\"flex items-center text-sm\"><!-- Avatar with inset shadow --><div class=\"relative hidden w-8 h-8 mr-3 rounded-full md:block\"><img class=\"object-cover w-full h-full rounded-full\" src=\"https://images.unsplash.com/photo-1566411520896-01e7ca4726af?ixlib=rb-1.2.1&amp;q=80&amp;fm=jpg&amp;crop=entropy&amp;cs=tinysrgb&amp;w=200&amp;fit=max&amp;ixid=eyJhcHBfaWQiOjE3Nzg0fQ\" alt=\"\" loading=\"lazy\"><div class=\"absolute inset-0 rounded-full shadow-inner\" aria-hidden=\"true\"></div></div><div><p class=\"font-semibold\">Hitney Wouston</p><p class=\"text-xs text-gray-600 dark:text-gray-400\"> Singer </p></div></div></td><td class=\"px-4 py-3 text-sm\"> $ 863.45 </td><td class=\"px-4 py-3 text-xs\"><span class=\"px-2 py-1 font-semibold leading-tight text-green-700 bg-green-100 rounded-full dark:bg-green-700 dark:text-green-100\"> Approved </span></td><td class=\"px-4 py-3 text-sm\"> 6/10/2020 </td></tr><tr class=\"text-gray-700 dark:text-gray-400\"><td class=\"px-4 py-3\"><div class=\"flex items-center text-sm\"><!-- Avatar with inset shadow --><div class=\"relative hidden w-8 h-8 mr-3 rounded-full md:block\"><img class=\"object-cover w-full h-full rounded-full\" src=\"https://images.unsplash.com/flagged/photo-1570612861542-284f4c12e75f?ixlib=rb-1.2.1&amp;q=80&amp;fm=jpg&amp;crop=entropy&amp;cs=tinysrgb&amp;w=200&amp;fit=max&amp;ixid=eyJhcHBfaWQiOjE3Nzg0fQ\" alt=\"\" loading=\"lazy\"><div class=\"absolute inset-0 rounded-full shadow-inner\" aria-hidden=\"true\"></div></div><div><p class=\"font-semibold\">Hans Burger</p><p class=\"text-xs text-gray-600 dark:text-gray-400\"> 10x Developer </p></div></div></td><td class=\"px-4 py-3 text-sm\"> $ 863.45 </td><td class=\"px-4 py-3 text-xs\"><span class=\"px-2 py-1 font-semibold leading-tight text-green-700 bg-green-100 rounded-full dark:bg-green-700 dark:text-green-100\"> Approved </span></td><td class=\"px-4 py-3 text-sm\"> 6/10/2020 </td></tr></tbody></table></div><div class=\"grid px-4 py-3 text-xs font-semibold tracking-wide text-gray-500 uppercase border-t dark:border-gray-700 bg-gray-50 sm:grid-cols-9 dark:text-gray-400 dark:bg-gray-800\"><span class=\"flex items-center col-span-3\"> Showing 21-30 of 100 </span><span class=\"col-span-2\"></span><!-- Pagination --><span class=\"flex col-span-4 mt-2 sm:mt-auto sm:justify-end\"><nav aria-label=\"Table navigation\"><ul class=\"inline-flex items-center\"><li><button class=\"px-3 py-1 rounded-md rounded-l-lg focus:outline-none focus:shadow-outline-purple\" aria-label=\"Previous\"><svg aria-hidden=\"true\" class=\"w-4 h-4 fill-current\" viewBox=\"0 0 20 20\"><path d=\"M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z\" clip-rule=\"evenodd\" fill-rule=\"evenodd\"></path></svg></button></li><li><button class=\"px-3 py-1 rounded-md focus:outline-none focus:shadow-outline-purple\"> 1 </button></li><li><button class=\"px-3 py-1 rounded-md focus:outline-none focus:shadow-outline-purple\"> 2 </button></li><li><button class=\"px-3 py-1 text-white transition-colors duration-150 bg-purple-600 border border-r-0 border-purple-600 rounded-md focus:outline-none focus:shadow-outline-purple\"> 3 </button></li><li><button class=\"px-3 py-1 rounded-md focus:outline-none focus:shadow-outline-purple\"> 4 </button></li><li><span class=\"px-3 py-1\">...</span></li><li><button class=\"px-3 py-1 rounded-md focus:outline-none focus:shadow-outline-purple\"> 8 </button></li><li><button class=\"px-3 py-1 rounded-md focus:outline-none focus:shadow-outline-purple\"> 9 </button></li><li><button class=\"px-3 py-1 rounded-md rounded-r-lg focus:outline-none focus:shadow-outline-purple\" aria-label=\"Next\"><svg class=\"w-4 h-4 fill-current\" aria-hidden=\"true\" viewBox=\"0 0 20 20\"><path d=\"M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z\" clip-rule=\"evenodd\" fill-rule=\"evenodd\"></path></svg></button></li></ul></nav></span></div></div></div></main>", 1);
+var _hoisted_1 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createStaticVNode)("<div class=\"flex flex-col flex-1\"><main class=\"h-full pb-16 overflow-y-auto\"><div class=\"container px-6 mx-auto grid\"><h2 class=\"my-6 text-2xl font-semibold text-gray-700 dark:text-gray-200\"> Dashboard </h2><!-- Cards --><div class=\"grid gap-6 mb-8 md:grid-cols-2 xl:grid-cols-4\"><!-- Card --><div class=\"flex items-center p-4 bg-white rounded-lg shadow dark:bg-gray-800\"><div class=\"p-3 mr-4 text-orange-500 bg-orange-100 rounded-full dark:text-orange-100 dark:bg-orange-500\"><svg class=\"w-5 h-5\" fill=\"currentColor\" viewBox=\"0 0 20 20\"><path d=\"M13 6a3 3 0 11-6 0 3 3 0 016 0zM18 8a2 2 0 11-4 0 2 2 0 014 0zM14 15a4 4 0 00-8 0v3h8v-3zM6 8a2 2 0 11-4 0 2 2 0 014 0zM16 18v-3a5.972 5.972 0 00-.75-2.906A3.005 3.005 0 0119 15v3h-3zM4.75 12.094A5.973 5.973 0 004 15v3H1v-3a3 3 0 013.75-2.906z\"></path></svg></div><div><p class=\"mb-2 text-sm font-medium text-gray-600 dark:text-gray-400\"> Total Employees </p><p class=\"text-lg font-semibold text-gray-700 dark:text-gray-200\"> 6389 </p></div></div><!-- Card --><div class=\"flex items-center p-4 bg-white rounded-lg shadow dark:bg-gray-800\"><div class=\"p-3 mr-4 text-orange-500 bg-orange-100 rounded-full dark:text-orange-100 dark:bg-orange-500\"><svg class=\"w-5 h-5\" fill=\"currentColor\" viewBox=\"0 0 20 20\"><path d=\"M13 6a3 3 0 11-6 0 3 3 0 016 0zM18 8a2 2 0 11-4 0 2 2 0 014 0zM14 15a4 4 0 00-8 0v3h8v-3zM6 8a2 2 0 11-4 0 2 2 0 014 0zM16 18v-3a5.972 5.972 0 00-.75-2.906A3.005 3.005 0 0119 15v3h-3zM4.75 12.094A5.973 5.973 0 004 15v3H1v-3a3 3 0 013.75-2.906z\"></path></svg></div><div><p class=\"mb-2 text-sm font-medium text-gray-600 dark:text-gray-400\"> Total clients </p><p class=\"text-lg font-semibold text-gray-700 dark:text-gray-200\"> 6389 </p></div></div><!-- Card --><div class=\"flex items-center p-4 bg-white rounded-lg shadow dark:bg-gray-800\"><div class=\"p-3 mr-4 text-green-500 bg-green-100 rounded-full dark:text-green-100 dark:bg-green-500\"><svg class=\"w-5 h-5\" fill=\"currentColor\" viewBox=\"0 0 20 20\"><path fill-rule=\"evenodd\" d=\"M4 4a2 2 0 00-2 2v4a2 2 0 002 2V6h10a2 2 0 00-2-2H4zm2 6a2 2 0 012-2h8a2 2 0 012 2v4a2 2 0 01-2 2H8a2 2 0 01-2-2v-4zm6 4a2 2 0 100-4 2 2 0 000 4z\" clip-rule=\"evenodd\"></path></svg></div><div><p class=\"mb-2 text-sm font-medium text-gray-600 dark:text-gray-400\"> Account balance </p><p class=\"text-lg font-semibold text-gray-700 dark:text-gray-200\"> $ 46,760.89 </p></div></div><!-- Card --><div class=\"flex items-center p-4 bg-white rounded-lg shadow dark:bg-gray-800\"><div class=\"p-3 mr-4 text-blue-500 bg-blue-100 rounded-full dark:text-blue-100 dark:bg-blue-500\"><svg class=\"w-5 h-5\" fill=\"currentColor\" viewBox=\"0 0 20 20\"><path d=\"M3 1a1 1 0 000 2h1.22l.305 1.222a.997.997 0 00.01.042l1.358 5.43-.893.892C3.74 11.846 4.632 14 6.414 14H15a1 1 0 000-2H6.414l1-1H14a1 1 0 00.894-.553l3-6A1 1 0 0017 3H6.28l-.31-1.243A1 1 0 005 1H3zM16 16.5a1.5 1.5 0 11-3 0 1.5 1.5 0 013 0zM6.5 18a1.5 1.5 0 100-3 1.5 1.5 0 000 3z\"></path></svg></div><div><p class=\"mb-2 text-sm font-medium text-gray-600 dark:text-gray-400\"> New sales </p><p class=\"text-lg font-semibold text-gray-700 dark:text-gray-200\"> 376 </p></div></div><!-- Card --><div class=\"flex items-center p-4 bg-white rounded-lg shadow dark:bg-gray-800\"><div class=\"p-3 mr-4 text-teal-500 bg-teal-100 rounded-full dark:text-teal-100 dark:bg-teal-500\"><svg class=\"w-5 h-5\" fill=\"currentColor\" viewBox=\"0 0 20 20\"><path fill-rule=\"evenodd\" d=\"M18 5v8a2 2 0 01-2 2h-5l-5 4v-4H4a2 2 0 01-2-2V5a2 2 0 012-2h12a2 2 0 012 2zM7 8H5v2h2V8zm2 0h2v2H9V8zm6 0h-2v2h2V8z\" clip-rule=\"evenodd\"></path></svg></div><div><p class=\"mb-2 text-sm font-medium text-gray-600 dark:text-gray-400\"> Pending contacts </p><p class=\"text-lg font-semibold text-gray-700 dark:text-gray-200\"> 35 </p></div></div></div><!-- New Table --><div class=\"w-full overflow-hidden rounded-lg shadow\"><div class=\"w-full overflow-x-auto\"><table class=\"w-full whitespace-no-wrap\"><thead><tr class=\"text-xs font-semibold tracking-wide text-left text-gray-500 uppercase border-b dark:border-gray-700 bg-gray-50 dark:text-gray-400 dark:bg-gray-800\"><th class=\"px-4 py-3\">Client</th><th class=\"px-4 py-3\">Amount</th><th class=\"px-4 py-3\">Status</th><th class=\"px-4 py-3\">Date</th></tr></thead><tbody class=\"bg-white divide-y dark:divide-gray-700 dark:bg-gray-800\"><tr class=\"text-gray-700 dark:text-gray-400\"><td class=\"px-4 py-3\"><div class=\"flex items-center text-sm\"><!-- Avatar with inset shadow --><div class=\"relative hidden w-8 h-8 mr-3 rounded-full md:block\"><img class=\"object-cover w-full h-full rounded-full\" src=\"https://images.unsplash.com/flagged/photo-1570612861542-284f4c12e75f?ixlib=rb-1.2.1&amp;q=80&amp;fm=jpg&amp;crop=entropy&amp;cs=tinysrgb&amp;w=200&amp;fit=max&amp;ixid=eyJhcHBfaWQiOjE3Nzg0fQ\" alt=\"\" loading=\"lazy\"><div class=\"absolute inset-0 rounded-full shadow-inner\" aria-hidden=\"true\"></div></div><div><p class=\"font-semibold\">Hans Burger</p><p class=\"text-xs text-gray-600 dark:text-gray-400\"> 10x Developer </p></div></div></td><td class=\"px-4 py-3 text-sm\"> $ 863.45 </td><td class=\"px-4 py-3 text-xs\"><span class=\"px-2 py-1 font-semibold leading-tight text-green-700 bg-green-100 rounded-full dark:bg-green-700 dark:text-green-100\"> Approved </span></td><td class=\"px-4 py-3 text-sm\"> 6/10/2020 </td></tr><tr class=\"text-gray-700 dark:text-gray-400\"><td class=\"px-4 py-3\"><div class=\"flex items-center text-sm\"><!-- Avatar with inset shadow --><div class=\"relative hidden w-8 h-8 mr-3 rounded-full md:block\"><img class=\"object-cover w-full h-full rounded-full\" src=\"https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-0.3.5&amp;q=80&amp;fm=jpg&amp;crop=entropy&amp;cs=tinysrgb&amp;w=200&amp;facepad=3&amp;fit=facearea&amp;s=707b9c33066bf8808c934c8ab394dff6\" alt=\"\" loading=\"lazy\"><div class=\"absolute inset-0 rounded-full shadow-inner\" aria-hidden=\"true\"></div></div><div><p class=\"font-semibold\">Jolina Angelie</p><p class=\"text-xs text-gray-600 dark:text-gray-400\"> Unemployed </p></div></div></td><td class=\"px-4 py-3 text-sm\"> $ 369.95 </td><td class=\"px-4 py-3 text-xs\"><span class=\"px-2 py-1 font-semibold leading-tight text-orange-700 bg-orange-100 rounded-full dark:text-white dark:bg-orange-600\"> Pending </span></td><td class=\"px-4 py-3 text-sm\"> 6/10/2020 </td></tr><tr class=\"text-gray-700 dark:text-gray-400\"><td class=\"px-4 py-3\"><div class=\"flex items-center text-sm\"><!-- Avatar with inset shadow --><div class=\"relative hidden w-8 h-8 mr-3 rounded-full md:block\"><img class=\"object-cover w-full h-full rounded-full\" src=\"https://images.unsplash.com/photo-1551069613-1904dbdcda11?ixlib=rb-1.2.1&amp;q=80&amp;fm=jpg&amp;crop=entropy&amp;cs=tinysrgb&amp;w=200&amp;fit=max&amp;ixid=eyJhcHBfaWQiOjE3Nzg0fQ\" alt=\"\" loading=\"lazy\"><div class=\"absolute inset-0 rounded-full shadow-inner\" aria-hidden=\"true\"></div></div><div><p class=\"font-semibold\">Sarah Curry</p><p class=\"text-xs text-gray-600 dark:text-gray-400\"> Designer </p></div></div></td><td class=\"px-4 py-3 text-sm\"> $ 86.00 </td><td class=\"px-4 py-3 text-xs\"><span class=\"px-2 py-1 font-semibold leading-tight text-red-700 bg-red-100 rounded-full dark:text-red-100 dark:bg-red-700\"> Denied </span></td><td class=\"px-4 py-3 text-sm\"> 6/10/2020 </td></tr><tr class=\"text-gray-700 dark:text-gray-400\"><td class=\"px-4 py-3\"><div class=\"flex items-center text-sm\"><!-- Avatar with inset shadow --><div class=\"relative hidden w-8 h-8 mr-3 rounded-full md:block\"><img class=\"object-cover w-full h-full rounded-full\" src=\"https://images.unsplash.com/photo-1551006917-3b4c078c47c9?ixlib=rb-1.2.1&amp;q=80&amp;fm=jpg&amp;crop=entropy&amp;cs=tinysrgb&amp;w=200&amp;fit=max&amp;ixid=eyJhcHBfaWQiOjE3Nzg0fQ\" alt=\"\" loading=\"lazy\"><div class=\"absolute inset-0 rounded-full shadow-inner\" aria-hidden=\"true\"></div></div><div><p class=\"font-semibold\">Rulia Joberts</p><p class=\"text-xs text-gray-600 dark:text-gray-400\"> Actress </p></div></div></td><td class=\"px-4 py-3 text-sm\"> $ 1276.45 </td><td class=\"px-4 py-3 text-xs\"><span class=\"px-2 py-1 font-semibold leading-tight text-green-700 bg-green-100 rounded-full dark:bg-green-700 dark:text-green-100\"> Approved </span></td><td class=\"px-4 py-3 text-sm\"> 6/10/2020 </td></tr><tr class=\"text-gray-700 dark:text-gray-400\"><td class=\"px-4 py-3\"><div class=\"flex items-center text-sm\"><!-- Avatar with inset shadow --><div class=\"relative hidden w-8 h-8 mr-3 rounded-full md:block\"><img class=\"object-cover w-full h-full rounded-full\" src=\"https://images.unsplash.com/photo-1546456073-6712f79251bb?ixlib=rb-1.2.1&amp;q=80&amp;fm=jpg&amp;crop=entropy&amp;cs=tinysrgb&amp;w=200&amp;fit=max&amp;ixid=eyJhcHBfaWQiOjE3Nzg0fQ\" alt=\"\" loading=\"lazy\"><div class=\"absolute inset-0 rounded-full shadow-inner\" aria-hidden=\"true\"></div></div><div><p class=\"font-semibold\">Wenzel Dashington</p><p class=\"text-xs text-gray-600 dark:text-gray-400\"> Actor </p></div></div></td><td class=\"px-4 py-3 text-sm\"> $ 863.45 </td><td class=\"px-4 py-3 text-xs\"><span class=\"px-2 py-1 font-semibold leading-tight text-gray-700 bg-gray-100 rounded-full dark:text-gray-100 dark:bg-gray-700\"> Expired </span></td><td class=\"px-4 py-3 text-sm\"> 6/10/2020 </td></tr><tr class=\"text-gray-700 dark:text-gray-400\"><td class=\"px-4 py-3\"><div class=\"flex items-center text-sm\"><!-- Avatar with inset shadow --><div class=\"relative hidden w-8 h-8 mr-3 rounded-full md:block\"><img class=\"object-cover w-full h-full rounded-full\" src=\"https://images.unsplash.com/photo-1502720705749-871143f0e671?ixlib=rb-0.3.5&amp;q=80&amp;fm=jpg&amp;crop=entropy&amp;cs=tinysrgb&amp;w=200&amp;fit=max&amp;s=b8377ca9f985d80264279f277f3a67f5\" alt=\"\" loading=\"lazy\"><div class=\"absolute inset-0 rounded-full shadow-inner\" aria-hidden=\"true\"></div></div><div><p class=\"font-semibold\">Dave Li</p><p class=\"text-xs text-gray-600 dark:text-gray-400\"> Influencer </p></div></div></td><td class=\"px-4 py-3 text-sm\"> $ 863.45 </td><td class=\"px-4 py-3 text-xs\"><span class=\"px-2 py-1 font-semibold leading-tight text-green-700 bg-green-100 rounded-full dark:bg-green-700 dark:text-green-100\"> Approved </span></td><td class=\"px-4 py-3 text-sm\"> 6/10/2020 </td></tr><tr class=\"text-gray-700 dark:text-gray-400\"><td class=\"px-4 py-3\"><div class=\"flex items-center text-sm\"><!-- Avatar with inset shadow --><div class=\"relative hidden w-8 h-8 mr-3 rounded-full md:block\"><img class=\"object-cover w-full h-full rounded-full\" src=\"https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?ixlib=rb-1.2.1&amp;q=80&amp;fm=jpg&amp;crop=entropy&amp;cs=tinysrgb&amp;w=200&amp;fit=max&amp;ixid=eyJhcHBfaWQiOjE3Nzg0fQ\" alt=\"\" loading=\"lazy\"><div class=\"absolute inset-0 rounded-full shadow-inner\" aria-hidden=\"true\"></div></div><div><p class=\"font-semibold\">Maria Ramovic</p><p class=\"text-xs text-gray-600 dark:text-gray-400\"> Runner </p></div></div></td><td class=\"px-4 py-3 text-sm\"> $ 863.45 </td><td class=\"px-4 py-3 text-xs\"><span class=\"px-2 py-1 font-semibold leading-tight text-green-700 bg-green-100 rounded-full dark:bg-green-700 dark:text-green-100\"> Approved </span></td><td class=\"px-4 py-3 text-sm\"> 6/10/2020 </td></tr><tr class=\"text-gray-700 dark:text-gray-400\"><td class=\"px-4 py-3\"><div class=\"flex items-center text-sm\"><!-- Avatar with inset shadow --><div class=\"relative hidden w-8 h-8 mr-3 rounded-full md:block\"><img class=\"object-cover w-full h-full rounded-full\" src=\"https://images.unsplash.com/photo-1566411520896-01e7ca4726af?ixlib=rb-1.2.1&amp;q=80&amp;fm=jpg&amp;crop=entropy&amp;cs=tinysrgb&amp;w=200&amp;fit=max&amp;ixid=eyJhcHBfaWQiOjE3Nzg0fQ\" alt=\"\" loading=\"lazy\"><div class=\"absolute inset-0 rounded-full shadow-inner\" aria-hidden=\"true\"></div></div><div><p class=\"font-semibold\">Hitney Wouston</p><p class=\"text-xs text-gray-600 dark:text-gray-400\"> Singer </p></div></div></td><td class=\"px-4 py-3 text-sm\"> $ 863.45 </td><td class=\"px-4 py-3 text-xs\"><span class=\"px-2 py-1 font-semibold leading-tight text-green-700 bg-green-100 rounded-full dark:bg-green-700 dark:text-green-100\"> Approved </span></td><td class=\"px-4 py-3 text-sm\"> 6/10/2020 </td></tr><tr class=\"text-gray-700 dark:text-gray-400\"><td class=\"px-4 py-3\"><div class=\"flex items-center text-sm\"><!-- Avatar with inset shadow --><div class=\"relative hidden w-8 h-8 mr-3 rounded-full md:block\"><img class=\"object-cover w-full h-full rounded-full\" src=\"https://images.unsplash.com/flagged/photo-1570612861542-284f4c12e75f?ixlib=rb-1.2.1&amp;q=80&amp;fm=jpg&amp;crop=entropy&amp;cs=tinysrgb&amp;w=200&amp;fit=max&amp;ixid=eyJhcHBfaWQiOjE3Nzg0fQ\" alt=\"\" loading=\"lazy\"><div class=\"absolute inset-0 rounded-full shadow-inner\" aria-hidden=\"true\"></div></div><div><p class=\"font-semibold\">Hans Burger</p><p class=\"text-xs text-gray-600 dark:text-gray-400\"> 10x Developer </p></div></div></td><td class=\"px-4 py-3 text-sm\"> $ 863.45 </td><td class=\"px-4 py-3 text-xs\"><span class=\"px-2 py-1 font-semibold leading-tight text-green-700 bg-green-100 rounded-full dark:bg-green-700 dark:text-green-100\"> Approved </span></td><td class=\"px-4 py-3 text-sm\"> 6/10/2020 </td></tr></tbody></table></div><div class=\"grid px-4 py-3 text-xs font-semibold tracking-wide text-gray-500 uppercase border-t dark:border-gray-700 bg-gray-50 sm:grid-cols-9 dark:text-gray-400 dark:bg-gray-800\"><span class=\"flex items-center col-span-3\"> Showing 21-30 of 100 </span><span class=\"col-span-2\"></span><!-- Pagination --><span class=\"flex col-span-4 mt-2 sm:mt-auto sm:justify-end\"><nav aria-label=\"Table navigation\"><ul class=\"inline-flex items-center\"><li><button class=\"px-3 py-1 rounded-md rounded-l-lg focus:outline-none focus:shadow-outline-purple\" aria-label=\"Previous\"><svg aria-hidden=\"true\" class=\"w-4 h-4 fill-current\" viewBox=\"0 0 20 20\"><path d=\"M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z\" clip-rule=\"evenodd\" fill-rule=\"evenodd\"></path></svg></button></li><li><button class=\"px-3 py-1 rounded-md focus:outline-none focus:shadow-outline-purple\"> 1 </button></li><li><button class=\"px-3 py-1 rounded-md focus:outline-none focus:shadow-outline-purple\"> 2 </button></li><li><button class=\"px-3 py-1 text-white transition-colors duration-150 bg-purple-600 border border-r-0 border-purple-600 rounded-md focus:outline-none focus:shadow-outline-purple\"> 3 </button></li><li><button class=\"px-3 py-1 rounded-md focus:outline-none focus:shadow-outline-purple\"> 4 </button></li><li><span class=\"px-3 py-1\">...</span></li><li><button class=\"px-3 py-1 rounded-md focus:outline-none focus:shadow-outline-purple\"> 8 </button></li><li><button class=\"px-3 py-1 rounded-md focus:outline-none focus:shadow-outline-purple\"> 9 </button></li><li><button class=\"px-3 py-1 rounded-md rounded-r-lg focus:outline-none focus:shadow-outline-purple\" aria-label=\"Next\"><svg class=\"w-4 h-4 fill-current\" aria-hidden=\"true\" viewBox=\"0 0 20 20\"><path d=\"M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z\" clip-rule=\"evenodd\" fill-rule=\"evenodd\"></path></svg></button></li></ul></nav></span></div></div></div></main></div>", 1);
 
 function render(_ctx, _cache, $props, $setup, $data, $options) {
   var _component_Head = (0,vue__WEBPACK_IMPORTED_MODULE_0__.resolveComponent)("Head");
 
   return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_Head, {
     title: "Dashboard"
-  }), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_1, [!_ctx.$page.props.isCompanyProfileConfigured ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_2, [_hoisted_3, _hoisted_4, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("button", {
-    type: "button",
-    onClick: _cache[0] || (_cache[0] = function ($event) {
-      return _ctx.$page.props.isCompanyProfileConfigured = true;
-    }),
-    "class": "ml-auto -mx-1.5 -my-1.5 bg-blue-100 text-blue-500 rounded-lg focus:ring-2 focus:ring-blue-400 p-1.5 hover:bg-blue-200 inline-flex h-8 w-8"
-  }, _hoisted_7)])) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true), _hoisted_8])], 64
+  }), _hoisted_1], 64
   /* STABLE_FRAGMENT */
   );
 }
@@ -23330,7 +22970,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
   return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("nav", {
     "class": (0,vue__WEBPACK_IMPORTED_MODULE_0__.normalizeClass)("".concat(!$props.isSidebarOpen ? 'close' : ''))
   }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_1, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("ul", _hoisted_2, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("li", null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_Link, {
-    href: "/"
+    href: "/admin"
   }, {
     "default": (0,vue__WEBPACK_IMPORTED_MODULE_0__.withCtx)(function () {
       return [_hoisted_3, _hoisted_4];
@@ -23339,7 +22979,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     /* STABLE */
 
   })]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("li", null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_Link, {
-    href: "/company"
+    href: "/admin/company"
   }, {
     "default": (0,vue__WEBPACK_IMPORTED_MODULE_0__.withCtx)(function () {
       return [_hoisted_5, _hoisted_6];
@@ -23348,7 +22988,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     /* STABLE */
 
   })]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("li", null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_Link, {
-    href: "/users"
+    href: "/admin/users"
   }, {
     "default": (0,vue__WEBPACK_IMPORTED_MODULE_0__.withCtx)(function () {
       return [_hoisted_7, _hoisted_8];
@@ -23357,7 +22997,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     /* STABLE */
 
   })]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("li", null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_Link, {
-    href: "/bankaccounts"
+    href: "/admin/bankaccounts"
   }, {
     "default": (0,vue__WEBPACK_IMPORTED_MODULE_0__.withCtx)(function () {
       return [_hoisted_9, _hoisted_10];
@@ -23366,7 +23006,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     /* STABLE */
 
   })]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("li", null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_Link, {
-    href: "/voucherapprovals"
+    href: "/admin/voucherapprovals"
   }, {
     "default": (0,vue__WEBPACK_IMPORTED_MODULE_0__.withCtx)(function () {
       return [_hoisted_11, _hoisted_12];
@@ -23550,7 +23190,7 @@ var _hoisted_18 = {
 };
 
 var _hoisted_19 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("label", {
-  "for": "id_num",
+  "for": "id_number",
   "class": "block mb-2 text-sm font-medium text-gray-900"
 }, " Identification Number ", -1
 /* HOISTED */
@@ -23606,7 +23246,7 @@ var _hoisted_31 = {
 };
 
 var _hoisted_32 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("label", {
-  "for": "contact_num",
+  "for": "contact_number",
   "class": "block mb-2 text-sm font-medium text-gray-900"
 }, " Contact Number ", -1
 /* HOISTED */
@@ -23684,18 +23324,18 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
   /* PROPS */
   , _hoisted_17)) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true)]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_18, [_hoisted_19, (0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)((0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("input", {
     "onUpdate:modelValue": _cache[3] || (_cache[3] = function ($event) {
-      return $setup.form.id_num = $event;
+      return $setup.form.id_number = $event;
     }),
     type: "text",
-    id: "id_num",
+    id: "id_number",
     "class": "bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5",
     placeholder: "",
     required: ""
   }, null, 512
   /* NEED_PATCH */
-  ), [[vue__WEBPACK_IMPORTED_MODULE_0__.vModelText, $setup.form.id_num]]), $setup.form.errors.id_num ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("p", {
+  ), [[vue__WEBPACK_IMPORTED_MODULE_0__.vModelText, $setup.form.id_number]]), $setup.form.errors.id_number ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("p", {
     key: 0,
-    textContent: (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($setup.form.errors.id_num),
+    textContent: (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($setup.form.errors.id_number),
     "class": "mt-2 text-sm text-red-600"
   }, null, 8
   /* PROPS */
@@ -23742,18 +23382,18 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
   /* PROPS */
   , _hoisted_30)) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true)]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_31, [_hoisted_32, (0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)((0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("input", {
     "onUpdate:modelValue": _cache[7] || (_cache[7] = function ($event) {
-      return $setup.form.contact_num = $event;
+      return $setup.form.contact_number = $event;
     }),
     type: "text",
-    id: "contact_num",
+    id: "contact_number",
     "class": "bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5",
     placeholder: "",
     required: ""
   }, null, 512
   /* NEED_PATCH */
-  ), [[vue__WEBPACK_IMPORTED_MODULE_0__.vModelText, $setup.form.contact_num]]), $setup.form.errors.contact_num ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("p", {
+  ), [[vue__WEBPACK_IMPORTED_MODULE_0__.vModelText, $setup.form.contact_number]]), $setup.form.errors.contact_number ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("p", {
     key: 0,
-    textContent: (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($setup.form.errors.contact_num),
+    textContent: (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($setup.form.errors.contact_number),
     "class": "mt-2 text-sm text-red-600"
   }, null, 8
   /* PROPS */
@@ -23781,7 +23421,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
   }, " Submit ", 8
   /* PROPS */
   , _hoisted_37), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_Link, {
-    href: "/users",
+    href: "/admin/users",
     as: "button",
     "class": "ml-2 text-gray-900 focus:outline-none bg-white border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-200 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center",
     disabled: $setup.form.processing
@@ -23903,7 +23543,7 @@ var _hoisted_18 = {
 };
 
 var _hoisted_19 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("label", {
-  "for": "id_num",
+  "for": "id_number",
   "class": "block mb-2 text-sm font-medium text-gray-900"
 }, " Identification Number ", -1
 /* HOISTED */
@@ -23963,7 +23603,7 @@ var _hoisted_33 = {
 };
 
 var _hoisted_34 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("label", {
-  "for": "contact_num",
+  "for": "contact_number",
   "class": "block mb-2 text-sm font-medium text-gray-900"
 }, " Contact Number ", -1
 /* HOISTED */
@@ -23995,7 +23635,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     title: 'Edit user | ' + _ctx.$props.user.name
   }, null, 8
   /* PROPS */
-  , ["title"]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_1, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("main", _hoisted_2, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_3, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("h2", _hoisted_4, " Edit user - " + (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(_ctx.$props.user.name), 1
+  , ["title"]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_1, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("main", _hoisted_2, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_3, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("h2", _hoisted_4, " Edit user [" + (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(_ctx.$props.user.name) + "] ", 1
   /* TEXT */
   ), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)(" Main Content Start "), _ctx.$page.props.flash.message ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_5, [_hoisted_6, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_7, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(_ctx.$page.props.flash.message), 1
   /* TEXT */
@@ -24045,7 +23685,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
   /* PROPS */
   , _hoisted_17)) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true)]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_18, [_hoisted_19, (0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)((0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("input", {
     "onUpdate:modelValue": _cache[3] || (_cache[3] = function ($event) {
-      return $setup.form.id_num = $event;
+      return $setup.form.id_number = $event;
     }),
     type: "text",
     id: "identification_num",
@@ -24054,9 +23694,9 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     required: ""
   }, null, 512
   /* NEED_PATCH */
-  ), [[vue__WEBPACK_IMPORTED_MODULE_0__.vModelText, $setup.form.id_num]]), $setup.form.errors.id_num ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("p", {
+  ), [[vue__WEBPACK_IMPORTED_MODULE_0__.vModelText, $setup.form.id_number]]), $setup.form.errors.id_number ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("p", {
     key: 0,
-    textContent: (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($setup.form.errors.id_num),
+    textContent: (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($setup.form.errors.id_number),
     "class": "mt-2 text-sm text-red-600"
   }, null, 8
   /* PROPS */
@@ -24105,18 +23745,18 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
   /* PROPS */
   , _hoisted_32)) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true)]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_33, [_hoisted_34, (0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)((0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("input", {
     "onUpdate:modelValue": _cache[7] || (_cache[7] = function ($event) {
-      return $setup.form.contact_num = $event;
+      return $setup.form.contact_number = $event;
     }),
     type: "text",
-    id: "contact_num",
+    id: "contact_number",
     "class": "bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5",
     placeholder: "",
     required: ""
   }, null, 512
   /* NEED_PATCH */
-  ), [[vue__WEBPACK_IMPORTED_MODULE_0__.vModelText, $setup.form.contact_num]]), $setup.form.errors.contact_num ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("p", {
+  ), [[vue__WEBPACK_IMPORTED_MODULE_0__.vModelText, $setup.form.contact_number]]), $setup.form.errors.contact_number ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("p", {
     key: 0,
-    textContent: (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($setup.form.errors.contact_num),
+    textContent: (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($setup.form.errors.contact_number),
     "class": "mt-2 text-sm text-red-600"
   }, null, 8
   /* PROPS */
@@ -24144,7 +23784,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
   }, " Save ", 8
   /* PROPS */
   , _hoisted_39), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_Link, {
-    href: "/users",
+    href: "/admin/users",
     as: "button",
     "class": "ml-2 text-gray-900 focus:outline-none bg-white border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-200 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center",
     disabled: $setup.form.processing
@@ -24206,7 +23846,7 @@ var _hoisted_7 = {
 };
 
 var _hoisted_8 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", {
-  "class": "flex absolute inset-y-0 left-0 items-center pl-4 pointer-events-none"
+  "class": "flex absolute inset-y-0 left-0 items-center pl-3 pointer-events-none"
 }, [/*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("svg", {
   "class": "w-5 h-5 text-gray-500",
   fill: "none",
@@ -24226,7 +23866,7 @@ var _hoisted_9 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNod
 
 var _hoisted_10 = {
   key: 0,
-  "class": "flex p-4 mb-4 bg-blue-100 rounded-lg",
+  "class": "flex p-4 my-4 bg-blue-100 rounded-lg",
   role: "alert"
 };
 
@@ -24375,12 +24015,12 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
       return $setup.searchUsers = $event;
     }),
     type: "text",
-    "class": "block p-2 pl-10 ease-in-out duration-150 w-0 focus:w-full text-sm text-gray-900 bg-gray-50 dark:bg-gray-800 rounded-lg border border-gray-300 dark:border-gray-800 focus:ring-blue-500 focus:border-blue-500",
+    "class": "block p-1 pl-10 ease-in-out duration-150 w-0 focus:w-full text-sm text-gray-900 bg-gray-50 dark:bg-gray-800 rounded-lg border border-gray-300 dark:border-gray-800 focus:ring-blue-500 focus:border-blue-500",
     placeholder: "Search"
   }, null, 512
   /* NEED_PATCH */
   ), [[vue__WEBPACK_IMPORTED_MODULE_0__.vModelText, $setup.searchUsers]])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_Link, {
-    href: "/users/create",
+    href: "/admin/users/create",
     "class": "h-min text-white bg-blue-500 hover:bg-blue-600 hover:text-white focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2 mx-2"
   }, {
     "default": (0,vue__WEBPACK_IMPORTED_MODULE_0__.withCtx)(function () {
@@ -24417,7 +24057,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     ), _hoisted_32, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("td", _hoisted_33, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(user.email), 1
     /* TEXT */
     ), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("td", _hoisted_34, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_35, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_Link, {
-      href: "/users/".concat(user.id, "/edit"),
+      href: "/admin/users/".concat(user.id, "/edit"),
       "class": "font-medium hover:text-blue-600"
     }, {
       "default": (0,vue__WEBPACK_IMPORTED_MODULE_0__.withCtx)(function () {
@@ -28476,7 +28116,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default()(function(i){return i[1]});
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, "\nnav[data-v-98f132ca]{\n    position: fixed;\n    top: 0;\n    left: 0;\n    height: 100%;\n    width: 250px;\n    padding: 10px 14px;\n    background-color: var(--panel-color);\n    border-right: 1px solid var(--border-color);\n    transition: var(--tran-05);\n}\nnav.close[data-v-98f132ca]{\n    width: 73px;\n}\nnav .logo-name[data-v-98f132ca]{\n    display: flex;\n    align-items: center;\n}\nnav .logo-image[data-v-98f132ca]{\n    display: flex;\n    justify-content: center;\n    min-width: 45px;\n}\nnav .logo-image img[data-v-98f132ca]{\n    width: 40px;\n    -o-object-fit: cover;\n       object-fit: cover;\n    border-radius: 50%;\n}\nnav .logo-name .logo_name[data-v-98f132ca]{\n    font-size: 22px;\n    font-weight: 600;\n    color: var(--text-color);\n    margin-left: 14px;\n    transition: var(--tran-05);\n}\nnav.close .logo_name[data-v-98f132ca]{\n    opacity: 0;\n    pointer-events: none;\n}\nnav .menu-items[data-v-98f132ca]{\n    margin-top: 40px;\n    height: calc(100% - 90px);\n    display: flex;\n    flex-direction: column;\n    justify-content: space-between;\n}\n.menu-items li[data-v-98f132ca]{\n    list-style: none;\n}\n.menu-items li a[data-v-98f132ca]{\n    display: flex;\n    align-items: center;\n    height: 50px;\n    text-decoration: none;\n    position: relative;\n    border-radius: 15px;\n}\n.nav-links li a[data-v-98f132ca]:hover:before{\n    content: \"\";\n    position: absolute;\n    left: -7px;\n    height: 5px;\n    width: 5px;\n    border-radius: 50%;\n    background-color: #b7b7b7;\n}\nbody.dark li a[data-v-98f132ca]:hover:before{\n    background-color: var(--text-color);\n}\n.menu-items li a i[data-v-98f132ca]{\n    font-size: 24px;\n    min-width: 45px;\n    height: 100%;\n    display: flex;\n    align-items: center;\n    justify-content: center;\n    color: var(--black-light-color);\n}\n.menu-items li a .link-name[data-v-98f132ca]{\n    font-size: 18px;\n    font-weight: 400;\n    color: var(--black-light-color);\n}\nnav.close li a .link-name[data-v-98f132ca]{\n    opacity: 0;\n    pointer-events: none;\n}\n.nav-links li a[data-v-98f132ca]:hover {\n    background-color: var(--color-primary);\n}\n.nav-links li a:hover i[data-v-98f132ca],\n.nav-links li a:hover .link-name[data-v-98f132ca]{\n    color: #ffffff;\n}\nbody.dark .nav-links li a:hover i[data-v-98f132ca],\nbody.dark .nav-links li a:hover .link-name[data-v-98f132ca]{\n    color: var(--text-color);\n}\n.menu-items .logout-mode[data-v-98f132ca]{\n    padding-top: 10px;\n    border-top: 1px solid var(--border-color);\n}\nnav.close .nav-links li a[data-v-98f132ca]:hover {\n}\n@media (max-width: 1000px) {\nnav[data-v-98f132ca]{\n        width: 73px;\n}\nnav.close[data-v-98f132ca]{\n        width: 250px;\n}\nnav .logo_name[data-v-98f132ca]{\n        opacity: 0;\n        pointer-events: none;\n}\nnav.close .logo_name[data-v-98f132ca]{\n        opacity: 1;\n        pointer-events: auto;\n}\nnav li a .link-name[data-v-98f132ca]{\n        opacity: 0;\n        pointer-events: none;\n}\nnav.close li a .link-name[data-v-98f132ca]{\n        opacity: 1;\n        pointer-events: auto;\n}\n}\n@media (max-width: 400px) {\nnav[data-v-98f132ca]{\n        width: 0px;\n}\nnav.close[data-v-98f132ca]{\n        width: 73px;\n}\nnav .logo_name[data-v-98f132ca]{\n        opacity: 0;\n        pointer-events: none;\n}\nnav.close .logo_name[data-v-98f132ca]{\n        opacity: 0;\n        pointer-events: none;\n}\nnav li a .link-name[data-v-98f132ca]{\n        opacity: 0;\n        pointer-events: none;\n}\nnav.close li a .link-name[data-v-98f132ca]{\n        opacity: 0;\n        pointer-events: none;\n}\n}\n", ""]);
+___CSS_LOADER_EXPORT___.push([module.id, "\nnav[data-v-98f132ca]{\n    position: fixed;\n    top: 0;\n    left: 0;\n    height: 100%;\n    width: 250px;\n    padding: 10px 14px;\n    background-color: var(--panel-color);\n    border-right: 1px solid var(--border-color);\n    transition: var(--tran-05);\n}\nnav.close[data-v-98f132ca]{\n    width: 73px;\n}\nnav .logo-name[data-v-98f132ca]{\n    display: flex;\n    align-items: center;\n}\nnav .logo-image[data-v-98f132ca]{\n    display: flex;\n    justify-content: center;\n    min-width: 45px;\n}\nnav .logo-image img[data-v-98f132ca]{\n    width: 40px;\n    -o-object-fit: cover;\n       object-fit: cover;\n    border-radius: 50%;\n}\nnav .logo-name .logo_name[data-v-98f132ca]{\n    font-size: 22px;\n    font-weight: 600;\n    color: var(--text-color);\n    margin-left: 14px;\n    transition: var(--tran-05);\n}\nnav.close .logo_name[data-v-98f132ca]{\n    opacity: 0;\n    pointer-events: none;\n}\nnav .menu-items[data-v-98f132ca]{\n    margin-top: 40px;\n    height: calc(100% - 90px);\n    display: flex;\n    flex-direction: column;\n    justify-content: space-between;\n}\n.menu-items li[data-v-98f132ca]{\n    list-style: none;\n}\n.menu-items li a[data-v-98f132ca]{\n    display: flex;\n    align-items: center;\n    height: 50px;\n    text-decoration: none;\n    position: relative;\n    border-radius: 15px;\n}\n.nav-links li a[data-v-98f132ca]:hover:before{\n    content: \"\";\n    position: absolute;\n    left: -7px;\n    height: 5px;\n    width: 5px;\n    border-radius: 50%;\n    background-color: #b7b7b7;\n}\nbody.dark li a[data-v-98f132ca]:hover:before{\n    background-color: var(--text-color);\n}\n.menu-items li a i[data-v-98f132ca]{\n    font-size: 24px;\n    min-width: 45px;\n    height: 100%;\n    display: flex;\n    align-items: center;\n    justify-content: center;\n    color: var(--black-light-color);\n}\n.menu-items li a .link-name[data-v-98f132ca]{\n    font-size: 18px;\n    font-weight: 400;\n    color: var(--black-light-color);\n}\nnav.close li a .link-name[data-v-98f132ca]{\n    opacity: 0;\n    pointer-events: none;\n}\n.nav-links li a[data-v-98f132ca]:hover {\n    background-color: var(--color-primary);\n}\n.nav-links li a:hover i[data-v-98f132ca],\n.nav-links li a:hover .link-name[data-v-98f132ca]{\n    color: #ffffff;\n}\nbody.dark .nav-links li a:hover i[data-v-98f132ca],\nbody.dark .nav-links li a:hover .link-name[data-v-98f132ca]{\n    color: var(--text-color);\n}\n.menu-items .logout-mode[data-v-98f132ca]{\n    padding-top: 10px;\n    border-top: 1px solid var(--border-color);\n}\n@media (max-width: 1000px) {\nnav[data-v-98f132ca]{\n        width: 73px;\n}\nnav.close[data-v-98f132ca]{\n        width: 250px;\n}\nnav .logo_name[data-v-98f132ca]{\n        opacity: 0;\n        pointer-events: none;\n}\nnav.close .logo_name[data-v-98f132ca]{\n        opacity: 1;\n        pointer-events: auto;\n}\nnav li a .link-name[data-v-98f132ca]{\n        opacity: 0;\n        pointer-events: none;\n}\nnav.close li a .link-name[data-v-98f132ca]{\n        opacity: 1;\n        pointer-events: auto;\n}\n}\n@media (max-width: 400px) {\nnav[data-v-98f132ca]{\n        width: 0px;\n}\nnav.close[data-v-98f132ca]{\n        width: 73px;\n}\nnav .logo_name[data-v-98f132ca]{\n        opacity: 0;\n        pointer-events: none;\n}\nnav.close .logo_name[data-v-98f132ca]{\n        opacity: 0;\n        pointer-events: none;\n}\nnav li a .link-name[data-v-98f132ca]{\n        opacity: 0;\n        pointer-events: none;\n}\nnav.close li a .link-name[data-v-98f132ca]{\n        opacity: 0;\n        pointer-events: none;\n}\n}\n", ""]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -36293,34 +35933,6 @@ if (false) {}
 
 /***/ }),
 
-/***/ "./resources/js/Pages/Admin/Company/Create.vue":
-/*!*****************************************************!*\
-  !*** ./resources/js/Pages/Admin/Company/Create.vue ***!
-  \*****************************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
-/* harmony export */ });
-/* harmony import */ var _Create_vue_vue_type_template_id_54ab9bf7__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./Create.vue?vue&type=template&id=54ab9bf7 */ "./resources/js/Pages/Admin/Company/Create.vue?vue&type=template&id=54ab9bf7");
-/* harmony import */ var _Create_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Create.vue?vue&type=script&lang=js */ "./resources/js/Pages/Admin/Company/Create.vue?vue&type=script&lang=js");
-/* harmony import */ var _Users_amarabjamal_Projects_demo_node_modules_vue_loader_dist_exportHelper_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./node_modules/vue-loader/dist/exportHelper.js */ "./node_modules/vue-loader/dist/exportHelper.js");
-
-
-
-
-;
-const __exports__ = /*#__PURE__*/(0,_Users_amarabjamal_Projects_demo_node_modules_vue_loader_dist_exportHelper_js__WEBPACK_IMPORTED_MODULE_2__["default"])(_Create_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_1__["default"], [['render',_Create_vue_vue_type_template_id_54ab9bf7__WEBPACK_IMPORTED_MODULE_0__.render],['__file',"resources/js/Pages/Admin/Company/Create.vue"]])
-/* hot reload */
-if (false) {}
-
-
-/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (__exports__);
-
-/***/ }),
-
 /***/ "./resources/js/Pages/Admin/Company/Edit.vue":
 /*!***************************************************!*\
   !*** ./resources/js/Pages/Admin/Company/Edit.vue ***!
@@ -37299,22 +36911,6 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
-/***/ "./resources/js/Pages/Admin/Company/Create.vue?vue&type=script&lang=js":
-/*!*****************************************************************************!*\
-  !*** ./resources/js/Pages/Admin/Company/Create.vue?vue&type=script&lang=js ***!
-  \*****************************************************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => (/* reexport safe */ _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_dist_index_js_ruleSet_0_use_0_Create_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__["default"])
-/* harmony export */ });
-/* harmony import */ var _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_dist_index_js_ruleSet_0_use_0_Create_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!../../../../../node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./Create.vue?vue&type=script&lang=js */ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./resources/js/Pages/Admin/Company/Create.vue?vue&type=script&lang=js");
- 
-
-/***/ }),
-
 /***/ "./resources/js/Pages/Admin/Company/Edit.vue?vue&type=script&lang=js":
 /*!***************************************************************************!*\
   !*** ./resources/js/Pages/Admin/Company/Edit.vue?vue&type=script&lang=js ***!
@@ -37887,22 +37483,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "render": () => (/* reexport safe */ _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_dist_templateLoader_js_ruleSet_1_rules_2_node_modules_vue_loader_dist_index_js_ruleSet_0_use_0_Index_vue_vue_type_template_id_aa87820a__WEBPACK_IMPORTED_MODULE_0__.render)
 /* harmony export */ });
 /* harmony import */ var _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_dist_templateLoader_js_ruleSet_1_rules_2_node_modules_vue_loader_dist_index_js_ruleSet_0_use_0_Index_vue_vue_type_template_id_aa87820a__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!../../../../../node_modules/vue-loader/dist/templateLoader.js??ruleSet[1].rules[2]!../../../../../node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./Index.vue?vue&type=template&id=aa87820a */ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!./node_modules/vue-loader/dist/templateLoader.js??ruleSet[1].rules[2]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./resources/js/Pages/Admin/BankAccount/Index.vue?vue&type=template&id=aa87820a");
-
-
-/***/ }),
-
-/***/ "./resources/js/Pages/Admin/Company/Create.vue?vue&type=template&id=54ab9bf7":
-/*!***********************************************************************************!*\
-  !*** ./resources/js/Pages/Admin/Company/Create.vue?vue&type=template&id=54ab9bf7 ***!
-  \***********************************************************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "render": () => (/* reexport safe */ _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_dist_templateLoader_js_ruleSet_1_rules_2_node_modules_vue_loader_dist_index_js_ruleSet_0_use_0_Create_vue_vue_type_template_id_54ab9bf7__WEBPACK_IMPORTED_MODULE_0__.render)
-/* harmony export */ });
-/* harmony import */ var _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_dist_templateLoader_js_ruleSet_1_rules_2_node_modules_vue_loader_dist_index_js_ruleSet_0_use_0_Create_vue_vue_type_template_id_54ab9bf7__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!../../../../../node_modules/vue-loader/dist/templateLoader.js??ruleSet[1].rules[2]!../../../../../node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./Create.vue?vue&type=template&id=54ab9bf7 */ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!./node_modules/vue-loader/dist/templateLoader.js??ruleSet[1].rules[2]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./resources/js/Pages/Admin/Company/Create.vue?vue&type=template&id=54ab9bf7");
 
 
 /***/ }),
@@ -38714,8 +38294,6 @@ var map = {
 	"./Admin/BankAccount/Edit.vue": "./resources/js/Pages/Admin/BankAccount/Edit.vue",
 	"./Admin/BankAccount/Index": "./resources/js/Pages/Admin/BankAccount/Index.vue",
 	"./Admin/BankAccount/Index.vue": "./resources/js/Pages/Admin/BankAccount/Index.vue",
-	"./Admin/Company/Create": "./resources/js/Pages/Admin/Company/Create.vue",
-	"./Admin/Company/Create.vue": "./resources/js/Pages/Admin/Company/Create.vue",
 	"./Admin/Company/Edit": "./resources/js/Pages/Admin/Company/Edit.vue",
 	"./Admin/Company/Edit.vue": "./resources/js/Pages/Admin/Company/Edit.vue",
 	"./Admin/Company/Index": "./resources/js/Pages/Admin/Company/Index.vue",

@@ -63,20 +63,20 @@
 
                         <div class="mb-6">
                             <label 
-                                for="id_num" 
+                                for="id_number" 
                                 class="block mb-2 text-sm font-medium text-gray-900"
                                 >
                                 Identification Number
                             </label>
                             <input 
-                                v-model="form.id_num"
+                                v-model="form.id_number"
                                 type="text" 
-                                id="id_num" 
+                                id="id_number" 
                                 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" 
                                 placeholder="" 
                                 required
                             />
-                            <p v-if="form.errors.id_num" v-text="form.errors.id_num" class="mt-2 text-sm text-red-600"></p>
+                            <p v-if="form.errors.id_number" v-text="form.errors.id_number" class="mt-2 text-sm text-red-600"></p>
                         </div>
 
                         <div class="mb-6">
@@ -114,20 +114,20 @@
 
                         <div class="mb-6">
                             <label 
-                                for="contact_num" 
+                                for="contact_number" 
                                 class="block mb-2 text-sm font-medium text-gray-900"
                                 >
                                 Contact Number
                             </label>
                             <input 
-                                v-model="form.contact_num"
+                                v-model="form.contact_number"
                                 type="text" 
-                                id="contact_num" 
+                                id="contact_number" 
                                 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" 
                                 placeholder="" 
                                 required
                             />
-                            <p v-if="form.errors.contact_num" v-text="form.errors.contact_num" class="mt-2 text-sm text-red-600"></p>
+                            <p v-if="form.errors.contact_number" v-text="form.errors.contact_number" class="mt-2 text-sm text-red-600"></p>
                         </div>
 
                         <div class="mb-6">
@@ -157,7 +157,7 @@
                         </button>
 
                         <Link 
-                            href="/users"
+                            href="/admin/users"
                             as="button"  
                             class="ml-2 text-gray-900 focus:outline-none bg-white border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-200 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center"
                             :disabled="form.processing"
@@ -182,16 +182,16 @@ export default {
         let form = useForm({
             name: '',
             email: '',
-            id_num: '',
+            id_number: '',
             employee_id: '',
             isAdmin: '',
             isLawyer: '',
-            contact_num: '',
+            contact_number: '',
             birthdate: ''
         });
 
         let submit = () => {
-            form.post('/users');
+            form.post('/admin/users');
         };
 
         return { form, submit };

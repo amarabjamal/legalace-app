@@ -8,7 +8,8 @@
                 <h2
                 class="my-6 text-2xl font-semibold text-gray-700 dark:text-gray-200"
                 >
-                Edit user - {{ $props.user.name }}
+                Edit user [{{ $props.user.name }}]
+
                 </h2>
     
                 <!-- Main Content Start -->
@@ -63,20 +64,20 @@
     
                         <div class="mb-6">
                             <label 
-                                for="id_num" 
+                                for="id_number" 
                                 class="block mb-2 text-sm font-medium text-gray-900"
                                 >
                                 Identification Number
                             </label>
                             <input 
-                                v-model="form.id_num"
+                                v-model="form.id_number"
                                 type="text" 
                                 id="identification_num" 
                                 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" 
                                 placeholder="" 
                                 required
                             />
-                            <p v-if="form.errors.id_num" v-text="form.errors.id_num" class="mt-2 text-sm text-red-600"></p>
+                            <p v-if="form.errors.id_number" v-text="form.errors.id_number" class="mt-2 text-sm text-red-600"></p>
                         </div>
     
                         <div class="mb-6">
@@ -114,20 +115,20 @@
     
                         <div class="mb-6">
                             <label 
-                                for="contact_num" 
+                                for="contact_number" 
                                 class="block mb-2 text-sm font-medium text-gray-900"
                                 >
                                 Contact Number
                             </label>
                             <input 
-                                v-model="form.contact_num"
+                                v-model="form.contact_number"
                                 type="text" 
-                                id="contact_num" 
+                                id="contact_number" 
                                 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" 
                                 placeholder="" 
                                 required
                             />
-                            <p v-if="form.errors.contact_num" v-text="form.errors.contact_num" class="mt-2 text-sm text-red-600"></p>
+                            <p v-if="form.errors.contact_number" v-text="form.errors.contact_number" class="mt-2 text-sm text-red-600"></p>
                         </div>
     
                         <div class="mb-6">
@@ -156,7 +157,7 @@
                             Save
                         </button>
                         <Link 
-                            href="/users"
+                            href="/admin/users"
                             as="button"  
                             class="ml-2 text-gray-900 focus:outline-none bg-white border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-200 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center"
                             :disabled="form.processing"
@@ -181,16 +182,16 @@ export default {
         let form = useForm({
             name: props.user.name,
             email: props.user.email,
-            id_num: props.user.id_num,
+            id_number: props.user.id_number,
             employee_id: props.user.employee_id,
             isAdmin: props.user.isAdmin,
             isLawyer: props.user.isLawyer,
-            contact_num: props.user.contact_num,
+            contact_number: props.user.contact_number,
             birthdate: props.user.birthdate.substring(0, 10),
         });
 
         let submit = () => {
-            form.put(`/users/${props.user.id}`);
+            form.put(`/admin/users/${props.user.id}`);
         };
 
         return { form, submit };

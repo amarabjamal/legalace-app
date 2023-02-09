@@ -17,7 +17,7 @@ return new class extends Migration
             $table->id();
             $table->double('deposit_amount');
             $table->boolean('is_paid');
-            $table->date('payment_date');
+            $table->date('payment_date')->nullable();
             $table->foreignId('issued_by')->constrained('users','id');
             $table->foreignId('case_file_id')->constrained('case_files','id');
             $table->foreignId('bank_account_id')->constrained('bank_accounts','id');

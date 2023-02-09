@@ -18,19 +18,25 @@ class Quotation extends Model
         'issued_by',
         'case_file_id',
         'bank_account_id',
-        'created_at',
-        'updated_at',
     ];
     protected $hidden = [
         'created_at',
         'updated_at',
     ];
 
+    public function user() {
+        return $this->belongsTo(User::class, 'created_by', 'id');
+    }
+
     public function caseFile() {
         return $this->belongsTo(CaseFile::class);
     }
 
-    public function Deposit() {
-        return $this->has(Deposit::class);
+    public function bankAccount() {
+        return $this->belongsTo(BankAccount::class);
+    }
+
+    public function workDescriptions() {
+        return $this->hasMany(workDescription::class);
     }
 }

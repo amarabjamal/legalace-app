@@ -2,10 +2,7 @@
 
 namespace Database\Seeders;
 
-use App\Models\Clerk;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
-use App\Models\Role;
 use App\Models\User;
 use App\Models\Company;
 use App\Models\Client;
@@ -78,7 +75,7 @@ class DatabaseSeeder extends Seeder
                 'account_number' => '167239581253',
                 'bank_address' => 'Maybank@UM, Universiti Malaya, 50603 Kuala Lumpur, WP Kuala Lumpur',
                 'swift_code' => 'MBBEMYKLXXX',
-                'account_type' => 1,
+                'bank_account_type_id' => 1,
                 'label' => 'Client Account 1',
                 'created_by' => 1,
                 'company_id' => 1,
@@ -89,8 +86,8 @@ class DatabaseSeeder extends Seeder
                 'account_number' => '167239581253',
                 'bank_address' => 'Maybank@UM, Universiti Malaya, 50603 Kuala Lumpur, WP Kuala Lumpur',
                 'swift_code' => 'MBBEMYKLXXX',
-                'account_type' => 2,
-                'label' => 'Client Account 1',
+                'bank_account_type_id' => 2,
+                'label' => 'Client Account 2',
                 'created_by' => 1,
                 'company_id' => 1,
             ],
@@ -98,7 +95,7 @@ class DatabaseSeeder extends Seeder
 
         DB::table('user_role')->insert($user_role);
 
-        DB::table('account_types')->insert($accountTypes);
+        DB::table('bank_account_types')->insert($accountTypes);
 
         DB::table('bank_accounts')->insert($bankAccounts);
 

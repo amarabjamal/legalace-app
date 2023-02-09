@@ -33,7 +33,7 @@
 
                             <div>
                                 <Link 
-                                    href="/company"
+                                    href="admin/company"
                                     as="button"  
                                     class="mr-2 text-gray-900 focus:outline-none bg-white border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-200 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center"
                                     :disabled="form.processing"
@@ -74,13 +74,13 @@
                                     <!-- Input -->
                                     <div>
                                         <input 
-                                            v-model="form.reg_no"
+                                            v-model="form.reg_number"
                                             type="text" 
                                             class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" 
                                             placeholder="" 
                                             required
                                         />
-                                        <p v-if="form.errors.reg_no" v-text="form.errors.reg_no" class="mt-2 text-sm text-red-600"></p>
+                                        <p v-if="form.errors.reg_number" v-text="form.errors.reg_number" class="mt-2 text-sm text-red-600"></p>
                                     </div>
                                 </dd>
                             </div>
@@ -151,14 +151,14 @@ export default {
     setup (props) {
         let form = useForm({
             name: props.company.name,
-            reg_no: props.company.reg_no,
+            reg_number: props.company.reg_number,
             address: props.company.address,
             email: props.company.email,
             website: props.company.website,
         });
 
         let submit = () => {
-            form.put(`/company/${props.company.id}`);
+            form.put(`/admin/company/${props.company.id}`);
         };
 
         return { form, submit }

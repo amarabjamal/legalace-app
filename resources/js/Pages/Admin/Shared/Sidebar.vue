@@ -3,31 +3,31 @@
         <div class="menu-items">
             <ul class="nav-links">
                 <li>
-                    <Link href="/">
+                    <Link href="/admin">
                         <i class="uil uil-estate"></i>
                         <span class="link-name">Dashboard</span>
                     </Link>
                 </li>
                 <li>
-                    <Link href="/company">
+                    <Link href="/admin/company">
                         <i class="uil uil-building"></i>
                         <span class="link-name">Company Profile</span>
                     </Link>
                 </li>
                 <li>
-                    <Link href="/users">
+                    <Link href="/admin/users">
                         <i class="uil uil-users-alt"></i>
                         <span class="link-name">User Accounts</span>
                     </Link>
                 </li>
                 <li>
-                    <Link href="/bankaccounts">
+                    <Link href="/admin/bankaccounts">
                         <i class="uil uil-credit-card"></i>
                         <span class="link-name">Bank Accounts</span>
                     </Link>
                 </li>
                 <li>
-                    <Link href="/voucherapprovals">
+                    <Link href="/admin/voucherapprovals">
                         <i class="uil uil-inbox"></i>
                         <span class="link-name">Voucher Requests</span>
                     </Link>
@@ -177,10 +177,6 @@ body.dark .nav-links li a:hover .link-name{
 .menu-items .logout-mode{
     padding-top: 10px;
     border-top: 1px solid var(--border-color);
-}
-
-nav.close .nav-links li a:hover {
-    
 }
 
 @media (max-width: 1000px) {

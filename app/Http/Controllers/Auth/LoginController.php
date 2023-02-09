@@ -34,9 +34,9 @@ class LoginController extends Controller
 
             if($roles != null) {   
                 if(Auth::check() && in_array("admin", $roles)){
-                    return redirect()->intended('dashboard');
+                    return redirect()->intended('/admin/dashboard');
                 } elseif(Auth::check() && in_array("lawyer", $roles)){
-                    return redirect()->intended('dashboard');
+                    return redirect()->intended('/lawyer/dashboard');
                 }
             } else {
                 return back()->withErrors([

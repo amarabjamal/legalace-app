@@ -12,18 +12,18 @@
 
                     <div class="flex justify-end items-center w-6/12">
                         <div class="relative">
-                            <div class="flex absolute inset-y-0 left-0 items-center pl-4 pointer-events-none">
+                            <div class="flex absolute inset-y-0 left-0 items-center pl-3 pointer-events-none">
                                 <svg class="w-5 h-5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
                             </div>
                             <input 
                                 v-model="searchUsers"
                                 type="text" 
-                                class="block p-2 pl-10 ease-in-out duration-150 w-0 focus:w-full text-sm text-gray-900 bg-gray-50 dark:bg-gray-800 rounded-lg border border-gray-300 dark:border-gray-800 focus:ring-blue-500 focus:border-blue-500" 
+                                class="block p-1 pl-10 ease-in-out duration-150 w-0 focus:w-full text-sm text-gray-900 bg-gray-50 dark:bg-gray-800 rounded-lg border border-gray-300 dark:border-gray-800 focus:ring-blue-500 focus:border-blue-500" 
                                 placeholder="Search">
                         </div>
                         
                         <Link 
-                            href="/users/create" 
+                            href="/admin/users/create" 
                             class="h-min text-white bg-blue-500 hover:bg-blue-600 hover:text-white focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2 mx-2"
                         >
                             Add Employee
@@ -32,7 +32,7 @@
                 </div>
     
                 <!-- Main Content Start -->
-                <div v-if="$page.props.flash.message" class="flex p-4 mb-4 bg-blue-100 rounded-lg" role="alert">
+                <div v-if="$page.props.flash.message" class="flex p-4 my-4 bg-blue-100 rounded-lg" role="alert">
                     <svg class="flex-shrink-0 w-5 h-5 text-blue-900" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"></path></svg>
                     <div class="ml-3 text-sm font-medium text-blue-900">
                         {{ $page.props.flash.message }}
@@ -94,7 +94,7 @@
                                 </td>
                                 <td class="px-4 py-3">
                                     <div class="flex items-center space-x-4 text-sm">
-                                        <Link :href="`/users/${ user.id }/edit`" class="font-medium hover:text-blue-600"><PencilIcon class="inline-block h-5 w-5"/></Link>
+                                        <Link :href="`/admin/users/${ user.id }/edit`" class="font-medium hover:text-blue-600"><PencilIcon class="inline-block h-5 w-5"/></Link>
                                         <Link @click="deleteUser(user)" as="button" class="ml-3 font-medium hover:text-red-600"><TrashIcon class="inline-block h-5 w-5"/></Link>
                                     </div>
                                 </td>
@@ -125,7 +125,7 @@ export default {
         let searchUsers = ref(props.filters.search);
 
         watch(searchUsers, throttle(value => {
-            Inertia.get('/users', { search: value }, {
+            Inertia.get('/admin/users', { search: value }, {
                 preserveState: true,
                 replace: true,
             });
@@ -141,7 +141,7 @@ export default {
     methods: {
         deleteUser(user) {
             if (confirm('Are you sure you want to delete this user account?')) {
-                Inertia.delete(`/users/${ user.id }`);
+                Inertia.delete(`/admin/users/${ user.id }`);
             }
         }
     },

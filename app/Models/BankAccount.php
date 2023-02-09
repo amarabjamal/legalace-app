@@ -13,17 +13,15 @@ class BankAccount extends Model
     protected $primaryKey = 'id';
 
     protected $fillable = [
+        'label',
         'account_name',
         'bank_name',
         'account_number',
         'bank_address',
         'swift_code',
-        'account_type',
-        'label',
+        'bank_account_type_id',
         'created_by',
         'company_id',
-        'created_at',
-        'updated_at',
     ];
 
     protected $hidden = [
@@ -31,8 +29,8 @@ class BankAccount extends Model
         'updated_at'
     ];
 
-    public function accountType() {
-        return $this->belongsTo(AccountType::class, 'account_type', 'id');
+    public function bankAccountType() {
+        return $this->belongsTo(BankAccountType::class, 'bank_account_type_id', 'id');
     }
 
     public function createdBy() {

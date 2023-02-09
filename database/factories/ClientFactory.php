@@ -18,8 +18,8 @@ class ClientFactory extends Factory
     {
         return [
             'name'=>fake()->name(),
-            'id_types_id'=>1,
-            'id_num'=>fake()->numerify('######-##-####'),
+            'id_type_id'=>1,
+            'id_number'=>fake()->numerify('######-##-####'),
             'email'=>fake()->safeEmail(),
             'phone_number'=> '',
             'address' => '',

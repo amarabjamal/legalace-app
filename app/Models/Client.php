@@ -9,8 +9,8 @@ class Client extends Model
 {
     protected $fillable = [
         'name', 
-        'id_types_id',
-        'id_num',
+        'id_type_id',
+        'id_number',
         'email', 
         'phone_number',
         'address',
@@ -20,8 +20,12 @@ class Client extends Model
 
     use HasFactory;
 
+    public function idType() {
+        return $this->belongsTo(IDType::class, 'id_type_id', 'id');
+    }
+
     public function user() {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(User::class, 'created_by', 'id');
     }
 
     public function caseFiles() {
