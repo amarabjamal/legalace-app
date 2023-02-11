@@ -18,3 +18,4 @@ public/js/app.js
 public/mix-manifest.json
 public/css
 public/js
+*.DS_Store
