@@ -72,40 +72,40 @@
                   <div class="md:w-1/2 px-3">
                     <div class="mb-6">
                       <label 
-                          for="id_type" 
+                          for="id_type_id" 
                           class="block mb-2 text-sm font-medium text-gray-700 dark:text-gray-200"
                           >
                           Identification Type
                       </label>
                       <select 
-                        v-model="form.id_type"
-                        id="id_type" 
+                        v-model="form.id_type_id"
+                        id="id_type_id" 
                         class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
                         required
                       >
                           <option disabled value="">Please select your identification type</option>
                           <option v-for="idType in idTypes" :value="idType.id">{{idType.name}}</option>
                       </select>
-                      <p v-if="form.errors.id_type" v-text="form.errors.id_type" class="mt-2 text-sm text-red-600"></p>
+                      <p v-if="form.errors.id_type_id" v-text="form.errors.id_type_id" class="mt-2 text-sm text-red-600"></p>
                     </div>
                   </div>
                   <div class="md:w-1/2 px-3">
                     <div class="mb-6">
                       <label 
-                          for="id_num" 
+                          for="id_number" 
                           class="block mb-2 text-sm font-medium text-gray-700 dark:text-gray-200"
                           >
                           Identification Number
                       </label>
                       <input 
-                          v-model="form.id_num"
+                          v-model="form.id_number"
                           type="text" 
-                          id="id_num" 
+                          id="id_number" 
                           class="bg-gray-50 border border-gray-300 text-gray-700 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-300 dark:focus:shadow-outline-gray" 
                           placeholder="" 
                           required
                       />
-                      <p v-if="form.errors.id_num" v-text="form.errors.id_num" class="mt-2 text-sm text-red-600"></p>
+                      <p v-if="form.errors.id_number" v-text="form.errors.id_number" class="mt-2 text-sm text-red-600"></p>
                     </div>
                   </div>
                 </div>
@@ -133,20 +133,20 @@
                   <div class="md:w-1/2 px-3">
                     <div class="mb-6">
                       <label 
-                          for="contact_num" 
+                          for="contact_number" 
                           class="block mb-2 text-sm font-medium text-gray-700 dark:text-gray-200"
                           >
                           Contact Number
                       </label>
                       <input 
-                          v-model="form.contact_num"
+                          v-model="form.contact_number"
                           type="tel" 
-                          id="contact_num" 
+                          id="contact_number" 
                           class="bg-gray-50 border border-gray-300 text-gray-700 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-300 dark:focus:shadow-outline-gray" 
                           placeholder="" 
                           required
                       />
-                      <p v-if="form.errors.contact_num" v-text="form.errors.contact_num" class="mt-2 text-sm text-red-600"></p>
+                      <p v-if="form.errors.contact_number" v-text="form.errors.contact_number" class="mt-2 text-sm text-red-600"></p>
                     </div>
                   </div>
                 </div>
@@ -203,20 +203,20 @@
                   <div class="md:w-1/2 px-3">
                     <div class="mb-6">
                       <label 
-                          for="reg_no" 
+                          for="reg_number" 
                           class="block mb-2 text-sm font-medium text-gray-700 dark:text-gray-200"
                           >
                           Registration Number
                       </label>
                       <input 
-                          v-model="form.reg_no"
+                          v-model="form.reg_number"
                           type="text" 
-                          id="reg_no" 
+                          id="reg_number" 
                           class="bg-gray-50 border border-gray-300 text-gray-700 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-300 dark:focus:shadow-outline-gray" 
                           placeholder="" 
                           required
                       />
-                      <p v-if="form.errors.reg_no" v-text="form.errors.reg_no" class="mt-2 text-sm text-red-600"></p>
+                      <p v-if="form.errors.reg_number" v-text="form.errors.reg_number" class="mt-2 text-sm text-red-600"></p>
                     </div>
                   </div>
                 </div>
@@ -309,19 +309,19 @@
                   <div class="md:w-1/2 px-3">
                     <div class="mb-6">
                       <label 
-                          for="confirmPassword" 
+                          for="password_confirmation" 
                           class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-200"
                           >
                           Confirm Password
                       </label>
                       <input 
-                          v-model="form.confirmPassword"
+                          v-model="form.password_confirmation"
                           type="password" 
-                          id="confirmPassword" 
+                          id="password_confirmation" 
                           class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-300 dark:focus:shadow-outline-gray" 
                           required  
                       />
-                      <p v-if="form.errors.confirmPassword" v-text="form.errors.confirmPassword" class="mt-2 text-sm text-red-600"></p>
+                      <p v-if="form.errors.password_confirmation" v-text="form.errors.password_confirmation" class="mt-2 text-sm text-red-600"></p>
                   </div>
                   </div>
                 </div>    
@@ -358,18 +358,18 @@ export default {
         let form = useForm({
             name: '',
             email: '',
-            id_type: '',
-            id_num: '',
+            id_type_id: '',
+            id_number: '',
             employee_id: '',
-            contact_num: '',
+            contact_number: '',
             birthdate: '',
             company_name: '',
-            reg_no: '',
+            reg_number: '',
             address: '',
             company_email: '',
             website: '',
             password: '',
-            confirmPassword: '',
+            password_confirmation: '',
         });
 
         let submit = () => {

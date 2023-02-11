@@ -6,6 +6,7 @@ use Inertia\Inertia;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 
 class LoginController extends Controller
@@ -30,6 +31,14 @@ class LoginController extends Controller
 
             foreach($userRoles as $userRole) {
                 array_push($roles, $userRole->role->slug);
+            }
+
+            $accessExpiryDate = Auth::user()->access_expiry_date;
+
+            if($accessExpiryDate != null && Carbon::now()->isAfter($accessExpiryDate)) {
+                return back()->withErrors([
+                    'email' => 'Your account access has expired.',
+                ]);
             }
 
             if($roles != null) {   

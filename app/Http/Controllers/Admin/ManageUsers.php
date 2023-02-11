@@ -3,11 +3,13 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\IDType;
 use App\Models\User;
 use App\Models\UserRole;
 use GuzzleHttp\Psr7\Message;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Validation\Rule;
 use Inertia\Inertia;
 
 class ManageUsers extends Controller
@@ -47,7 +49,11 @@ class ManageUsers extends Controller
      */
     public function create()
     {
-        return Inertia::render('Admin/User/Create');
+        $idTypes = IDType::all();
+
+        return Inertia::render('Admin/User/Create', [
+            "idTypes" => $idTypes,
+        ]);
     }
 
     /**
@@ -56,19 +62,17 @@ class ManageUsers extends Controller
     public function store(Request $request)
     {
         //Validate the request
-        $email = User::where([
-            ['email', '=' , $request->email],
-            ['company_id', '=' , Auth::user()->company_id],
-        ])->first();
-        $id_number = User::where([
-            ['id_number', '=' , $request->id_number],
-            ['company_id', '=' , Auth::user()->company_id],
-        ])->first();
-        $employee_id = User::where([
-            ['employee_id', '=' , $request->employee_id],
-            ['company_id', '=' , Auth::user()->company_id],
-        ])->first();
-        $errors = array();
+        $validated = $request->validate([
+            'name' => 'required',
+            'email' => ['required', 'email', 'unique:users'],
+            'id_type_id' => ['required', 'exists:id_types,id'],
+            'id_number' => ['required', $request->id_type_id == 1 ? 'regex:/^\d{6}-\d{2}-\d{4}$/' : null, Rule::unique('users')->where(fn ($query) => $query->where('company_id', Auth::user()->company_id)) ],
+            'employee_id' => ['required', Rule::unique('users')->where(fn ($query) => $query->where('company_id', Auth::user()->company_id))],
+            'contact_number' => ['required', 'min:9', 'numeric'],
+            'birthdate' => ['required', 'date'],
+            'is_active' => ['required', 'boolean'],
+            'access_expiry_date' => ['nullable', 'date'],
+        ]);
 
         if($request->isAdmin == true) {
             $isAdmin = true;
@@ -82,50 +86,37 @@ class ManageUsers extends Controller
             $isLawyer = false;
         }
 
-        if($email == null && $id_number == null && $employee_id == null) {
-
-            $user = User::create([
-                        'name' => $request->name,
-                        'email' => $request->email,
-                        'password' => 'defaultpassword',
-                        'id_number' => $request->id_number,
-                        'employee_id' => $request->employee_id,
-                        'contact_number' => $request->contact_number,
-                        'birthdate' => $request->birthdate,
-                        'company_id' => Auth::user()->company_id,
-                        'created_at' => now(),
-                        'updated_at' => now(),
-                    ]);
-
-            if($isAdmin) {
-                UserRole::create([
-                    'user_id' => $user->id,
-                    'role_id' => 1,
+        $user = User::create([
+                    'name' => $validated['name'],
+                    'email' =>  $validated['email'],
+                    'password' => 'defaultpassword',
+                    'id_type_id' =>  $validated['id_type_id'],
+                    'id_number' =>  $validated['id_number'],
+                    'employee_id' =>  $validated['employee_id'],
+                    'contact_number' =>  $validated['contact_number'],
+                    'birthdate' => $validated['birthdate'],
+                    'company_id' => Auth::user()->company_id,
+                    'is_active' => $validated['is_active'],
+                    'access_expiry_date' => $validated['access_expiry_date'],
+                    'created_at' => now(),
+                    'updated_at' => now(),
                 ]);
-            }
 
-            if($isLawyer) {
-                UserRole::create([
-                    'user_id' => $user->id,
-                    'role_id' => 2,
-                ]);
-            }
-
-            return redirect()->route('admin.users.index')->with('message', 'Successfully added new user account.');
-
-        } else {
-            if($email != null) {
-                $errors += ['email' => 'Email already in use.'];
-            } 
-            if($employee_id != null) {
-                $errors += ['employee_id' => 'Employee ID already in use.'];
-            } 
-            if($id_number != null) {
-                $errors += ['id_number' => 'Identification Number already in use.'];
-            } 
- 
-            return back()->withErrors($errors);
+        if($isAdmin) {
+            UserRole::create([
+                'user_id' => $user->id,
+                'role_id' => 1,
+            ]);
         }
+
+        if($isLawyer) {
+            UserRole::create([
+                'user_id' => $user->id,
+                'role_id' => 2,
+            ]);
+        }
+
+        return redirect()->route('admin.users.index')->with('message', 'Successfully added new user account.');
     }
 
     /**
@@ -145,15 +136,22 @@ class ManageUsers extends Controller
             'id' => $user->id,
             'name' => $user->name,
             'email' => $user->email,
+            'id_type_id' => $user->id_type_id,
             'id_number' => $user->id_number,
             'employee_id' => $user->employee_id,
             'isAdmin' => in_array('admin', $roles),
             'isLawyer' => in_array('lawyer', $roles),
             'contact_number' => $user->contact_number,
             'birthdate' => $user->birthdate,
+            'is_active' => (boolean) $user->is_active,
+            'access_expiry_date' => $user->access_expiry_date,
         ];
+
+        $idTypes = IDType::all();
+
         return Inertia::render('Admin/User/Edit', [
             'user' => $filteredUser,
+            "idTypes" => $idTypes,
         ]);
     }
 
@@ -163,105 +161,89 @@ class ManageUsers extends Controller
     public function update(Request $request,User $user)
     {
         //Validate the request
-        $email = User::where([
-            ['email', '=' , $request->email],
-            ['id', '!=' , $user->id],
-            ['company_id', '=' , Auth::user()->company_id],
-        ])->first();
-        $id_number = User::where([
-            ['id_number', '=' , $request->id_number],
-            ['id', '!=' , $user->id],
-            ['company_id', '=' , Auth::user()->company_id],
-        ])->first();
-        $employee_id = User::where([
-            ['employee_id', '=' , $request->employee_id],
-            ['id', '!=' , $user->id],
-            ['company_id', '=' , Auth::user()->company_id],
-        ])->first();
-        $errors = array();
 
-        if($email == null && $id_number == null && $employee_id == null) {
+        $validated = $request->validate([
+            'name' => 'required',
+            'email' => ['required', 'email', Rule::unique('users')->where(fn ($query) => $query->where([['id', '!=' , $request->id]]))],
+            'id_type_id' => ['required', 'exists:id_types,id'],
+            'id_number' => ['required', $request->id_type_id == 1 ? 'regex:/^\d{6}-\d{2}-\d{4}$/' : null, Rule::unique('users')->where(fn ($query) => $query->where([['company_id', '=' , Auth::user()->company_id], ['id', '!=' , $request->id]])) ],
+            'employee_id' => ['required', Rule::unique('users')->where(fn ($query) => $query->where([['company_id', '=' , Auth::user()->company_id], ['id', '!=' , $request->id]])) ], 
+            'contact_number' => ['required', 'min:9', 'numeric'],
+            'birthdate' => ['required', 'date'],
+            'is_active' => ['required', 'boolean'],
+            'access_expiry_date' => ['nullable', 'date'],
+        ]);
 
-            $userRoles = $user->userRoles;
-            $roles = array();
 
-            foreach($userRoles as $userRole) {
-                array_push($roles, $userRole->role->slug);
-            }
+        $userRoles = $user->userRoles;
+        $roles = array();
 
-            if(in_array('admin', $roles)) {
-                $alreadyAdmin = true;
-            } else {
-                $alreadyAdmin = false;
-            }
-            
-            if(in_array('lawyer', $roles)) {
-                $alreadyLawyer = true;
-            } else {
-                $alreadyLawyer = false;
-            }
-
-            if($request->isAdmin == true) {
-                $isAdmin = true;
-            } else {
-                $isAdmin = false;
-            }
-    
-            if($request->isLawyer == true) {
-                $isLawyer = true;
-            } else {
-                $isLawyer = false;
-            }
-            
-            $user->update([
-                'name' => $request->name,
-                'email' => $request->email,
-                'id_number' => $request->id_number,
-                'employee_id' => $request->employee_id,
-                'contact_number' => $request->contact_number,
-                'birthdate' => $request->birthdate,
-                'updated_at' => now(),
-            ]);
-
-            if($isAdmin && !$alreadyAdmin) { //Add admin role to the user
-                UserRole::create([
-                    'user_id' => $user->id,
-                    'role_id' => 1,
-                ]);
-            } else if(!$isAdmin && $alreadyAdmin) { //Remove admin role from the user
-                UserRole::where([
-                    ['user_id', '=', $user->id],
-                    ['role_id', '=', 1],
-                ])->delete();
-            }
-
-            if($isLawyer && !$alreadyLawyer) { //Add lawyer role to the user
-                UserRole::create([
-                    'user_id' => $user->id,
-                    'role_id' => 2,
-                ]);
-            } else if(!$isLawyer && $alreadyLawyer) { //Remove lawyer role from the user
-                UserRole::where([
-                    ['user_id', '=', $user->id],
-                    ['role_id', '=', 2],
-                ])->delete();
-            }
-    
-            return redirect()->route('admin.users.index')->with('message', 'Successfully updated the user account.');
-
-        } else {
-            if($email != null) {
-                $errors += ['email' => 'Email already in use.'];
-            } 
-            if($employee_id != null) {
-                $errors += ['employee_id' => 'Employee ID already in use.'];
-            } 
-            if($id_number != null) {
-                $errors += ['id_number' => 'Identification Number already in use.'];
-            } 
- 
-            return back()->withErrors($errors);
+        foreach($userRoles as $userRole) {
+            array_push($roles, $userRole->role->slug);
         }
+
+        if(in_array('admin', $roles)) {
+            $alreadyAdmin = true;
+        } else {
+            $alreadyAdmin = false;
+        }
+        
+        if(in_array('lawyer', $roles)) {
+            $alreadyLawyer = true;
+        } else {
+            $alreadyLawyer = false;
+        }
+
+        if($request->isAdmin == true) {
+            $isAdmin = true;
+        } else {
+            $isAdmin = false;
+        }
+
+        if($request->isLawyer == true) {
+            $isLawyer = true;
+        } else {
+            $isLawyer = false;
+        }
+        
+        $user->update([
+            'name' => $validated['name'],
+            'email' => $validated['email'],
+            'id_type_id' => $validated['id_type_id'],
+            'id_number' => $validated['id_number'],
+            'employee_id' => $validated['employee_id'],
+            'contact_number' => $validated['contact_number'],
+            'birthdate' => $validated['birthdate'],
+            'is_active' => $validated['is_active'],
+            'access_expiry_date' => $validated['access_expiry_date'],
+            'updated_at' => now(),
+        ]);
+
+        if($isAdmin && !$alreadyAdmin) { //Add admin role to the user
+            UserRole::create([
+                'user_id' => $user->id,
+                'role_id' => 1,
+            ]);
+        } else if(!$isAdmin && $alreadyAdmin) { //Remove admin role from the user
+            UserRole::where([
+                ['user_id', '=', $user->id],
+                ['role_id', '=', 1],
+            ])->delete();
+        }
+
+        if($isLawyer && !$alreadyLawyer) { //Add lawyer role to the user
+            UserRole::create([
+                'user_id' => $user->id,
+                'role_id' => 2,
+            ]);
+        } else if(!$isLawyer && $alreadyLawyer) { //Remove lawyer role from the user
+            UserRole::where([
+                ['user_id', '=', $user->id],
+                ['role_id', '=', 2],
+            ])->delete();
+        }
+
+        return redirect()->route('admin.users.index')->with('message', 'Successfully updated the user account.');
     }
 
     /**

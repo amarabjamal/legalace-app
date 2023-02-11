@@ -4,7 +4,6 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\BankAccount;
-use App\Models\BankAccountType;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
@@ -27,25 +26,32 @@ class ManageBankAccount extends Controller
     }
 
     public function store(Request $request) {
-        //Data validation
-        
-        $accountType = BankAccountType::where('slug', $request->account_type)->firstOrFail();
+        dd($request);
+        $validated = $request->validate([
+            'account_name' => [],
+            'bank_name' => [],
+            'account_number' => [],
+            'bank_address' => [],
+            'swift_code' => [],
+            'bank_account_type_id' => [],
+            'label' => [],
+        ]);
 
         BankAccount::create([
-            'account_name' => $request->account_name,
-            'bank_name' => $request->bank_name,
-            'account_number' => $request->account_number,
-            'bank_address' => $request->bank_address,
-            'swift_code' => $request->swift_code,
-            'account_type' => $accountType->id,
-            'label' => $request->label,
+            'account_name' => $validated['account_name'],
+            'bank_name' => $validated['bank_name'],
+            'account_number' => $validated['account_number'],
+            'bank_address' => $validated['bank_address'],
+            'swift_code' => $validated['swift_code'],
+            'bank_account_type_id' => $validated['bank_account_type_id'],
+            'label' => $validated['label'],
             'created_by' => Auth::id(),
             'company_id' => Auth::user()->company_id,
             'created_at' => now(),
             'updated_at' => now(),
         ]);
 
-        return redirect()->route('bankaccounts.index')->with('message', 'Successfully added new bank account (' . $request->account_name . ').');
+        return redirect()->route('admin.bankaccounts.index')->with('message', 'Successfully added new bank account (' . $request->account_name . ').');
     }
 
     public function edit(BankAccount $bankaccount)
@@ -59,17 +65,13 @@ class ManageBankAccount extends Controller
 
     public function update(Request $request, BankAccount $bankaccount) {
 
-         //Data validation
-        
-         $accountType = BankAccountType::where('slug', $request->bank_account_type)->firstOrFail();
-
          $bankaccount->update([
              'account_name' => $request->account_name,
              'bank_name' => $request->bank_name,
              'account_number' => $request->account_number,
              'bank_address' => $request->bank_address,
              'swift_code' => $request->swift_code,
-             'account_type' => $accountType->id,
+             'bank_account_type_id' => $request->bank_account_type_id,
              'label' => $request->label,
              'updated_at' => now(),
          ]);

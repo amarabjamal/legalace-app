@@ -14,6 +14,10 @@ class IDType extends Model
         'name',
         'slug'
     ];
+
+    public const MYIC = 1;
+    public const PASSPPORT = 2;
+
     public $timestamps = false;
 
     public function users() {

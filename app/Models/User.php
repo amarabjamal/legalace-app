@@ -33,6 +33,10 @@ class User extends Authenticatable
         'company_id',
     ];
 
+    protected $attributes = [
+        'is_active' => true,
+    ];
+
     /**
      * The attributes that should be hidden for serialization.
      *
