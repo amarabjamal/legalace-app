@@ -1,6 +1,6 @@
 <template>
 
-    <Head title="Forgot Password"/>
+    <Head title="Reset Password"/>
 
     <div class="auth-layout flex items-center min-h-screen p-6 bg-gray-50 dark:bg-gray-900">
       <div
@@ -26,7 +26,7 @@
               <h1
                 class="mb-4 text-xl font-semibold text-gray-700 dark:text-gray-200"
               >
-                Forgot password
+                Reset Password
               </h1>
 
               <div v-if="$page.props.flash.infoMessage" class="flex p-4 mb-4 text-sm text-blue-800 border border-blue-300 rounded-lg bg-blue-50 dark:bg-gray-800 dark:text-blue-400 dark:border-blue-800" role="alert">
@@ -54,22 +54,41 @@
               </div>
               
               <form @submit.prevent="submit">
+
                 <div class="mb-6">
                     <label 
-                        for="email" 
+                        for="password" 
                         class="block mb-2 text-sm font-medium text-gray-700 dark:text-gray-200"
                         >
-                        Email Address
+                        Password
                     </label>
                     <input 
-                        v-model="form.email"
-                        type="email" 
-                        id="email" 
+                        v-model="form.password"
+                        type="password" 
+                        id="password" 
                         class="bg-gray-50 border border-gray-300 text-gray-700 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-300 dark:focus:shadow-outline-gray" 
                         placeholder="" 
                         required
                     />
-                    <p v-if="form.errors.email" v-text="form.errors.email" class="mt-2 text-sm text-red-600"></p>
+                    <p v-if="form.errors.password" v-text="form.errors.password" class="mt-2 text-sm text-red-600"></p>
+                </div>
+
+                <div class="mb-6">
+                    <label 
+                        for="password_confirmation" 
+                        class="block mb-2 text-sm font-medium text-gray-700 dark:text-gray-200"
+                        >
+                        Confirm Password
+                    </label>
+                    <input 
+                        v-model="form.password_confirmation"
+                        type="password" 
+                        id="password_confirmation" 
+                        class="bg-gray-50 border border-gray-300 text-gray-700 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-300 dark:focus:shadow-outline-gray" 
+                        placeholder="" 
+                        required
+                    />
+                    <p v-if="form.errors.password_confirmation" v-text="form.errors.password_confirmation" class="mt-2 text-sm text-red-600"></p>
                 </div>
 
                 <button 
@@ -77,7 +96,7 @@
                     class="block w-full px-4 py-2 mt-4 text-sm font-medium leading-5 text-center text-white transition-colors duration-150 bg-blue-700 border border-transparent rounded-lg active:bg-blue-800 hover:bg-blue-900 focus:outline-none focus:shadow-outline-purple"
                     :disabled="form.processing"
                     >
-                    Recover password
+                    Reset Password
                 </button>
             </form>
 
@@ -102,16 +121,21 @@ import { useForm } from "@inertiajs/inertia-vue3";
 import { ArrowCircleLeftIcon } from "@heroicons/vue/outline";
 
 export default {
-    setup () {
+    setup (props) {
         let form = useForm({
-            email: '',
+            token: props.token,
+            password: '',
+            password_confirmation: ''
         });
 
         let submit = () => {
-            form.post('/forgotpassword');
+            form.post('/resetpassword');
         };
 
         return { form, submit };
+    },
+    props: {
+        'token': String,
     },
     components: { ArrowCircleLeftIcon },
 };
