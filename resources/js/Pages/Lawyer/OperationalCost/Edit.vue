@@ -2,6 +2,7 @@
     <Head title="Add new operational cost" />
     
     <div class="flex flex-col flex-1">
+        
         <main class="h-full pb-16 overflow-y-auto mx-3 my-4">
             <div class="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
                 <form @submit.prevent="submit">
@@ -148,28 +149,25 @@
 import { Head } from "@inertiajs/inertia-vue3";
 import Layout from "../Shared/Layout";
 import { useForm } from "@inertiajs/inertia-vue3";
-
 export default {
-    setup () {
+    setup (props) {
         let form = useForm({
-            details: '',
-            amount: '',
+            details: props.operationalCosts.details,
+            amount: props.operationalCosts.amount,
             is_recurring: false,
-            recurring_period: '',
+            recurring_period: props.operationalCosts.recurring_period,
             is_paid: true,
             bank_account_id: 1,
         });
-
         let submit = () => {
-            form.post('lawyer/operational-cost');
+            form.put(`/lawyer/operational-cost/${props.operationalCosts.id}`);
         };
-
         return { form, submit };
     },
     props: { 
-        firmAccounts: Object,
+        operationalCosts: Object,
      },
-    components: { Head },
+    components: { Head, Header, Sidebar },
     layout: Layout,
 };
 </script>

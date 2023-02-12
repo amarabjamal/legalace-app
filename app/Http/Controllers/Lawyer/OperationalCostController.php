@@ -53,23 +53,34 @@ class OperationalCostController extends Controller
             'created_by'=>Auth::id(),
         ]);
 
-        return redirect()->route('operational-cost.index')->with('message', 'Successfully added new operational cost.');
+        return redirect()->route('lawyer.operational-cost.index')->with('message', 'Successfully added new operational cost.');
     }
 
     public function edit(OperationalCost $operationalCost)
     {
-        
+        return Inertia::render('Lawyer/OperationalCost/Edit', [
+            'operationalCosts' => $operationalCost
+        ]);
     }
 
     public function update(Request $request, OperationalCost $operationalCost)
     {
-        
+        $operationalCost->update([
+            'details'=>$request->details,
+            'amount' => $request->amount,
+            'is_recurring' => $request->is_recurring,
+            'recurring_period' => $request->recurring_period,
+            'is_paid' => $request->is_paid,
+            'bank_account_id'=>$request->bank_account_id,
+        ]);
+
+        return redirect()->route('lawyer.operational-cost.index')->with('message', 'Successfully updated the record.');
     }
 
     public function destroy(OperationalCost $operationalCost)
     {
         $operationalCost->delete();   
 
-        return redirect()->route('operational-cost.index')->with('message', 'Successfully deleted the cost.');
+        return redirect()->route('lawyer.operational-cost.index')->with('message', 'Successfully deleted the cost.');
     }
 }

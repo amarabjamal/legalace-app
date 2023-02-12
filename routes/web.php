@@ -77,5 +77,9 @@ Route::group(['middleware' => 'auth'], function() {
 
         Route::resource('clients', ClientController::class);
         Route::resource('casefiles', ManageCaseFile::class);
+        Route::resource('firm-account', FirmAccountController::class);
+        Route::resource('client-account', ClientAccountController::class);
+        Route::resource('account-reporting', AccountReportingController::class);
+        Route::resource('operational-cost', OperationalCostController::class);
     });
 });

@@ -58,24 +58,38 @@ class FirmAccountController extends Controller
             'created_by'=>Auth::id(),
         ]);
 
-        return redirect()->route('firm-account.index')->with('message', 'Successfully added new transaction.');
+        return redirect()->route('lawyer.firm-account.index')->with('message', 'Successfully added new transaction.');
     }
 
     public function edit(FirmAccount $firmAccount)
     {
-        
+        return Inertia::render('Lawyer/FirmAccount/Edit', [
+            'firmAccounts' => $firmAccount
+        ]);
     }
 
     public function update(Request $request, FirmAccount $firmAccount)
     {
-        
+        $debit = $request->debit;
+        $credit = $request->credit;
+        $firmAccount->update([
+            'date'=> $request->date,
+            'description' => $request->description,
+            'transaction_type' => $request->transaction_type,
+            'debit' => $request->debit,
+            'credit' => $request->credit,
+            'balance' => $debit - $credit,
+            'bank_account_id'=>$request->bank_account_id,
+        ]);
+
+        return redirect()->route('lawyer.firm-account.index')->with('message', 'Successfully updated the transaction.');
     }
 
     public function destroy(FirmAccount $firmAccount)
     {
         $firmAccount->delete();   
 
-        return redirect()->route('firm-account.index')->with('message', 'Successfully deleted the account.');
+        return redirect()->route('lawyer.firm-account.index')->with('message', 'Successfully deleted the account.');
     }
 
     public function totalBalance(){

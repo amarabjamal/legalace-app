@@ -119,7 +119,7 @@
                         Operational cost lists
                     </h4>
 
-                    <Link href="/operational-cost/create">
+                    <Link href="/lawyer/operational-cost/create">
                         <button class="px-4 py-2 ml-3 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-blue-800 border border-transparent rounded-lg active:bg-blue-900 hover:bg-blue-900 focus:outline-none focus:shadow-outline-blue">
                             Add new cost
                         </button>
@@ -177,7 +177,7 @@
                                     {{ cost.balance }}
                                 </th> -->
                                 <td class="px-6 py-4 text-right">
-                                    <Link :href="`/account-reporting/${ cost.id }/edit`" class="font-medium text-blue-600 hover:underline">Edit</Link>
+                                    <Link :href="`/lawyer/operational-cost/${ cost.id }/edit`" class="font-medium text-blue-600 hover:underline">Edit</Link>
                                     <Link @click="deleteAcc(cost)" as="button" class="ml-3 font-medium text-red-600 hover:underline">Delete</Link>
                                 </td>
                             </tr>
@@ -205,7 +205,7 @@ export default {
         let searchClients = ref(props.filters.search);
 
         watch(searchClients, throttle(value => {
-            Inertia.get('/operational-cost', { search: value }, {
+            Inertia.get('/lawyer/operational-cost', { search: value }, {
                 preserveState: true,
                 replace: true,
             });
@@ -222,7 +222,7 @@ export default {
     methods: {
         deleteAcc(acc) {
             if (confirm('Are you sure you want to delete this cost?')) {
-                Inertia.delete(`/operational-cost/${ acc.id }`);
+                Inertia.delete(`/lawyer/operational-cost/${ acc.id }`);
             }
         }
     },

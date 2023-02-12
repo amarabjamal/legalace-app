@@ -21,15 +21,27 @@
                     </Link>
                 </li>
                 <li>
-                    <Link href="/lawyer">
+                    <Link href="/lawyer/firm-account">
                         <i class="uil uil-browser"></i>
                         <span class="link-name">Firm Account</span>
                     </Link>
                 </li>
                 <li>
-                    <Link href="/lawyer">
+                    <Link href="/lawyer/client-account">
                         <i class="uil uil-browser"></i>
                         <span class="link-name">Client Account</span>
+                    </Link>
+                </li>
+                <li>
+                    <Link href="/lawyer/operational-cost">
+                        <i class="uil uil-browser"></i>
+                        <span class="link-name">Operational Cost</span>
+                    </Link>
+                </li>
+                <li>
+                    <Link href="/lawyer/account-reporting">
+                        <i class="uil uil-browser"></i>
+                        <span class="link-name">Account Reporting</span>
                     </Link>
                 </li>
                 <li>
