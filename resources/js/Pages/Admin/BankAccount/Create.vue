@@ -1,9 +1,7 @@
 <template>
     <Head title="Register Bank Account" />
-    <Sidebar/>
 
     <div class="flex flex-col flex-1">
-        <Header title="" />
         <main class="h-full pb-16 overflow-y-auto">
             
             <div class="container px-6 mx-auto grid">
@@ -103,20 +101,20 @@
                         </div>
 
                         <div class="mb-6">
-                            <label for="account_type" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                            <label for="bank_account_type_id" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
                                 Account Type
                             </label>
                             <select 
-                                v-model="form.account_type"
-                                id="account_type" 
+                                v-model="form.bank_account_type_id"
+                                id="bank_account_type_id" 
                                 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:outline-none focus:border-purple-400 focus:shadow-outline-purple block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                                 required
                             >
-                                <!-- <option selected>Choose the account type</option> -->
-                                <option value="clientaccount">Client Account</option>
-                                <option value="firmaccount">Firm Account</option>
+                                <option>Select Bank Account Type</option>
+                                <option value="1">Client Account</option>
+                                <option value="2">Firm Account</option>
                             </select>
-                            <p v-if="form.errors.account_type" v-text="form.errors.account_type" class="mt-2 text-sm text-red-600"></p>
+                            <p v-if="form.errors.bank_account_type_id" v-text="form.errors.bank_account_type_id" class="mt-2 text-sm text-red-600"></p>
                         </div>
 
                         <div class="mb-6">
@@ -143,7 +141,7 @@
                         </button>
 
                         <Link 
-                            href="/bankaccounts"
+                            href="/admin/bankaccounts"
                             as="button"  
                             class="ml-2 text-gray-900 focus:outline-none bg-white border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-200 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center"
                             :disabled="form.processing"
@@ -161,8 +159,6 @@
 <script>
 import { Head } from "@inertiajs/inertia-vue3";
 import Layout from "../Shared/Layout";
-import Header from "../Shared/Header";
-import Sidebar from "../Shared/Sidebar";
 import { useForm } from "@inertiajs/inertia-vue3";
 
 export default { 
@@ -173,17 +169,17 @@ export default {
             account_number: '',
             bank_address: '',
             swift_code: '',
-            account_type: '',
+            bank_account_type_id: '',
             label: '',
         });
 
         let submit = () => {
-            form.post('/bankaccounts');
+            form.post('/admin/bankaccounts');
         };
 
         return { form, submit };
     },
-    components: { Head, Header, Sidebar },
+    components: { Head },
     layout: Layout,
 };
 </script>

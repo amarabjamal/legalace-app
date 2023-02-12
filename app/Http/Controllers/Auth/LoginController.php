@@ -6,16 +6,17 @@ use Inertia\Inertia;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 
 class LoginController extends Controller
 {
-    public function create()
+    public function index()
     {
         return Inertia::render('Auth/Login');
     }
 
-    public function store(Request $request)
+    public function login(Request $request)
     {
         $credentials = $request->validate([
             'email' => ['required', 'email'],
@@ -29,14 +30,22 @@ class LoginController extends Controller
             $roles = array();
 
             foreach($userRoles as $userRole) {
-                array_push($roles, $userRole->role->name);
+                array_push($roles, $userRole->role->slug);
+            }
+
+            $accessExpiryDate = Auth::user()->access_expiry_date;
+
+            if($accessExpiryDate != null && Carbon::now()->isAfter($accessExpiryDate)) {
+                return back()->withErrors([
+                    'email' => 'Your account access has expired.',
+                ]);
             }
 
             if($roles != null) {   
                 if(Auth::check() && in_array("admin", $roles)){
-                    return redirect()->intended('dashboard');
+                    return redirect()->intended('/admin/dashboard');
                 } elseif(Auth::check() && in_array("lawyer", $roles)){
-                    return redirect()->intended('dashboard');
+                    return redirect()->intended('/lawyer/dashboard');
                 }
             } else {
                 return back()->withErrors([
@@ -51,7 +60,7 @@ class LoginController extends Controller
         ])->onlyInput('email');
     }
 
-    public function destroy()
+    public function logout()
     {
         Auth::logout();
 

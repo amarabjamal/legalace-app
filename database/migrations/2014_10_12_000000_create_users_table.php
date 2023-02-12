@@ -3,6 +3,7 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
+use phpDocumentor\Reflection\Types\Nullable;
 
 return new class extends Migration
 {
@@ -16,11 +17,17 @@ return new class extends Migration
         Schema::create('companies', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->string('reg_no');
+            $table->string('reg_number');
             $table->string('address');
             $table->string('email');
-            $table->string('website');
+            $table->string('website')->nullable();
             $table->timestamps();
+        });
+
+        Schema::create('id_types', function (Blueprint $table) {
+            $table->id();
+            $table->string('name');
+            $table->string('slug');
         });
 
         Schema::create('users', function (Blueprint $table) {
@@ -29,10 +36,14 @@ return new class extends Migration
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
-            $table->string('id_num')->unique();
-            $table->string('employee_id')->unique();
-            $table->string('contact_num');
-            $table->date('birthdate');
+            $table->foreignId('id_type_id')->constrained("id_types","id");
+            $table->string('id_number');
+            $table->string('employee_id');
+            $table->string('contact_number')->nullable();
+            $table->date('birthdate')->nullable();
+            $table->string('profile_image_url')->nullable();
+            $table->boolean('is_active');
+            $table->date('access_expiry_date')->nullable();
             $table->foreignId('company_id')->constrained("companies", "id");
             $table->rememberToken();
             $table->timestamps();
@@ -41,6 +52,7 @@ return new class extends Migration
         Schema::create('roles', function (Blueprint $table) {
             $table->id();
             $table->string('name');
+            $table->string('slug');
         });
 
 

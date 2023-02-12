@@ -20,12 +20,21 @@ class User extends Authenticatable
     protected $fillable = [
         'name',
         'email',
+        'email_verified_at',
         'password',
-        'id_num',
+        'id_type_id',
+        'id_number',
         'employee_id',
-        'contact_num',
+        'contact_number',
         'birthdate',
+        'profile_image_url',
+        'is_active',
+        'access_expiry_date',
         'company_id',
+    ];
+
+    protected $attributes = [
+        'is_active' => true,
     ];
 
     /**
@@ -61,11 +70,19 @@ class User extends Authenticatable
         return $this->hasMany(UserRole::class);
     }
 
+    public function idType() {
+        return $this->belongsTo(IDType::class);
+    }
+
     public function company() {
         return $this->belongsTo(Company::class);
     }
 
     public function clients() {
         return $this->hasMany(Client::class);
+    }
+
+    public function caseFiles() {
+        return $this->hasMany(CaseFile::class);
     }
 }

@@ -21,13 +21,14 @@ class UserFactory extends Factory
             'name' => fake()->name(),
             'email' => fake()->safeEmail(),
             'email_verified_at' => now(),
-            // 'password' => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', // password
             'password' => 'password', // password
-            'id_num' => fake()->numerify('######-##-####'),
-            'employee_id'=>fake()->numerify('CL####'),
-            'contact_num'=>'',
+            'id_type_id' => 1,
+            'id_number' => fake()->numerify('######-##-####'),
+            'employee_id'=> fake()->numerify('CL####'),
+            'contact_number'=> fake()->numerify('011-########'),
             'birthdate'=>'2000-12-05',
-            'company_id'=>1,
+            'is_active' => true,
+            'company_id'=> 1,
             'remember_token' => Str::random(10),
         ];
     }

@@ -1,160 +1,235 @@
 <template>
-    <div
-      class="flex h-screen bg-gray-50 dark:bg-gray-900"
-      :class="{ 'overflow-hidden': isSideMenuOpen}"
-    >
-            <!-- Desktop sidebar -->
-    <aside
-        class="z-20 hidden w-64 overflow-y-auto bg-white dark:bg-gray-800 md:block flex-shrink-0"
-      >
-        <div class="py-4 text-gray-500 dark:text-gray-400">
-          <div class="flex justify-left px-7 pt-3">
-            <Link
-              class="ml-6 text-lg font-bold text-gray-800 dark:text-gray-200"
-              href="/"
-            >
-              <img :src="'/images/app/logo.png'" width="120" alt="legalace logo">
-            </Link>
-          </div>
-          <div  class="flex justify-left pl-6 pt-6 text-sm">
-            <span>Hello, <strong>{{ $page.props.auth.user.name }}</strong>!</span>
-          </div>
-          <ul class="mt-6">
-            <li class="relative px-6 py-3">
-              <Link
-                class="inline-flex items-center w-full text-sm font-semibold transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200"
-                href="/"
-              >
-                <HomeIcon class="inline-block h-5 w-5"></HomeIcon>
-                <span class="ml-4">Dashboard</span>
-              </Link>
-            </li>
-            <!-- <NavLink v-for="link in navLinks" :key="link.name" :href="link.href" :active="$page.component === link.component">{{ link.name }}</NavLink> -->
-            <li class="relative px-6 py-3">
-              <Link
-                class="inline-flex items-center w-full text-sm font-semibold transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200"
-                href="/clients"
-              >
-                <UsersIcon class="inline-block h-5 w-5"></UsersIcon>
-                <span class="ml-4">Clients</span>
-              </Link>
-            </li>
-            <li class="relative px-6 py-3">
-              <Link
-                class="inline-flex items-center w-full text-sm font-semibold transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200"
-                href="/"
-              >
-                <UsersIcon class="inline-block h-5 w-5"></UsersIcon>
-                <span class="ml-4">Case Files</span>
-              </Link>
-            </li>
-            <li class="relative px-6 py-3">
-              <Link
-                class="inline-flex items-center w-full text-sm font-semibold transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200"
-                href=""
-              >
-                <UsersIcon class="inline-block h-5 w-5"></UsersIcon>
-                <span class="ml-4">Vouchers</span>
-              </Link>
-            </li>
-            <li class="relative px-6 py-3">
-              <a
-                class="inline-flex items-center w-full text-sm font-semibold transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200"
-                href="/firm-account"
-              >
-                <svg
-                  class="w-5 h-5"
-                  aria-hidden="true"
-                  fill="none"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <path
-                    d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"
-                  ></path>
-                </svg>
-                <span class="ml-4">Firm Account</span>
-              </a>
-            </li>
-            <li class="relative px-6 py-3">
-              <a
-                class="inline-flex items-center w-full text-sm font-semibold transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200"
-                href="/client-account"
-              >
-                <svg
-                  class="w-5 h-5"
-                  aria-hidden="true"
-                  fill="none"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <path
-                    d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"
-                  ></path>
-                </svg>
-                <span class="ml-4">Client Account</span>
-              </a>
-            </li>
-            <li class="relative px-6 py-3">
-              <a
-                class="inline-flex items-center w-full text-sm font-semibold transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200"
-                href="/operational-cost"
-              >
-                <svg
-                  class="w-5 h-5"
-                  aria-hidden="true"
-                  fill="none"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <path
-                    d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"
-                  ></path>
-                </svg>
-                <span class="ml-4">Operational Cost</span>
-              </a>
-            </li>
-            <li class="relative px-6 py-3">
-              <a
-                class="inline-flex items-center w-full text-sm font-semibold transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200"
-                href="/account-reporting"
-              >
-                <svg
-                  class="w-5 h-5"
-                  aria-hidden="true"
-                  fill="none"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <path
-                    d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"
-                  ></path>
-                </svg>
-                <span class="ml-4">Account Reporting</span>
-              </a>
-            </li>
-          </ul>
+    <nav :class="`${!isSidebarOpen ? 'close' : ''}`">
+        <div class="menu-items">
+            <ul class="nav-links">
+                <li>
+                    <Link href="/lawyer">
+                        <i class="uil uil-estate"></i>
+                        <span class="link-name">Dashboard</span>
+                    </Link>
+                </li>
+                <li>
+                    <Link href="/lawyer/clients">
+                        <i class="uil uil-users-alt"></i>
+                        <span class="link-name">Client Profiles</span>
+                    </Link>
+                </li>
+                <li>
+                    <Link href="/lawyer/casefiles">
+                        <i class="uil uil-folder"></i>
+                        <span class="link-name">Case Files</span>
+                    </Link>
+                </li>
+                <li>
+                    <Link href="/lawyer">
+                        <i class="uil uil-browser"></i>
+                        <span class="link-name">Firm Account</span>
+                    </Link>
+                </li>
+                <li>
+                    <Link href="/lawyer">
+                        <i class="uil uil-browser"></i>
+                        <span class="link-name">Client Account</span>
+                    </Link>
+                </li>
+                <li>
+                    <Link href="/lawyer">
+                        <i class="uil uil-archive"></i>
+                        <span class="link-name">Disbursement Records</span>
+                    </Link>
+                </li>
+                <li>
+                    <Link href="/lawyer">
+                        <i class="uil uil-ticket"></i>
+                        <span class="link-name">Vouchers</span>
+                    </Link>
+                </li>
+            </ul>
+            
+            <ul class="logout-mode">
+                <li>
+                    <Link href="/logout" method="post">
+                        <i class="uil uil-signout"></i>
+                        <span class="link-name">Logout</span>
+                    </Link>
+                </li>
+            </ul>
         </div>
-      </aside>
-    </div>
+    </nav>
 </template>
 
 <script>
-import { HomeIcon, UsersIcon, CreditCardIcon, InboxInIcon, OfficeBuildingIcon } from "@heroicons/vue/outline";
 
 export default {
-  components: { HomeIcon, UsersIcon, CreditCardIcon, InboxInIcon, OfficeBuildingIcon },
-}
+    data() {
+        return {
+            isSidebarOpen : true,
+        }
+    },
+    props: {
+        isSidebarOpen: Boolean,
+    },
+    methods: {
+    }
+};
 </script>
+
+<style scoped>
+
+nav{
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 250px;
+    padding: 10px 14px;
+    background-color: var(--panel-color);
+    border-right: 1px solid var(--border-color);
+    transition: var(--tran-05);
+}
+nav.close{
+    width: 73px;
+}
+nav .logo-name{
+    display: flex;
+    align-items: center;
+}
+nav .logo-image{
+    display: flex;
+    justify-content: center;
+    min-width: 45px;
+}
+nav .logo-image img{
+    width: 40px;
+    object-fit: cover;
+    border-radius: 50%;
+}
+
+nav .logo-name .logo_name{
+    font-size: 22px;
+    font-weight: 600;
+    color: var(--text-color);
+    margin-left: 14px;
+    transition: var(--tran-05);
+}
+nav.close .logo_name{
+    opacity: 0;
+    pointer-events: none;
+}
+nav .menu-items{
+    margin-top: 40px;
+    height: calc(100% - 90px);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+.menu-items li{
+    list-style: none;
+}
+.menu-items li a{
+    display: flex;
+    align-items: center;
+    height: 50px;
+    text-decoration: none;
+    position: relative;
+    border-radius: 15px;
+}
+.nav-links li a:hover:before{
+    content: "";
+    position: absolute;
+    left: -7px;
+    height: 5px;
+    width: 5px;
+    border-radius: 50%;
+    background-color: #b7b7b7;
+}
+body.dark li a:hover:before{
+    background-color: var(--text-color);
+}
+.menu-items li a i{
+    font-size: 24px;
+    min-width: 45px;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--black-light-color);
+}
+
+.menu-items li a .link-name{
+    font-size: 18px;
+    font-weight: 400;
+    color: var(--black-light-color);    
+}
+nav.close li a .link-name{
+    opacity: 0;
+    pointer-events: none;
+}
+
+.nav-links li a:hover {
+    background-color: var(--color-primary);
+}
+
+.nav-links li a:hover i,
+.nav-links li a:hover .link-name{
+    color: #ffffff;
+}
+body.dark .nav-links li a:hover i,
+body.dark .nav-links li a:hover .link-name{
+    color: var(--text-color);
+}
+.menu-items .logout-mode{
+    padding-top: 10px;
+    border-top: 1px solid var(--border-color);
+}
+
+@media (max-width: 1000px) {
+    nav{
+        width: 73px;
+    }
+    nav.close{
+        width: 250px;
+    }
+    nav .logo_name{
+        opacity: 0;
+        pointer-events: none;
+    }
+    nav.close .logo_name{
+        opacity: 1;
+        pointer-events: auto;
+    }
+    nav li a .link-name{
+        opacity: 0;
+        pointer-events: none;
+    }
+    nav.close li a .link-name{
+        opacity: 1;
+        pointer-events: auto;
+    }
+}
+
+@media (max-width: 400px) {
+    nav{
+        width: 0px;
+    }
+    nav.close{
+        width: 73px;
+    }
+    nav .logo_name{
+        opacity: 0;
+        pointer-events: none;
+    }
+    nav.close .logo_name{
+        opacity: 0;
+        pointer-events: none;
+    }
+    nav li a .link-name{
+        opacity: 0;
+        pointer-events: none;
+    }
+    nav.close li a .link-name{
+        opacity: 0;
+        pointer-events: none;
+    }
+}
+</style>

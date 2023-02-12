@@ -1,0 +1,94 @@
+@import url("https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,400;0,500;0,700;1,400;1,500;1,700&display=swap");
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500;600&display=swap');
+@import url('https://unicons.iconscout.com/release/v4.0.0/css/line.css');
+
+:root {
+    /* Component Color */
+    --color-primary: #3c3d5b;
+    --color-secondary: #50527A;
+    --color-link: #7069fa;
+    --color-link-hover: #8c86ff;
+    --color-button: #50527A;
+    --color-border-button: #9aa5b1;
+    --color-border: #e8e9eb;
+    --color-font: #3e4c59;
+    --color-font-light: #616e7c;
+    --color-font-lighter: #9aa5b1;
+    --color-outline: #a0c2ff;
+
+    /* Sizes */
+    --size-10: 10px;
+    --size-12: 12px;
+    --size-14: 14px;
+    --size-16: 16px;
+    --size-18: 18px;
+    --size-20: 20px;
+    --size-22: 22px;
+    --size-24: 24px;
+    --size-28: 28px;
+    --size-32: 32px;
+    --size-48: 48px;
+    --size-64: 64px;
+
+    /* Box Shadows */
+    --shadow-sm: 0 -1px 3px rgba(0, 0, 0, 0.02), 0 1px 2px rgba(0, 0, 0, 0.03),
+        0 4px 4px rgba(0, 0, 0, 0.03);
+    --shadow-lg: 0 -1px 3px rgba(0, 0, 0, 0.02), 0 1px 2px rgba(0, 0, 0, 0.05),
+        0 3px 4px rgba(0, 0, 0, 0.05), 0 5px 8px rgba(0, 0, 0, 0.05);
+    --shadow-xl: 0 -1px 3px rgba(0, 0, 0, 0.02), 0 1px 2px rgba(0, 0, 0, 0.05),
+        0 3px 4px rgba(0, 0, 0, 0.05), 0 5px 8px rgba(0, 0, 0, 0.05),
+        0 16px 16px rgba(0, 0, 0, 0.05);
+
+    /* Other Variables */
+    --font-default: "Poppins", sans-serif;
+
+    /* ===== Colors ===== */
+    --primary-color: #0E4BF1;
+    --panel-color: #FFF;
+    --text-color: #000;
+    --black-light-color: #707070;
+    --border-color: #e6e5e5;
+    --toggle-color: #DDD;
+    --box1-color: #4DA3FF;
+    --box2-color: #FFE6AC;
+    --box3-color: #E7D1FC;
+    --title-icon-color: #fff;
+    
+    /* ====== Transition ====== */
+    --tran-05: all 0.5s ease;
+    --tran-03: all 0.3s ease;
+    --tran-03: all 0.2s ease;
+}
+
+html,
+body {
+    color: var(--color-font);
+    font-family: var(--font-default);
+}
+
+.bg-primary {
+    background-color: var(--color-primary) !important;
+}
+
+.auth-layout {
+    background-color: rgb(246, 250, 255) !important;
+}
+
+.auth-layout a {
+    color: var(--color-link);
+    cursor: pointer;
+    text-decoration: none;
+    transition: color 0.1s ease-in-out;
+}
+.auth-layout a:hover {
+    color: var(--color-link-hover);
+}
+
+.standard-button {
+    background-color: var(--color-primary) !important;
+    transition: color 0.1s ease-in-out;
+}
+
+.standard-button:hover {
+    background-color: var(--color-secondary);
+}

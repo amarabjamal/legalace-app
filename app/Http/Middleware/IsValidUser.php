@@ -19,12 +19,11 @@ class IsValidUser
     public function handle(Request $request, Closure $next)
     {
         if(Auth::check() == true) {
-
             $userRoles = User::findOrFail(Auth::id())->userRoles;
             $roles = array();
     
             foreach($userRoles as $userRole) {
-                array_push($roles, $userRole->role->name);
+                array_push($roles, $userRole->role->slug);
             }
     
             if($roles !== null) {

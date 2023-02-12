@@ -18,10 +18,9 @@ class DashboardController extends Controller
         $roles = array();
 
         foreach($userRoles as $userRole) {
-            array_push($roles, $userRole->role->name);
+            array_push($roles, $userRole->role->slug);
         }
 
-        // $companyProfile = Company::where('id', '=', $user->company_id)->get();
         $company = $user->company;
         $companyName = $user->company->name;
 
@@ -45,5 +44,38 @@ class DashboardController extends Controller
                 'invalid_role' => 'The user is not assigned a role',
             ]);
         }
+    }
+
+    public function showAdminDashboard() {
+        $user = Auth::user();
+        $userRoles = User::findOrFail($user->id)->userRoles;
+        $roles = array();
+
+        foreach($userRoles as $userRole) {
+            array_push($roles, $userRole->role->slug);
+        }
+
+        return Inertia::render('Admin/Dashboard', [
+            'total_users' => User::all()->count(),
+            'role' => $roles
+        ]);
+    }
+
+    public function showLawyerDashboard() {
+        $user = Auth::user();
+        $userRoles = User::findOrFail($user->id)->userRoles;
+        $roles = array();
+
+        foreach($userRoles as $userRole) {
+            array_push($roles, $userRole->role->slug);
+        }
+
+        $companyName = $user->company->name;
+
+        return Inertia::render('Lawyer/Dashboard', [
+            'user' => $user,
+            'company' => $companyName,
+            'role' => $roles
+        ]);
     }
 }

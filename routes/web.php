@@ -4,15 +4,16 @@ use App\Http\Controllers\Admin\ApproveVoucher;
 use App\Http\Controllers\Admin\ManageBankAccount;
 use App\Http\Controllers\Admin\ManageCompany;
 use App\Http\Controllers\Admin\ManageUsers;
-use App\Models\User;
-use App\Models\Client;
+use App\Http\Controllers\Auth\ForgotPasswordController;
 use Inertia\Inertia;
 use Illuminate\Support\Facades\Route;
-use Illuminate\Support\Facades\Request;
 use App\Http\Controllers\Auth\LoginController;
+use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\Common\DashboardController;
 use App\Http\Controllers\Common\ProfileController;
+use App\Http\Controllers\Email\MailController;
 use App\Http\Controllers\Lawyer\ClientController;
+use App\Http\Controllers\Lawyer\ManageCaseFile;
 use App\Http\Controllers\Lawyer\FirmAccountController;
 use App\Http\Controllers\Lawyer\ClientAccountController;
 use App\Http\Controllers\Lawyer\AccountReportingController;
@@ -30,58 +31,51 @@ use Illuminate\Support\Facades\Auth;
 |
 */
 
-Route::get('login', [LoginController::class, 'create'])->name('login');
-Route::post('login', [LoginController::class, 'store']);
-Route::post('logout', [LoginController::class, 'destroy'])->middleware('auth:admin');
+Route::get('/sendmail', [MailController::class, 'index']);
 
-Route::get('/register', function () {
-    return Inertia::render('Auth/Register');
-});
-Route::post('/register', function () {
-    // validate the request
-    $attributes = Request::validate([
-        'name' => 'required',
-        'email' => ['required', 'email'],
-        'password' => 'required',
-    ]);
-    // create the user
-    User::create($attributes);
-    // redirect
-    return redirect('/login');
-});
+Route::get('login', [LoginController::class, 'index'])->name('login');
+Route::post('login', [LoginController::class, 'login']);
+Route::post('logout', [LoginController::class, 'logout'])->middleware('auth:admin');
 
-Route::middleware('admin')->group(function () {
+Route::get('register', [RegisterController::class, 'index'])->name('register');
+Route::post('register', [RegisterController::class, 'registerNewAccount']);
+Route::get('/testInfoMessage', [RegisterController::class, 'testInfoMessage']);
+
+Route::get('forgotpassword', [ForgotPasswordController::class, 'showForgetPasswordForm'])->name('forgotpassword');
+Route::post('forgotpassword', [ForgotPasswordController::class, 'submitForgetPasswordForm']);
+Route::get('resetpassword/{token}', [ForgotPasswordController::class, 'showResetPaswordForm'])->name('forgotpassword');
+Route::post('resetpassword', [ForgotPasswordController::class, 'submitResetPasswordForm']);
+
+
+Route::group(['middleware' => 'auth'], function() {
+    //Routes for Administrator ONLY
+    Route::group(['middleware' => 'check.role:admin', 'prefix' => 'admin', 'as' => 'admin.'], function() {
+        Route::get('/', [DashboardController::class, 'showAdminDashboard']);
+        Route::get('/dashboard', [DashboardController::class, 'showAdminDashboard']);
+        Route::get('/profile', [ProfileController::class, 'showAdminProfile']);
+
+        Route::resources([
+            'users' => ManageUsers::class,
+            'bankaccounts' => ManageBankAccount::class,
+            'voucherapprovals' => ApproveVoucher::class,
+        ]);
     
-    Route::resources([
-        'users' => ManageUsers::class,
-        'bankaccounts' => ManageBankAccount::class,
-        'voucherapprovals' => ApproveVoucher::class,
-    ]);
-
-    Route::resource('company', ManageCompany::class)->except(['show','edit', 'destroy']);
-    Route::get('company/edit', [ManageCompany::class, 'edit'])->name('company.edit');
-    
-    Route::get('/settings', function () {
-        $userId = Auth::id();
-        return Inertia::render('Admin/Settings', [$userId]);
+        Route::resource('company', ManageCompany::class)->except(['show','edit', 'destroy']);
+        Route::get('company/edit', [ManageCompany::class, 'edit'])->name('company.edit');
+        
+        Route::get('/settings', function () {
+            $userId = Auth::id();
+            return Inertia::render('Admin/Settings', [$userId]);
+        });
     });
-});
 
+    //Routes for Lawyer ONLY
+    Route::group(['middleware' => 'check.role:lawyer', 'prefix' => 'lawyer', 'as' => 'lawyer.'], function() {
+        Route::get('/', [DashboardController::class, 'showLawyerDashboard']);
+        Route::get('/dashboard', [DashboardController::class, 'showLawyerDashboard']);
+        Route::get('/profile', [ProfileController::class, 'showLawyerProfile']);
 
-//Common routes for all users
-Route::middleware('is.valid.user')->group(function () {
-    Route::get('/', [DashboardController::class, 'index']);
-    Route::get('/dashboard', [DashboardController::class, 'index']);
-
-    Route::get('/profile', [ProfileController::class, 'index']);
-});
-
-
-Route::middleware('lawyer')->group(function () {
-    Route::resource('clients', ClientController::class);
-    Route::resource('firm-account', FirmAccountController::class);
-    Route::resource('client-account', ClientAccountController::class);
-    Route::resource('account-reporting', AccountReportingController::class);
-    Route::resource('operational-cost', OperationalCostController::class);
-
+        Route::resource('clients', ClientController::class);
+        Route::resource('casefiles', ManageCaseFile::class);
+    });
 });

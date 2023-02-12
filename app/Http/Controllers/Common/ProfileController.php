@@ -16,7 +16,7 @@ class ProfileController extends Controller
         $roles = array();
 
         foreach($userRoles as $userRole) {
-            array_push($roles, $userRole->role->name);
+            array_push($roles, $userRole->role->slug);
         }
 
         $company = $user->company;
@@ -38,5 +38,23 @@ class ProfileController extends Controller
                 'invalid_role' => 'The user is not assigned a role',
             ]);
         }
+    }
+
+    public function showAdminProfile() {
+        $user = Auth::user();
+        $user->company;
+
+        return Inertia::render('Admin/Profile', [
+            'user' => $user,
+        ]);
+    } 
+
+    public function showLawyerProfile() {
+        $user = Auth::user();
+        $user->company;
+        
+        return Inertia::render('Lawyer/Profile', [
+            'user' => $user,
+        ]);
     }
 }

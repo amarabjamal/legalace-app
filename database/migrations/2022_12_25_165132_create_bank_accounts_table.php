@@ -13,7 +13,7 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('account_types', function (Blueprint $table) {
+        Schema::create('bank_account_types', function (Blueprint $table) {
             $table->id();
             $table->string('name');
             $table->string('slug');
@@ -21,13 +21,13 @@ return new class extends Migration
 
         Schema::create('bank_accounts', function (Blueprint $table) {
             $table->id();
+            $table->string('label');
             $table->string('account_name');
             $table->string('bank_name');
             $table->string('account_number');
             $table->string('bank_address');
             $table->string('swift_code');
-            $table->foreignId('account_type')->constrained('account_types', 'id');
-            $table->string('label');
+            $table->foreignId('bank_account_type_id')->constrained('bank_account_types', 'id');
             $table->foreignId('created_by')->constrained('users', 'id');
             $table->foreignId('company_id')->constrained('companies', 'id');
             $table->timestamps();

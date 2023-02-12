@@ -18,10 +18,10 @@ class CompanyFactory extends Factory
     {
         return [
             'name'=>fake()->name(),
-            'reg_no'=>'',
-            'address'=>'',
+            'reg_number'=> fake()->numerify('REG####'),
+            'address'=> fake()->address(),
             'email'=>fake()->safeEmail(),
-            'website'=>'',
+            'website'=> '-',
         ];
     }
 }

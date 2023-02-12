@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Auth;
 
 class BankAccount extends Model
 {
@@ -13,17 +14,15 @@ class BankAccount extends Model
     protected $primaryKey = 'id';
 
     protected $fillable = [
+        'label',
         'account_name',
         'bank_name',
         'account_number',
         'bank_address',
         'swift_code',
-        'account_type',
-        'label',
+        'bank_account_type_id',
         'created_by',
         'company_id',
-        'created_at',
-        'updated_at',
     ];
 
     protected $hidden = [
@@ -31,8 +30,8 @@ class BankAccount extends Model
         'updated_at'
     ];
 
-    public function accountType() {
-        return $this->belongsTo(AccountType::class, 'account_type', 'id');
+    public function bankAccountType() {
+        return $this->belongsTo(BankAccountType::class, 'bank_account_type_id', 'id');
     }
 
     public function createdBy() {
@@ -41,5 +40,12 @@ class BankAccount extends Model
 
     public function company() {
         return $this->belongsTo(Company::class, 'company_id', 'id');
+    }
+
+    public function allBankAccounts() {
+        
+        return $this->where([ 'company_id' => Auth::user()->company_id ])
+            ->with('createdBy:id,name', 'bankAccountType:id,name')
+            ->get();
     }
 }

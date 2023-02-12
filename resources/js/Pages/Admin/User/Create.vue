@@ -1,9 +1,7 @@
 <template>
     <Head :title="'Register new user'" />
-    <Sidebar/>
 
     <div class="flex flex-col flex-1">
-        <Header title="" />
         <main class="h-full pb-16 overflow-y-auto">
             
             <div class="container px-6 mx-auto grid">
@@ -65,20 +63,39 @@
 
                         <div class="mb-6">
                             <label 
-                                for="id_num" 
+                                for="id_type_id" 
+                                class="block mb-2 text-sm font-medium text-gray-700 dark:text-gray-200"
+                                >
+                                Identification Type
+                            </label>
+                            <select 
+                                v-model="form.id_type_id"
+                                id="id_type_id" 
+                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
+                                required
+                            >
+                                <option disabled value="">Please select identification type</option>
+                                <option v-for="idType in idTypes" :value="idType.id">{{idType.name}}</option>
+                            </select>
+                            <p v-if="form.errors.id_type_id" v-text="form.errors.id_type_id" class="mt-2 text-sm text-red-600"></p>
+                        </div>
+
+                        <div class="mb-6">
+                            <label 
+                                for="id_number" 
                                 class="block mb-2 text-sm font-medium text-gray-900"
                                 >
                                 Identification Number
                             </label>
                             <input 
-                                v-model="form.id_num"
+                                v-model="form.id_number"
                                 type="text" 
-                                id="id_num" 
+                                id="id_number" 
                                 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" 
                                 placeholder="" 
                                 required
                             />
-                            <p v-if="form.errors.id_num" v-text="form.errors.id_num" class="mt-2 text-sm text-red-600"></p>
+                            <p v-if="form.errors.id_number" v-text="form.errors.id_number" class="mt-2 text-sm text-red-600"></p>
                         </div>
 
                         <div class="mb-6">
@@ -116,20 +133,20 @@
 
                         <div class="mb-6">
                             <label 
-                                for="contact_num" 
+                                for="contact_number" 
                                 class="block mb-2 text-sm font-medium text-gray-900"
                                 >
                                 Contact Number
                             </label>
                             <input 
-                                v-model="form.contact_num"
+                                v-model="form.contact_number"
                                 type="text" 
-                                id="contact_num" 
+                                id="contact_number" 
                                 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" 
                                 placeholder="" 
                                 required
                             />
-                            <p v-if="form.errors.contact_num" v-text="form.errors.contact_num" class="mt-2 text-sm text-red-600"></p>
+                            <p v-if="form.errors.contact_number" v-text="form.errors.contact_number" class="mt-2 text-sm text-red-600"></p>
                         </div>
 
                         <div class="mb-6">
@@ -150,6 +167,36 @@
                             <p v-if="form.errors.birthdate" v-text="form.errors.birthdate" class="mt-2 text-sm text-red-600"></p>
                         </div>
 
+                        <div class="mb-6">
+                            <label 
+                                for="is_active" 
+                                class="block mb-2 text-sm font-medium text-gray-900"
+                                >
+                                Enable Access
+                            </label>
+
+                            <input v-model="form.is_active" type="checkbox" id="is_active" value="is_active">
+                            <label for="is_active"> Grant Access</label><br/>
+                            <p v-if="form.errors.is_active" v-text="form.errors.is_active" class="mt-2 text-sm text-red-600"></p>
+                        </div>
+
+                        <div class="mb-6">
+                            <label 
+                                for="access_expiry_date" 
+                                class="block mb-2 text-sm font-medium text-gray-900"
+                                >
+                                Access Expiry Date
+                            </label>
+                            <input 
+                                v-model="form.access_expiry_date"
+                                type="date" 
+                                id="access_expiry_date" 
+                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" 
+                                placeholder=""
+                            />
+                            <p v-if="form.errors.access_expiry_date" v-text="form.errors.access_expiry_date" class="mt-2 text-sm text-red-600"></p>
+                        </div>
+
                         <button 
                             type="submit" 
                             class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center"
@@ -159,7 +206,7 @@
                         </button>
 
                         <Link 
-                            href="/users"
+                            href="/admin/users"
                             as="button"  
                             class="ml-2 text-gray-900 focus:outline-none bg-white border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-200 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center"
                             :disabled="form.processing"
@@ -177,8 +224,6 @@
 <script>
 import { Head } from "@inertiajs/inertia-vue3";
 import Layout from "../Shared/Layout";
-import Header from "../Shared/Header";
-import Sidebar from "../Shared/Sidebar";
 import { useForm } from "@inertiajs/inertia-vue3";
 
 export default { 
@@ -186,21 +231,27 @@ export default {
         let form = useForm({
             name: '',
             email: '',
-            id_num: '',
+            id_type_id: '',
+            id_number: '',
             employee_id: '',
             isAdmin: '',
             isLawyer: '',
-            contact_num: '',
-            birthdate: ''
+            contact_number: '',
+            birthdate: '',
+            is_active: '',
+            access_expiry_date: '',
         });
 
         let submit = () => {
-            form.post('/users');
+            form.post('/admin/users');
         };
 
         return { form, submit };
     },
-    components: { Head, Header, Sidebar },
+    components: { Head },
     layout: Layout,
+    props: {
+      idTypes : Object
+    },
 };
 </script>
