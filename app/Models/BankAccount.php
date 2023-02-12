@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Auth;
 
 class BankAccount extends Model
 {
@@ -39,5 +40,12 @@ class BankAccount extends Model
 
     public function company() {
         return $this->belongsTo(Company::class, 'company_id', 'id');
+    }
+
+    public function allBankAccounts() {
+        
+        return $this->where([ 'company_id' => Auth::user()->company_id ])
+            ->with('createdBy:id,name', 'bankAccountType:id,name')
+            ->get();
     }
 }

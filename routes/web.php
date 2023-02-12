@@ -37,18 +37,13 @@ Route::get('register', [RegisterController::class, 'index'])->name('register');
 Route::post('register', [RegisterController::class, 'registerNewAccount']);
 Route::get('/testInfoMessage', [RegisterController::class, 'testInfoMessage']);
 
-Route::get('forgotpassword', [ForgotPasswordController::class, 'index'])->name('forgotpassword');
-
+Route::get('forgotpassword', [ForgotPasswordController::class, 'showForgetPasswordForm'])->name('forgotpassword');
+Route::post('forgotpassword', [ForgotPasswordController::class, 'submitForgetPasswordForm']);
+Route::get('resetpassword/{token}', [ForgotPasswordController::class, 'showResetPaswordForm'])->name('forgotpassword');
+Route::post('resetpassword', [ForgotPasswordController::class, 'submitResetPasswordForm']);
 
 
 Route::group(['middleware' => 'auth'], function() {
-    //Common routes for all users
-    // Route::middleware('is.valid.user')->group(function () {
-    //     Route::get('/', [DashboardController::class, 'index']);
-    //     Route::get('/dashboard', [DashboardController::class, 'index']);
-    //     Route::get('/profile', [ProfileController::class, 'index']);
-    // });
-
     //Routes for Administrator ONLY
     Route::group(['middleware' => 'check.role:admin', 'prefix' => 'admin', 'as' => 'admin.'], function() {
         Route::get('/', [DashboardController::class, 'showAdminDashboard']);
@@ -80,30 +75,3 @@ Route::group(['middleware' => 'auth'], function() {
         Route::resource('casefiles', ManageCaseFile::class);
     });
 });
-
-
-
-
-// //Routes for Administrator ONLY
-// Route::middleware('is.admin')->group(function () {
-//     Route::resources([
-//         'users' => ManageUsers::class,
-//         'bankaccounts' => ManageBankAccount::class,
-//         'voucherapprovals' => ApproveVoucher::class,
-//     ]);
-
-//     Route::resource('company', ManageCompany::class)->except(['show','edit', 'destroy']);
-//     Route::get('company/edit', [ManageCompany::class, 'edit'])->name('company.edit');
-    
-//     Route::get('/settings', function () {
-//         $userId = Auth::id();
-//         return Inertia::render('Admin/Settings', [$userId]);
-//     });
-// });
-
-//Routes for Lawyer ONLY
-// Route::middleware('is.lawyer')->group(function () {
-//     Route::resource('clients', ClientController::class);
-
-//     Route::resource('casefiles', ManageCaseFile::class);
-// });

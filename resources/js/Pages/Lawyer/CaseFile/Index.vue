@@ -1,9 +1,7 @@
 <template>
     <Head title="Manage users" />
-    <Sidebar/>
 
     <div class="flex flex-col flex-1">
-        <Header title="" />
         <main class="h-full pb-16 overflow-y-auto">
             
             <div class="container px-6 mx-auto grid">
@@ -71,7 +69,7 @@
                         </thead>
                         <tbody class="bg-white  dark:bg-gray-800">
                             <tr 
-                                v-if="case_files == null"
+                                v-if="case_files.length <= 0"
                                 class="border-b dark:border-b-gray-700 text-gray-700 dark:text-gray-400"
                             >
                                 <td 
@@ -97,7 +95,7 @@
                                     {{ case_file.type }}
                                 </th>
                                 <th scope="row" class="px-6 py-4 font-medium whitespace-nowrap">
-                                    {{ case_file.file_no }}
+                                    {{ case_file.file_number }}
                                 </th>
                                 <th scope="row" class="px-6 py-4 font-medium whitespace-nowrap">
                                     On-going
@@ -121,12 +119,10 @@
 <script>
 import { Head } from "@inertiajs/inertia-vue3";
 import Layout from "../Shared/Layout";
-import Header from "../Shared/Header";
-import Sidebar from "../Shared/Sidebar";
 import Pagination from "../Shared/Pagination";
 
 export default { 
-    components: { Head, Header, Sidebar, Pagination},
+    components: { Head, Pagination},
     props: {
         case_files: Object,
     },

@@ -1,9 +1,7 @@
 <template>
     <Head title="Client" />
-    <Sidebar/>
 
     <div class="flex flex-col flex-1">
-        <Header title="" />
         <main class="h-full pb-16 overflow-y-auto">
             <div class="container px-6 mx-auto grid">
                 <h2 class="my-6 text-2xl font-semibold text-gray-700 dark:text-gray-200">
@@ -84,8 +82,6 @@
 <script>
 import { Head } from "@inertiajs/inertia-vue3";
 import Layout from "../Shared/Layout";
-import Header from "../Shared/Header";
-import Sidebar from "../Shared/Sidebar";
 import Pagination from "../Shared/Pagination";
 import { Inertia } from "@inertiajs/inertia";
 import throttle from 'lodash/throttle';
@@ -109,7 +105,7 @@ export default {
         clients: Object,
         filters: Object
      },
-    components: { Head, Header, Sidebar, Pagination, ref },
+    components: { Head, Pagination, ref },
     layout: Layout,
     methods: {
         deleteUser(client) {

@@ -11,6 +11,8 @@
                 Account Overview
                 </h2>
 
+                {{ $props.user }}
+
                 <table>
                     <tr>
                         <td>Name</td>
@@ -22,7 +24,7 @@
                     </tr>
                     <tr>
                         <td>Identification No.</td>
-                        <td class="font-bold">{{ $props.user.id_num }}</td>
+                        <td class="font-bold">{{ $props.user.id_number }}</td>
                     </tr>
                     <tr>
                         <td>Employee ID</td>
@@ -30,7 +32,7 @@
                     </tr>
                     <tr>
                         <td>Contact No.</td>
-                        <td class="font-bold">{{ $props.user.contact_num }}</td>
+                        <td class="font-bold">{{ $props.user.contact_number }}</td>
                     </tr>
                     <tr>
                         <td>Birthdate</td>
@@ -38,8 +40,11 @@
                     </tr>
                     <tr>
                         <td>Roles</td>
-                        <td>
-                            <div v-for="user_role in user.user_roles">
+                        <td class="font-bold flex">
+                            <div 
+                                v-for="user_role in user.user_roles"
+                                class="mr-2"
+                            >
                                 {{ user_role.role.name }}
                             </div>
                         </td>

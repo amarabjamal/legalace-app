@@ -47,7 +47,6 @@
 </template>
 
 <script>
-import { HomeIcon, UsersIcon, CreditCardIcon, InboxInIcon, OfficeBuildingIcon } from "@heroicons/vue/outline";
 
 export default {
     data() {
@@ -57,13 +56,6 @@ export default {
     },
     props: {
         isSidebarOpen: Boolean,
-    },
-    components: { 
-        HomeIcon, 
-        UsersIcon, 
-        CreditCardIcon, 
-        InboxInIcon, 
-        OfficeBuildingIcon
     },
     methods: {
     }

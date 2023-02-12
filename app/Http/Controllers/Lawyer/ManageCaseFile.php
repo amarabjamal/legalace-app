@@ -13,11 +13,18 @@ use Inertia\Inertia;
 
 class ManageCaseFile extends Controller
 {
+    protected $casefile;
+
+    public function __construct(CaseFile $casefile)
+    {
+        $this->casefile = $casefile;   
+    }
+    
     public function index()
     {
-        $caseFiles = CaseFile::where('created_by', '=', Auth::id())->get(['id', 'matter', 'type', 'file_no', 'no_conflict_checked', 'client_id']);
+        //$caseFiles = CaseFile::where('created_by', '=', Auth::id())->get(['id', 'matter', 'type', 'file_no', 'no_conflict_checked', 'client_id']);
         return Inertia::render('Lawyer/CaseFile/Index', [
-            'case_files' => $caseFiles,
+            'case_files' => $this->casefile->myCaseFile(),
         ]);
     }
 

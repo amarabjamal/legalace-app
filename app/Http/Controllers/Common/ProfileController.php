@@ -42,6 +42,7 @@ class ProfileController extends Controller
 
     public function showAdminProfile() {
         $user = Auth::user();
+        $user->company;
 
         return Inertia::render('Admin/Profile', [
             'user' => $user,
@@ -50,6 +51,7 @@ class ProfileController extends Controller
 
     public function showLawyerProfile() {
         $user = Auth::user();
+        $user->company;
         
         return Inertia::render('Lawyer/Profile', [
             'user' => $user,
