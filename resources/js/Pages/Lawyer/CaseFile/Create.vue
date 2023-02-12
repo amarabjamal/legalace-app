@@ -1,9 +1,7 @@
 <template>
     <Head title="Create Case File" />
-    <Sidebar/>
 
     <div class="flex flex-col flex-1">
-        <Header title="" />
         <main class="h-full pb-16 overflow-y-auto">
             
             <div class="container px-6 mx-auto grid">
@@ -151,8 +149,6 @@
 <script>
 import { Head } from "@inertiajs/inertia-vue3";
 import Layout from "../Shared/Layout";
-import Header from "../Shared/Header";
-import Sidebar from "../Shared/Sidebar";
 import Pagination from "../Shared/Pagination";
 import { useForm } from "@inertiajs/inertia-vue3";
 import Multiselect from "vue-multiselect";
@@ -172,7 +168,7 @@ export default {
 
         return { form, submit };
     },
-    components: { Head, Header, Sidebar, Pagination, Multiselect },
+    components: { Head, Pagination, Multiselect },
     props: {
         clients: Object,
         lawyers: Object,

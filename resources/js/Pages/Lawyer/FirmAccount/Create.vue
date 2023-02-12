@@ -1,10 +1,7 @@
 <template>
     <Head title="Add new transaction" />
-    <!-- <Sidebar /> -->
     
     <div class="flex flex-col flex-1">
-        
-        <Header title="Add New Transaction" />
         <main class="h-full pb-16 overflow-y-auto mx-3 my-4">
             <div class="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
                 <form @submit.prevent="submit">
@@ -168,8 +165,6 @@
 <script>
 import { Head } from "@inertiajs/inertia-vue3";
 import Layout from "../Shared/Layout";
-import Header from "../Shared/Header.vue";
-import Sidebar from "../Shared/Sidebar";
 import { useForm } from "@inertiajs/inertia-vue3";
 
 export default {
@@ -191,7 +186,7 @@ export default {
     props: { 
         firmAccounts: Object,
      },
-    components: { Head, Header, Sidebar },
+    components: { Head },
     layout: Layout,
 };
 </script>

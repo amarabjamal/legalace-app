@@ -1,9 +1,7 @@
 <template>
     <Head title="View Case File" />
-    <Sidebar/>
 
     <div class="flex flex-col flex-1">
-        <Header title="" />
         <main class="h-full pb-16 overflow-y-auto">
             
             <div class="container px-6 mx-auto grid">
@@ -153,12 +151,10 @@
 <script>
 import { Head } from "@inertiajs/inertia-vue3";
 import Layout from "../Shared/Layout";
-import Header from "../Shared/Header";
-import Sidebar from "../Shared/Sidebar";
 import Pagination from "../Shared/Pagination";
 
 export default { 
-    components: { Head, Header, Sidebar, Pagination},
+    components: { Head, Pagination},
     props: {
         'case_file' : Object,
     },

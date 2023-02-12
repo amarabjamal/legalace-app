@@ -21,7 +21,6 @@ return new class extends Migration
             $table->double('debit');
             $table->double('credit');
             $table->double('balance')->nullable();
-            // $table->foreignId('company_id')->constrained('companies', 'id')->nullable();
             $table->foreignId('bank_account_id')->constrained('bank_accounts', 'id')->nullable();
             $table->timestamps();
         });
