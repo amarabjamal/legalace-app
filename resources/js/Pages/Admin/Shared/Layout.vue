@@ -14,6 +14,15 @@
             </div>
 
             <ul class="flex items-center flex-shrink-0 space-x-6">
+                <li v-if="$page.props.auth.user.roles.indexOf('lawyer') !== -1" class="relative">
+                    <Link
+                        class="text-white text-sm"
+                        href="/lawyer"
+                    >
+                        <i class="uil uil-sync"></i>
+                        Switch Dashboard
+                    </Link>
+                </li>
                 <!-- Notifications menu -->
                 <li class="relative">
                 <button
@@ -181,6 +190,7 @@
 </template>
 
 <script>
+import { Link } from '@inertiajs/inertia-vue3';
 import Sidebar from './Sidebar.vue';
 
 export default {
@@ -191,7 +201,7 @@ export default {
             isProfileMenuOpen: false,
         }
     },
-    components: { Sidebar },
+    components: { Sidebar, Link },
     methods: {
         toggleSidebar() {
             this.isSidebarOpen = !this.isSidebarOpen;

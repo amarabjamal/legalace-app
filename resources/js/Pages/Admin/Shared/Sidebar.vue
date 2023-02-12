@@ -37,7 +37,7 @@
             <ul class="logout-mode">
                 <li>
                     <Link href="/logout" method="post">
-                        <i class="uil uil-signout"></i>
+                        <i class="uil uil-signin"></i>
                         <span class="link-name">Logout</span>
                     </Link>
                 </li>
