@@ -83,17 +83,25 @@
                 <!-- Profile menu -->
                 <li class="relative">
                 <button
-                    class="align-middle rounded-full border-white border focus:shadow-outline-blue focus:outline-none"
+                    class="align-middle flex items-center focus:shadow-outline-blue focus:outline-none"
                     @click="toggleProfileMenu"
                     aria-label="Account"
                     aria-haspopup="true"
                 >
                     <img
-                    class="object-cover w-8 h-8 rounded-full"
+                    class="object-cover w-8 h-8 rounded-full shadow"
                     :src="'/images/profileImage/default.png'"
                     alt="user profile image"
                     aria-hidden="true"
                     />
+                    <div class="auth-nav flex flex-col items-start pl-3 text-white">
+                        <p class="auth-name">
+                            {{ $page.props.auth.user.name }}
+                        </p>
+                        <p class="auth-role">
+                            <span v-for="role in $page.props.auth.user.roles" class="mr-1 capitalize">{{ role }}</span>
+                        </p>
+                    </div>
                 </button>
                 <template v-if="isProfileMenuOpen"
                 >
@@ -202,9 +210,7 @@ export default {
 .dashboard{
     position: relative;
     left: 250px;
-    /* background-color: rgb(239, 246, 255); */
     background-color: rgb(246, 250, 255);
-    /* background-image: linear-gradient(90deg, rgb(239, 246, 255) 0%, rgba(253, 242, 248, 1) 100%); */
     min-height: 100vh;
     width: calc(100% - 250px);
     padding: 10px 14px;
@@ -239,6 +245,25 @@ nav.close ~ .dashboard .top{
     font-size: 26px;
     color: #fff;
     cursor: pointer;
+}
+
+.dashboard .top .auth-nav{
+    white-space: nowrap;
+    overflow: hidden;
+}
+
+.dashboard .top .auth-name{
+    font-size: 13px;
+    font-weight: bold;
+    text-overflow: ellipsis;
+    width: 120px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-align: start;
+}
+
+.dashboard .top .auth-role{
+    font-size: 10px;
 }
 
 .dashboard .dash-content{

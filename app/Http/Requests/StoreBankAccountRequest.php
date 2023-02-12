@@ -66,8 +66,6 @@ class StoreBankAccountRequest extends FormRequest
         return array_merge(parent::validated(), [
             'created_by' => Auth::id(),
             'company_id' => Auth::user()->company_id,
-            'created_at' => now(),
-            'updated_at' => now(),
         ]);
     }
 }
