@@ -14,6 +14,10 @@ use App\Http\Controllers\Common\ProfileController;
 use App\Http\Controllers\Email\MailController;
 use App\Http\Controllers\Lawyer\ClientController;
 use App\Http\Controllers\Lawyer\ManageCaseFile;
+use App\Http\Controllers\Lawyer\FirmAccountController;
+use App\Http\Controllers\Lawyer\ClientAccountController;
+use App\Http\Controllers\Lawyer\AccountReportingController;
+use App\Http\Controllers\Lawyer\OperationalCostController;
 use Illuminate\Support\Facades\Auth;
 
 /*
