@@ -142,13 +142,17 @@
                                     {{ cost.amount }}
                                 </th>
                                 <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
-                                    {{ cost.is_recurring }}
+                                    <!-- {{ cost.is_recurring }} -->
+                                    <p v-if="cost.is_recurring == 0"> Non-recurring</p>
+                                    <p v-else> Recurring</p>
                                 </th>
                                 <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
                                     {{ cost.recurring_period }}
                                 </th>
                                 <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
-                                    {{ cost.is_paid }}
+                                    <!-- {{ cost.is_paid }} -->
+                                    <p v-if="cost.is_paid == 0"> Non paid</p>
+                                    <p v-else> Done paid</p>
                                 </th>
                                 <!-- <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
                                     {{ cost.balance }}

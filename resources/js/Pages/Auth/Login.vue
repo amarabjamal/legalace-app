@@ -87,7 +87,7 @@
                   class="text-sm font-medium text-blue-700 dark:text-blue-400 hover:text-blue-900"
                   href="/register"
                 >
-                  <!-- Create account -->
+                  Create account
               </Link>
               </p>
             </div>

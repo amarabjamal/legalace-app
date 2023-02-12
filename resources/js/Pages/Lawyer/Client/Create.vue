@@ -46,6 +46,7 @@
                                 <option>2</option>
                             </select>
                         <p v-if="form.errors.id_types_id" v-text="form.errors.id_types_id" class="mt-2 text-sm text-red-600 dark:text-red-500"></p>
+                        <span class="text-sm">*1: ID card, 2: Passport</span>
                     </div>
                     <div class="mb-6">
                         <label 

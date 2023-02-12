@@ -26,7 +26,7 @@ class DashboardController extends Controller
         $company = $user->company;
         $companyName = $user->company->name;
 
-        $totalClient = DB::table('client_accounts')->count();
+        $totalClient = DB::table('clients')->count();
         $totalCost = DB::table('operational_costs')->sum('amount');
         $firmAccBalance = DB::table('firm_account')->sum('balance');
 

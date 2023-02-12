@@ -116,7 +116,7 @@
                     </div>
                 </div> -->
 
-                <div class="relative mb-3">
+                <!-- <div class="relative mb-3">
                     <div class="flex absolute inset-y-0 left-0 items-center pl-3 pointer-events-none">
                         <svg class="w-5 h-5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
                     </div>
@@ -137,9 +137,10 @@
                             Add new transaction
                         </button>
                     </Link>
-                </div>
-                <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
-                    <table class="w-full text-sm text-left text-gray-500">
+                </div> -->
+                <div class="flex justify-center">
+                <div class="w-1/2 relative overflow-x-auto shadow-md sm:rounded-lg content-center">
+                    <!-- <table class="w-full text-sm text-left text-gray-500">
                         <thead class="text-xs text-gray-700 uppercase bg-green-400">
                             <tr>
                                 <th scope="col" class="px-6 py-3">
@@ -195,10 +196,201 @@
                                 </td>
                             </tr>
                         </tbody>
+                    </table> -->
+
+                    <table summary="Column one has the location and size of accommodation, other columns show the type and number of properties available" class="w-full text-sm text-left text-gray-500">
+                        
+                        <thead class="text-xs text-gray-700 uppercase bg-green-400">
+                            <tr>
+                                <td></td>
+                                <th id="stud" scope="col" class="px-6 py-3">
+                                    Debit
+                                </th>
+                                <th id="apt" scope="col" class="px-6 py-3">
+                                    <!-- <abbr title="Apartment">Credit</abbr> -->
+                                    Credit
+                                </th>
+                                <!-- <th id="chal" scope="col" class="px-6 py-3">
+                                    Chalet
+                                </th>
+                                <th id="villa" scope="col" class="px-6 py-3">
+                                    Villa
+                                </th> -->
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <th id="par" class="span" colspan="5" scope="colgroup">
+                                    Current Assets
+                                </th>
+                            </tr>
+                            <tr class="bg-white border-b">
+                                <th headers="par" id="pbed1" class="px-6 py-1 font-medium text-gray-900 whitespace-nowrap">
+                                    Petty Cash
+                                </th>
+                                <td headers="par pbed1 stud" class="px-6 py-1 font-medium text-gray-900 whitespace-nowrap">
+                                    500
+                                </td>
+                                <td headers="par pbed1 apt" class="px-6 py-1 font-medium text-gray-900 whitespace-nowrap">
+                                    
+                                </td>
+                                
+                            </tr>
+                            <tr class="bg-white border-b">
+                                <th headers="par" id="pbed2" class="px-6 py-1 font-medium text-gray-900 whitespace-nowrap">
+                                    Inventory
+                                </th>
+                                <td headers="par pbed2 stud" class="px-6 py-1 font-medium text-gray-900 whitespace-nowrap">
+                                    -
+                                </td>
+                                <td headers="par pbed2 apt" class="px-6 py-1 font-medium text-gray-900 whitespace-nowrap">
+                                    43
+                                </td>
+                            
+                            </tr>
+                            <tr class="bg-white border-b">
+                                <th headers="par" id="pbed3" class="px-6 py-1 font-medium text-gray-900 whitespace-nowrap">
+                                    Account Receivables
+                                </th>
+                                <td headers="par pbed3 stud" class="px-6 py-1 font-medium text-gray-900 whitespace-nowrap">
+                                    -
+                                </td>
+                                <td headers="par pbed3 apt" class="px-6 py-1 font-medium text-gray-900 whitespace-nowrap">
+                                    13
+                                </td>
+                                
+                            </tr>
+                            <tr>
+                                <th id="par" class="span" colspan="5" scope="colgroup">
+                                    Non-Current Assets
+                                </th>
+                            </tr>
+                            <tr class="bg-white border-b">
+                                <th headers="par" id="pbed1" class="px-6 py-1 font-medium text-gray-900 whitespace-nowrap">
+                                    Fax Printer
+                                </th>
+                                <td headers="par pbed1 stud" class="px-6 py-1 font-medium text-gray-900 whitespace-nowrap">
+                                    11
+                                </td>
+                                <td headers="par pbed1 apt" class="px-6 py-1 font-medium text-gray-900 whitespace-nowrap">
+                                    20
+                                </td>
+                                
+                            </tr>
+                            <tr class="bg-white border-b">
+                                <th headers="par" id="pbed2" class="px-6 py-1 font-medium text-gray-900 whitespace-nowrap">
+                                    Vehicle
+                                </th>
+                                <td headers="par pbed2 stud" class="px-6 py-1 font-medium text-gray-900 whitespace-nowrap">
+                                    -
+                                </td>
+                                <td headers="par pbed2 apt" class="px-6 py-1 font-medium text-gray-900 whitespace-nowrap">
+                                    43
+                                </td>
+                            
+                            </tr>
+                            <tr class="bg-white border-b">
+                                <th headers="par" id="pbed3" class="px-6 py-1 font-medium text-gray-900 whitespace-nowrap">
+                                    Computer
+                                </th>
+                                <td headers="par pbed3 stud" class="px-6 py-1 font-medium text-gray-900 whitespace-nowrap">
+                                    -
+                                </td>
+                                <td headers="par pbed3 apt" class="px-6 py-1 font-medium text-gray-900 whitespace-nowrap">
+                                    13
+                                </td>
+                                
+                            </tr>
+                            <tr>
+                                <th id="rome" class="span" colspan="5" scope="colgroup">
+                                    Current Liabilities
+                                </th>
+                            </tr>
+                            <tr class="bg-white border-b">
+                                <th id="rbed1" headers="rome" class="px-6 py-1 font-medium text-gray-900 whitespace-nowrap">
+                                    Account Payable
+                                </th>
+                                <td headers="rome rbed1 stud" class="px-6 py-1 font-medium text-gray-900 whitespace-nowrap">
+                                    13
+                                </td>
+                                <td headers="rome rbed1 apt" class="px-6 py-1 font-medium text-gray-900 whitespace-nowrap">
+                                    21
+                                </td>
+                                <!-- <td headers="rome rbed1 chal">
+                                    22
+                                </td>
+                                <td headers="rome rbed1 villa">
+                                    3
+                                </td> -->
+                            </tr>
+                            <tr class="bg-white border-b">
+                                <th id="rbed2" headers="rome" class="px-6 py-1 font-medium text-gray-900 whitespace-nowrap">
+                                    Payroll
+                                </th>
+                                <td headers="rome rbed2 stud" class="px-6 py-1 font-medium text-gray-900 whitespace-nowrap">
+                                    -
+                                </td>
+                                <td headers="rome rbed2 apt" class="px-6 py-1 font-medium text-gray-900 whitespace-nowrap">
+                                    23
+                                </td>
+                                <!-- <td headers="rome rbed2 chal">
+                                    43
+                                </td>
+                                <td headers="rome rbed2 villa">
+                                    30
+                                </td> -->
+                            </tr>
+                            <tr>
+                                <th id="rome" class="span" colspan="5" scope="colgroup">
+                                    Non-Current Liabilities
+                                </th>
+                            </tr>
+                            <tr class="bg-white border-b">
+                                <th id="rbed1" headers="rome" class="px-6 py-1 font-medium text-gray-900 whitespace-nowrap">
+                                    Long term debt
+                                </th>
+                                <td headers="rome rbed1 stud" class="px-6 py-1 font-medium text-gray-900 whitespace-nowrap">
+                                    13
+                                </td>
+                                <td headers="rome rbed1 apt" class="px-6 py-1 font-medium text-gray-900 whitespace-nowrap">
+                                    21
+                                </td>
+                            
+                            </tr>
+                            <tr>
+                                <th id="rome" class="span" colspan="5" scope="colgroup">
+                                    Equities
+                                </th>
+                            </tr>
+                            <tr class="bg-white border-b">
+                                <th id="rbed1" headers="rome" class="px-6 py-1 font-medium text-gray-900 whitespace-nowrap">
+                                    Owner's Capital
+                                </th>
+                                <td headers="rome rbed1 stud" class="px-6 py-1 font-medium text-gray-900 whitespace-nowrap">
+                                    13
+                                </td>
+                                <td headers="rome rbed1 apt" class="px-6 py-1 font-medium text-gray-900 whitespace-nowrap">
+                                    21
+                                </td>
+                            </tr>
+                            
+                        </tbody>
                     </table>
                 </div>
+                </div>
+                <div class="flex items-center my-4 place-content-end">
+                    <h4 class="text-lg font-semibold text-gray-600 dark:text-gray-300">
+                        
+                    </h4>
+
+                    <Link href="#">
+                        <button class="px-4 py-2 ml-3 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-green-700 border border-transparent rounded-lg active:bg-blue-900 hover:bg-blue-900 focus:outline-none focus:shadow-outline-blue self-end">
+                            Generate PDF
+                        </button>
+                    </Link>
+                </div>
                 <!-- Paginator -->
-            <Pagination :links="accountReporting.links" :total="accountReporting.total" :from="accountReporting.from" :to="accountReporting.to"/>
+            <!-- <Pagination :links="accountReporting.links" :total="accountReporting.total" :from="accountReporting.from" :to="accountReporting.to"/> -->
             </div>
         </main>
     </div>
