@@ -20,7 +20,7 @@
                         href="/admin"
                     >
                         <i class="uil uil-sync"></i>
-                        Switch Dashboard
+                        Lawyer Dashboard
                     </Link>
                 </li>
                 <!-- Notifications menu -->
