@@ -26,12 +26,17 @@ class CaseFile extends Model
 
     public function client() 
     {
-        return $this->belongsTo(Client::class);
+        return $this->belongsTo(Client::class, 'client_id', 'id');
     }
 
     public function createdBy() 
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(User::class, 'created_by', 'id');
+    }
+
+    public function quotation()
+    {
+        return $this->has(Quotation::class);
     }
 
     public function myCaseFile() 
@@ -40,5 +45,21 @@ class CaseFile extends Model
         return $this->where('created_by', '=', Auth::id())
             ->with('client:id,name')
             ->get();
+    }
+
+    public function getCaseFileById($id)  
+    {
+        
+        return $this->where('id', '=', $id)
+            ->with('client:id,name', 'createdBy:id,name')
+            ->first();
+    }
+
+    public function getCaseFileByIdWithAddress($id)  
+    {
+        
+        return $this->where('id', '=', $id)
+            ->with('client:id,name,address', 'createdBy:id,name')
+            ->first();
     }
 }

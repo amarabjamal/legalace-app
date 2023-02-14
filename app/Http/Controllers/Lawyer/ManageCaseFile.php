@@ -3,8 +3,10 @@
 namespace App\Http\Controllers\Lawyer;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\StoreCaseFileRequest;
 use App\Models\CaseFile;
 use App\Models\Client;
+use App\Models\Quotation;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -14,24 +16,27 @@ use Inertia\Inertia;
 class ManageCaseFile extends Controller
 {
     protected $casefile;
+    protected $quotation;
 
-    public function __construct(CaseFile $casefile)
+    public function __construct(CaseFile $casefile, Quotation $quotation)
     {
         $this->casefile = $casefile;   
+        $this->quotation = $quotation;
     }
     
     public function index()
     {
-        //$caseFiles = CaseFile::where('created_by', '=', Auth::id())->get(['id', 'matter', 'type', 'file_no', 'no_conflict_checked', 'client_id']);
+        
         return Inertia::render('Lawyer/CaseFile/Index', [
             'case_files' => $this->casefile->myCaseFile(),
         ]);
     }
 
-    public function show($id) {
-        $caseFile = CaseFile::find($id);
+    public function show($id) 
+    {
+
         return Inertia::render('Lawyer/CaseFile/Show', [
-            'case_file' => $caseFile,
+            'case_file' => $this->casefile->getCaseFileById($id),
         ]);   
     }
 
@@ -55,24 +60,12 @@ class ManageCaseFile extends Controller
         ]);
     }
 
-    public function store(Request $request)
+    public function store(StoreCaseFileRequest $request)
     {
-        $validatedAttributes = $request->validate([
-            'matter' => ['required'],
-            'type' => ['required'],
-            'file_no' => ['required'],
-            'client_id' => ['required'],
-        ]);
+        $validated = $request->validated();
 
-        CaseFile::create([
-            'matter' => $validatedAttributes['matter'],
-            'type' => $validatedAttributes['type'],
-            'file_no' => $validatedAttributes['file_no'],
-            'client_id' => $validatedAttributes['client_id'],
-            'no_conflict_checked' => true,
-            'created_by' => Auth::id(),
-        ]);
+        CaseFile::create($validated);
 
-        return redirect()->route('casefiles.index')->with('message', 'Successfully added case file: ' . $validatedAttributes['file_no']);
+        return redirect()->route('lawyer.casefiles.index')->with('message', 'Successfully added case file [' . $validated['file_number'] . ']');
     }
 }

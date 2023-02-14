@@ -24,19 +24,33 @@ class Quotation extends Model
         'updated_at',
     ];
 
-    public function user() {
+    public function createdBy() {
         return $this->belongsTo(User::class, 'created_by', 'id');
     }
 
     public function caseFile() {
-        return $this->belongsTo(CaseFile::class);
+        return $this->belongsTo(CaseFile::class, 'case_file_id', 'id');
     }
 
     public function bankAccount() {
-        return $this->belongsTo(BankAccount::class);
+        return $this->belongsTo(BankAccount::class, 'bank_account_id', 'id');
     }
 
     public function workDescriptions() {
         return $this->hasMany(workDescription::class);
+    }
+
+    public function getQuotationByFileCaseId($id) 
+    {
+
+        return $this->where('case_file_id', $id)->first();
+    }
+
+    public function verifyCaseFileHasQuotation($id) {
+        if($this->where('case_file_id', $id)->get()->isEmpty()) {
+            return false;
+        }
+
+        return true;
     }
 }

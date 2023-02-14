@@ -2,14 +2,9 @@
     <Head title="View Case File" />
 
     <div class="flex flex-col flex-1">
-        <main class="h-full pb-16 overflow-y-auto">
-            
+        <main class="h-full pb-16 overflow-y-auto">          
             <div class="container px-6 mx-auto grid">
-                <h2
-                class="my-6 text-2xl font-semibold text-gray-700 dark:text-gray-200"
-                >
-                Case File: {{ case_file.file_no }}
-                </h2>
+                <Link class="my-6" href="/lawyer/casefiles"><i class="uil uil-arrow-left"></i> Back to all case files</Link>
     
                 <!-- Main Content Start -->
                 <div v-if="$page.props.flash.message" class="flex p-4 mb-4 bg-green-100 rounded-lg" role="alert">
@@ -23,141 +18,158 @@
                     </button>
                 </div>
 
-                <div class="px-4 py-3 mb-8 bg-white rounded-lg shadow-md dark:bg-gray-800">
-                    <h4 class="mb-4 text-lg font-semibold text-gray-600 dark:text-gray-300">
-                    Case File Information
-                    </h4>
-                    <div>
-                        Matter: {{ case_file.matter }}
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-header-title font-size-lg text-capitalize font-weight-normal">
+                            Case File Information
+                        </div>
                     </div>
-                    <div>
-                        Type: {{ case_file.type }}
+
+                    <div class="card-body">
+                        <div>
+                            File Number: {{ case_file.file_number }}
+                        </div>
+                        <div>
+                            Matter: {{ case_file.matter }}
+                        </div>
+                        <div>
+                            Type: {{ case_file.type }}
+                        </div>
+                        <div>
+                            No Conflict: 
+                            <span v-if="case_file.no_conflict_checked === 1" class="px-2 py-1 font-semibold leading-tight text-green-700 bg-green-100 rounded-full dark:bg-green-700 dark:text-green-100">
+                                Verified
+                            </span>
+
+                            <span v-else class="px-2 py-1 font-semibold leading-tight text-orange-700 bg-orange-100 rounded-full dark:text-white dark:bg-orange-600"> 
+                                Pending
+                            </span>
+                        </div>
+                        <div>
+                            Client: {{ case_file.client.name }}
+                        </div>
+                        <div>
+                            File Owner: {{ case_file.created_by.name }} <span v-if="case_file.created_by.name == $page.props.auth.user.name" class="text-sm text-gray-400">(You)</span>
+                        </div>
                     </div>
-                    <div>
-                        File No.: {{ case_file.file_no }}
-                    </div>
-                    <div>
-                        No Conflict: {{ case_file.no_conflict_check }}
-                    </div>
-                    <div>
-                        Client: {{ case_file.client_id }}
-                    </div>
-                    <div>
-                        Creator: {{ case_file.created_by }}
-                    </div>
+
+                    <!-- <div class="text-center d-block p-3 card-footer">
+                        Footer
+                    </div> -->
                 </div>
 
-                <div class="px-4 py-3 mb-8 bg-white rounded-lg shadow-md dark:bg-gray-800">
-                    <h4 class="mb-4 text-lg font-semibold text-gray-600 dark:text-gray-300">
-                    Quotation
-                    </h4>
-                    <div>
-                        Matter: {{ case_file.matter }}
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-header-title font-size-lg text-capitalize font-weight-normal">
+                            Quotation
+                        </div>
                     </div>
-                    <div>
-                        Type: {{ case_file.type }}
+
+                    <div class="card-body">
+                        <Link :href="'/lawyer/quotations/' + case_file.id"><button class="btn">Generate Quotation</button></Link>
                     </div>
-                    <div>
-                        File No.: {{ case_file.file_no }}
-                    </div>
-                    <div>
-                        No Conflict: {{ case_file.no_conflict_check }}
-                    </div>
-                    <div>
-                        Client: {{ case_file.client_id }}
-                    </div>
-                    <div>
-                        Creator: {{ case_file.created_by }}
-                    </div>
+
+                    <!-- <div class="text-center d-block p-3 card-footer">
+                        Footer
+                    </div> -->
                 </div>
 
-                <div class="px-4 py-3 mb-8 bg-white rounded-lg shadow-md dark:bg-gray-800">
-                    <h4 class="mb-4 text-lg font-semibold text-gray-600 dark:text-gray-300">
-                    Disbursement Items
-                    </h4>
-                    <div>
-                        Matter: {{ case_file.matter }}
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-header-title font-size-lg text-capitalize font-weight-normal">
+                            Disbursement Items
+                        </div>
                     </div>
-                    <div>
-                        Type: {{ case_file.type }}
+
+                    <div class="card-body">
+                        None
                     </div>
-                    <div>
-                        File No.: {{ case_file.file_no }}
-                    </div>
-                    <div>
-                        No Conflict: {{ case_file.no_conflict_check }}
-                    </div>
-                    <div>
-                        Client: {{ case_file.client_id }}
-                    </div>
-                    <div>
-                        Creator: {{ case_file.created_by }}
-                    </div>
+
+                    <!-- <div class="text-center d-block p-3 card-footer">
+                        Footer
+                    </div> -->
                 </div>
 
-                <div class="px-4 py-3 mb-8 bg-white rounded-lg shadow-md dark:bg-gray-800">
-                    <h4 class="mb-4 text-lg font-semibold text-gray-600 dark:text-gray-300">
-                    Invoices
-                    </h4>
-                    <div>
-                        Matter: {{ case_file.matter }}
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-header-title font-size-lg text-capitalize font-weight-normal">
+                            Invoices
+                        </div>
                     </div>
-                    <div>
-                        Type: {{ case_file.type }}
+
+                    <div class="card-body">
+                        None
                     </div>
-                    <div>
-                        File No.: {{ case_file.file_no }}
-                    </div>
-                    <div>
-                        No Conflict: {{ case_file.no_conflict_check }}
-                    </div>
-                    <div>
-                        Client: {{ case_file.client_id }}
-                    </div>
-                    <div>
-                        Creator: {{ case_file.created_by }}
-                    </div>
+
+                    <!-- <div class="text-center d-block p-3 card-footer">
+                        Footer
+                    </div> -->
                 </div>
 
-                <div class="px-4 py-3 mb-8 bg-white rounded-lg shadow-md dark:bg-gray-800">
-                    <h4 class="mb-4 text-lg font-semibold text-gray-600 dark:text-gray-300">
-                    Receipts
-                    </h4>
-                    <div>
-                        Matter: {{ case_file.matter }}
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-header-title font-size-lg text-capitalize font-weight-normal">
+                            Receipts
+                        </div>
                     </div>
-                    <div>
-                        Type: {{ case_file.type }}
-                    </div>
-                    <div>
-                        File No.: {{ case_file.file_no }}
-                    </div>
-                    <div>
-                        No Conflict: {{ case_file.no_conflict_check }}
-                    </div>
-                    <div>
-                        Client: {{ case_file.client_id }}
-                    </div>
-                    <div>
-                        Creator: {{ case_file.created_by }}
-                    </div>
-                </div>
 
+                    <div class="card-body">
+                        None
+                    </div>
+
+                    <!-- <div class="text-center d-block p-3 card-footer">
+                        Footer
+                    </div> -->
+                </div>
           </div>
         </main>
     </div>
 </template>
 
 <script>
-import { Head } from "@inertiajs/inertia-vue3";
+import { Head, Link } from "@inertiajs/inertia-vue3";
 import Layout from "../Shared/Layout";
 import Pagination from "../Shared/Pagination";
 
 export default { 
-    components: { Head, Pagination},
+    components: { Head, Pagination, Link },
     props: {
         'case_file' : Object,
     },
     layout: Layout,
 };
 </script>
+
+<style scope>
+.card {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    word-wrap: break-word;
+    background-color: #fff;
+    background-clip: border-box;
+    border: 1px solid rgba(0, 0, 0, .125);
+    border-radius: .25rem;
+    margin-bottom: 30px;
+}
+
+.card-header {
+    padding: .75rem 1.25rem;
+    margin-bottom: 0;
+    color: inherit;
+    background-color: rgba(0, 0, 0, .03);
+    border-bottom: 1px solid rgba(0, 0, 0, .125)
+}
+
+.card-body {
+    padding: .75rem 1.25rem;
+    margin-bottom: 0;
+}
+
+.card-footer {
+    padding: .75rem 1.25rem;
+    background-color: rgba(0, 0, 0, .03);
+    border-top: 1px solid rgba(0, 0, 0, .125)
+}
+</style>

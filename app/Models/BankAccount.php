@@ -48,4 +48,11 @@ class BankAccount extends Model
             ->with('createdBy:id,name', 'bankAccountType:id,name')
             ->get();
     }
+
+    public function clientAccountOptions() 
+    {
+
+        return $this->where([ 'company_id' => Auth::user()->company_id, 'bank_account_type_id' => BankAccountType::IS_CLIENT_ACCOUNT ])
+            ->get(['id', 'label']);
+    }
 }

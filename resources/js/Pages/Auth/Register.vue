@@ -2,7 +2,7 @@
 
     <Head title="Register"/>
 
-    <div class="flex items-center min-h-screen p-6 bg-gray-50 dark:bg-gray-900">
+    <div class="auth-layout flex items-center min-h-screen p-6 bg-gray-50 dark:bg-gray-900">
       <div class="flex-1 h-full max-w-4xl mx-auto overflow-hidden">
         <div class="flex items-center justify-center p-6 sm:p-12">
           <div class="w-full">

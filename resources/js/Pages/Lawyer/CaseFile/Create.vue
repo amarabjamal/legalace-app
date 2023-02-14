@@ -63,20 +63,20 @@
 
                         <div class="mb-6">
                             <label 
-                                for="file_no" 
+                                for="file_number" 
                                 class="block mb-2 text-sm font-medium text-gray-900"
                                 >
                                 File No.
                             </label>
                             <input 
-                                v-model="form.file_no"
+                                v-model="form.file_number"
                                 type="text" 
-                                id="file_no" 
+                                id="file_number" 
                                 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" 
                                 placeholder="" 
                                 required
                             />
-                            <p v-if="form.errors.file_no" v-text="form.errors.file_no" class="mt-2 text-sm text-red-600"></p>
+                            <p v-if="form.errors.file_number" v-text="form.errors.file_number" class="mt-2 text-sm text-red-600"></p>
                         </div>
 
                         <div class="mb-6">
@@ -98,7 +98,7 @@
                             <p v-if="form.errors.client_id" v-text="form.errors.client_id" class="mt-2 text-sm text-red-600"></p>
                         </div>
 
-                        <div class="mb-6">
+                        <!-- <div class="mb-6">
                             <label 
                                 for="lawyer_ids" 
                                 class="block mb-2 text-sm font-medium text-gray-700 dark:text-gray-200"
@@ -115,7 +115,7 @@
                                 <option v-for="lawyer in lawyers" :value="lawyer.id">{{lawyer.name}}</option>
                             </select>
                             <p v-if="form.errors.lawyer_ids" v-text="form.errors.lawyer_ids" class="mt-2 text-sm text-red-600"></p>
-                        </div>
+                        </div> -->
 
                         <!-- <div>
                             <label class="typo__label">Tagging</label>
@@ -132,7 +132,7 @@
                         </button>
 
                         <Link 
-                            href="/casefiles"
+                            href="/lawyer/casefiles"
                             as="button"  
                             class="ml-2 text-gray-900 focus:outline-none bg-white border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-200 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center"
                             :disabled="form.processing"
@@ -158,12 +158,12 @@ export default {
         let form = useForm({
             matter: '',
             type: '',
-            file_no: '',
+            file_number: '',
             client_id: '',
         });
 
         let submit = () => {
-            form.post('/casefiles');
+            form.post('/lawyer/casefiles');
         };
 
         return { form, submit };

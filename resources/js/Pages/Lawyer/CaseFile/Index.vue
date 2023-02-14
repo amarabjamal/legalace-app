@@ -35,8 +35,15 @@
                             placeholder="Search">
                     </div>
                     
+                    <!-- <button
+                        type="button"
+                        @click="openModal"
+                        class="rounded-md bg-black bg-opacity-20 px-4 py-2 text-sm font-medium text-white hover:bg-opacity-30 focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75"
+                        >
+                        New File Case
+                    </button> -->
                     <Link 
-                        href="/casefiles/create" 
+                        href="/lawyer/casefiles/create" 
                         class="h-min text-white bg-blue-800 hover:bg-blue-900 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2"
                         >
                         Create New Case File
@@ -47,8 +54,8 @@
                     <table class="w-full text-sm text-left text-gray-500">
                         <thead class="text-xs text-gray-200 uppercase bg-blue-900">
                             <tr>
-                                <th scope="col" class="px-6 py-3 w-1">
-                                    No.
+                                <th scope="col" class="px-6 py-3">
+                                    File No.
                                 </th>
                                 <th scope="col" class="px-6 py-3">
                                     Matter
@@ -56,11 +63,14 @@
                                 <th scope="col" class="px-6 py-3">
                                     Type
                                 </th>
-                                <th scope="col" class="px-6 py-3">
-                                    File No.
-                                </th>
                                 <th scope="col" class="px-6 py-3 w-5">
                                     Status
+                                </th>
+                                <th scope="col" class="px-6 py-3 w-40">
+                                    No Conflict
+                                </th>
+                                <th scope="col" class="px-6 py-3">
+                                    Client
                                 </th>
                                 <th scope="col" class="px-6 py-3 w-5">
                                     <span>Actions</span>
@@ -86,7 +96,7 @@
                                 class="border-b dark:border-b-gray-700 text-gray-700 dark:text-gray-400"
                             >
                                 <th scope="row" class="px-6 py-4 font-medium whitespace-nowrap">
-                                    {{ case_file.id }}
+                                    {{ case_file.file_number }}
                                 </th>
                                 <th scope="row" class="px-6 py-4 font-medium whitespace-nowrap">
                                     {{ case_file.matter }}
@@ -95,36 +105,134 @@
                                     {{ case_file.type }}
                                 </th>
                                 <th scope="row" class="px-6 py-4 font-medium whitespace-nowrap">
-                                    {{ case_file.file_number }}
+                                    None
                                 </th>
                                 <th scope="row" class="px-6 py-4 font-medium whitespace-nowrap">
-                                    On-going
+                                    <span v-if="case_file.no_conflict_checked === 1" class="px-2 py-1 font-semibold leading-tight text-green-700 bg-green-100 rounded-full dark:bg-green-700 dark:text-green-100">
+                                        Verified
+                                    </span>
+
+                                    <span v-else class="px-2 py-1 font-semibold leading-tight text-orange-700 bg-orange-100 rounded-full dark:text-white dark:bg-orange-600"> 
+                                        Pending
+                                    </span>
+                                </th>
+                                <th scope="row" class="px-6 py-4 font-medium whitespace-nowrap">
+                                    {{ case_file.client.name }}
                                 </th>
                                 <td class="px-6 py-4">
-                                    <Link :href="`casefiles/${case_file.id}`" class="font-medium hover:text-blue-600">View</Link>
+                                    <Link :href="`/lawyer/casefiles/${case_file.id}`" class="font-medium hover:text-blue-600">View</Link>
                                 </td>
                             </tr>
                         </tbody>
                     </table>
                 </div>
-
-                <!-- Paginator -->
-                <!-- <Pagination :links="users.links" :total="users.total" :from="users.from" :to="users.to"/> -->
-                <!-- Main Content End -->
           </div>
         </main>
     </div>
+
+    <TransitionRoot appear :show="isOpen" as="template">
+    <Dialog as="div" @close="closeModal" class="relative z-10">
+      <TransitionChild
+        as="template"
+        enter="duration-300 ease-out"
+        enter-from="opacity-0"
+        enter-to="opacity-100"
+        leave="duration-200 ease-in"
+        leave-from="opacity-100"
+        leave-to="opacity-0"
+      >
+        <div class="fixed inset-0 bg-black bg-opacity-25" />
+      </TransitionChild>
+
+      <div class="fixed inset-0 overflow-y-auto">
+        <div
+          class="flex min-h-full items-center justify-center p-4 text-center"
+        >
+          <TransitionChild
+            as="template"
+            enter="duration-300 ease-out"
+            enter-from="opacity-0 scale-95"
+            enter-to="opacity-100 scale-100"
+            leave="duration-200 ease-in"
+            leave-from="opacity-100 scale-100"
+            leave-to="opacity-0 scale-95"
+          >
+            <DialogPanel
+              class="w-full max-w-lg transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all"
+            >
+              <DialogTitle
+                as="h3"
+                class="text-lg font-medium leading-6 text-gray-900"
+              >
+                New File Case
+              </DialogTitle>
+              <div class="mt-2">
+                <p class="text-sm text-gray-500">
+                  Your payment has been successfully submitted. We’ve sent you
+                  an email with all of the details of your order.
+                </p>
+              </div>
+
+              <div class="mt-4">
+                <button
+                  type="button"
+                  class="inline-flex justify-center rounded-md border border-transparent bg-blue-100 px-4 py-2 text-sm font-medium text-blue-900 hover:bg-blue-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
+                  @click="closeModal"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="button"
+                  class="ml-2 inline-flex justify-center rounded-md border border-transparent bg-blue-100 px-4 py-2 text-sm font-medium text-blue-900 hover:bg-blue-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
+                >
+                  Save
+                </button>
+              </div>
+            </DialogPanel>
+          </TransitionChild>
+        </div>
+      </div>
+    </Dialog>
+  </TransitionRoot>
 </template>
 
 <script>
 import { Head } from "@inertiajs/inertia-vue3";
 import Layout from "../Shared/Layout";
 import Pagination from "../Shared/Pagination";
+import {
+  TransitionRoot,
+  TransitionChild,
+  Dialog,
+  DialogPanel,
+  DialogTitle,
+} from '@headlessui/vue';
 
 export default { 
-    components: { Head, Pagination},
+    data() {
+        return {
+            isOpen: false,
+        }
+    },
+    components: { 
+        Head, 
+        Pagination, 
+        TransitionRoot,
+        TransitionChild,
+        Dialog,
+        DialogPanel,
+        DialogTitle,
+    },
     props: {
         case_files: Object,
+    },
+    methods: {
+        closeModal: function() {
+            this.isOpen = false;
+        },
+        openModal: function() {
+            this.isOpen = true;
+        }
     },
     layout: Layout,
 };

@@ -17,6 +17,7 @@ use App\Http\Controllers\Lawyer\ManageCaseFile;
 use App\Http\Controllers\Lawyer\FirmAccountController;
 use App\Http\Controllers\Lawyer\ClientAccountController;
 use App\Http\Controllers\Lawyer\AccountReportingController;
+use App\Http\Controllers\Lawyer\ManageQuotation;
 use App\Http\Controllers\Lawyer\OperationalCostController;
 use Illuminate\Support\Facades\Auth;
 
@@ -77,5 +78,9 @@ Route::group(['middleware' => 'auth'], function() {
 
         Route::resource('clients', ClientController::class);
         Route::resource('casefiles', ManageCaseFile::class);
+        Route::get('/quotations/{caseFileId}', [ManageQuotation::class, 'generateQuotation'])->name('generate.quotation');
+        Route::post('/quotations', [ManageQuotation::class, 'store']);
+        Route::get('/quotations/{quotation}/edit', [ManageQuotation::class, 'edit'])->name('edit.quotation');
+        Route::put('/quotations/{quotation}', [ManageQuotation::class, 'update']);
     });
 });

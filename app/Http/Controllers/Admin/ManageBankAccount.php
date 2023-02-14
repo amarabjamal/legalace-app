@@ -37,7 +37,7 @@ class ManageBankAccount extends Controller
 
         BankAccount::create($validated);
 
-        return redirect()->route('admin.bankaccounts.index')->with('message', 'Successfully added new bank account (' . $validated['label'] . ').');
+        return redirect()->route('admin.bankaccounts.index')->with('message', 'Successfully added new bank account [' . $validated['label'] . '].');
     }
 
     public function edit(BankAccount $bankaccount)
