@@ -49,7 +49,7 @@ class LoginController extends Controller
                 }
             } else {
                 return back()->withErrors([
-                    'email' => 'The user is no assigned a role.',
+                    'email' => 'The user is not assigned a role.',
                 ]);
             }
             
