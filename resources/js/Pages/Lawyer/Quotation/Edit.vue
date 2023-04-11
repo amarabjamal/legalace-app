@@ -70,22 +70,41 @@
                         <div class="quotation-section">
                             <h3>1. SCOPE OF SERVICES & LEGAL FEES</h3>
 
+                            <div class="my-4">
+                                <button class="button" @click="addWorkDescription">
+                                    Add row
+                                </button>
+                            </div>
                             <table class="w-full border-collapse border border-slate-400">
                                 <thead>
-                                    <th class="border border-slate-300 px-6 py-3"></th>
+                                    <th class="border border-slate-300 px-6 py-3">No.</th>
                                     <th class="border border-slate-300 px-6 py-3">Work Descriptions</th>
                                     <th class="border border-slate-300 px-6 py-3">Fee (RM)</th>
+                                    <th class="border border-slate-300 px-6 py-3">Actions</th>
                                 </thead>
                                 <tbody>
-                                    <tr>
-                                        <td class="border border-slate-300 px-6 py-3">1</td>
-                                        <td class="border border-slate-300 px-6 py-3"></td>
-                                        <td class="border border-slate-300 px-6 py-3"></td>
-                                    </tr>
-                                    <tr>
-                                        <td class="border border-slate-300 px-6 py-3">2</td>
-                                        <td class="border border-slate-300 px-6 py-3"></td>
-                                        <td class="border border-slate-300 px-6 py-3"></td>
+                                    <tr v-for="(workDescription, index) in workDescriptionForm.work_descriptions" :key="index">
+                                        <td class="border border-slate-300 px-6 py-3">
+                                            {{ index + 1 }}
+                                        </td>
+                                        <td class="border border-slate-300 px-6 py-3">
+                                            <input 
+                                                v-model="workDescription.work_description"
+                                                :aria-label="`Work Description #${index+1}`"
+                                                type="text" 
+                                                class="mr-4 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
+                                            >
+                                        </td>
+                                        <td class="border border-slate-300 px-6 py-3">
+                                            <input 
+                                                v-model="workDescription.fee"
+                                                type="number" 
+                                                class="mr-4 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
+                                            >
+                                        </td>
+                                        <td class="border border-slate-300 px-6 py-3">
+                                            <button v-if="workDescriptionForm.work_descriptions.length > 1" @click="removeWorkDescription(index)">Remove</button>
+                                        </td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -181,16 +200,36 @@ import { Head } from "@inertiajs/inertia-vue3";
 import Layout from "../Shared/Layout";
 import Pagination from "../Shared/Pagination";
 import { useForm } from "@inertiajs/inertia-vue3";
+import { ref } from "vue";
+import { remove } from "lodash";
 
 export default { 
     setup (props) {
+        const workDescriptionArray = ref([{
+                "work_description" : "",
+                "fee" : "",
+            }]);
+        const addWorkDescriptionRow = () => {
+            workDescriptionForm.work_descriptions.value.push([{
+                "work_description" : "",
+                "fee" : "",
+            }])
+        }
+
+        const removeWorkDescription = (index) => {
+            workDescriptionArray.value.splice(index, 1);
+        }
+
         let depositAmountForm = useForm({
             'deposit_amount': props.quotation.deposit_amount,
             'bank_account_id' : props.quotation.bank_account_id,
         });
 
-        let addWorkDescriptionForm = useForm({
-            
+        let workDescriptionForm = useForm({
+            'work_descriptions' : [{
+                "work_description" : "",
+                "fee" : "",
+            }]
         });
 
         let submitdepositAmount = () => {
@@ -198,10 +237,29 @@ export default {
         };
         
         let submitaddWorkDescription = () => {
-            addWorkDescriptionForm.put(`/lawyer${props}`);
+            workDescriptionForm.put(`/lawyer${props}`);
         };
 
-        return { depositAmountForm, addWorkDescriptionForm, submitdepositAmount, submitaddWorkDescription };
+        return { 
+            workDescriptionArray,
+            // addWorkDescriptionRow,
+            // removeWorkDescription,
+            depositAmountForm, 
+            workDescriptionForm, 
+            submitdepositAmount, 
+            submitaddWorkDescription 
+        };
+    },
+    methods: {
+        addWorkDescription() {
+            this.workDescriptionForm.work_descriptions.push({
+                "work_description" : "",
+                "fee" : "",
+            });
+        },
+        removeWorkDescription(index) {
+            this.workDescriptionForm.work_descriptions.splice(index, 1);
+        }
     },
     components: { Head, Pagination},
     props: {

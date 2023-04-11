@@ -31,7 +31,7 @@ class RedirectIfAuthenticated
 
         foreach ($guards as $guard) {
             if (Auth::guard($guard)->check() && in_array("admin", $roles)) {
-                return redirect()->route('dashboard');
+                return redirect()->route('admin.dashboard');
             } elseif(Auth::guard($guard)->check() && in_array("lawyer", $roles)){
                 return redirect()->route('lawyer.dashboard');
             }

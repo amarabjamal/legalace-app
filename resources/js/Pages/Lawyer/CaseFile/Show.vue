@@ -19,9 +19,12 @@
                 </div>
 
                 <div class="card">
-                    <div class="card-header">
+                    <div class="card-header flex justify-between">
                         <div class="card-header-title font-size-lg text-capitalize font-weight-normal">
                             Case File Information
+                        </div>
+                        <div>
+                            <Link :href="`/lawyer/casefiles/${case_file.id}/edit`">Edit</Link>
                         </div>
                     </div>
 

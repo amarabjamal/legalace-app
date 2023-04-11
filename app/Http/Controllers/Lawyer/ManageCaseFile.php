@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Lawyer;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreCaseFileRequest;
+use App\Http\Requests\UpdateCaseFileRequest;
 use App\Models\CaseFile;
 use App\Models\Client;
 use App\Models\Quotation;
@@ -67,5 +68,35 @@ class ManageCaseFile extends Controller
         CaseFile::create($validated);
 
         return redirect()->route('lawyer.casefiles.index')->with('message', 'Successfully added case file [' . $validated['file_number'] . ']');
+    }
+
+    public function edit(CaseFile $casefile) 
+    {
+        $lawyerRoleID = DB::table('roles')->select('id')->where('slug', 'lawyer');
+        $userRole = DB::table('user_role')->select('user_id')->whereIn('role_id', $lawyerRoleID);
+        $lawyers = DB::table('users')
+                        ->where('company_id', Auth::user()->company_id)
+                        ->whereIn('id', $userRole)
+                        ->orderBy('name')
+                        ->get(['id', 'name']);
+        $users = DB::table('users')->select('id')->where('company_id', Auth::user()->company_id);
+        $clients = DB::table('clients')
+                        ->whereIn('created_by', $users)
+                        ->get(['id', 'name']);
+
+        return Inertia::render('Lawyer/CaseFile/Edit', [
+            'case_file' => $casefile,
+            'clients' => $clients,
+            'lawyers' => $lawyers,
+        ]);
+    }
+
+    public function update(UpdateCaseFileRequest $request,CaseFile $casefile) 
+    {
+        $validated = $request->validated();
+
+        $casefile->update($validated);
+
+        return redirect()->route('lawyer.casefiles.show', ['casefile' => $casefile->id])->with('successMessage', 'Successfully updated the Case File');
     }
 }

@@ -33,27 +33,30 @@ use Illuminate\Support\Facades\Auth;
 */
 
 Route::get('/sendmail', [MailController::class, 'index']);
-
-Route::get('login', [LoginController::class, 'index'])->name('login');
-Route::post('login', [LoginController::class, 'login']);
-Route::post('logout', [LoginController::class, 'logout'])->middleware('auth:admin');
-
-Route::get('register', [RegisterController::class, 'index'])->name('register');
-Route::post('register', [RegisterController::class, 'registerNewAccount']);
 Route::get('/testInfoMessage', [RegisterController::class, 'testInfoMessage']);
 
-Route::get('forgotpassword', [ForgotPasswordController::class, 'showForgetPasswordForm'])->name('forgotpassword');
-Route::post('forgotpassword', [ForgotPasswordController::class, 'submitForgetPasswordForm']);
-Route::get('resetpassword/{token}', [ForgotPasswordController::class, 'showResetPaswordForm'])->name('forgotpassword');
-Route::post('resetpassword', [ForgotPasswordController::class, 'submitResetPasswordForm']);
+// Route::group(['middleware' => 'guest'],function() {
+    Route::get('/', [LoginController::class, 'index']);
+    Route::get('login', [LoginController::class, 'index'])->name('login');
+    Route::post('login', [LoginController::class, 'login']);
+    Route::post('logout', [LoginController::class, 'logout']);
+    
+    Route::get('register', [RegisterController::class, 'index'])->name('register');
+    Route::post('register', [RegisterController::class, 'registerNewAccount']);
+    
+    Route::get('forgotpassword', [ForgotPasswordController::class, 'showForgetPasswordForm'])->name('forgotpassword');
+    Route::post('forgotpassword', [ForgotPasswordController::class, 'submitForgetPasswordForm']);
+    Route::get('resetpassword/{token}', [ForgotPasswordController::class, 'showResetPaswordForm'])->name('forgotpassword');
+    Route::post('resetpassword', [ForgotPasswordController::class, 'submitResetPasswordForm']);
+// });
 
 
 Route::group(['middleware' => 'auth'], function() {
     //Routes for Administrator ONLY
     Route::group(['middleware' => 'check.role:admin', 'prefix' => 'admin', 'as' => 'admin.'], function() {
         Route::get('/', [DashboardController::class, 'showAdminDashboard']);
-        Route::get('/dashboard', [DashboardController::class, 'showAdminDashboard']);
-        Route::get('/profile', [ProfileController::class, 'showAdminProfile']);
+        Route::get('/dashboard', [DashboardController::class, 'showAdminDashboard'])->name('dashboard');
+        Route::get('/profile', [ProfileController::class, 'showAdminProfile'])->name('profile');
 
         Route::resources([
             'users' => ManageUsers::class,

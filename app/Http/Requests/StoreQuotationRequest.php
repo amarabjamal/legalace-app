@@ -26,7 +26,7 @@ class StoreQuotationRequest extends FormRequest
     {
         return [
             'deposit_amount' => ['required', 'regex:/^\d+(\.\d{1,2})?$/'],
-            'case_file_id' => ['required', 'exists:case_files,id', 'unique:case_files,id'],
+            'case_file_id' => ['required', 'exists:case_files,id', 'unique:quotations,case_file_id'],
             'bank_account_id' => ['required', 'exists:bank_accounts,id']
         ];
     }
