@@ -17,8 +17,9 @@ use App\Http\Controllers\Lawyer\ManageCaseFile;
 use App\Http\Controllers\Lawyer\FirmAccountController;
 use App\Http\Controllers\Lawyer\ClientAccountController;
 use App\Http\Controllers\Lawyer\AccountReportingController;
-use App\Http\Controllers\Lawyer\ManageQuotation;
+use App\Http\Controllers\Lawyer\QuotationController;
 use App\Http\Controllers\Lawyer\OperationalCostController;
+use App\Models\CaseFile;
 use Illuminate\Support\Facades\Auth;
 
 /*
@@ -81,9 +82,13 @@ Route::group(['middleware' => 'auth'], function() {
 
         Route::resource('clients', ClientController::class);
         Route::resource('casefiles', ManageCaseFile::class);
-        Route::get('/quotations/{caseFileId}', [ManageQuotation::class, 'generateQuotation'])->name('generate.quotation');
-        Route::post('/quotations', [ManageQuotation::class, 'store']);
-        Route::get('/quotations/{quotation}/edit', [ManageQuotation::class, 'edit'])->name('edit.quotation');
-        Route::put('/quotations/{quotation}', [ManageQuotation::class, 'update']);
+
+        Route::prefix('/casefiles/{casefile}')->group(function() {
+            Route::get('quotation', [QuotationController::class, 'index'])->name('quotation.index');
+        });
+        Route::get('/quotations/{caseFileId}', [QuotationController::class, 'generateQuotation'])->name('generate.quotation');
+        Route::post('/quotations', [QuotationController::class, 'store']);
+        Route::get('/quotations/{quotation}/edit', [QuotationController::class, 'edit'])->name('edit.quotation');
+        Route::put('/quotations/{quotation}', [QuotationController::class, 'update']);
     });
 });

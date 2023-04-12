@@ -11,7 +11,7 @@ use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 use Inertia\Inertia;
 
-class ManageQuotation extends Controller
+class QuotationController extends Controller
 {
     protected $casefile;
     protected $bankaccount;
@@ -22,6 +22,10 @@ class ManageQuotation extends Controller
         $this->casefile = $casefile;
         $this->bankaccount = $bankaccount;
         $this->quotation = $quotation;
+    }
+
+    public function index($casefile) {
+        
     }
 
     public function generateQuotation($caseFileId) {
