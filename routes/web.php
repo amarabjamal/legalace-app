@@ -84,7 +84,10 @@ Route::group(['middleware' => 'auth'], function() {
         Route::resource('casefiles', ManageCaseFile::class);
 
         Route::prefix('/casefiles/{casefile}')->group(function() {
-            Route::get('quotation', [QuotationController::class, 'index'])->name('quotation.index');
+            Route::get('quotation/create', [QuotationController::class, 'create'])->name('quotation.create');
+            Route::post('quotation', [QuotationController::class, 'store'])->name('quotation.store');
+            Route::get('quotation/edit', [QuotationController::class, 'edit'])->name('quotation.edit');
+            Route::put('quotation/{quotation}', [QuotationController::class, 'update'])->name('quotation.update');
         });
         Route::get('/quotations/{caseFileId}', [QuotationController::class, 'generateQuotation'])->name('generate.quotation');
         Route::post('/quotations', [QuotationController::class, 'store']);

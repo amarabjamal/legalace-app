@@ -36,7 +36,7 @@ class CaseFile extends Model
 
     public function quotation()
     {
-        return $this->has(Quotation::class);
+        return $this->hasOne(Quotation::class);
     }
 
     public function myCaseFile() 

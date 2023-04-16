@@ -24,7 +24,15 @@ class QuotationController extends Controller
         $this->quotation = $quotation;
     }
 
-    public function index($casefile) {
+    public function create(CaseFile $casefile) {
+        if($casefile->quotation()->exists()) {
+            dd('Case file already has a quoation');
+        }
+
+        return Inertia::render('Lawyer/Quotation/CreateQuotation', [
+            //'case_file' => $casefile,
+            'client_bank_accounts' => $this->bankaccount->clientAccountOptions(),
+        ]);
         
     }
 
