@@ -7,6 +7,7 @@ use App\Http\Requests\StoreQuotationRequest;
 use App\Models\BankAccount;
 use App\Models\CaseFile;
 use App\Models\Quotation;
+use App\Models\WorkDescription;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 use Inertia\Inertia;
@@ -26,11 +27,14 @@ class QuotationController extends Controller
 
     public function create(CaseFile $casefile) {
         if($casefile->quotation()->exists()) {
-            dd('Case file already has a quoation');
+            return redirect()->route('lawyer.quotation.edit', $casefile);
         }
 
         return Inertia::render('Lawyer/Quotation/CreateQuotation', [
-            //'case_file' => $casefile,
+            'case_file' => [
+                'id' => $casefile->id,
+                'file_number' => $casefile->file_number,
+            ],
             'client_bank_accounts' => $this->bankaccount->clientAccountOptions(),
         ]);
         
@@ -48,26 +52,48 @@ class QuotationController extends Controller
         ]);
     }
 
-    public function store(StoreQuotationRequest $request) {
+    public function store(StoreQuotationRequest $request, CaseFile $casefile) {
+        
         $validated = $request->validated();
+
+        $workDescriptions = [];
+
+        foreach($validated['work_descriptions'] as $workDescription) {
+            array_push(
+                $workDescriptions, 
+                new WorkDescription([
+                        'description' => $workDescription['description'],
+                        'fee' => $workDescription['fee']
+                    ]
+                )
+            );
+        }
+
+        //dd($workDescriptions);
 
         $quotation = Quotation::create($validated);
 
-        return redirect()->route('lawyer.edit.quotation', $quotation);
+        $quotation->workDescriptions()->saveMany($workDescriptions);
+
+        return redirect()->route('lawyer.quotation.edit', $casefile);
     }
 
-    public function edit(Quotation $quotation)
-    {
-        $quotation->caseFile;
+    public function edit(CaseFile $casefile) {
+        if(!$casefile->quotation()->exists()) {
+            return redirect()->route('lawyer.quotation.create', $casefile);
+        }
 
-        return Inertia::render('Lawyer/Quotation/Edit', [
-            'quotation' => $quotation,
+        $casefile->quotation;
+
+        return inertia('Lawyer/Quotation/EditQuotation', [
+            'case_file' => $casefile,
             'client_bank_accounts' => $this->bankaccount->clientAccountOptions(),
         ]);
     }
 
-    public function update(Request $request, Quotation $quotation) 
+    public function update(Request $request, CaseFile $casefile, Quotation $quotation) 
     {
+        
         $validated = $request->validate([
             'deposit_amount' => ['required', 'regex:/^\d+(\.\d{1,2})?$/'],
             'bank_account_id' => ['required', 'exists:bank_accounts,id']

@@ -89,6 +89,9 @@ Route::group(['middleware' => 'auth'], function() {
             Route::get('quotation/edit', [QuotationController::class, 'edit'])->name('quotation.edit');
             Route::put('quotation/{quotation}', [QuotationController::class, 'update'])->name('quotation.update');
         });
+        
+        Route::get('/getbankaccountdetails/{bankaccount}', [ManageBankAccount::class, 'getBankAccountDetails']);
+
         Route::get('/quotations/{caseFileId}', [QuotationController::class, 'generateQuotation'])->name('generate.quotation');
         Route::post('/quotations', [QuotationController::class, 'store']);
         Route::get('/quotations/{quotation}/edit', [QuotationController::class, 'edit'])->name('edit.quotation');

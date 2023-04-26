@@ -30,19 +30,26 @@ class BankAccount extends Model
         'updated_at'
     ];
 
-    public function bankAccountType() {
+    public function bankAccountType() 
+    {
+
         return $this->belongsTo(BankAccountType::class, 'bank_account_type_id', 'id');
     }
 
-    public function createdBy() {
+    public function createdBy() 
+    {
+
         return $this->belongsTo(User::class, 'created_by', 'id');
     }
 
-    public function company() {
+    public function company() 
+    {
+    
         return $this->belongsTo(Company::class, 'company_id', 'id');
     }
 
-    public function allBankAccounts() {
+    public function allBankAccounts() 
+    {
         
         return $this->where([ 'company_id' => Auth::user()->company_id ])
             ->with('createdBy:id,name', 'bankAccountType:id,name')
@@ -54,5 +61,11 @@ class BankAccount extends Model
 
         return $this->where([ 'company_id' => Auth::user()->company_id, 'bank_account_type_id' => BankAccountType::IS_CLIENT_ACCOUNT ])
             ->get(['id', 'label']);
+    }
+
+    public function getById($id) 
+    {
+
+        return $this->where(['id' => $id])->get();
     }
 }

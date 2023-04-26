@@ -66,23 +66,33 @@ class User extends Authenticatable
         
     }
 
-    public function userRoles() {
+    public function userRoles() 
+    {
         return $this->hasMany(UserRole::class);
     }
 
-    public function idType() {
+    public function roles() 
+    {
+        return $this->belongsToMany(Role::class, 'user_role');
+    }
+
+    public function idType() 
+    {
         return $this->belongsTo(IDType::class);
     }
 
-    public function company() {
+    public function company() 
+    {
         return $this->belongsTo(Company::class);
     }
 
-    public function clients() {
+    public function clients() 
+    {
         return $this->hasMany(Client::class);
     }
 
-    public function caseFiles() {
+    public function caseFiles() 
+    {
         return $this->hasMany(CaseFile::class);
     }
 }

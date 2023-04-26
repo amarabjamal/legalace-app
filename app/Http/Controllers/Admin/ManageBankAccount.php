@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreBankAccountRequest;
 use App\Http\Requests\UpdateBankAccountRequest;
 use App\Models\BankAccount;
+use Illuminate\Http\Request;
 use Inertia\Inertia;
 
 class ManageBankAccount extends Controller
@@ -64,5 +65,14 @@ class ManageBankAccount extends Controller
         $bankaccount->delete();   
 
         return redirect()->route('admin.bankaccounts.index')->with('message', 'Successfully deleted the bank account.');
+    }
+
+    public function getBankAccountDetails(Request $request,BankAccount $bankaccount)
+    {
+        if($request->ajax()) {
+            return response()->json([ 'hello' => 'hihiho']);
+        }
+
+        return response()->json([ 'hello' => 'hihihu']);
     }
 }

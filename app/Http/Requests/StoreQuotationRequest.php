@@ -25,9 +25,18 @@ class StoreQuotationRequest extends FormRequest
     public function rules()
     {
         return [
-            'deposit_amount' => ['required', 'regex:/^\d+(\.\d{1,2})?$/'],
             'case_file_id' => ['required', 'exists:case_files,id', 'unique:quotations,case_file_id'],
+            'work_descriptions.*.description' => ['required', 'string'],
+            'work_descriptions.*.fee' => ['required', 'regex:/^\d+(\.\d{1,2})?$/'],
+            'deposit_amount' => ['required', 'regex:/^\d+(\.\d{1,2})?$/'],
             'bank_account_id' => ['required', 'exists:bank_accounts,id']
+        ];
+    }
+
+    public function messages()
+    {
+        return [
+            'work_descriptions.*.description.required' => 'The item :position description cannot be empty.'
         ];
     }
 
