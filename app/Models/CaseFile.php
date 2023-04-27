@@ -39,6 +39,11 @@ class CaseFile extends Model
         return $this->hasOne(Quotation::class);
     }
 
+    public function workDescriptions() 
+    {
+        return $this->hasManyThrough(WorkDescription::class, Quotation::class);
+    }
+
     public function myCaseFile() 
     {
 

@@ -4,11 +4,14 @@ namespace App\Http\Controllers\Lawyer;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreQuotationRequest;
+use App\Http\Requests\UpdateQuotationRequest;
 use App\Models\BankAccount;
 use App\Models\CaseFile;
 use App\Models\Quotation;
 use App\Models\WorkDescription;
+use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\Rule;
 use Inertia\Inertia;
 
@@ -17,12 +20,14 @@ class QuotationController extends Controller
     protected $casefile;
     protected $bankaccount;
     protected $quotation;
+    protected $workdescription;
 
-    public function __construct(CaseFile $casefile, BankAccount $bankaccount, Quotation $quotation)
+    public function __construct(CaseFile $casefile, BankAccount $bankaccount, Quotation $quotation, WorkDescription $workdescription)
     {
         $this->casefile = $casefile;
         $this->bankaccount = $bankaccount;
         $this->quotation = $quotation;
+        $this->workdescription = $workdescription;
     }
 
     public function create(CaseFile $casefile) {
@@ -38,18 +43,6 @@ class QuotationController extends Controller
             'client_bank_accounts' => $this->bankaccount->clientAccountOptions(),
         ]);
         
-    }
-
-    public function generateQuotation($caseFileId) {
-
-        if($this->quotation->verifyCaseFileHasQuotation($caseFileId)) {
-            return redirect()->route('lawyer.edit.quotation', $this->quotation->getQuotationByFileCaseId($caseFileId));
-        }
-
-        return Inertia::render('Lawyer/Quotation/Create', [
-            'case_file' => $this->casefile->getCaseFileByIdWithAddress($caseFileId),
-            'client_bank_accounts' => $this->bankaccount->clientAccountOptions(),
-        ]);
     }
 
     public function store(StoreQuotationRequest $request, CaseFile $casefile) {
@@ -69,8 +62,6 @@ class QuotationController extends Controller
             );
         }
 
-        //dd($workDescriptions);
-
         $quotation = Quotation::create($validated);
 
         $quotation->workDescriptions()->saveMany($workDescriptions);
@@ -84,6 +75,7 @@ class QuotationController extends Controller
         }
 
         $casefile->quotation;
+        $casefile->workDescriptions;
 
         return inertia('Lawyer/Quotation/EditQuotation', [
             'case_file' => $casefile,
@@ -91,16 +83,51 @@ class QuotationController extends Controller
         ]);
     }
 
-    public function update(Request $request, CaseFile $casefile, Quotation $quotation) 
+    public function update(UpdateQuotationRequest $request, CaseFile $casefile) 
     {
-        
-        $validated = $request->validate([
-            'deposit_amount' => ['required', 'regex:/^\d+(\.\d{1,2})?$/'],
-            'bank_account_id' => ['required', 'exists:bank_accounts,id']
-        ]);
+        if(!$casefile->quotation()->exists()) {
+            return redirect()->route('lawyer.quotation.create', $casefile);
+        }
 
-        $quotation->update($validated);
+        $quotation = $this->quotation->getQuotationByFileCaseId($casefile->id);
 
-        return back()->with('successMessage', 'Successfully update!');
+        try {
+            DB::beginTransaction();
+    
+            $quotation->update($request->safe()->only(['deposit_amount', 'bank_account_id']));
+            
+            $deleteStatus = $this->workdescription->deleteAll($quotation->id);
+            
+            if(!$deleteStatus) {
+                DB::rollback();
+                dd('Failed to delete old work descriptions');
+            }
+
+            $workDescriptions = [];
+            
+            foreach($request->safe()->only(['work_descriptions'])['work_descriptions'] as $workDescription) {
+                array_push(
+                    $workDescriptions, 
+                    new WorkDescription([
+                            'description' => $workDescription['description'],
+                            'fee' => $workDescription['fee']
+                        ]
+                    )
+                );
+            }
+            
+            $quotation->workDescriptions()->saveMany($workDescriptions);
+            
+            DB::commit();
+
+            return back()->with('successMessage', 'Successfully update!');
+        } catch (Exception $e) {
+    
+            DB::rollback();
+    
+        }
+
+        dd('failed');
+        return back()->with('errorMessage', 'Failed update!');
     }
 }

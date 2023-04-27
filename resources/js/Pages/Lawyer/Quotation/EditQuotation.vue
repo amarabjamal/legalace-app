@@ -57,18 +57,20 @@
                                             v-for="(workDescription, index) in form.work_descriptions" 
                                             :key="index"
                                             class="border-slate-300 border-b text-gray-700"
+                                            valign="top"
                                         >
                                             <td class="px-6 py-3">
                                                 {{ index + 1 }}
                                             </td>
                                             <td class="px-6 py-3">
                                                 <input 
-                                                    v-model="workDescription.item"
+                                                    v-model="workDescription.description"
                                                     :aria-label="`Work Description #${index+1}`"
                                                     type="text" 
                                                     required
                                                     class="mr-4 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
                                                 >
+                                                <p v-if="form.errors[`work_descriptions.${index}.description`]" v-text="form.errors[`work_descriptions.${index}.description`]" class="mt-2 text-sm text-red-600"></p>
                                             </td>
                                             <td class="px-6 py-3">
                                                 <input 
@@ -80,6 +82,7 @@
                                                     required 
                                                     class="text-right mr-4 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
                                                 >
+                                                <p v-if="form.errors[`work_descriptions.${index}.fee`]" v-text="form.errors[`work_descriptions.${index}.fee`]" class="mt-2 text-sm text-red-600"></p>
                                             </td>
                                             <td class="py-3">
                                                 <button 
@@ -97,7 +100,7 @@
     
                                 <div class="my-4 w-100 flex justify-center">
                                     <button class="button text-center" @click="addWorkDescription">
-                                        + Add an item
+                                        + Add an description
                                     </button>
                                 </div>
     
@@ -131,47 +134,50 @@
     
                             <div class="quotation-section">
                                 <h3>INITIAL DEPOSIT</h3>
-    
-                                <div class="mb-6">
-                                    <label 
-                                        for="deposit_amount" 
-                                        class="block mb-2 text-sm font-medium text-gray-900"
+
+                                <div class="flex">
+                                    <div class="m-3 basis-1/2">
+                                        <label 
+                                            for="deposit_amount" 
+                                            class="block mb-2 text-sm font-medium text-gray-900"
+                                            >
+                                            Initial Deposit
+                                        </label>
+                                        <input 
+                                            v-model="form.deposit_amount"
+                                            type="number" 
+                                            min="0.00"
+                                            step="0.01"
+                                            id="deposit_amount" 
+                                            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" 
+                                            placeholder="" 
+                                            required
+                                        />
+                                        <p v-if="form.errors.deposit_amount" v-text="form.errors.deposit_amount" class="mt-2 text-sm text-red-600"></p>
+                                    </div>
+        
+        
+                                    <div class="m-3 basis-1/2">
+                                        <label 
+                                            for="bank_account_id" 
+                                            class="block mb-2 text-sm font-medium text-gray-700 dark:text-gray-200"
+                                            >
+                                            Client Account
+                                        </label>
+                                        <select 
+                                            v-model="form.bank_account_id"
+                                            id="bank_account_id" 
+                                            @change="getBankAccountDetails($event)"
+                                            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
+                                            required
                                         >
-                                        Initial Deposit
-                                    </label>
-                                    <input 
-                                        v-model="form.deposit_amount"
-                                        type="number" 
-                                        min="0.00"
-                                        step="0.01"
-                                        id="deposit_amount" 
-                                        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" 
-                                        placeholder="" 
-                                        required
-                                    />
-                                    <p v-if="form.errors.deposit_amount" v-text="form.errors.deposit_amount" class="mt-2 text-sm text-red-600"></p>
+                                            <option disabled value="">Please select client account</option>
+                                            <option v-for="client_bank_account in client_bank_accounts" :value="client_bank_account.id">{{client_bank_account.label}}</option>
+                                        </select>
+                                        <p v-if="form.errors.bank_account_id" v-text="form.errors.bank_account_id" class="mt-2 text-sm text-red-600"></p>
+                                    </div>
                                 </div>
     
-    
-                                <div class="mb-6">
-                                    <label 
-                                        for="bank_account_id" 
-                                        class="block mb-2 text-sm font-medium text-gray-700 dark:text-gray-200"
-                                        >
-                                        Client Account
-                                    </label>
-                                    <select 
-                                        v-model="form.bank_account_id"
-                                        id="bank_account_id" 
-                                        @change="getBankAccountDetails($event)"
-                                        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
-                                        required
-                                    >
-                                        <option disabled value="">Please select client account</option>
-                                        <option v-for="client_bank_account in client_bank_accounts" :value="client_bank_account.id">{{client_bank_account.label}}</option>
-                                    </select>
-                                    <p v-if="form.errors.bank_account_id" v-text="form.errors.bank_account_id" class="mt-2 text-sm text-red-600"></p>
-                                </div>
                             </div>
 
                             <button 
@@ -202,10 +208,7 @@ export default {
     setup (props) {
         let form = useForm({
             'case_file_id' : props.case_file.id,
-            'work_descriptions' : [{
-                "item" : "",
-                "fee" : 0.00,
-            }],
+            'work_descriptions' : props.case_file.work_descriptions,
             'deposit_amount': props.case_file.quotation.deposit_amount,
             'bank_account_id' : props.case_file.quotation.bank_account_id,
         });
@@ -224,7 +227,7 @@ export default {
     methods: {
         addWorkDescription() {
             this.form.work_descriptions.push({
-                "item" : "",
+                "description" : "",
                 "fee" : 0.00,
             });
         },
@@ -256,13 +259,16 @@ export default {
             });
         },
         submit() {
-            this.form.put(`/lawyer/casefiles/${this.case_file.id}/quotation/${this.case_file.quotation.id}`);
+            this.form.put(`/lawyer/casefiles/${this.case_file.id}/quotation/`);
         }
     },
     components: { Head, Pagination, TrashIcon},
     props: {
         case_file : Object,
         client_bank_accounts : Object,
+    },
+    mounted: function mounted() {
+        this.calculateTotal()
     },
     layout: Layout,
 };
