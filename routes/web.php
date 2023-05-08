@@ -84,10 +84,14 @@ Route::group(['middleware' => 'auth'], function() {
         Route::resource('casefiles', ManageCaseFile::class);
 
         Route::prefix('/casefiles/{casefile}')->group(function() {
-            Route::get('quotation/create', [QuotationController::class, 'create'])->name('quotation.create');
-            Route::post('quotation', [QuotationController::class, 'store'])->name('quotation.store');
-            Route::get('quotation/', [QuotationController::class, 'edit'])->name('quotation.edit');
-            Route::put('quotation/', [QuotationController::class, 'update'])->name('quotation.update');
+            Route::prefix('/quotation')->group(function() {
+                Route::get('create', [QuotationController::class, 'create'])->name('quotation.create');
+                Route::post('', [QuotationController::class, 'store'])->name('quotation.store');
+                Route::get('', [QuotationController::class, 'edit'])->name('quotation.edit');
+                Route::put('', [QuotationController::class, 'update'])->name('quotation.update');
+                Route::get('/pdf', [QuotationController::class, 'viewPDF']);
+                Route::get('/email', [QuotationController::class, 'sendEmail']);
+            });
         });
         
         Route::get('/getbankaccountdetails/{bankaccount}', [ManageBankAccount::class, 'getBankAccountDetails']);

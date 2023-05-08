@@ -69,7 +69,7 @@
                     </div>
 
                     <div class="card-body">
-                        <Link :href="'/lawyer/quotations/' + case_file.id"><button class="btn">Generate Quotation</button></Link>
+                        <Link :href="`/lawyer/casefiles/${case_file.id}/quotation`"><button class="btn">Generate Quotation</button></Link>
                     </div>
 
                     <!-- <div class="text-center d-block p-3 card-footer">

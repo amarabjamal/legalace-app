@@ -11,7 +11,7 @@ createInertiaApp({
       .component("Head", Head)
       .mount(el)
   },
-  title: (title) => `Legalace - ${title}`,
+  title: (title) => title ? `${title} - Legal Ace` : 'Legal Ace',
 })
 
 InertiaProgress.init({

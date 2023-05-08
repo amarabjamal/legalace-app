@@ -117,11 +117,15 @@
                             <p v-if="form.errors.lawyer_ids" v-text="form.errors.lawyer_ids" class="mt-2 text-sm text-red-600"></p>
                         </div> -->
 
-                        <!-- <div>
-                            <label class="typo__label">Tagging</label>
-                            <multiselect v-model="value" tag-placeholder="Add this as new tag" placeholder="Search or add a tag" label="name" track-by="code" :options="options" :multiple="true" :taggable="true" @tag="addTag"></multiselect>
-                            <pre class="language-json"><code>{{ value  }}</code></pre>
-                        </div>    -->
+                        <!-- <multiselect 
+                            v-model="form.lawyer_id"
+                            :options="lawyers" 
+                            @search-change="onSearchLawyersChange" 
+                            @input="onSelectedLawyer" 
+                            label="name" 
+                            track-by="id" 
+                            placeholder="Search lawyer" 
+                        ></multiselect> -->
 
                         <button 
                             type="submit" 
@@ -160,6 +164,7 @@ export default {
             type: '',
             file_number: '',
             client_id: '',
+            lawyer_id: ''
         });
 
         let submit = () => {
@@ -173,26 +178,12 @@ export default {
         clients: Object,
         lawyers: Object,
     },
-    data () {
-        return {
-            value: [
-                { name: 'Javascript', code: 'js' }
-            ],
-            options: [
-                { name: 'Vue.js', code: 'vu' },
-                { name: 'Javascript', code: 'js' },
-                { name: 'Open Source', code: 'os' }
-            ]
-        }
-    },
     methods: {
-        addTag (newTag) {
-        const tag = {
-            name: newTag,
-            code: newTag.substring(0, 2) + Math.floor((Math.random() * 10000000))
-        }
-        this.options.push(tag)
-        this.value.push(tag)
+        onSearchLawyersChange() {
+            console.log('onSearchLawyersChange');
+        },
+        onSelectedLawyer() {
+            console.log('onSelectedLawyer');
         }
     },
     layout: Layout,

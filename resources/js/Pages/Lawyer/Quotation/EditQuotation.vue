@@ -3,8 +3,15 @@
 
     <div class="flex flex-col flex-1">
         <main class="h-full pb-16 overflow-y-auto">          
-            <div class="container px-6 mx-auto grid">
-                <Link class="my-6" :href="'/lawyer/casefiles/'"><i class="uil uil-arrow-left"></i> Back to Case File</Link>
+            <div class="container px-6 mx-auto grid pt-6">
+
+                <h1 class="mb-6 text-xl font-bold">
+                    <Link class="text-blue-500 hover:text-blue-600" href="/lawyer/casefiles/">Case Files</Link>
+                    <span class="text-blue-500 font-medium mx-2">/</span>
+                    <Link class="text-blue-500 hover:text-blue-600" :href="`/lawyer/casefiles/${form.case_file_id}`">{{ case_file.file_number }}</Link>
+                    <span class="text-blue-500 font-medium mx-2">/</span>
+                    <span class="font-medium">Quotation</span>
+                </h1>
     
                 <!-- Main Content Start -->
                 <div v-if="$page.props.flash.message" class="flex p-4 mb-4 bg-green-100 rounded-lg" role="alert">
@@ -30,16 +37,20 @@
                 </div>
 
                 <div class="card">
-                    <div class="card-header">
+                    <div class="card-header flex justify-between items-center">
                         <div class="card-header-title font-size-lg text-capitalize font-weight-normal">
-                            Quotation
+                            Quotation for {{ case_file.matter }} ({{ case_file.file_number }})
+                        </div>
+                        <div>
+                            <a target="_blank" :href="`/lawyer/casefiles/${form.case_file_id}/quotation/pdf`" class="mr-2 text-white bg-blue-500 hover:bg-blue-600 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2 text-center">PDF</a>
+                            <a :href="`/lawyer/casefiles/${form.case_file_id}/quotation/email`"  class="text-white bg-blue-500 hover:bg-blue-600 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2 text-center">Email</a>
                         </div>
                     </div>
 
                     <div class="card-body">
                         <form @submit.prevent="submit">
                             <div>
-                                File Number: {{ case_file.file_number }}
+                                
                             </div>
     
                             <div class="quotation-section">
@@ -100,7 +111,7 @@
     
                                 <div class="my-4 w-100 flex justify-center">
                                     <button class="button text-center" @click="addWorkDescription">
-                                        + Add an description
+                                        + Add a description
                                     </button>
                                 </div>
     
@@ -196,7 +207,7 @@
 </template>
 
 <script>
-import { Head } from "@inertiajs/inertia-vue3";
+import { Head, Link } from "@inertiajs/inertia-vue3";
 import Layout from "../Shared/Layout";
 import Pagination from "../Shared/Pagination";
 import { useForm } from "@inertiajs/inertia-vue3";
@@ -262,7 +273,7 @@ export default {
             this.form.put(`/lawyer/casefiles/${this.case_file.id}/quotation/`);
         }
     },
-    components: { Head, Pagination, TrashIcon},
+    components: { Head, Pagination, TrashIcon, Link },
     props: {
         case_file : Object,
         client_bank_accounts : Object,

@@ -1,5 +1,6 @@
 @import url("https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,400;0,500;0,700;1,400;1,500;1,700&display=swap");
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500&display=swap');
 @import url('https://unicons.iconscout.com/release/v4.0.0/css/line.css');
 
 :root {
@@ -40,7 +41,7 @@
         0 16px 16px rgba(0, 0, 0, 0.05);
 
     /* Other Variables */
-    --font-default: "Poppins", sans-serif;
+    --font-default: "Montserrat","Poppins", sans-serif;
 
     /* ===== Colors ===== */
     --primary-color: #0E4BF1;
@@ -123,4 +124,10 @@ body {
     padding: .75rem 1.25rem;
     background-color: rgba(0, 0, 0, .03);
     border-top: 1px solid rgba(0, 0, 0, .125)
+}
+
+select {
+    -webkit-appearance: none; 
+    -moz-appearance: none;
+    appearance: none;
 }

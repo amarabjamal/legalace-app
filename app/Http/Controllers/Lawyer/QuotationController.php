@@ -10,10 +10,10 @@ use App\Models\CaseFile;
 use App\Models\Quotation;
 use App\Models\WorkDescription;
 use Exception;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Validation\Rule;
 use Inertia\Inertia;
+use Barryvdh\DomPDF\Facade\Pdf as PDF;
+use Illuminate\Support\Facades\Mail;
 
 class QuotationController extends Controller
 {
@@ -129,5 +129,44 @@ class QuotationController extends Controller
 
         dd('failed');
         return back()->with('errorMessage', 'Failed update!');
+    }
+
+    public function viewPDF(CaseFile $casefile)
+    {
+        $data = [
+            'workdescriptions' => $casefile->workDescriptions()->get()->toArray(),
+            'deposit_amount' =>  $casefile->quotation()->pluck('deposit_amount')->toArray()[0],
+        ];
+
+        //dd($data);
+        
+        $pdf = PDF::loadView('templates.quotation.quotation', $data)->setPaper('a4', 'portrait');
+
+        return $pdf->stream();
+    }
+
+    public function sendEmail(CaseFile $casefile) 
+    {
+
+        $data = [
+            'workdescriptions' => $casefile->workDescriptions()->get()->toArray(),
+            'deposit_amount' =>  $casefile->quotation()->pluck('deposit_amount')->toArray()[0],
+        ];
+        
+        $pdf = PDF::loadView('templates.quotation.quotation', $data);
+
+        $email = [
+            'client_email' => 'client@example.com',
+            'subject' => 'Quotation: Matter',
+            'body' => 'Please find the attached quotation.',
+        ];
+
+        Mail::send('emails.quotation', $email, function ($message) use ($email, $pdf) {
+            $message->to($email["client_email"], $email["client_email"])
+                ->subject($email["subject"])
+                ->attachData($pdf->output(), "quotation.pdf");
+        });
+
+        echo "email send successfully !!";
     }
 }
