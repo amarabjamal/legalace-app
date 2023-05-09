@@ -100,7 +100,8 @@ class QuotationController extends Controller
             
             if(!$deleteStatus) {
                 DB::rollback();
-                dd('Failed to delete old work descriptions');
+
+                return back()->with('errorMessage', 'Failed to delete old work descriptions');
             }
 
             $workDescriptions = [];
@@ -122,12 +123,9 @@ class QuotationController extends Controller
 
             return back()->with('successMessage', 'Successfully update!');
         } catch (Exception $e) {
-    
             DB::rollback();
-    
         }
 
-        dd('failed');
         return back()->with('errorMessage', 'Failed update!');
     }
 
