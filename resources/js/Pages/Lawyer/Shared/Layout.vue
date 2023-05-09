@@ -105,15 +105,14 @@
                     />
                     <div class="auth-nav flex flex-col items-start pl-3 text-white">
                         <p class="auth-name">
-                            {{ $page.props.auth.user.name }}
+                            {{ auth.user.name }}
                         </p>
                         <p class="auth-role">
-                            <span v-for="role in $page.props.auth.user.roles" class="mr-1 capitalize">{{ role }}</span>
+                            <span v-for="(role, index) in auth.user.roles" :key="index" class="mr-1 capitalize">{{ index != auth.user.roles.length-1 ? `${role}, ` : `& ${role}` }}</span>
                         </p>
                     </div>
                 </button>
-                <template v-if="isProfileMenuOpen"
-                >
+                <template v-if="isProfileMenuOpen">
                     <ul
                     class="absolute right-0 w-56 p-2 mt-2 space-y-2 text-gray-600 bg-white border border-gray-100 rounded-md shadow-md dark:border-gray-700 dark:text-gray-300 dark:bg-gray-700"
                     aria-label="submenu"
@@ -184,13 +183,21 @@
 
         <!-- Page Content -->
         <div class="dash-content">
-            <slot />
+            <div class="flex flex-col flex-1">
+                <main class="h-full pb-16 overflow-y-auto">          
+                    <div class="container px-6 mx-auto grid pt-6">
+                        <flash-messages/>
+                        <slot />
+                    </div>
+                </main>
+            </div>
         </div>
     </section>
 </template>
 
 <script>
 import Sidebar from './Sidebar';
+import FlashMessages from '../../../Shared/FlashMessages';
 
 export default {
     data() {
@@ -200,7 +207,13 @@ export default {
             isProfileMenuOpen: false,
         }
     },
-    components: { Sidebar },
+    components: { 
+        Sidebar, 
+        FlashMessages 
+    },
+    props: {
+        auth: Object
+    },
     methods: {
         toggleSidebar() {
             this.isSidebarOpen = !this.isSidebarOpen;
