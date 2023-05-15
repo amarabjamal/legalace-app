@@ -22,10 +22,6 @@
 
         <div class="card-body">
             <form @submit.prevent="submit">
-                <div>
-                    
-                </div>
-
                 <div class="quotation-section">
                     <h3>SCOPE OF SERVICES & LEGAL FEES</h3>
 
@@ -163,14 +159,17 @@
                     </div>
 
                 </div>
+                
+                <div class="quotation-section flex justify-end">
+                    <button 
+                        type="submit" 
+                        class="text-white bg-blue-500 hover:bg-blue-600 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2 text-center"
+                        :disabled="form.processing"
+                        >
+                        Save
+                    </button>
+                </div>
 
-                <button 
-                    type="submit" 
-                    class="text-white bg-blue-500 hover:bg-blue-600 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2 text-center"
-                    :disabled="form.processing"
-                    >
-                    Submit
-                </button>
             </form>
         </div>
     </div>
@@ -264,8 +263,8 @@ export default {
 }
 
 .quotation-section {
-    margin: 30px 0px;
-    padding: 0px 30px
+    margin: 20px 0px;
+    padding: 0px 10px;
 }
 
 .quotation-section h3 {

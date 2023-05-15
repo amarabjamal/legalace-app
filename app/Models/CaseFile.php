@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\CaseFile\DisbursementItem\DisbursementItem;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Auth;
@@ -42,6 +43,11 @@ class CaseFile extends Model
     public function workDescriptions() 
     {
         return $this->hasManyThrough(WorkDescription::class, Quotation::class);
+    }
+
+    public function disbursementItems() 
+    {
+        return $this->hasMany(DisbursementItem::class);
     }
 
     public function myCaseFile() 

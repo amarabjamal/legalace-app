@@ -9,7 +9,7 @@
                     </Link>
                 </li>
                 <li>
-                    <Link href="/lawyer/clients">
+                    <Link href="/lawyer/clients" :class="{'color-blue-500' : $page.url.startsWith('/lawyer/clients')}">
                         <i class="uil uil-users-alt"></i>
                         <span class="link-name">Client Profiles</span>
                     </Link>
@@ -48,7 +48,7 @@
             
             <ul class="logout-mode">
                 <li>
-                    <Link href="/logout" method="post">
+                    <Link as="button" href="/logout" method="post">
                         <i class="uil uil-signin"></i>
                         <span class="link-name">Logout</span>
                     </Link>
@@ -61,16 +61,9 @@
 <script>
 
 export default {
-    data() {
-        return {
-            isSidebarOpen : true,
-        }
-    },
     props: {
         isSidebarOpen: Boolean,
     },
-    methods: {
-    }
 };
 </script>
 

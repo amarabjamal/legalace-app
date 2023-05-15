@@ -94,9 +94,11 @@ Route::group(['middleware' => 'auth'], function() {
                 Route::get('/email', [QuotationController::class, 'sendEmail']);
             });
 
-            Route::prefix('/disbursement-item')->group(function() {
-                Route::get('/', [DisbursementItemController::class, 'index'])->name('disbursement_item.index');
-            });
+            // Route::prefix('/disbursement-items')->group(function() {
+            //     Route::get('/', [DisbursementItemController::class, 'index'])->name('disbursement_item.index');
+            // });
+
+            Route::resource('disbursement-items', DisbursementItemController::class)->except('show');
         });
         
         Route::get('/getbankaccountdetails/{bankaccount}', [ManageBankAccount::class, 'getBankAccountDetails']);
