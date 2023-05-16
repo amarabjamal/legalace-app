@@ -32,26 +32,26 @@
         </thead>
         <tbody>
           <tr v-for="item in disbursement_items.data" :key="item.id" class="hover:bg-gray-100 focus-within:bg-gray-100">
-            <td class="border-t">
-              
+            <td class="border-t text-center">
+              {{ item.date }}
             </td>
             <td class="border-t">
-              
+              {{ item.record_type.name }}
             </td>
             <td class="border-t">
-              
+              {{ item.name }}
             </td>
             <td class="border-t">
-              
+              {{ item.desc != null ? item.desc : 'N/A' }}
             </td>
-            <td class="border-t">
-              
+            <td class="border-t text-right">
+              {{ item.amount }}
             </td>
-            <td class="border-t">
-              
+            <td class="border-t text-center ">
+              {{ item.status }}
             </td>
-            <td class="border-t">
-              
+            <td class="border-t text-center">
+              {{ item.fund_type }}
             </td>
             <td class="w-px border-t">
               
@@ -63,6 +63,8 @@
         </tbody>
       </table>
     </div>
+
+    <!-- {{ disbursement_items }} -->
 </template>
 
 <script>
