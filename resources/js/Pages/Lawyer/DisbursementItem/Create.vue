@@ -103,7 +103,7 @@ export default {
     methods: {
         store() {
             this.form.amount = this.form.amount.replace(/^\W|,/g,"");
-            this.form.post(`/lawyer/casefiles/${this.case_file.id}/disbursement-items`);
+            this.form.post(`/lawyer/casefiles/${this.case_file.id}/disbursement-items`, {forceFormData: true,});
         },
     },
 }

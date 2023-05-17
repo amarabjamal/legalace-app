@@ -36,6 +36,14 @@ class DisbursementItem extends Model
         'fund_type' => DisbursementItemFundTypeEnum::class,
     ];
 
+    public const FUND_TYPE = [
+        1 => 'Paid By Lawyer',
+        2 => 'Firm Account',
+        3 => 'Petty Cash',
+    ];
+
+    public const RECEIPT_PATH = 'case-files/disbursement-items/receipts';
+
     public function caseFile() 
     {
         return $this->belongsTo(CaseFile::class, 'case_file_id', 'id');

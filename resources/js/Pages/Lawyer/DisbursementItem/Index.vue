@@ -19,42 +19,48 @@
 
     <div class="bg-white rounded-md shadow overflow-x-auto">
       <table class="w-full whitespace-nowrap">
-        <thead>
-          <tr class="text-left font-bold">
-            <th class="pb-4 pt-6 px-6">Date</th>
-            <th class="pb-4 pt-6 px-6">Record Type</th>
-            <th class="pb-4 pt-6 px-6">Name</th>
-            <th class="pb-4 pt-6 px-6">Desc</th>
-            <th class="pb-4 pt-6 px-6">Amount</th>
-            <th class="pb-4 pt-6 px-6">Status</th>
-            <th class="pb-4 pt-6 px-6" colspan="2">Fund Type</th>
+        <thead class="bg-gray-50 border-b-2 border-gray-200">
+          <tr class="text-left text-sm tracking-wide font-semibold">
+            <th class="w-24 py-4 px-6">Date</th>
+            <th class="w-32 py-4 px-6">Record Type</th>
+            <th class="py-4 px-6">Name</th>
+            <th class="py-4 px-6">Desc</th>
+            <th class="w-32 py-4 px-6">Amount</th>
+            <th class="w-24 py-4 px-6">Status</th>
+            <th class="w-24 py-4 px-6">Fund Type</th>
+            <th class="py-4 px-6"></th>
           </tr>
         </thead>
         <tbody>
-          <tr v-for="item in disbursement_items.data" :key="item.id" class="hover:bg-gray-100 focus-within:bg-gray-100">
-            <td class="border-t text-center">
+          <tr v-for="item in disbursement_items.data" :key="item.id" class="text-sm tetx-gray-700 hover:bg-gray-100 focus-within:bg-gray-100">
+            <td class="border-t px-6 py-4 whitespace-nowrap">
               {{ item.date }}
             </td>
-            <td class="border-t">
+            <td class="border-t px-6 py-4 whitespace-nowrap">
               {{ item.record_type.name }}
             </td>
-            <td class="border-t">
+            <td class="border-t px-6 py-4 whitespace-nowrap ">
               {{ item.name }}
             </td>
-            <td class="border-t">
-              {{ item.desc != null ? item.desc : 'N/A' }}
+            <td class="border-t px-6 py-4 whitespace-nowrap">
+              <span v-if="item.desc == null" class="text-gray-400">None</span>
+              {{ item.desc }}
             </td>
-            <td class="border-t text-right">
+            <td class="border-t px-6 py-4 whitespace-nowrap text-right">
               {{ item.amount }}
             </td>
-            <td class="border-t text-center ">
-              {{ item.status }}
+            <td class="border-t px-6 py-4 whitespace-nowrap">
+              <span class="p-1.5 text-xs font-medium uppercase tracking-wider text-gray-800 bg-gray-200 rounded-lg bg-opacity-50">
+                {{ item.status }}
+              </span>
             </td>
-            <td class="border-t text-center">
+            <td class="border-t px-6 py-4 whitespace-nowrap">
               {{ item.fund_type }}
             </td>
-            <td class="w-px border-t">
-              
+            <td class="w-px border-t px-6 py-4 whitespace-nowrap">
+              <Link class="flex items-center px-2" :href="`/lawyer/casefiles/${case_file.id}/disbursement-items/${item.id}/edit`" tabindex="-1">
+                <icon name="cheveron-right" class="block w-5 h-5 fill-gray-400" />
+              </Link>
             </td>
           </tr>
           <tr>
@@ -70,6 +76,7 @@
 <script>
 import Layout from '../Shared/Layout';
 import SearchFilter from '../../../Shared/SearchFilter';
+import Icon from '../../../Shared/Icon';
 import throttle from 'lodash/throttle';
 import pickBy from 'lodash/pickBy'
 import mapValues from 'lodash/mapValues';
@@ -78,6 +85,7 @@ import mapValues from 'lodash/mapValues';
 export default {
     components: {
         SearchFilter,
+        Icon
     },
     layout: Layout,
     props: {

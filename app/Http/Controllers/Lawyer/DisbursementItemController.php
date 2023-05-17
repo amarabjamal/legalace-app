@@ -6,12 +6,15 @@ use App\Enums\DisbursementItemFundTypeEnum;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreDisbursementItemRequest;
 use App\Models\CaseFile;
+use App\Models\CaseFile\DisbursementItem\DisbursementItem;
 use App\Models\CaseFile\DisbursementItem\DisbursementItemType;
 use Brick\Money\Money;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Request as FacadesRequest;
+use Illuminate\Support\Facades\Storage;
 use Spatie\LaravelOptions\Options;
 
 class DisbursementItemController extends Controller
@@ -36,8 +39,8 @@ class DisbursementItemController extends Controller
                     'name' => $item->name,
                     'desc' => $item->description,
                     'amount' => $item->amount->formatTo('en_MY'),
-                    'status' => $item->status,
-                    'fund_type' => $item->fund_type,
+                    'status' => $item->status->name,
+                    'fund_type' => DisbursementItem::FUND_TYPE[$item->fund_type->value],
                     'record_type' => $item->recordType ? $item->recordType->only('name') : null,
                 ]),
         ]);
@@ -63,6 +66,13 @@ class DisbursementItemController extends Controller
         try {
             DB::beginTransaction();
 
+            if($request->hasFile('receipt')) {
+                $fileName = uniqid('receipt_') . '_' . date('Ymd') . '_' .time() . '.' . $request->file('receipt')->getClientOriginalExtension();
+                $filePath = $request->file('receipt')->storeAs(DisbursementItem::RECEIPT_PATH, $fileName, 'public');
+            }
+            
+            $data['receipt'] = $fileName;
+
             $casefile->disbursementItems()->create($data);
 
             DB::commit();
@@ -70,6 +80,10 @@ class DisbursementItemController extends Controller
             return redirect()->route('lawyer.disbursement-items.index', $casefile)->with('successMessage', 'Successfully saved the new record.');
         } catch (\Exception $e) {
             DB::rollBack();
+            if(Storage::exists($filePath))
+            {
+                File::delete($filePath);
+            }
 
             return back()->with('errorMessage', 'Failed: ' . $e->getMessage());
         }

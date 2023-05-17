@@ -4,9 +4,12 @@ namespace App\Enums;
  
 enum DisbursementItemStatusEnum:int {
     case Recorded = 1;
-    case Invoiced = 2;
-    case RequestedForClaim = 3;
-    case PendingClaimApproval = 4;
-    case ApprovedForClaim = 5;
-    case Disbursed = 6;
+    case DraftedForInvoice = 2;
+    case Invoiced = 3;
+    case PaidByClient = 4;
+    case RequestedForClaim = 5;
+    case PendingClaimApproval = 6;
+    case ApprovedForClaim = 7;
+    case Disbursed = 8;
+    case RejectedForClaimed = 9;
 }
