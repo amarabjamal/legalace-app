@@ -37,7 +37,7 @@ class DisbursementItem extends Model
     ];
 
     public const FUND_TYPE = [
-        1 => 'Paid By Lawyer',
+        1 => 'Paid by Lawyer',
         2 => 'Firm Account',
         3 => 'Petty Cash',
     ];
@@ -67,5 +67,10 @@ class DisbursementItem extends Model
                     ->orWhere('description', 'like', '%'.$search.'%');
             });
         });
+    }
+
+    public function isDeletable() : bool 
+    {
+        return $this->status->value == DisbursementItemStatusEnum::Recorded->value;
     }
 }

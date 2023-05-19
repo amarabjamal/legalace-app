@@ -3,11 +3,10 @@
 namespace App\Http\Requests;
 
 use App\Enums\DisbursementItemFundTypeEnum;
-use App\Enums\DisbursementItemStatusEnum;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rules\Enum;
 
-class StoreDisbursementItemRequest extends FormRequest
+class UpdateDisbursementItemRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -17,20 +16,6 @@ class StoreDisbursementItemRequest extends FormRequest
     public function authorize()
     {
         return true;
-    }
-
-    /**
-     * Prepare the data for validation.
-     *
-     * @return void
-     */
-    protected function prepareForValidation()
-    {
-        $this->merge([
-            'company_id' => Auth()->user()->company->id,
-            'status' => DisbursementItemStatusEnum::Recorded->value,
-            'case_file_id' => $this->casefile->id,
-        ]);
     }
 
     /**
@@ -48,9 +33,6 @@ class StoreDisbursementItemRequest extends FormRequest
             'receipt' => ['nullable', 'file', 'mimes:pdf,xlxs,xlx,docx,doc,csv,txt,png,gif,jpg,jpeg', 'max:2048'],
             'fund_type' => ['required', new Enum(DisbursementItemFundTypeEnum::class)],
             'record_type_id' => ['required', 'exists:disbursement_item_types,id'],
-            'company_id' => ['required', 'exists:companies,id'],
-            'status' => ['required', new Enum(DisbursementItemStatusEnum::class)],
-            'case_file_id' => ['required', 'exists:case_files,id'],
         ];
     }
 }

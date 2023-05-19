@@ -8,11 +8,11 @@
         <span class="text-blue-500 font-medium mx-2">/</span>
         <Link class="text-blue-500 hover:text-blue-600" :href="`/lawyer/casefiles/${case_file.id}/disbursement-items`">Disbursement Items</Link>
         <span class="text-blue-500 font-medium mx-2">/</span>
-        <span class="font-medium">Create</span>
+        <span class="font-medium">{{ disbursement_item. name }}</span>
     </h1>
 
     <div class="max-w-3xl bg-white rounded-md shadow overflow-hidden">
-        <form @submit.prevent="store">
+        <form @submit.prevent="update">
             <div class="flex flex-wrap -mb-8 -mr-6 p-8">
                 <date-input v-model="form.date" :error="form.errors.date" class="pb-8 pr-6 w-full lg:w-1/2" label="Date" required/>
 
@@ -41,9 +41,20 @@
                 </select-input>
 
                 <file-input v-model="form.receipt" :error="form.errors.receipt" class="pb-8 pr-6 w-full lg:w-1/2" label="Receipt" accept=".jpg,.png,.pdf,.doc,.docx"/>
+
+                <div v-if="disbursement_item.receipt" class="pb-8 pr-6 w-full lg:w-1/2">
+                    <label class="form-label">Uploaded File</label>
+                    <div class="form-input">
+                        <div class="flex">
+                            <icon name="solid-document" class="block w-5 h-5 fill-blue-500"></icon>
+                            <div class="ml-2 whitespace-nowrap overflow-ellipsis overflow-hidden ">{{ disbursement_item.receipt }}</div>
+                        </div>
+                    </div>
+                </div>
             </div>
-            <div class="flex items-center justify-end px-8 py-4 bg-gray-50 border-t border-gray-100">
-                <loading-button :loading="form.processing" class="btn-indigo" type="submit">Create Item</loading-button>
+            <div class="flex items-center px-8 py-4 bg-gray-50 border-t border-gray-100">
+                <button class="text-red-600 hover:underline" tabindex="-1" type="button" @click="destroy">Delete Item</button>
+                <loading-button :loading="form.processing" class="btn-indigo ml-auto" type="submit">Update Item</loading-button>
             </div>
         </form>
     </div>
@@ -56,6 +67,7 @@ import SelectInput from '../../../Shared/SelectInput';
 import DateInput from '../../../Shared/DateInput';
 import FileInput from '../../../Shared/FileInput'
 import LoadingButton from '../../../Shared/LoadingButton';
+import Icon from '../../../Shared/Icon';
 import { VMoney } from 'v-money';
 
 export default {
@@ -65,10 +77,12 @@ export default {
         DateInput,
         FileInput,
         LoadingButton,
+        Icon,
     },
     layout: Layout,
     props: {
         case_file: Object,
+        disbursement_item: Object,
         fund_types: Object,
         record_types: Object,
     },
@@ -76,13 +90,14 @@ export default {
     data() {
         return {
             form: this.$inertia.form({
-                date: null,
-                name: null,
-                description: null,
-                amount: null,
+                _method: 'put',
+                date: this.disbursement_item.date,
+                name: this.disbursement_item.name,
+                description: this.disbursement_item.description,
+                amount: this.disbursement_item.amount.amount,
                 receipt: null,
-                record_type_id: null,
-                fund_type: null,
+                record_type_id: this.disbursement_item.record_type_id,
+                fund_type: this.disbursement_item.fund_type,
             }),
             moneyConfig: {
                 // The character used to show the decimal place.
@@ -102,10 +117,19 @@ export default {
     },
     directives: {money: VMoney},
     methods: {
-        store() {
+        update() {
             this.form.amount = this.form.amount.replace(/^\W|,/g,"");
-            this.form.post(`/lawyer/casefiles/${this.case_file.id}/disbursement-items`, {forceFormData: true,});
+            this.form.post(
+                `/lawyer/casefiles/${this.case_file.id}/disbursement-items/${this.disbursement_item.id}`, 
+                {
+                    onSuccess: () => this.form.reset('receipt'),
+            });
         },
+        destroy() {
+            if(confirm('Are you sure you want to delete this item?')) {
+                this.$inertia.delete(`/lawyer/casefiles/${this.case_file.id}/disbursement-items/${this.disbursement_item.id}`);
+            }
+        }
     },
 }
 

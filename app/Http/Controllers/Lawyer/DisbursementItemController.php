@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Lawyer;
 use App\Enums\DisbursementItemFundTypeEnum;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreDisbursementItemRequest;
+use App\Http\Requests\UpdateDisbursementItemRequest;
 use App\Models\CaseFile;
 use App\Models\CaseFile\DisbursementItem\DisbursementItem;
 use App\Models\CaseFile\DisbursementItem\DisbursementItemType;
@@ -62,12 +63,12 @@ class DisbursementItemController extends Controller
     {
         $data =  $request->all();
         $data['amount'] = Money::of($data['amount'], 'MYR');
-        //dd($data);
+        
         try {
             DB::beginTransaction();
 
             if($request->hasFile('receipt')) {
-                $fileName = uniqid('receipt_') . '_' . date('Ymd') . '_' .time() . '.' . $request->file('receipt')->getClientOriginalExtension();
+                $fileName = uniqid('ITEM_RECEIPT_') . '_' . date('Ymd') . '_' .time() . '.' . $request->file('receipt')->extension();
                 $filePath = $request->file('receipt')->storeAs(DisbursementItem::RECEIPT_PATH, $fileName, 'public');
             }
             
@@ -86,6 +87,81 @@ class DisbursementItemController extends Controller
             }
 
             return back()->with('errorMessage', 'Failed: ' . $e->getMessage());
+        }
+    }
+
+    public function edit(CaseFile $casefile, DisbursementItem $disbursement_item) 
+    {
+        // if($disbursement_item->case_file_id != $casefile->id) {
+        //     abort(404);
+        // }
+
+        return inertia('Lawyer/DisbursementItem/Edit', [
+            'case_file' => [ 
+                'id' => $casefile->id,
+                'file_number' => $casefile->file_number,
+            ],
+            'disbursement_item' => $disbursement_item->only(['id', 'date', 'record_type_id', 'name', 'description', 'amount', 'fund_type', 'receipt']),
+            'fund_types' => Options::forEnum(DisbursementItemFundTypeEnum::class),
+            'record_types' => DisbursementItemType::enabled()->get(['id', 'name']),
+        ]);
+    }
+
+    public function update(
+        UpdateDisbursementItemRequest $request, 
+        CaseFile $casefile, 
+        DisbursementItem $disbursement_item
+    ) 
+    {
+        $data =  $request->all();
+        $data['amount'] = Money::of($data['amount'], 'MYR');
+        $filePath = null;
+        
+        try {
+            DB::beginTransaction();
+
+            if($request->hasFile('receipt')) {
+                $fileName = uniqid('ITEM_RECEIPT_') . '_' . date('Ymd') . '_' .time() . '.' . $request->file('receipt')->extension();
+                $filePath = $request->file('receipt')->storeAs(DisbursementItem::RECEIPT_PATH, $fileName, 'public');
+
+                $oldFilePath = 'public/'. DisbursementItem::RECEIPT_PATH . '/' . $disbursement_item->receipt;
+                if(Storage::exists($oldFilePath))
+                {
+                    File::delete($oldFilePath);
+                }
+
+                $data['receipt'] = $fileName;
+            }
+
+            $disbursement_item->update($data);
+
+            DB::commit();
+
+            return back()->with('successMessage', 'Successfully updated the record.');
+        } catch (\Exception $e) {
+            DB::rollBack();
+            if(isset($filePath) && Storage::exists($filePath))
+            {
+                File::delete($filePath);
+            }
+
+            return back()->with('errorMessage', 'Failed: ' . $e->getMessage());
+        }
+    }
+
+    public function destroy(CaseFile $casefile, DisbursementItem $disbursement_item) 
+    {
+        try {
+            if($disbursement_item->isDeletable()) 
+            {
+                $disbursement_item->delete();
+
+                return redirect()->route('lawyer.disbursement-items.index', $casefile)->with('successMessage', 'Successfully deleted the record.');
+            }
+
+            return back()->with('infoMessage', 'You are not allowed to delete this record since it has been drafted for invoicing.');
+        } catch (\Exception $e) {
+            return back()->with('errorMessage', 'Error: failed to delete.');
         }
     }
 }

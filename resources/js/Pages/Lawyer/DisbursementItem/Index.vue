@@ -55,7 +55,9 @@
               </span>
             </td>
             <td class="border-t px-6 py-4 whitespace-nowrap">
-              {{ item.fund_type }}
+              <span class="text-xs font-medium uppercase tracking-wide">
+                {{ item.fund_type }}
+              </span>
             </td>
             <td class="w-px border-t px-6 py-4 whitespace-nowrap">
               <Link class="flex items-center px-2" :href="`/lawyer/casefiles/${case_file.id}/disbursement-items/${item.id}/edit`" tabindex="-1">
