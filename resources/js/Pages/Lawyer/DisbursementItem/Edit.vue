@@ -46,7 +46,7 @@
                     <label class="form-label">Uploaded File</label>
                     <div class="form-input">
                         <div class="flex">
-                            <icon name="solid-document" class="block w-5 h-5 fill-blue-500"></icon>
+                            <icon name="file-fill" class="block w-6 h-6 fill-blue-500"></icon>
                             <div class="ml-2 whitespace-nowrap overflow-ellipsis overflow-hidden ">{{ disbursement_item.receipt }}</div>
                         </div>
                     </div>
