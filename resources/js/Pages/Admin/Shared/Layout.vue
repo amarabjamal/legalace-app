@@ -5,7 +5,8 @@
         <!-- Header -->
         <div class="top">
             <div class="flex flex-column">
-                <i @click="toggleSidebar" class="uil uil-bars sidebar-toggle"></i>
+                <icon v-if="!isSidebarOpen" @click="toggleSidebar" name="menu-line" class="mt-2 h-6 w-6 fill-white cursor-pointer hover:fill-blue-400"></icon>
+                <icon v-else @click="toggleSidebar" name="menu-fold-fill" class="mt-2 h-6 w-6 fill-white cursor-pointer hover:fill-blue-400"></icon>
                 <div class="ml-4">
                     <Link href="/">
                         <img :src="'/images/app/logo.png'" width="90" alt="legalace logo">
@@ -14,15 +15,6 @@
             </div>
 
             <ul class="flex items-center flex-shrink-0 space-x-6">
-                <li v-if="$page.props.auth.user.roles.indexOf('lawyer') !== -1" class="relative">
-                    <Link
-                        class="text-white text-sm"
-                        href="/lawyer"
-                    >
-                        <i class="uil uil-sync"></i>
-                        Admin Dashboard
-                    </Link>
-                </li>
                 <!-- Notifications menu -->
                 <li class="relative">
                 <button
@@ -250,11 +242,6 @@ nav.close ~ .dashboard{
 nav.close ~ .dashboard .top{
     left: 73px;
     width: calc(100% - 73px);
-}
-.dashboard .top .sidebar-toggle{
-    font-size: 26px;
-    color: #fff;
-    cursor: pointer;
 }
 
 .dashboard .top .auth-nav{

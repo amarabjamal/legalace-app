@@ -2,6 +2,7 @@
 @import 'global.css';
 @import 'form.css';
 @import 'button.css';
+@import 'sidebar.css';
 @tailwind base;
 @tailwind components;
 @tailwind utilities;

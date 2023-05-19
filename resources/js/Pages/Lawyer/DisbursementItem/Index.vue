@@ -72,6 +72,10 @@
       </table>
     </div>
 
+    <div>
+      <pagination :links="disbursement_items.links" :from="disbursement_items.from" :to="disbursement_items.to" :total="disbursement_items.total"/>
+    </div>
+
     <!-- {{ disbursement_items }} -->
 </template>
 
@@ -79,6 +83,7 @@
 import Layout from '../Shared/Layout';
 import SearchFilter from '../../../Shared/SearchFilter';
 import Icon from '../../../Shared/Icon';
+import Pagination from '../Shared/Pagination';
 import throttle from 'lodash/throttle';
 import pickBy from 'lodash/pickBy'
 import mapValues from 'lodash/mapValues';
@@ -87,7 +92,8 @@ import mapValues from 'lodash/mapValues';
 export default {
     components: {
         SearchFilter,
-        Icon
+        Icon,
+        Pagination
     },
     layout: Layout,
     props: {

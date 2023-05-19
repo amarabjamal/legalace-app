@@ -4,7 +4,7 @@
     <div class="flex flex-col flex-1">
         <main class="h-full pb-16 overflow-y-auto">          
             <div class="container px-6 mx-auto grid">
-                <Link class="my-6" :href="'/lawyer/casefiles/'"><i class="uil uil-arrow-left"></i> Back to Case File</Link>
+                <Link class="my-6" :href="'/lawyer/casefiles/'">Back to Case File</Link>
     
                 <!-- Main Content Start -->
                 <div v-if="$page.props.flash.message" class="flex p-4 mb-4 bg-green-100 rounded-lg" role="alert">
