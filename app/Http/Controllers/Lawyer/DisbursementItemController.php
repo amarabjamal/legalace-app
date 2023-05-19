@@ -40,7 +40,7 @@ class DisbursementItemController extends Controller
                     'name' => $item->name,
                     'desc' => $item->description,
                     'amount' => $item->amount->formatTo('en_MY'),
-                    'status' => $item->status->name,
+                    'status' => DisbursementItem::STATUS[$item->status->value],
                     'fund_type' => DisbursementItem::FUND_TYPE[$item->fund_type->value],
                     'record_type' => $item->recordType ? $item->recordType->only('name') : null,
                 ]),
@@ -92,9 +92,6 @@ class DisbursementItemController extends Controller
 
     public function edit(CaseFile $casefile, DisbursementItem $disbursement_item) 
     {
-        // if($disbursement_item->case_file_id != $casefile->id) {
-        //     abort(404);
-        // }
 
         return inertia('Lawyer/DisbursementItem/Edit', [
             'case_file' => [ 
@@ -131,6 +128,8 @@ class DisbursementItemController extends Controller
                 }
 
                 $data['receipt'] = $fileName;
+            } else {
+                unset($data['receipt']);
             }
 
             $disbursement_item->update($data);
