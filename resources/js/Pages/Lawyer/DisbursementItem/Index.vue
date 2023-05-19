@@ -2,16 +2,16 @@
     <Head title="Disbursement Item" />
 
     <h1 class="mb-6 text-xl font-bold">
-        <Link class="text-blue-500 hover:text-blue-600" href="/lawyer/casefiles/">Case Files</Link>
+        <Link class="text-blue-500 hover:text-blue-600" href="/lawyer/case-files/">Case Files</Link>
         <span class="text-blue-500 font-medium mx-2">/</span>
-        <Link class="text-blue-500 hover:text-blue-600" :href="`/lawyer/casefiles/${case_file.id}`">{{ case_file.file_number }}</Link>
+        <Link class="text-blue-500 hover:text-blue-600" :href="`/lawyer/case-files/${case_file.id}`">{{ case_file.file_number }}</Link>
         <span class="text-blue-500 font-medium mx-2">/</span>
         <span class="font-medium">Disbursement Items</span>
     </h1>
 
     <div class="flex items-center justify-between mb-6">
         <search-filter v-model="form.search" class="mr-4 w-full max-w-md"  @reset="reset"></search-filter>
-        <Link class="btn-indigo" :href="`/lawyer/casefiles/${case_file.id}/disbursement-items/create`">
+        <Link class="btn-indigo" :href="`/lawyer/case-files/${case_file.id}/disbursement-items/create`">
             <span>Create</span>
             <span class="hidden md:inline">&nbsp;Item</span>
         </Link>
@@ -60,7 +60,7 @@
               </span>
             </td>
             <td class="w-px border-t px-6 py-4 whitespace-nowrap">
-              <Link class="flex items-center px-2" :href="`/lawyer/casefiles/${case_file.id}/disbursement-items/${item.id}/edit`" tabindex="-1">
+              <Link class="flex items-center px-2" :href="`/lawyer/case-files/${case_file.id}/disbursement-items/${item.id}/edit`" tabindex="-1">
                 <icon name="cheveron-right" class="block w-5 h-5 fill-gray-400" />
               </Link>
             </td>
@@ -112,7 +112,7 @@ export default {
         form: {
           deep: true,
           handler: throttle(function () {
-            this.$inertia.get(`/lawyer/casefiles/${this.case_file.id}/disbursement-items`, pickBy(this.form), {preserveState: true})
+            this.$inertia.get(`/lawyer/case-files/${this.case_file.id}/disbursement-items`, pickBy(this.form), {preserveState: true})
           }, 150),
         },
     },

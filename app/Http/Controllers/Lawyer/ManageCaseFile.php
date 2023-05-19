@@ -67,7 +67,7 @@ class ManageCaseFile extends Controller
 
         CaseFile::create($validated);
 
-        return redirect()->route('lawyer.casefiles.index')->with('message', 'Successfully added case file [' . $validated['file_number'] . ']');
+        return redirect()->route('lawyer.case-files.index')->with('message', 'Successfully added case file [' . $validated['file_number'] . ']');
     }
 
     public function edit(CaseFile $casefile) 
@@ -97,6 +97,6 @@ class ManageCaseFile extends Controller
 
         $casefile->update($validated);
 
-        return redirect()->route('lawyer.casefiles.show', ['casefile' => $casefile->id])->with('successMessage', 'Successfully updated the Case File');
+        return redirect()->route('lawyer.case-files.show', ['casefile' => $casefile->id])->with('successMessage', 'Successfully updated the Case File');
     }
 }

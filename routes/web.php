@@ -82,9 +82,9 @@ Route::group(['middleware' => 'auth'], function() {
         Route::get('/profile', [ProfileController::class, 'showLawyerProfile']);
 
         Route::resource('clients', ClientController::class);
-        Route::resource('casefiles', ManageCaseFile::class);
+        Route::resource('case-files', ManageCaseFile::class);
 
-        Route::scopeBindings()->prefix('/casefiles/{casefile}')->group(function() {
+        Route::scopeBindings()->prefix('/case-files/{casefile}')->group(function() {
             Route::prefix('/quotation')->group(function() {
                 Route::get('create', [QuotationController::class, 'create'])->name('quotation.create');
                 Route::post('/', [QuotationController::class, 'store'])->name('quotation.store');

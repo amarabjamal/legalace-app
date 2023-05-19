@@ -43,7 +43,7 @@
                         New File Case
                     </button> -->
                     <Link 
-                        href="/lawyer/casefiles/create" 
+                        href="/lawyer/case-files/create" 
                         class="h-min text-white bg-blue-800 hover:bg-blue-900 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2"
                         >
                         Create New Case File
@@ -120,7 +120,7 @@
                                     {{ case_file.client.name }}
                                 </th>
                                 <td class="px-6 py-4">
-                                    <Link :href="`/lawyer/casefiles/${case_file.id}`" class="font-medium hover:text-blue-600">View</Link>
+                                    <Link :href="`/lawyer/case-files/${case_file.id}`" class="font-medium hover:text-blue-600">View</Link>
                                 </td>
                             </tr>
                         </tbody>

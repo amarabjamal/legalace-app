@@ -2,9 +2,9 @@
     <Head title="Generate Quotation" />
 
     <h1 class="mb-6 text-xl font-bold">
-        <Link class="text-blue-500 hover:text-blue-600" href="/lawyer/casefiles/">Case Files</Link>
+        <Link class="text-blue-500 hover:text-blue-600" href="/lawyer/case-files/">Case Files</Link>
         <span class="text-blue-500 font-medium mx-2">/</span>
-        <Link class="text-blue-500 hover:text-blue-600" :href="`/lawyer/casefiles/${form.case_file_id}`">{{ case_file.file_number }}</Link>
+        <Link class="text-blue-500 hover:text-blue-600" :href="`/lawyer/case-files/${form.case_file_id}`">{{ case_file.file_number }}</Link>
         <span class="text-blue-500 font-medium mx-2">/</span>
         <span class="font-medium">Quotation</span>
     </h1>
@@ -15,8 +15,8 @@
                 Quotation for {{ case_file.matter }} ({{ case_file.file_number }})
             </div>
             <div>
-                <a target="_blank" :href="`/lawyer/casefiles/${form.case_file_id}/quotation/pdf`" class="mr-2 text-white bg-blue-500 hover:bg-blue-600 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2 text-center">PDF</a>
-                <a :href="`/lawyer/casefiles/${form.case_file_id}/quotation/email`"  class="text-white bg-blue-500 hover:bg-blue-600 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2 text-center">Email</a>
+                <a target="_blank" :href="`/lawyer/case-files/${form.case_file_id}/quotation/pdf`" class="mr-2 text-white bg-blue-500 hover:bg-blue-600 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2 text-center">PDF</a>
+                <a :href="`/lawyer/case-files/${form.case_file_id}/quotation/email`"  class="text-white bg-blue-500 hover:bg-blue-600 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2 text-center">Email</a>
             </div>
         </div>
 
@@ -239,7 +239,7 @@ export default {
             });
         },
         submit() {
-            this.form.put(`/lawyer/casefiles/${this.case_file.id}/quotation/`);
+            this.form.put(`/lawyer/case-files/${this.case_file.id}/quotation/`);
         }
     },
     components: { Head, Pagination, TrashIcon, Link },

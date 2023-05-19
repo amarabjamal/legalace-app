@@ -2,11 +2,11 @@
     <Head title="Disbursement Item" />
 
     <h1 class="mb-6 text-xl font-bold">
-        <Link class="text-blue-500 hover:text-blue-600" href="/lawyer/casefiles/">Case Files</Link>
+        <Link class="text-blue-500 hover:text-blue-600" href="/lawyer/case-files/">Case Files</Link>
         <span class="text-blue-500 font-medium mx-2">/</span>
-        <Link class="text-blue-500 hover:text-blue-600" :href="`/lawyer/casefiles/${case_file.id}`">{{ case_file.file_number }}</Link>
+        <Link class="text-blue-500 hover:text-blue-600" :href="`/lawyer/case-files/${case_file.id}`">{{ case_file.file_number }}</Link>
         <span class="text-blue-500 font-medium mx-2">/</span>
-        <Link class="text-blue-500 hover:text-blue-600" :href="`/lawyer/casefiles/${case_file.id}/disbursement-items`">Disbursement Items</Link>
+        <Link class="text-blue-500 hover:text-blue-600" :href="`/lawyer/case-files/${case_file.id}/disbursement-items`">Disbursement Items</Link>
         <span class="text-blue-500 font-medium mx-2">/</span>
         <span class="font-medium">{{ disbursement_item. name }}</span>
     </h1>
@@ -120,14 +120,14 @@ export default {
         update() {
             this.form.amount = this.form.amount.replace(/^\W|,/g,"");
             this.form.post(
-                `/lawyer/casefiles/${this.case_file.id}/disbursement-items/${this.disbursement_item.id}`, 
+                `/lawyer/case-files/${this.case_file.id}/disbursement-items/${this.disbursement_item.id}`, 
                 {
                     onSuccess: () => this.form.reset('receipt'),
             });
         },
         destroy() {
             if(confirm('Are you sure you want to delete this item?')) {
-                this.$inertia.delete(`/lawyer/casefiles/${this.case_file.id}/disbursement-items/${this.disbursement_item.id}`);
+                this.$inertia.delete(`/lawyer/case-files/${this.case_file.id}/disbursement-items/${this.disbursement_item.id}`);
             }
         }
     },

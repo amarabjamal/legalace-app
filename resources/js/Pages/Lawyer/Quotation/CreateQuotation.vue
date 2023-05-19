@@ -4,7 +4,7 @@
     <div class="flex flex-col flex-1">
         <main class="h-full pb-16 overflow-y-auto">          
             <div class="container px-6 mx-auto grid">
-                <Link class="my-6" :href="'/lawyer/casefiles/'">Back to Case File</Link>
+                <Link class="my-6" :href="'/lawyer/case-files/'">Back to Case File</Link>
     
                 <!-- Main Content Start -->
                 <div v-if="$page.props.flash.message" class="flex p-4 mb-4 bg-green-100 rounded-lg" role="alert">
@@ -262,7 +262,7 @@ export default {
             });
         },
         submit() {
-            this.form.post(`/lawyer/casefiles/${this.case_file.id}/quotation`);
+            this.form.post(`/lawyer/case-files/${this.case_file.id}/quotation`);
         }
     },
     components: { Head, Pagination, TrashIcon},

@@ -107,7 +107,7 @@
                         </button>
 
                         <Link 
-                            :href="`/lawyer/casefiles/${case_file.id}`"
+                            :href="`/lawyer/case-files/${case_file.id}`"
                             as="button"  
                             class="ml-2 text-gray-900 focus:outline-none bg-white border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-200 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center"
                             :disabled="form.processing"
@@ -138,7 +138,7 @@ export default {
         });
 
         let submit = () => {
-            form.put(`/lawyer/casefiles/${props.case_file.id}`);
+            form.put(`/lawyer/case-files/${props.case_file.id}`);
         };
 
         return { form, submit };
