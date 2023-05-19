@@ -7,9 +7,9 @@ enum DisbursementItemStatusEnum:int {
     case DraftedForInvoice = 2;
     case Invoiced = 3;
     case PaidByClient = 4;
-    case RequestedForClaim = 5;
+    case DraftedForClaim = 5;
     case PendingClaimApproval = 6;
     case ApprovedForClaim = 7;
     case Disbursed = 8;
-    case RejectedForClaimed = 9;
+    case Denied = 9;
 }

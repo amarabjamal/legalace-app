@@ -42,6 +42,18 @@ class DisbursementItem extends Model
         3 => 'Petty Cash',
     ];
 
+    public const STATUS = [
+        1 => 'Recorded',
+        2 => 'Drafted',
+        3 => 'Invoiced',
+        4 => 'Paid',
+        5 => 'Claiming',
+        6 => 'Pending Approval',
+        7 => 'Approved',
+        8 => 'Disbursed',
+        9 => 'Denied',
+    ];
+
     public const RECEIPT_PATH = 'case-files/disbursement-items/receipts';
 
     public function caseFile() 
@@ -56,7 +68,7 @@ class DisbursementItem extends Model
 
     public function scopeOrderByDate($query) 
     {
-        $query->orderBy('date');
+        $query->orderBy('date', 'desc');
     }
 
     public function scopeFilter($query, array $filters) 
