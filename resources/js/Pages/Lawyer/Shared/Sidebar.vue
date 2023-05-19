@@ -17,7 +17,7 @@
                     </Link>
                 </li>
                 <li>
-                    <Link href="/lawyer/casefiles">
+                    <Link href="/lawyer/case-files">
                         <icon-sidebar name="folder-5-line" class="mr-2 w-5 h-5"></icon-sidebar>
                         <span class="link-name">Case Files</span>
                     </Link>
