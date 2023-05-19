@@ -24,7 +24,7 @@
         </div>
         <div v-if="$page.props.flash.infoMessage && show" class="flex items-center justify-between mb-8 max-w-3xl bg-blue-500 rounded">
             <div class="flex items-center">
-                <svg class="flex-shrink-0 ml-4 mr-2 w-4 h-4 fill-white" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M11.25 11.25l.041-.02a.75.75 0 011.063.852l-.708 2.836a.75.75 0 001.063.853l.041-.021M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9-3.75h.008v.008H12V8.25z" /></svg>
+                <icon name="information-line" class="flex-shrink-0 ml-4 mr-2 w-4 h-4 fill-white"/>
                 <div class="py-4 text-white text-sm font-medium">{{ $page.props.flash.infoMessage }}</div>
             </div>
             <button type="button" class="group mr-2 p-2" @click="show = false">
