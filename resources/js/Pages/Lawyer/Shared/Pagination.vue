@@ -1,5 +1,5 @@
 <template>
-    <nav class="flex justify-between mt-10" aria-label="Page navigation">
+    <nav v-if="links != null" class="flex justify-between mt-10" aria-label="Page navigation">
         <span v-if="total != 0" class="text-sm text-gray-700">
             Showing <span class="font-semibold text-gray-900 dark:text-gray-300">{{ from }}</span> to <span class="font-semibold text-gray-900 dark:text-gray-300">{{ to }}</span> of <span class="font-semibold text-gray-900 dark:text-gray-300">{{ total }}</span> Entries
         </span>
