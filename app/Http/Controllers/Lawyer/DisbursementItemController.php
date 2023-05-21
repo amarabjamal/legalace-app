@@ -20,16 +20,16 @@ use Spatie\LaravelOptions\Options;
 
 class DisbursementItemController extends Controller
 {
-    public function index(CaseFile $casefile) 
+    public function index(CaseFile $case_file) 
     {
 
         return inertia('Lawyer/DisbursementItem/Index', [
             'case_file' => [ 
-                'id' => $casefile->id,
-                'file_number' => $casefile->file_number,
+                'id' => $case_file->id,
+                'file_number' => $case_file->file_number,
             ],
             'filters' => FacadesRequest::all('search'),
-            'disbursement_items' => $casefile->disbursementItems()
+            'disbursement_items' => $case_file->disbursementItems()
                 ->orderByDate()
                 ->filter(FacadesRequest::only('search'))
                 ->paginate(25)
@@ -47,19 +47,19 @@ class DisbursementItemController extends Controller
         ]);
     }
 
-    public function create(CaseFile $casefile) 
+    public function create(CaseFile $case_file) 
     {
         return inertia('Lawyer/DisbursementItem/Create', [
             'case_file' => [ 
-                'id' => $casefile->id,
-                'file_number' => $casefile->file_number,
+                'id' => $case_file->id,
+                'file_number' => $case_file->file_number,
             ],
             'fund_types' => Options::forEnum(DisbursementItemFundTypeEnum::class),
             'record_types' => DisbursementItemType::enabled()->get(['id', 'name']),
         ]);
     }
 
-    public function store(StoreDisbursementItemRequest $request, CaseFile $casefile) 
+    public function store(StoreDisbursementItemRequest $request, CaseFile $case_file) 
     {
         $data =  $request->all();
         $data['amount'] = Money::of($data['amount'], 'MYR');
@@ -74,11 +74,11 @@ class DisbursementItemController extends Controller
             
             $data['receipt'] = $fileName;
 
-            $casefile->disbursementItems()->create($data);
+            $case_file->disbursementItems()->create($data);
 
             DB::commit();
 
-            return redirect()->route('lawyer.disbursement-items.index', $casefile)->with('successMessage', 'Successfully saved the new record.');
+            return redirect()->route('lawyer.disbursement-items.index', $case_file)->with('successMessage', 'Successfully saved the new record.');
         } catch (\Exception $e) {
             DB::rollBack();
             if(Storage::exists($filePath))
@@ -90,13 +90,13 @@ class DisbursementItemController extends Controller
         }
     }
 
-    public function edit(CaseFile $casefile, DisbursementItem $disbursement_item) 
+    public function edit(CaseFile $case_file, DisbursementItem $disbursement_item) 
     {
 
         return inertia('Lawyer/DisbursementItem/Edit', [
             'case_file' => [ 
-                'id' => $casefile->id,
-                'file_number' => $casefile->file_number,
+                'id' => $case_file->id,
+                'file_number' => $case_file->file_number,
             ],
             'disbursement_item' => $disbursement_item->only(['id', 'date', 'record_type_id', 'name', 'description', 'amount', 'fund_type', 'receipt']),
             'fund_types' => Options::forEnum(DisbursementItemFundTypeEnum::class),
@@ -106,7 +106,7 @@ class DisbursementItemController extends Controller
 
     public function update(
         UpdateDisbursementItemRequest $request, 
-        CaseFile $casefile, 
+        CaseFile $case_file, 
         DisbursementItem $disbursement_item
     ) 
     {
@@ -148,14 +148,14 @@ class DisbursementItemController extends Controller
         }
     }
 
-    public function destroy(CaseFile $casefile, DisbursementItem $disbursement_item) 
+    public function destroy(CaseFile $case_file, DisbursementItem $disbursement_item) 
     {
         try {
             if($disbursement_item->isDeletable()) 
             {
                 $disbursement_item->delete();
 
-                return redirect()->route('lawyer.disbursement-items.index', $casefile)->with('successMessage', 'Successfully deleted the record.');
+                return redirect()->route('lawyer.disbursement-items.index', $case_file)->with('successMessage', 'Successfully deleted the record.');
             }
 
             return back()->with('infoMessage', 'You are not allowed to delete this record since it has been drafted for invoicing.');

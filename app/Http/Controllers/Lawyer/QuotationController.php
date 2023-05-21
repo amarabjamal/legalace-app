@@ -22,7 +22,12 @@ class QuotationController extends Controller
     protected $quotation;
     protected $workdescription;
 
-    public function __construct(CaseFile $casefile, BankAccount $bankaccount, Quotation $quotation, WorkDescription $workdescription)
+    public function __construct(
+        CaseFile $casefile, 
+        BankAccount $bankaccount, 
+        Quotation $quotation, 
+        WorkDescription $workdescription
+    )
     {
         $this->casefile = $casefile;
         $this->bankaccount = $bankaccount;
@@ -30,22 +35,27 @@ class QuotationController extends Controller
         $this->workdescription = $workdescription;
     }
 
-    public function create(CaseFile $casefile) {
-        if($casefile->quotation()->exists()) {
-            return redirect()->route('lawyer.quotation.edit', $casefile);
+    public function create(CaseFile $case_file) 
+    {
+        if($case_file->quotation()->exists()) {
+            return redirect()->route('lawyer.quotation.edit', $case_file);
         }
 
-        return Inertia::render('Lawyer/Quotation/CreateQuotation', [
+        return Inertia::render('Lawyer/Quotation/Create', [
             'case_file' => [
-                'id' => $casefile->id,
-                'file_number' => $casefile->file_number,
+                'id' => $case_file->id,
+                'file_number' => $case_file->file_number,
             ],
             'client_bank_accounts' => $this->bankaccount->clientAccountOptions(),
         ]);
         
     }
 
-    public function store(StoreQuotationRequest $request, CaseFile $casefile) {
+    public function store(
+        StoreQuotationRequest $request, 
+        CaseFile $case_file
+    ) 
+    {
         
         $validated = $request->validated();
 
@@ -66,30 +76,42 @@ class QuotationController extends Controller
 
         $quotation->workDescriptions()->saveMany($workDescriptions);
 
-        return redirect()->route('lawyer.quotation.edit', $casefile);
+        return redirect()->route('lawyer.quotation.edit', $case_file);
     }
 
-    public function edit(CaseFile $casefile) {
-        if(!$casefile->quotation()->exists()) {
-            return redirect()->route('lawyer.quotation.create', $casefile);
-        }
+    public function show(CaseFile $case_file) 
+    {
+        $case_file->quotation;
+        $case_file->workDescriptions;
 
-        $casefile->quotation;
-        $casefile->workDescriptions;
-
-        return inertia('Lawyer/Quotation/EditQuotation', [
-            'case_file' => $casefile,
+        return inertia('Lawyer/Quotation/Show', [
+            'case_file' => $case_file,
             'client_bank_accounts' => $this->bankaccount->clientAccountOptions(),
         ]);
     }
 
-    public function update(UpdateQuotationRequest $request, CaseFile $casefile) 
+    public function edit(CaseFile $case_file) 
     {
-        if(!$casefile->quotation()->exists()) {
-            return redirect()->route('lawyer.quotation.create', $casefile);
+        if(!$case_file->quotation()->exists()) {
+            return redirect()->route('lawyer.quotation.create', $case_file);
         }
 
-        $quotation = $this->quotation->getQuotationByFileCaseId($casefile->id);
+        $case_file->quotation;
+        $case_file->workDescriptions;
+
+        return inertia('Lawyer/Quotation/Edit', [
+            'case_file' => $case_file,
+            'client_bank_accounts' => $this->bankaccount->clientAccountOptions(),
+        ]);
+    }
+
+    public function update(UpdateQuotationRequest $request, CaseFile $case_file) 
+    {
+        if(!$case_file->quotation()->exists()) {
+            return redirect()->route('lawyer.quotation.create', $case_file);
+        }
+
+        $quotation = $this->quotation->getQuotationByFileCaseId($case_file->id);
 
         try {
             DB::beginTransaction();
@@ -129,11 +151,11 @@ class QuotationController extends Controller
         return back()->with('errorMessage', 'Failed update!');
     }
 
-    public function viewPDF(CaseFile $casefile)
+    public function viewPDF(CaseFile $case_file)
     {
         $data = [
-            'workdescriptions' => $casefile->workDescriptions()->get()->toArray(),
-            'deposit_amount' =>  $casefile->quotation()->pluck('deposit_amount')->toArray()[0],
+            'workdescriptions' => $case_file->workDescriptions()->get()->toArray(),
+            'deposit_amount' =>  $case_file->quotation()->pluck('deposit_amount')->toArray()[0],
         ];
 
         //dd($data);
@@ -143,12 +165,12 @@ class QuotationController extends Controller
         return $pdf->stream();
     }
 
-    public function sendEmail(CaseFile $casefile) 
+    public function sendEmail(CaseFile $case_file) 
     {
 
         $data = [
-            'workdescriptions' => $casefile->workDescriptions()->get()->toArray(),
-            'deposit_amount' =>  $casefile->quotation()->pluck('deposit_amount')->toArray()[0],
+            'workdescriptions' => $case_file->workDescriptions()->get()->toArray(),
+            'deposit_amount' =>  $case_file->quotation()->pluck('deposit_amount')->toArray()[0],
         ];
         
         $pdf = PDF::loadView('templates.quotation.quotation', $data);
