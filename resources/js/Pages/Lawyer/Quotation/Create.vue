@@ -1,27 +1,21 @@
 <template>
     <Head title="Generate Quotation" />
 
-    <h1 class="mb-6 text-xl font-bold">
-        <Link class="text-blue-500 hover:text-blue-600" href="/lawyer/case-files/">Case Files</Link>
-        <span class="text-blue-500 font-medium mx-2">/</span>
-        <Link class="text-blue-500 hover:text-blue-600" :href="`/lawyer/case-files/${form.case_file_id}`">{{ case_file.file_number }}</Link>
-        <span class="text-blue-500 font-medium mx-2">/</span>
-        <span class="font-medium">Quotation</span>
-    </h1>
+    <Link class="my-6" :href="'/lawyer/case-files/'">Back to Case File</Link>
 
     <div class="card">
-        <div class="card-header flex justify-between items-center">
+        <div class="card-header">
             <div class="card-header-title font-size-lg text-capitalize font-weight-normal">
-                Quotation for {{ case_file.matter }} ({{ case_file.file_number }})
-            </div>
-            <div>
-                <a target="_blank" :href="`/lawyer/case-files/${form.case_file_id}/quotation/pdf`" class="mr-2 text-white bg-blue-500 hover:bg-blue-600 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2 text-center">PDF</a>
-                <a :href="`/lawyer/case-files/${form.case_file_id}/quotation/email`"  class="text-white bg-blue-500 hover:bg-blue-600 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2 text-center">Email</a>
+                Quotation
             </div>
         </div>
 
         <div class="card-body">
             <form @submit.prevent="submit">
+                <div>
+                    File Number: {{ case_file.file_number }}
+                </div>
+
                 <div class="quotation-section">
                     <h3>SCOPE OF SERVICES & LEGAL FEES</h3>
 
@@ -47,7 +41,7 @@
                                         v-model="workDescription.description"
                                         :aria-label="`Work Description #${index+1}`"
                                         type="text" 
-                                        required
+                                        
                                         class="mr-4 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
                                     >
                                     <p v-if="form.errors[`work_descriptions.${index}.description`]" v-text="form.errors[`work_descriptions.${index}.description`]" class="mt-2 text-sm text-red-600"></p>
@@ -59,7 +53,7 @@
                                         min="0.00"
                                         step="0.01"
                                         type="number"
-                                        required 
+                                        
                                         class="text-right mr-4 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
                                     >
                                     <p v-if="form.errors[`work_descriptions.${index}.fee`]" v-text="form.errors[`work_descriptions.${index}.fee`]" class="mt-2 text-sm text-red-600"></p>
@@ -80,7 +74,7 @@
 
                     <div class="my-4 w-100 flex justify-center">
                         <button class="button text-center" @click="addWorkDescription">
-                            + Add a description
+                            + Add an item
                         </button>
                     </div>
 
@@ -159,26 +153,21 @@
                     </div>
 
                 </div>
-                
-                <div class="quotation-section flex justify-end">
-                    <button 
-                        type="submit" 
-                        class="text-white bg-blue-500 hover:bg-blue-600 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2 text-center"
-                        :disabled="form.processing"
-                        >
-                        Save
-                    </button>
-                </div>
 
+                <button 
+                    type="submit" 
+                    class="text-white bg-blue-500 hover:bg-blue-600 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2 text-center"
+                    :disabled="form.processing"
+                    >
+                    Submit
+                </button>
             </form>
         </div>
     </div>
 </template>
 
 <script>
-import { Head, Link } from "@inertiajs/inertia-vue3";
 import Layout from "../Shared/Layout";
-import Pagination from "../Shared/Pagination";
 import { useForm } from "@inertiajs/inertia-vue3";
 import { TrashIcon } from "@heroicons/vue/outline";
 import { ref } from "vue";
@@ -188,9 +177,12 @@ export default {
     setup (props) {
         let form = useForm({
             'case_file_id' : props.case_file.id,
-            'work_descriptions' : props.case_file.work_descriptions,
-            'deposit_amount': props.case_file.quotation.deposit_amount,
-            'bank_account_id' : props.case_file.quotation.bank_account_id,
+            'work_descriptions' : [{
+                "description" : "",
+                "fee" : 0.00,
+            }],
+            'deposit_amount': "",
+            'bank_account_id' : "",
         });
 
         let subtotal = ref(0);
@@ -203,6 +195,12 @@ export default {
             tax,
             total
         };
+    },
+    components: { TrashIcon},
+    layout: Layout,
+    props: {
+        case_file : Object,
+        client_bank_accounts : Object,
     },
     methods: {
         addWorkDescription() {
@@ -239,18 +237,9 @@ export default {
             });
         },
         submit() {
-            this.form.put(`/lawyer/case-files/${this.case_file.id}/quotation/`);
+            this.form.post(`/lawyer/case-files/${this.case_file.id}/quotation`);
         }
     },
-    components: { Head, Pagination, TrashIcon, Link },
-    props: {
-        case_file : Object,
-        client_bank_accounts : Object,
-    },
-    mounted: function mounted() {
-        this.calculateTotal()
-    },
-    layout: Layout,
 };
 </script>
 
@@ -263,8 +252,8 @@ export default {
 }
 
 .quotation-section {
-    margin: 20px 0px;
-    padding: 0px 10px;
+    margin: 30px 0px;
+    padding: 0px 30px
 }
 
 .quotation-section h3 {
