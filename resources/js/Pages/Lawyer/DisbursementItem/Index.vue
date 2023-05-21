@@ -75,8 +75,6 @@
     <div>
       <pagination :links="disbursement_items.links" :from="disbursement_items.from" :to="disbursement_items.to" :total="disbursement_items.total"/>
     </div>
-
-    <!-- {{ disbursement_items }} -->
 </template>
 
 <script>
@@ -93,7 +91,7 @@ export default {
     components: {
         SearchFilter,
         Icon,
-        Pagination
+        Pagination,
     },
     layout: Layout,
     props: {
