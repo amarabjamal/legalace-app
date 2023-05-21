@@ -60,10 +60,6 @@
         <div class="card-body">
             <Link :href="`/lawyer/case-files/${case_file.id}/quotation`"><button class="btn">View Quotation</button></Link>
         </div>
-
-        <!-- <div class="text-center d-block p-3 card-footer">
-            Footer
-        </div> -->
     </div>
 
     <div class="card">
@@ -77,9 +73,6 @@
             <Link :href="`/lawyer/case-files/${case_file.id}/disbursement-items`"><button class="btn">View Disbursement Items</button></Link>
         </div>
 
-        <!-- <div class="text-center d-block p-3 card-footer">
-            Footer
-        </div> -->
     </div>
 
     <div class="card">
@@ -90,12 +83,8 @@
         </div>
 
         <div class="card-body">
-            None
+            <Link :href="`/lawyer/case-files/${case_file.id}/invoices`"><button class="btn">View Invoices</button></Link>
         </div>
-
-        <!-- <div class="text-center d-block p-3 card-footer">
-            Footer
-        </div> -->
     </div>
 
     <div class="card">
@@ -108,10 +97,6 @@
         <div class="card-body">
             None
         </div>
-
-        <!-- <div class="text-center d-block p-3 card-footer">
-            Footer
-        </div> -->
     </div>
 
 </template>
