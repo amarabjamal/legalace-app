@@ -2,35 +2,13 @@
     <nav id="sidebar" :class="`${!isSidebarOpen ? 'close' : ''}`">
         <div class="menu-items">
             <ul class="nav-links">
-                <li>
-                    <Link href="/admin">
-                        <icon-sidebar name="home-smile-line" class="mr-2 w-5 h-5"></icon-sidebar>
-                        <span class="link-name">Dashboard</span>
-                    </Link>
-                </li>
-                <li>
-                    <Link href="/admin/company">
-                        <icon-sidebar name="donut-chart-line" class="mr-2 w-5 h-5"></icon-sidebar>
-                        <span class="link-name">Company Profile</span>
-                    </Link>
-                </li>
-                <li>
-                    <Link href="/admin/users">
-                        <icon-sidebar name="group-line" class="mr-2 w-5 h-5"></icon-sidebar>
-                        <span class="link-name">User Accounts</span>
-                    </Link>
-                </li>
-                <li>
-                    <Link href="/admin/bankaccounts">
-                        <icon-sidebar name="bank-card-line" class="mr-2 w-5 h-5"></icon-sidebar>
-                        <span class="link-name">Bank Accounts</span>
-                    </Link>
-                </li>
-                <li>
-                    <Link href="/admin/voucherapprovals">
-                        <icon-sidebar name="inbox-line" class="mr-2 w-5 h-5"></icon-sidebar>
-                        <span class="link-name">Voucher Requests</span>
-                    </Link>
+                <li v-for="(navigation, index) in navigations" :key="index">
+                    <div>
+                        <Link :href="navigation.href">
+                            <icon-sidebar :name="navigation.icon"></icon-sidebar>
+                            <span class="link-name">{{ navigation.label }}</span>
+                        </Link>
+                    </div>
                 </li>
             </ul>
             
@@ -52,6 +30,17 @@ import IconSidebar from '../../../Shared/IconSidebar';
 export default {
     props: {
         isSidebarOpen: Boolean,
+    },
+    data() {
+        return {
+            navigations: [
+                {href: '/admin', label: 'Dashboard', icon:'home-smile-line', isActive: this.$page.url.startsWith('/lawyer')},
+                {href: '/admin/company', label: 'Company Profile', icon:'donut-chart-line', isActive: this.$page.url.startsWith('/admin/company')},
+                {href: '/admin/users', label: 'Employees', icon:'group-line', isActive: this.$page.url.startsWith('/admin/users')},
+                {href: '/admin/bankaccounts', label: 'Bank Accounts', icon:'bank-card-line', isActive: this.$page.url.startsWith('/admin/bankaccounts')},
+                {href: '/admin/voucherapprovals', label: 'Voucher Requests', icon:'inbox-line', isActive: this.$page.url.startsWith('/admin/voucherapprovals')},
+            ],
+        }
     },
     components: {
         IconSidebar,

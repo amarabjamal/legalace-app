@@ -5,8 +5,8 @@
         <!-- Header -->
         <div class="top">
             <div class="flex flex-column">
-                <icon v-if="!isSidebarOpen" @click="toggleSidebar" name="menu-line" class="mt-2 h-6 w-6 fill-white cursor-pointer hover:fill-blue-400"></icon>
-                <icon v-else @click="toggleSidebar" name="menu-fold-fill" class="mt-2 h-6 w-6 fill-white cursor-pointer hover:fill-blue-400"></icon>
+                <icon v-if="!isSidebarOpen" @click="toggleSidebar" name="menu-line" class="mt-2 h-6 w-6 fill-white cursor-pointer"></icon>
+                <icon v-else @click="toggleSidebar" name="menu-fold-fill" class="mt-2 h-6 w-6 fill-white cursor-pointer"></icon>
                 <div class="ml-4">
                     <Link href="/">
                         <img :src="'/images/app/logo.png'" width="90" alt="legalace logo">
