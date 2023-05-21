@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Models\CaseFile\DisbursementItem\DisbursementItem;
+use App\Traits\HasCompanyScope;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Auth;
@@ -10,6 +11,7 @@ use Illuminate\Support\Facades\Auth;
 class CaseFile extends Model
 {
     use HasFactory;
+
     protected $table = 'case_files';
     protected $primaryKey= 'id';
     protected $fillable = [
@@ -48,6 +50,30 @@ class CaseFile extends Model
     public function disbursementItems() 
     {
         return $this->hasMany(DisbursementItem::class);
+    }
+
+    public function scopeOrderByDate($query) 
+    {
+        $query->orderBy('created_at', 'desc');
+    }
+
+    public function scopeFilter($query, array $filters)
+    {
+        $query->when($filters['search'] ?? null, function ($query, $search) {
+            $query->where(function ($query) use ($search) {
+                $query->where('matter', 'like', '%'.$search.'%')
+                    ->orWhere('type', 'like', '%'.$search.'%')
+                    ->orWhere('file_number', 'like', '%'.$search.'%')
+                    ->orWhereHas('client', function ($query) use ($search) {
+                        $query->where('name', 'like', '%'.$search.'%');
+                    });
+            });
+        });
+    }
+
+    public function scopeMyFiles($query) 
+    {
+        $query->where('created_by', '=', auth()->id())->with('client:id,name');
     }
 
     public function myCaseFile() 
