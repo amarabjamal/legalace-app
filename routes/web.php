@@ -13,11 +13,12 @@ use App\Http\Controllers\Common\DashboardController;
 use App\Http\Controllers\Common\ProfileController;
 use App\Http\Controllers\Email\MailController;
 use App\Http\Controllers\Lawyer\ClientController;
-use App\Http\Controllers\Lawyer\ManageCaseFile;
 use App\Http\Controllers\Lawyer\FirmAccountController;
 use App\Http\Controllers\Lawyer\ClientAccountController;
 use App\Http\Controllers\Lawyer\AccountReportingController;
+use App\Http\Controllers\Lawyer\CaseFileController;
 use App\Http\Controllers\Lawyer\DisbursementItemController;
+use App\Http\Controllers\Lawyer\InvoiceController;
 use App\Http\Controllers\Lawyer\QuotationController;
 use App\Http\Controllers\Lawyer\OperationalCostController;
 use App\Models\CaseFile;
@@ -82,23 +83,20 @@ Route::group(['middleware' => 'auth'], function() {
         Route::get('/profile', [ProfileController::class, 'showLawyerProfile']);
 
         Route::resource('clients', ClientController::class);
-        Route::resource('case-files', ManageCaseFile::class);
+        Route::resource('case-files', CaseFileController::class);
 
-        Route::scopeBindings()->prefix('/case-files/{casefile}')->group(function() {
+        Route::scopeBindings()->prefix('/case-files/{case_file}')->group(function() {
             Route::prefix('/quotation')->group(function() {
                 Route::get('create', [QuotationController::class, 'create'])->name('quotation.create');
                 Route::post('/', [QuotationController::class, 'store'])->name('quotation.store');
-                Route::get('/', [QuotationController::class, 'edit'])->name('quotation.edit');
-                Route::put('/', [QuotationController::class, 'update'])->name('quotation.update');
                 Route::get('/pdf', [QuotationController::class, 'viewPDF']);
                 Route::get('/email', [QuotationController::class, 'sendEmail']);
             });
 
-            // Route::prefix('/disbursement-items')->group(function() {
-            //     Route::get('/', [DisbursementItemController::class, 'index'])->name('disbursement_item.index');
-            // });
+            Route::singleton('quotation', QuotationController::class);
 
-            Route::resource('disbursement-items', DisbursementItemController::class)->except('show');
+            Route::resource('disbursement-items', DisbursementItemController::class);
+            Route::resource('invoices', InvoiceController::class);
         });
         
         Route::get('/getbankaccountdetails/{bankaccount}', [ManageBankAccount::class, 'getBankAccountDetails']);
