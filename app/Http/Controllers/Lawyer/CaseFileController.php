@@ -12,9 +12,10 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Request as FacadesRequest;
 use Inertia\Inertia;
 
-class ManageCaseFile extends Controller
+class CaseFileController extends Controller
 {
     protected $casefile;
     protected $quotation;
@@ -28,8 +29,22 @@ class ManageCaseFile extends Controller
     public function index()
     {
         
-        return Inertia::render('Lawyer/CaseFile/Index', [
-            'case_files' => $this->casefile->myCaseFile(),
+        return inertia('Lawyer/CaseFile/Index', [
+            'filters' => FacadesRequest::all('search'),
+            'case_files' => $this->casefile
+                ->myFiles()
+                ->OrderByDate()
+                ->filter(FacadesRequest::only('search'))
+                ->paginate(25)
+                ->withQueryString()
+                ->through(fn ($file) => [
+                    'id' => $file->id,
+                    'matter' => $file->matter,
+                    'type' => $file->type,
+                    'file_number' => $file->file_number,
+                    'no_conflict_checked' => $file->no_conflict_checked,
+                    'client' => $file->client->name,
+                ]),
         ]);
     }
 
@@ -67,10 +82,10 @@ class ManageCaseFile extends Controller
 
         CaseFile::create($validated);
 
-        return redirect()->route('lawyer.case-files.index')->with('message', 'Successfully added case file [' . $validated['file_number'] . ']');
+        return redirect()->route('lawyer.case-files.index')->with('successMessage', 'Successfully added case the file.');
     }
 
-    public function edit(CaseFile $casefile) 
+    public function edit(CaseFile $case_file) 
     {
         $lawyerRoleID = DB::table('roles')->select('id')->where('slug', 'lawyer');
         $userRole = DB::table('user_role')->select('user_id')->whereIn('role_id', $lawyerRoleID);
@@ -85,18 +100,18 @@ class ManageCaseFile extends Controller
                         ->get(['id', 'name']);
 
         return Inertia::render('Lawyer/CaseFile/Edit', [
-            'case_file' => $casefile,
+            'case_file' => $case_file,
             'clients' => $clients,
             'lawyers' => $lawyers,
         ]);
     }
 
-    public function update(UpdateCaseFileRequest $request,CaseFile $casefile) 
+    public function update(UpdateCaseFileRequest $request,CaseFile $case_file) 
     {
         $validated = $request->validated();
 
-        $casefile->update($validated);
+        $case_file->update($validated);
 
-        return redirect()->route('lawyer.case-files.show', ['casefile' => $casefile->id])->with('successMessage', 'Successfully updated the Case File');
+        return redirect()->route('lawyer.case-files.show', $case_file)->with('successMessage', 'Successfully updated the file');
     }
 }
