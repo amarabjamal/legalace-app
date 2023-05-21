@@ -12,8 +12,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class DisbursementItem extends Model
 {
-    use HasFactory;
-    use HasCompanyScope;
+    use HasFactory, HasCompanyScope;
 
     protected $table = 'disbursement_items';
     protected $primaryKey= 'id';
