@@ -3,6 +3,7 @@ import { createInertiaApp, Head, Link } from '@inertiajs/inertia-vue3'
 import { InertiaProgress } from '@inertiajs/progress'
 import { Inertia } from '@inertiajs/inertia'
 import Icon from './Shared/Icon';
+import PageHeading from './Shared/PageHeading'
 
 Inertia.on('success', (event) => {
   let isAuthenticated = event.detail.page.props.auth !== null;
@@ -24,6 +25,7 @@ createInertiaApp({
       .component("Link", Link)
       .component("Head", Head)
       .component("Icon", Icon)
+      .component("PageHeading", PageHeading)
       .mount(el)
   },
   title: (title) => title ? `${title} - Legal Ace` : 'Legal Ace',
