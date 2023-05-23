@@ -51,6 +51,23 @@
                                 </td>
                             </tr>
                         </tbody>
+                        <tfoot>
+                            <tr>
+                                <th scope="row" class="px-0 pb-0 font-normal text-gray-700 sm:hidden">Subtotal</th>
+                                <th scope="row" colspan="3" class="hidden px-0 pb-0 pt-6 text-right font-normal text-gray-700 sm:table-cell">Subtotal</th>
+                                <td colspan="1" class="pb-0 pl-8 pr-0 pt-6 text-right text-gray-900 tabular-nums">RM 1,000.00</td>
+                            </tr>
+                            <tr>
+                                <th scope="row" class="pt-4 font-normal text-gray-700/100 sm:hidden">Tax</th>
+                                <th scope="row" colspan="3" class="hidden pt-4 text-right font-normal text-gray-700 sm:table-cell">Tax</th>
+                                <td colspan="1" class="pb-0 pl-8 pr-0 pt-4 text-right tabular-nums text-gray-900">RM 1,000.00</td>
+                            </tr>
+                            <tr>
+                                <th scope="row" class="pt-4 font-semibold text-gray-900/10 sm:hidden">Total</th>
+                                <th scope="row" colspan="3" class="hidden pt-4 text-right font-semibold text-gray-900 sm:table-cell">Total</th>
+                                <td colspan="1" class="pb-0 pl-8 pr-0 pt-4 text-right font-semibold tabular-nums text-gray-900">RM 1,000.00</td>
+                            </tr>
+                        </tfoot>
                     </table>
     
                     <textarea-input v-model="form.notes" :error="form.errors.notes" class="pb-8 pr-6 w-full" label="Notes"/>
@@ -110,6 +127,7 @@ export default {
                 issued_at: null,
                 due_at: null,
                 notes: null,
+                items_id: [],
             }),
             page_title: 'Create Invoice',
             breadcrumbs: [
@@ -139,10 +157,12 @@ export default {
             } else {
                 const new_item = this.items.find((item) => item.id === id);
                 this.added_items.push(new_item);
+                this.form.items_id.push(id);
             }
         },
         removeItem(index) {
             this.added_items.splice(index, 1);
+            this.form.items_id.splice(index, 1);
         }
     },
 };
