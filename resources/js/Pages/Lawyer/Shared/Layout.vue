@@ -222,7 +222,7 @@ export default {
         FlashMessages 
     },
     props: {
-        auth: Object
+        auth: Object,
     },
     methods: {
         toggleSidebar() {

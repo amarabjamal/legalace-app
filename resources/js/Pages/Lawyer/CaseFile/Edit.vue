@@ -1,13 +1,7 @@
 <template>
     <Head title="Create Case File" />
 
-    <h1 class="mb-6 text-xl font-bold">
-        <Link class="text-blue-500 hover:text-blue-600" href="/lawyer/case-files/">Case Files</Link>
-        <span class="text-blue-500 font-medium mx-2">/</span>
-        <Link class="text-blue-500 hover:text-blue-600" :href="`/lawyer/case-files/${case_file.id}`">{{ case_file.file_number }}</Link>
-        <span class="text-blue-500 font-medium mx-2">/</span>
-        <span class="font-medium">Edit</span>
-    </h1>
+    <page-heading :page_title="page_title" :breadcrumbs="breadcrumbs"/>
     
     <div class="max-w-3xl bg-white rounded-md shadow overflow-hidden">
         <form @submit.prevent="update">
@@ -61,6 +55,13 @@ export default {
                 file_number: this.case_file.file_number,
                 client_id: this.case_file.client_id,
             }),
+            page_title: 'Edit File',
+            breadcrumbs: [
+                { link: '/lawyer', label: 'Dashboard'},
+                { link: '/lawyer/case-files/', label: 'Case Files'},
+                { link: `/lawyer/case-files/${this.case_file.id}`, label: this.case_file.file_number},
+                { link: null, label: 'Edit'},
+            ],
         }
     },
     methods: {

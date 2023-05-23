@@ -87,13 +87,11 @@ Route::group(['middleware' => 'auth'], function() {
 
         Route::scopeBindings()->prefix('/case-files/{case_file}')->group(function() {
             Route::prefix('/quotation')->group(function() {
-                Route::get('create', [QuotationController::class, 'create'])->name('quotation.create');
-                Route::post('/', [QuotationController::class, 'store'])->name('quotation.store');
                 Route::get('/pdf', [QuotationController::class, 'viewPDF']);
                 Route::get('/email', [QuotationController::class, 'sendEmail']);
             });
 
-            Route::singleton('quotation', QuotationController::class);
+            Route::singleton('quotation', QuotationController::class)->creatable();
 
             Route::resource('disbursement-items', DisbursementItemController::class);
             Route::resource('invoices', InvoiceController::class);

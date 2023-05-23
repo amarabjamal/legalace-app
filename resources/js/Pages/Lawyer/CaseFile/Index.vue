@@ -1,9 +1,7 @@
 <template>
     <Head title="Manage users" />
-
-    <h1 class="mb-6 text-xl font-bold">
-        <span class="font-medium">Case Files</span>
-    </h1>
+    
+    <page-heading :page_title="page_title" :breadcrumbs="breadcrumbs"/>
 
     <div class="flex items-center justify-between mb-6">
         <search-filter v-model="form.search" class="mr-4 w-full max-w-md"  @reset="reset"></search-filter>
@@ -78,7 +76,7 @@
     </div>
 
     <div>
-      <pagination :links="case_files.links" :from="case_files.from" :to="case_files.to" :total="case_files.total"/>
+    <pagination :links="case_files.links" :from="case_files.from" :to="case_files.to" :total="case_files.total"/>
     </div>
 </template>
 
@@ -90,13 +88,15 @@ import Pagination from '../Shared/Pagination';
 import throttle from 'lodash/throttle';
 import pickBy from 'lodash/pickBy'
 import mapValues from 'lodash/mapValues';
+import PageHeading from "../../../Shared/PageHeading";
 
 export default { 
-    components: { 
-        SearchFilter,
-        Icon,
-        Pagination,
-    },
+    components: {
+    SearchFilter,
+    Icon,
+    Pagination,
+    PageHeading,
+},
     layout: Layout,
     props: {
         filters: Object,
@@ -106,7 +106,12 @@ export default {
         return {
             form: {
                 search: null,
-            }
+            },
+            page_title: 'Case Files',
+            breadcrumbs: [
+                { link: '/lawyer', label: 'Dashboard'},
+                { link: null, label: 'Case Files'},
+            ],
         }
     },
     watch: {

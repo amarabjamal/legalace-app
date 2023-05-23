@@ -1,11 +1,7 @@
 <template>
     <Head title="Create Case File" />
 
-    <h1 class="mb-6 text-xl font-bold">
-        <Link class="text-blue-500 hover:text-blue-600" href="/lawyer/case-files/">Case Files</Link>
-        <span class="text-blue-500 font-medium mx-2">/</span>
-        <span class="font-medium">Create</span>
-    </h1>
+    <page-heading :page_title="page_title" :breadcrumbs="breadcrumbs"/>
     
     <div class="max-w-3xl bg-white rounded-md shadow overflow-hidden">
         <form @submit.prevent="store">
@@ -60,6 +56,12 @@ export default {
                 client_id: null,
                 lawyer_id: null,
             }),
+            page_title: 'Create File',
+            breadcrumbs: [
+                { link: '/lawyer', label: 'Dashboard'},
+                { link: '/lawyer/case-files/', label: 'Case Files'},
+                { link: null, label: 'Create'},
+            ],
         }
     },
     methods: {

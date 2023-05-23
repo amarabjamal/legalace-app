@@ -63,6 +63,8 @@ class DisbursementItemController extends Controller
     {
         $data =  $request->all();
         $data['amount'] = Money::of($data['amount'], 'MYR');
+        $filePath = '';
+        $fileName = '';
         
         try {
             DB::beginTransaction();

@@ -1,11 +1,7 @@
 <template>
     <Head title="View Case File" />
 
-    <h1 class="mb-6 text-xl font-bold">
-        <Link class="text-blue-500 hover:text-blue-600" href="/lawyer/case-files/">Case Files</Link>
-        <span class="text-blue-500 font-medium mx-2">/</span>
-        <span class="font-medium">{{ case_file.file_number }}</span>
-    </h1>
+    <page-heading :page_title="page_title" :breadcrumbs="breadcrumbs"/>
 
     <div class="card">
         <div class="card-header flex justify-between">
@@ -110,6 +106,16 @@ export default {
     components: { Head, Pagination, Link },
     props: {
         'case_file' : Object,
+    },
+    data() {
+        return {
+            page_title: 'Case File: ' + this.case_file.file_number,
+            breadcrumbs: [
+                { link: '/lawyer', label: 'Dashboard'},
+                { link: '/lawyer/case-files/', label: 'Case Files'},
+                { link: null, label: this.case_file.file_number},
+            ],
+        }
     },
     layout: Layout,
 };

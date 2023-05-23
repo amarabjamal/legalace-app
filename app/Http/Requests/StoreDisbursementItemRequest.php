@@ -29,7 +29,7 @@ class StoreDisbursementItemRequest extends FormRequest
         $this->merge([
             'company_id' => Auth()->user()->company->id,
             'status' => DisbursementItemStatusEnum::Recorded->value,
-            'case_file_id' => $this->casefile->id,
+            'case_file_id' => $this->case_file->id,
         ]);
     }
 
