@@ -37,6 +37,10 @@ class Money implements CastsAttributes
      */
     public function get($model, string $key, $value, array $attributes)
     {
+        if($attributes[$this->priceField] == null) {
+            return null;
+        }
+        
         if (!$this->useMinor) {
             return BrickMoney::of($attributes[$this->priceField], $this->currency);
         }

@@ -33,7 +33,7 @@
                                         {{ added_item.description }}
                                     </div>
                                 </td>
-                                <td class="pr-0 pl-8 py-5 align-top text-right">{{ added_item.amount }}</td>
+                                <td class="pr-0 pl-8 py-5 align-top text-right tabular-nums">{{ added_item.amount }}</td>
                                 <td class="max-w-0 px-0 py-5 align-top">
                                     <div class="flex justify-center">
                                         <button type="button" @click="removeItem(index)"><icon name="close-circle-fill" class="block w-5 h-5 fill-gray-400" /></button>    
@@ -53,19 +53,19 @@
                         </tbody>
                         <tfoot>
                             <tr>
-                                <th scope="row" class="px-0 pb-0 font-normal text-gray-700 sm:hidden">Subtotal</th>
-                                <th scope="row" colspan="3" class="hidden px-0 pb-0 pt-6 text-right font-normal text-gray-700 sm:table-cell">Subtotal</th>
+                                <th scope="row" colspan="2" class="px-0 pb-0 sm:pt-6 sm:text-right font-normal text-gray-700">Subtotal</th>
                                 <td colspan="1" class="pb-0 pl-8 pr-0 pt-6 text-right text-gray-900 tabular-nums">RM 1,000.00</td>
+                                <td></td>
                             </tr>
                             <tr>
-                                <th scope="row" class="pt-4 font-normal text-gray-700/100 sm:hidden">Tax</th>
-                                <th scope="row" colspan="3" class="hidden pt-4 text-right font-normal text-gray-700 sm:table-cell">Tax</th>
+                                <th scope="row" colspan="2" class="pt-4 sm:text-right font-normal text-gray-700">Tax</th>
                                 <td colspan="1" class="pb-0 pl-8 pr-0 pt-4 text-right tabular-nums text-gray-900">RM 1,000.00</td>
+                                <td></td>
                             </tr>
                             <tr>
-                                <th scope="row" class="pt-4 font-semibold text-gray-900/10 sm:hidden">Total</th>
-                                <th scope="row" colspan="3" class="hidden pt-4 text-right font-semibold text-gray-900 sm:table-cell">Total</th>
+                                <th scope="row" colspan="2" class="pt-4 sm:text-right font-semibold text-gray-900">Total</th>
                                 <td colspan="1" class="pb-0 pl-8 pr-0 pt-4 text-right font-semibold tabular-nums text-gray-900">RM 1,000.00</td>
+                                <td></td>
                             </tr>
                         </tfoot>
                     </table>
@@ -154,16 +154,30 @@ export default {
         addItem(id) {
             if(this.added_items.find((item) => item.id === id)) {
                 alert('Item already added to the list.');
-            } else {
+            } else if(this.items.find((item) => item.id === id) != undefined) {
                 const new_item = this.items.find((item) => item.id === id);
                 this.added_items.push(new_item);
-                this.form.items_id.push(id);
             }
         },
         removeItem(index) {
             this.added_items.splice(index, 1);
-            this.form.items_id.splice(index, 1);
+            // this.form.items_id.splice(index, 1);
         }
     },
+    watch: {
+        added_items: {
+            handler() {
+                this.form.items_id = this.added_items.map(({id}) => id);
+            },
+            deep: true,
+        },
+    },
+    beforeMount() {
+        if(this.form.items_id.length !== 0) {
+            this.form.items_id.forEach(id => {
+                this.addItem(id);
+            });
+        }
+    }
 };
 </script>

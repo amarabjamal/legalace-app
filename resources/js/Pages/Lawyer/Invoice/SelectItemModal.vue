@@ -57,7 +57,7 @@
                                                     </td>
                                                     <td class="flex justify-center py-5 align-top">
                                                         <button v-if="isNotAdded(item.id)" type="button" @click="addItem(item.id)">Add</button>   
-                                                        <span v-else class="italic text-sm text-gray-400">Added</span>
+                                                        <span v-else class="italic text-sm text-gray-400 mt-1">Added</span>
                                                     </td>
                                                 </tr>
                                             </tbody>

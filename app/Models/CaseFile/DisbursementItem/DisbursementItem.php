@@ -6,6 +6,7 @@ use App\Casts\Money;
 use App\Enums\DisbursementItemFundTypeEnum;
 use App\Enums\DisbursementItemStatusEnum;
 use App\Models\CaseFile;
+use App\Models\CaseFile\Invoices\Invoice;
 use App\Traits\HasCompanyScope;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -65,6 +66,11 @@ class DisbursementItem extends Model
        return $this->belongsTo(DisbursementItemType::class, 'record_type_id', 'id');
     }
 
+    public function invoice()
+    {
+        return $this->belongsTo(Invoice::class, 'invoice_id', 'id');
+    }
+
     public function scopeOrderByDate($query) 
     {
         $query->orderBy('date', 'desc');
@@ -78,6 +84,11 @@ class DisbursementItem extends Model
                     ->orWhere('description', 'like', '%'.$search.'%');
             });
         });
+    }
+
+    public function scopeRecorded($query)
+    {
+        $query->where('status', '=', DisbursementItemStatusEnum::Recorded->value);
     }
 
     public function isDeletable() : bool 
