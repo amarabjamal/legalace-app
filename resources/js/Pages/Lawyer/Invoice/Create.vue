@@ -19,6 +19,7 @@
                                 <th class="w-12">No.</th>
                                 <th>Item</th>
                                 <th class="w-40 text-right">Amount</th>
+                                <th class="w-16"></th>
                             </tr>
                         </thead>
                         <tbody>
@@ -33,6 +34,11 @@
                                     </div>
                                 </td>
                                 <td class="pr-0 pl-8 py-5 align-top text-right">{{ added_item.amount }}</td>
+                                <td class="max-w-0 px-0 py-5 align-top">
+                                    <div class="flex justify-center">
+                                        <button type="button" @click="removeItem(index)"><icon name="close-circle-fill" class="block w-5 h-5 fill-gray-400" /></button>    
+                                    </div>
+                                </td>
                             </tr>
                             <tr v-if="added_items.length === 0" class="border-b border-gray-100/100 bg-gray-100">
                                 <td class="text-center py-4 text-gray-500" colspan="100">No items in the list</td>
@@ -63,7 +69,7 @@
             </form>
         </div>
         
-        <div class="w-full max-w-3xl h-fit xl:w-1/3 bg-gray-100 ring-gray-900 rounded-md shadow overflow-hidden mt-5 xl:mt-0 xl:ml-5 p-8">
+        <div class="hidden w-full max-w-3xl h-fit xl:w-1/3 bg-gray-100 ring-gray-900 rounded-md shadow overflow-hidden mt-5 xl:mt-0 xl:ml-5 p-8">
             Total RM 9,999.99
         </div>
     </div>
@@ -134,6 +140,9 @@ export default {
                 const new_item = this.items.find((item) => item.id === id);
                 this.added_items.push(new_item);
             }
+        },
+        removeItem(index) {
+            this.added_items.splice(index, 1);
         }
     },
 };
