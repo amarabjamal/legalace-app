@@ -1,0 +1,140 @@
+<template>
+    <Head title="Create Invoice" />
+
+    <page-heading :page_title="page_title" :breadcrumbs="breadcrumbs"/>
+    
+    <div class="flex flex-col xl:flex-row">
+        <div class="max-w-3xl bg-white rounded-md shadow overflow-hidden">
+            <form @submit.prevent="store">
+                <div class="flex flex-wrap -mb-8 -mr-6 p-8">
+                    <div class="w-full">
+                        <text-input v-model="form.invoice_number" :error="form.errors.invoice_number" class="pb-8 pr-6 w-full lg:w-1/2" label="Invoice Number" required/>
+                    </div>
+                    <date-input v-model="form.issued_at" :error="form.errors.issued_at" class="pb-8 pr-6 w-full lg:w-1/2" label="Invoice Date" required/>
+                    <date-input v-model="form.due_at" :error="form.errors.due_at" class="pb-8 pr-6 w-full lg:w-1/2" label="Due Date" required/>
+    
+                    <table class="w-full my-4 whitespace-nowrap text-left text-sm leading-6 mr-6">
+                        <thead class="border-b border-gray-200/100 text-gray-900/100">
+                            <tr>
+                                <th class="w-12">No.</th>
+                                <th>Item</th>
+                                <th class="w-40 text-right">Amount</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr v-for="(added_item, index) in added_items" :key="index" class="border-b border-gray-100/100">
+                                <td class="max-w-0 px-0 py-5 align-top">{{ index + 1 }}</td>
+                                <td class="max-w-0 px-0 py-5 align-top">
+                                    <div class="truncate font-medium text-gray-900/100">
+                                        {{ added_item.name }}
+                                    </div>
+                                    <div class="truncate text-gray-500/100">
+                                        {{ added_item.description }}
+                                    </div>
+                                </td>
+                                <td class="pr-0 pl-8 py-5 align-top text-right">{{ added_item.amount }}</td>
+                            </tr>
+                            <tr v-if="added_items.length === 0" class="border-b border-gray-100/100 bg-gray-100">
+                                <td class="text-center py-4 text-gray-500" colspan="100">No items in the list</td>
+                            </tr>
+                            <tr>
+                                <td class="py-5" colspan="100">
+                                   <div class="w-100 flex justify-center">
+                                        <button type="button" @click="openModal">Add Item</button>
+                                   </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+    
+                    <textarea-input v-model="form.notes" :error="form.errors.notes" class="pb-8 pr-6 w-full" label="Notes"/>
+                </div>
+                <div class="flex items-center justify-end px-8 py-4 bg-gray-50 border-t border-gray-100">
+                    <Link 
+                        :href="`/lawyer/case-files/${this.case_file.id}/invoices`"
+                        as="button"  
+                        class="mr-2 text-gray-500 focus:outline-none hover:text-blue-700 hover:underline focus:z-10 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center"
+                        :disabled="form.processing"
+                        >
+                        Cancel
+                    </Link>
+                    <loading-button :loading="form.processing" class="btn-indigo" type="submit">Create Invoice</loading-button>
+                </div>
+            </form>
+        </div>
+        
+        <div class="w-full max-w-3xl h-fit xl:w-1/3 bg-gray-100 ring-gray-900 rounded-md shadow overflow-hidden mt-5 xl:mt-0 xl:ml-5 p-8">
+            Total RM 9,999.99
+        </div>
+    </div>
+
+
+    <select-item-modal :isOpen="isOpen" @close-modal="closeModal" @add-item="addItem" :items="items" :addedItems="added_items"/>
+</template>
+
+<script>
+import Layout from '../Shared/Layout';
+import TextInput from '../../../Shared/TextInput';
+import DateInput from '../../../Shared/DateInput';
+import TextareaInput from '../../../Shared/TextareaInput';
+import SelectInput from '../../../Shared/SelectInput';
+import LoadingButton from '../../../Shared/LoadingButton';
+import SelectItemModal from './SelectItemModal';
+
+export default { 
+    components: { 
+        TextInput,
+        DateInput,
+        TextareaInput,
+        SelectInput,
+        LoadingButton,
+        SelectItemModal,
+    },
+    layout: Layout,
+    props: {
+        case_file: Object,
+        invoice_number: String,
+        items: Array,
+    },
+    remember: 'form',
+    data() {
+        return {
+            form: this.$inertia.form({
+                invoice_number: this.invoice_number,
+                issued_at: null,
+                due_at: null,
+                notes: null,
+            }),
+            page_title: 'Create Invoice',
+            breadcrumbs: [
+                { link: '/lawyer', label: 'Dashboard'},
+                { link: '/lawyer/case-files/', label: 'Case Files'},
+                { link: `/lawyer/case-files/${this.case_file.id}`, label: this.case_file.file_number},
+                { link: `/lawyer/case-files/${this.case_file.id}/invoices`, label: 'Invoices'},
+                { link: null, label: 'Create'},
+            ],
+            isOpen: false,
+            added_items: [],
+        }
+    },
+    methods: {
+        store() {
+            this.form.post(`/lawyer/case-files/${this.case_file.id}/invoices`);
+        },
+        openModal() {
+            this.isOpen = true;
+        },
+        closeModal() {
+            this.isOpen = false;
+        },
+        addItem(id) {
+            if(this.added_items.find((item) => item.id === id)) {
+                alert('Item already added to the list.');
+            } else {
+                const new_item = this.items.find((item) => item.id === id);
+                this.added_items.push(new_item);
+            }
+        }
+    },
+};
+</script>
