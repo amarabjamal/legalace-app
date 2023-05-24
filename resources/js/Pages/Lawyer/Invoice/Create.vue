@@ -54,17 +54,17 @@
                         <tfoot>
                             <tr>
                                 <th scope="row" colspan="2" class="px-0 pb-0 sm:pt-6 sm:text-right font-normal text-gray-700">Subtotal</th>
-                                <td colspan="1" class="pb-0 pl-8 pr-0 pt-6 text-right text-gray-900 tabular-nums">RM 1,000.00</td>
+                                <td colspan="1" class="pb-0 pl-8 pr-0 pt-6 text-right text-gray-900 tabular-nums">{{ $filters.currency(subtotal) }}</td>
                                 <td></td>
                             </tr>
                             <tr>
-                                <th scope="row" colspan="2" class="pt-4 sm:text-right font-normal text-gray-700">Tax</th>
-                                <td colspan="1" class="pb-0 pl-8 pr-0 pt-4 text-right tabular-nums text-gray-900">RM 1,000.00</td>
+                                <th scope="row" colspan="2" class="pt-4 sm:text-right font-normal text-gray-700">Tax (0%)</th>
+                                <td colspan="1" class="pb-0 pl-8 pr-0 pt-4 text-right tabular-nums text-gray-900">{{ $filters.currency(tax) }}</td>
                                 <td></td>
                             </tr>
                             <tr>
                                 <th scope="row" colspan="2" class="pt-4 sm:text-right font-semibold text-gray-900">Total</th>
-                                <td colspan="1" class="pb-0 pl-8 pr-0 pt-4 text-right font-semibold tabular-nums text-gray-900">RM 1,000.00</td>
+                                <td colspan="1" class="pb-0 pl-8 pr-0 pt-4 text-right font-semibold tabular-nums text-gray-900">{{ $filters.currency(grandTotal) }}</td>
                                 <td></td>
                             </tr>
                         </tfoot>
@@ -170,6 +170,22 @@ export default {
                 this.form.items_id = this.added_items.map(({id}) => id);
             },
             deep: true,
+        },
+    },
+    computed: {
+        subtotal() {
+            let total = 0;
+            this.added_items.forEach((item) => {
+                total += item.amount_numeric;
+            });
+
+            return total;
+        },
+        tax() {
+            return 0;
+        },
+        grandTotal() {
+            return this.subtotal + this.tax;
         },
     },
     beforeMount() {

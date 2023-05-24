@@ -20,13 +20,27 @@ window.addEventListener('popstate', (event) => {
 createInertiaApp({
   resolve: name => require(`./Pages/${name}`),
   setup({ el, App, props, plugin }) {
-    createApp({ render: () => h(App, props) })
-      .use(plugin)
-      .component("Link", Link)
-      .component("Head", Head)
-      .component("Icon", Icon)
-      .component("PageHeading", PageHeading)
-      .mount(el)
+      const app = createApp({ render: () => h(App, props) })
+        .use(plugin)
+        .component("Link", Link)
+        .component("Head", Head)
+        .component("Icon", Icon)
+        .component("PageHeading", PageHeading);
+
+      app.config.globalProperties.$filters = {
+        currency(value) {
+          if (typeof value !== "number") {
+            return value;
+          }
+          var formatter = new Intl.NumberFormat('en-MY', {
+              style: 'currency',
+              currency: 'MYR'
+          });
+          return formatter.format(value);
+          },
+      }
+
+      app.mount(el)
   },
   title: (title) => title ? `${title} - Legal Ace` : 'Legal Ace',
 })
