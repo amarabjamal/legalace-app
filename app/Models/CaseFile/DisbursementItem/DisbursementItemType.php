@@ -5,11 +5,11 @@ namespace App\Models\CaseFile\DisbursementItem;
 use App\Traits\HasCompanyScope;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class DisbursementItemType extends Model
 {
-    use HasFactory;
-    use HasCompanyScope;
+    use HasFactory, HasCompanyScope, SoftDeletes;
 
     protected $table = 'disbursement_item_types';
     protected $primaryKey= 'id';
