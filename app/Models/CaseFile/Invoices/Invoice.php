@@ -6,13 +6,19 @@ use App\Casts\Money;
 use App\Enums\InvoiceStatusEnum;
 use App\Models\CaseFile;
 use App\Models\CaseFile\DisbursementItem\DisbursementItem;
+use App\Models\Company;
+use App\Models\User;
 use App\Traits\HasCompanyScope;
+use Brick\Math\RoundingMode;
+use Brick\Money\Money as BrickMoney;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Invoice extends Model
 {
-    use HasFactory, HasCompanyScope;
+    use HasFactory, HasCompanyScope, SoftDeletes;
 
     protected $table = 'invoices';
     protected $primaryKey= 'id';
@@ -46,9 +52,35 @@ class Invoice extends Model
         6 => 'Uncollectible',
     ];
 
+
+    public function getFormattedInvoiceDateAttribute()
+    {
+        return Carbon::parse($this->issued_at)->format('Y/m/d');
+    }
+
+    public function getFormattedDueDateAttribute()
+    {
+        return Carbon::parse($this->due_at)->format('Y/m/d');
+    }
+
+    public function getFormattedCreatedAtAttribute()
+    {
+        return $this->created_at->format('Y/m/d');
+    }
+
+    public function company()
+    {
+        return $this->belongsTo(Company::class, 'company_id', 'id');
+    }
+
     public function caseFile() 
     {
         return $this->belongsTo(CaseFile::class, 'case_file_id', 'id');
+    }
+
+    public function createdBy()
+    {
+        return $this->belongsTo(User::class, 'created_by', 'id');
     }
 
     public function disbursementItems()
@@ -64,6 +96,43 @@ class Invoice extends Model
             });
         });
     }
+
+    public function calculateSubtotal() 
+    {
+        $amount = $this->disbursementItems()->sum('amount');
+
+        return BrickMoney::of($amount, 'MYR');
+    }
+
+    public function calculateTaxRate() {
+        return 0;
+    }
+
+    public function calculateTax() 
+    {
+        $taxRate = $this->calculateTaxRate();
+
+        return $this->calculateSubtotal()->multipliedBy($taxRate, RoundingMode::UP);
+    }
+
+    public function calculateTotal() 
+    {
+        $subtotal = $this->calculateSubtotal();
+        $tax = $this->calculateTax();
+
+        return  $subtotal->plus($tax);
+    }
+    
+    public function isEditable() : bool
+    {
+        return $this->status->value == InvoiceStatusEnum::Draft->value;
+    }
+
+    public function isDeletable() : bool
+    {
+        return $this->status->value == InvoiceStatusEnum::Draft->value;
+    }
+
 
     public static function getNewInvoiceNumber() : string
     {
