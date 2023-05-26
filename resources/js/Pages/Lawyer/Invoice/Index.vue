@@ -16,11 +16,13 @@
         <thead class="bg-gray-50 border-b-2 border-gray-200">
           <tr class="text-left text-sm tracking-wide font-semibold">
               <th class="w-32 py-4 px-6">Created At</th>
-            <th class="py-4 px-6">Invoice Number</th>
+            <th class="w-32 py-4 px-6">Invoice Number</th>
             <th class="w-32 py-4 px-6">Invoice Date</th>
             <th class="w-32 py-4 px-6">Due Date</th>
             <th class="w-24 py-4 px-6">Status</th>
+            <th class="w-24 py-4 px-6">Amount</th>
             <th class="py-4 px-6">Payment Method</th>
+            <th class="w-24 py-4 px-6">Creator</th>
             <th class="py-4 px-6"></th>
           </tr>
         </thead>
@@ -43,12 +45,19 @@
                 {{ invoice.status }}
               </span>
             </td>
+            <td class="border-t px-6 py-4 whitespace-nowrap ">
+              {{ invoice.total }}
+            </td>
             <td class="border-t px-6 py-4 whitespace-nowrap">
               <span v-if="invoice.desc == null" class="text-gray-400">None</span>
               {{  }}
             </td>
+            <td class="border-t px-6 py-4 whitespace-nowrap ">
+              {{ invoice.created_by.name }}
+            </td>
             <td class="w-px border-t px-6 py-4 whitespace-nowrap">
-              <Link class="flex items-center px-2" :href="`/lawyer/case-files/${case_file.id}/invoices/${invoice.id}/edit`" tabindex="-1">
+              <button class="text-red-600 hover:underline" tabindex="-1" type="button" @click="destroy(invoice.id)">Delete</button>
+              <Link class="flex items-center px-2" :href="`/lawyer/case-files/${case_file.id}/invoices/${invoice.id}`" tabindex="-1">
                 <icon name="cheveron-right" class="block w-5 h-5 fill-gray-400" />
               </Link>
             </td>
@@ -112,6 +121,11 @@ export default {
     methods: {
         reset() {
           this.form = mapValues(this.form, () => null);
+        },
+        destroy(id) {
+          if(confirm('Are you sure you want to delete this invoice?')) {
+                this.$inertia.delete(`/lawyer/case-files/${this.case_file.id}/invoices/${id}`);
+          }
         },
     },
 }
