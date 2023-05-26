@@ -1,13 +1,7 @@
 <template>
     <Head title="Disbursement Item" />
 
-    <h1 class="mb-6 text-xl font-bold">
-        <Link class="text-blue-500 hover:text-blue-600" href="/lawyer/case-files/">Case Files</Link>
-        <span class="text-blue-500 font-medium mx-2">/</span>
-        <Link class="text-blue-500 hover:text-blue-600" :href="`/lawyer/case-files/${case_file.id}`">{{ case_file.file_number }}</Link>
-        <span class="text-blue-500 font-medium mx-2">/</span>
-        <span class="font-medium">Disbursement Items</span>
-    </h1>
+    <page-heading :page_title="page_title" :breadcrumbs="breadcrumbs"/>
 
     <div class="flex items-center justify-between mb-6">
         <search-filter v-model="form.search" class="mr-4 w-full max-w-md"  @reset="reset"></search-filter>
@@ -104,6 +98,13 @@ export default {
         form: {
             search: this.filters.search,
         },
+        page_title: 'Disbursement Items',
+        breadcrumbs: [
+            { link: '/lawyer', label: 'Dashboard'},
+            { link: '/lawyer/case-files/', label: 'Case Files'},
+            { link: `/lawyer/case-files/${this.case_file.id}`, label: this.case_file.file_number},
+            { link: null, label: 'Items'},
+        ],
       }
     },
     watch: {

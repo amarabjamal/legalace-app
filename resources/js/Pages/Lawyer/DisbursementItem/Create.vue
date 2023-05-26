@@ -1,15 +1,7 @@
 <template>
     <Head title="Disbursement Item" />
 
-    <h1 class="mb-6 text-xl font-bold">
-        <Link class="text-blue-500 hover:text-blue-600" href="/lawyer/case-files/">Case Files</Link>
-        <span class="text-blue-500 font-medium mx-2">/</span>
-        <Link class="text-blue-500 hover:text-blue-600" :href="`/lawyer/case-files/${case_file.id}`">{{ case_file.file_number }}</Link>
-        <span class="text-blue-500 font-medium mx-2">/</span>
-        <Link class="text-blue-500 hover:text-blue-600" :href="`/lawyer/case-files/${case_file.id}/disbursement-items`">Disbursement Items</Link>
-        <span class="text-blue-500 font-medium mx-2">/</span>
-        <span class="font-medium">Create</span>
-    </h1>
+    <page-heading :page_title="page_title" :breadcrumbs="breadcrumbs"/>
 
     <div class="max-w-3xl bg-white rounded-md shadow overflow-hidden">
         <form @submit.prevent="store">
@@ -98,6 +90,14 @@ export default {
                 // If mask is false, outputs the number to the model. Otherwise outputs the masked string.
                 masked: false
             },
+            page_title: 'Create Item',
+            breadcrumbs: [
+                { link: '/lawyer', label: 'Dashboard'},
+                { link: '/lawyer/case-files/', label: 'Case Files'},
+                { link: `/lawyer/case-files/${this.case_file.id}`, label: this.case_file.file_number},
+                { link: `/lawyer/case-files/${this.case_file.id}/disbursement-items`, label: 'Items'},
+                { link: null, label: 'Create'},
+            ],
         }
     },
     directives: {money: VMoney},
