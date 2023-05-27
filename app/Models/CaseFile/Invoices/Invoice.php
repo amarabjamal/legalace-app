@@ -136,7 +136,7 @@ class Invoice extends Model
 
     public static function getNewInvoiceNumber() : string
     {
-        $number =Invoice::where('invoice_number', 'like', 'INV-%')->where('company_id', '=', auth()->user()->company_id)->count();
+        $number =Invoice::where('invoice_number', 'like', 'INV-%')->where('company_id', '=', auth()->user()->company_id)->withTrashed()->count();
 
         do {
             $number++;

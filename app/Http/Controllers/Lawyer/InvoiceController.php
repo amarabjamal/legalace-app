@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Lawyer;
 use App\Enums\DisbursementItemStatusEnum;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreInvoiceRequest;
+use App\Http\Requests\UpdateInvoiceRequest;
 use App\Jobs\CalculateInvoiceTotal;
 use App\Models\CaseFile;
 use App\Models\CaseFile\DisbursementItem\DisbursementItem;
@@ -49,7 +50,11 @@ class InvoiceController extends Controller
                 'id' => $case_file->id,
                 'file_number' => $case_file->file_number,
             ],
-            'invoice_number' => Invoice::getNewInvoiceNumber(),
+            'invoice' => [
+                'company' => auth()->user()->company->only('name', 'address'),
+                'client' => $case_file->client->only('name', 'address'),
+                'number' => Invoice::getNewInvoiceNumber(),
+            ],
             'items' => $case_file->disbursementItems()->recorded()->get(['id', 'name', 'description', 'amount'])->map(fn ($item) => [
                 'id' => $item->id,
                 'name' => $item->name,
@@ -100,6 +105,7 @@ class InvoiceController extends Controller
     {
         if($invoice->subtotal == null) {
             CalculateInvoiceTotal::dispatchSync($invoice);
+            $this->show($case_file, $invoice);
         }
 
         return inertia('Lawyer/Invoice/Show', [
@@ -108,6 +114,7 @@ class InvoiceController extends Controller
                 'file_number' => $case_file->file_number,
             ],
             'invoice' => [
+                'id' => $invoice->id,
                 'company' => $invoice->company->only('name', 'address'),
                 'client' => $invoice->caseFile->client->only('name', 'address'),
                 'number' => $invoice->invoice_number,
@@ -129,6 +136,84 @@ class InvoiceController extends Controller
                 ]
             ),
         ]);
+    }
+
+    public function edit(CaseFile $case_file, Invoice $invoice)
+    {
+        if(!$invoice->isEditable()) 
+        {
+            return redirect()->route('lawyer.invoices.show', ['case_file' => $case_file, 'invoice' => $invoice])->with('infoMessage', 'This invoice cannot be edited since it is no longer a draft.');
+        }
+
+        return inertia('Lawyer/Invoice/Edit', [
+            'case_file' => [ 
+                'id' => $case_file->id,
+                'file_number' => $case_file->file_number,
+            ],
+            'invoice' => [
+                'id' => $invoice->id,
+                'company' => $invoice->company->only('name', 'address'),
+                'client' => $invoice->caseFile->client->only('name', 'address'),
+                'number' => $invoice->invoice_number,
+                'invoice_date' => $invoice->issued_at,
+                'due_date' => $invoice->due_at,
+                'notes' => $invoice->notes,
+                'items_id' => $invoice->disbursementItems->pluck('id'),
+            ],
+            'items' => $case_file->disbursementItems()->recorded()->orWhere('invoice_id', $invoice->id)->get(['id', 'name', 'description', 'amount'])->map(fn ($item) => [
+                'id' => $item->id,
+                'name' => $item->name,
+                'description' => $item->description,
+                'amount' => $item->amount->formatTo('en_MY'),
+                'amount_numeric' => $item->amount->getAmount()->toFloat(),
+            ]),
+        ]);
+    }
+
+    public function update(UpdateInvoiceRequest $request, CaseFile $case_file, Invoice $invoice)
+    {
+        try {
+            $items = DisbursementItem::whereIn('id', $request->items_id)->get();
+
+             //Check the status for each item equals recorded
+            foreach($items as $item) {
+                if  (
+                        ($item->status->value != DisbursementItemStatusEnum::Recorded->value
+                        || $item->invoice_id != null) && $item->invoice_id != $invoice->id
+                    ) 
+                {
+                    return back()->with('errorMessage', $item->name . ' has been added to other invoice please remove it from the list.');
+                }
+            }
+
+            DB::beginTransaction();
+
+            $invoice->update($request->except('items_id'));
+
+            $removedItems = $invoice->disbursementItems()->whereNotIn('id', $request->items_id)->get();
+            if($removedItems->isNotEmpty())
+            {
+                $removedItems->toQuery()->update(['status' => DisbursementItemStatusEnum::Recorded]);
+                foreach($removedItems as $removedItem) {
+                    $removedItem->invoice()->dissociate();
+                    $removedItem->save();
+                }
+            }
+
+            $invoice->disbursementItems()->saveMany($items);
+
+            $items->toQuery()->update(['status' => DisbursementItemStatusEnum::DraftedForInvoice]);
+            
+            DB::commit();
+            
+            CalculateInvoiceTotal::dispatchSync($invoice);
+            
+            return redirect()->route('lawyer.invoices.show', ['case_file' => $case_file, 'invoice' => $invoice])->with('successMessage', 'Successfully updated the invoice.');
+        } catch(\Exception $e) {
+            DB::rollBack();
+
+            return back()->with('errorMessage', 'Failed: ' . $e->getMessage());
+        }
     }
 
     public function destroy(CaseFile $case_file, Invoice $invoice)

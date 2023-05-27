@@ -56,7 +56,6 @@
               {{ invoice.created_by.name }}
             </td>
             <td class="w-px border-t px-6 py-4 whitespace-nowrap">
-              <button class="text-red-600 hover:underline" tabindex="-1" type="button" @click="destroy(invoice.id)">Delete</button>
               <Link class="flex items-center px-2" :href="`/lawyer/case-files/${case_file.id}/invoices/${invoice.id}`" tabindex="-1">
                 <icon name="cheveron-right" class="block w-5 h-5 fill-gray-400" />
               </Link>
@@ -102,12 +101,12 @@ export default {
             search: this.filters.search,
         },
         page_title: 'Invoices',
-            breadcrumbs: [
-                { link: '/lawyer', label: 'Dashboard'},
-                { link: '/lawyer/case-files/', label: 'Case Files'},
-                { link: `/lawyer/case-files/${this.case_file.id}`, label: this.case_file.file_number},
-                { link: null, label: 'Invoices'},
-            ],
+        breadcrumbs: [
+            { link: '/lawyer', label: 'Dashboard'},
+            { link: '/lawyer/case-files/', label: 'Case Files'},
+            { link: `/lawyer/case-files/${this.case_file.id}`, label: this.case_file.file_number},
+            { link: null, label: 'Invoices'},
+        ],
       }
     },
     watch: {
@@ -121,11 +120,6 @@ export default {
     methods: {
         reset() {
           this.form = mapValues(this.form, () => null);
-        },
-        destroy(id) {
-          if(confirm('Are you sure you want to delete this invoice?')) {
-                this.$inertia.delete(`/lawyer/case-files/${this.case_file.id}/invoices/${id}`);
-          }
         },
     },
 }

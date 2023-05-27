@@ -3,7 +3,9 @@
 namespace App\Http\Requests;
 
 use App\Enums\InvoiceStatusEnum;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 use Illuminate\Validation\Rules\Enum;
 
 class StoreInvoiceRequest extends FormRequest
@@ -40,7 +42,7 @@ class StoreInvoiceRequest extends FormRequest
     public function rules()
     {
         return [
-            'invoice_number' => ['required', 'string', 'max:255'],
+            'invoice_number' => ['required', 'string', 'max:255', Rule::unique('invoices', 'invoice_number')->where(fn(Builder $query) => $query->where('company_id', auth()->user()->company->id))],
             'issued_at' => ['required', 'date', 'after_or_equal:today'],
             'due_at' => ['required', 'date', 'after:issued_at'],
             'notes' => ['nullable', 'string', 'max:500'],
