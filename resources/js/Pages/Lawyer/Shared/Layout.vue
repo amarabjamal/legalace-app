@@ -219,7 +219,7 @@ export default {
     },
     components: { 
         Sidebar, 
-        FlashMessages 
+        FlashMessages,
     },
     props: {
         auth: Object,
