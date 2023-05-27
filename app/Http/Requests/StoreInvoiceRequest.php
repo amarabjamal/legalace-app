@@ -3,7 +3,7 @@
 namespace App\Http\Requests;
 
 use App\Enums\InvoiceStatusEnum;
-use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Query\Builder;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 use Illuminate\Validation\Rules\Enum;
