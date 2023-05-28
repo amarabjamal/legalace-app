@@ -4,18 +4,19 @@
         enter-active-class="duration-500"
         leave-active-class="duration-500"
         leave-to-class="translate-x-full opacity-0"
+        appear
     >
         <div v-if="show" :class="containerClass">
             <div class="shrink-0">
                 <component :is="iconComponent" :class="iconClass"/>
             </div>
-            <div class="flex-1 space-y-2">
+            <div class="flex-1 space-y-1">
                 <h2 :class="titleClass">{{ title }}</h2>
                 <div :class="contentClass"><slot /></div>
             </div>
             <div class="shrink-0">
                 <button @click="dismissToast" :class="buttonClass">
-                    <x-icon class="inline-block w-6 h-6"/>
+                    <x-icon class="w-6 h-6"/>
                 </button>
             </div>
         </div>
@@ -52,7 +53,7 @@ export default {
     },
     computed: {
         containerClass() {
-            return cva("flex p-4 rounded-md space-x-3", {
+            return cva("flex p-4 rounded-lg space-x-3 ring-black/[.05] shadow-lg", {
                 variants: {
                     intent: {
                         info:"bg-blue-100",
@@ -66,7 +67,7 @@ export default {
             })
         },
         iconClass() {
-            return cva("inline-block w-6 h-6", {
+            return cva("w-6 h-6", {
                 variants: {
                     intent: {
                         info:"text-blue-700",

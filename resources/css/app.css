@@ -1,6 +1,7 @@
 @import '../../node_modules/vue-multiselect/dist/vue-multiselect.min.css';
 @import 'global.css';
 @import 'form.css';
+@import 'table.css';
 @import 'button.css';
 @import 'sidebar.css';
 @tailwind base;

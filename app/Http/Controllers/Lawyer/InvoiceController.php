@@ -124,6 +124,8 @@ class InvoiceController extends Controller
                 'tax' => $invoice->tax_amount->formatTo('en-MY'),
                 'total' => $invoice->grand_total->formatTo('en-MY'),
                 'notes' => $invoice->notes,
+                'status_value' => $invoice->status->value,
+                'status_label' => Invoice::STATUS[$invoice->status->value],
                 'is' => [
                     'editable' => $invoice->isEditable(),
                 ],

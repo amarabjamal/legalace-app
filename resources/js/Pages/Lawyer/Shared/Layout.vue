@@ -210,6 +210,9 @@ import Sidebar from './Sidebar';
 import FlashMessages from '../../../Shared/FlashMessages';
 
 export default {
+    props: {
+        auth: Object,
+    },
     data() {
         return {
             isSidebarOpen: false,
@@ -220,9 +223,6 @@ export default {
     components: { 
         Sidebar, 
         FlashMessages,
-    },
-    props: {
-        auth: Object,
     },
     methods: {
         toggleSidebar() {

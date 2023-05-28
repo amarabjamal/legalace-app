@@ -4,23 +4,47 @@
     <page-heading :page_title="page_title" :breadcrumbs="breadcrumbs"/>
     
     <div class="flex flex-col xl:flex-row">
-        <div class="max-w-3xl bg-white rounded-md shadow overflow-hidden">
+        <div class="max-w-3xl bg-white rounded-md shadow-xl overflow-hidden">
             <div class="flex flex-wrap px-8 py-12">
                 <div class="flex justify-between items-center w-full mb-4">
-                    <div>
+                    <div class="flex flex-wrap items-center space-x-2">
                         <h2 class="text-base font-semibold text-gray-900"><span class="text-gray-500 font-medium">Invoice</span> {{ invoice.number }}</h2>
+                        <div v-if="invoice.status_value === 1" class="p-1.5 text-sm font-semibold uppercase tracking-wider text-red-600 border-2 border-red-600 rounded-lg">
+                            {{ invoice.status_label }}
+                        </div>
+                        <div v-else-if="invoice.status_value === 2" class="p-1.5 text-sm font-semibold uppercase tracking-wider text-blue-600 border-2 border-blue-600 rounded-lg">
+                            {{ invoice.status_label }}
+                        </div>
+                        <div v-else-if="invoice.status_value === 3" class="p-1.5 text-sm font-semibold uppercase tracking-wider text-green-600 border-2 border-green-600 rounded-lg">
+                            {{ invoice.status_label }}
+                        </div>
+                        <div v-else-if="invoice.status_value === 4" class="p-1.5 text-sm font-semibold uppercase tracking-wider text-red-600 border-2 border-red-600 rounded-lg">
+                            {{ invoice.status_label }}
+                        </div>
+                        <div v-else-if="invoice.status_value === 5" class="p-1.5 text-sm font-semibold uppercase tracking-wider text-gray-600 border-2 border-gray-600 rounded-lg">
+                            {{ invoice.status_label }}
+                        </div>
+                        <div v-else-if="invoice.status_value === 6" class="p-1.5 text-sm font-semibold uppercase tracking-wider text-yellow-600 border-2 border-yellow-600 rounded-lg">
+                            {{ invoice.status_label }}
+                        </div>
                     </div>
-                    <div>
-                        <button 
-                            type="button" 
-                            class="inline-flex items-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
+                    <div class="flex items-center space-x-2">
+                        <Link 
+                            :href="`/lawyer/case-files/${case_file.id}/invoices/${invoice.id}/edit`"
+                            as="button" 
+                            class="btn-primary"
                             v-if="invoice.is.editable"
                         >
-                            <svg class="-ml-0.5 mr-1.5 h-5 w-5 text-gray-400" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-                            <path d="M2.695 14.763l-1.262 3.154a.5.5 0 00.65.65l3.155-1.262a4 4 0 001.343-.885L17.5 5.5a2.121 2.121 0 00-3-3L3.58 13.42a4 4 0 00-.885 1.343z" />
-                            </svg>
+                            Change to Open
+                        </Link>
+                        <Link 
+                            :href="`/lawyer/case-files/${case_file.id}/invoices/${invoice.id}/edit`"
+                            as="button" 
+                            class="btn-secondary"
+                            v-if="invoice.is.editable"
+                        >
                             Edit
-                        </button>
+                        </Link>
                     </div>
                 </div>
 
@@ -114,16 +138,19 @@
 
                 <div class="flex flex-col mt-4 w-full">
                     <div class="text-gray-900 font-medium mb-3">Notes</div>
-                    <div class="bg-gray-50 text-gray-500 text-sm px-4 py-6 border border-dashed">
+                    <div class="bg-gray-50 text-gray-500 text-sm px-4 py-6 border border-dashed whitespace-pre-wrap">
                         {{ invoice.notes }}
                     </div>
                 </div>
             </div>
         </div>
         
-        <div class="hidden w-full max-w-3xl h-fit xl:w-1/3 bg-gray-100 ring-gray-900 rounded-md shadow overflow-hidden mt-5 xl:mt-0 xl:ml-5 p-8">
-            Total RM 9,999.99
-        </div>
+        <!-- <div class="w-full max-w-3xl h-fit xl:max-w-xs bg-gray-50 border-1 border-gray-100 shadow ring-gray-900 rounded-md overflow-hidden mt-5 xl:mt-0 xl:ml-5 py-6 px-4">
+            <div>
+                Invoice status: Draft
+                <button>Change status to open</button>
+            </div>
+        </div> -->
     </div>
 </template>
 

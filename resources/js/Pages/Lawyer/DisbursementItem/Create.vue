@@ -35,7 +35,7 @@
                 <file-input v-model="form.receipt" :error="form.errors.receipt" class="pb-8 pr-6 w-full lg:w-1/2" label="Receipt" accept=".jpg,.png,.pdf,.doc,.docx"/>
             </div>
             <div class="flex items-center justify-end px-8 py-4 bg-gray-50 border-t border-gray-100">
-                <loading-button :loading="form.processing" class="btn-indigo" type="submit">Create Item</loading-button>
+                <loading-button :loading="form.processing" class="btn-primary" type="submit">Create Item</loading-button>
             </div>
         </form>
     </div>

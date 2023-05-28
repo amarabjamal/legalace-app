@@ -23,7 +23,7 @@
                     >
                     Cancel
                 </Link>
-                <loading-button :loading="form.processing" class="btn-indigo" type="submit">Create File</loading-button>
+                <loading-button :loading="form.processing" class="btn-primary" type="submit">Create File</loading-button>
             </div>
         </form>
     </div>

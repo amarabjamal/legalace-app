@@ -1,11 +1,11 @@
 <template>
-    <Head title="Manage users" />
+    <Head title="Case Files" />
     
     <page-heading :page_title="page_title" :breadcrumbs="breadcrumbs"/>
 
     <div class="flex items-center justify-between mb-6">
         <search-filter v-model="form.search" class="mr-4 w-full max-w-md"  @reset="reset"></search-filter>
-        <Link class="btn-indigo" :href="`/lawyer/case-files/create`">
+        <Link class="btn-primary" :href="`/lawyer/case-files/create`">
             <span>Create</span>
             <span class="hidden md:inline">&nbsp;File</span>
         </Link>
@@ -39,7 +39,7 @@
                 </tr>
             </thead>
             <tbody>
-                <tr v-for="case_file in case_files.data" class="text-sm tetx-gray-700 hover:bg-gray-100 focus-within:bg-gray-100">
+                <tr v-for="case_file in case_files.data" class="text-sm text-gray-700 hover:bg-gray-100 focus-within:bg-gray-100">
                     <td class="border-t px-6 py-4 whitespace-nowrap">
                         {{ case_file.file_number }}
                     </td>
@@ -75,28 +75,24 @@
         </table>
     </div>
 
-    <div>
     <pagination :links="case_files.links" :from="case_files.from" :to="case_files.to" :total="case_files.total"/>
-    </div>
 </template>
 
 <script>
 import Layout from "../Shared/Layout";
 import SearchFilter from '../../../Shared/SearchFilter';
 import Icon from '../../../Shared/Icon';
-import Pagination from '../Shared/Pagination';
+import Pagination from '../../../Shared/Pagination';
 import throttle from 'lodash/throttle';
 import pickBy from 'lodash/pickBy'
 import mapValues from 'lodash/mapValues';
-import PageHeading from "../../../Shared/PageHeading";
 
 export default { 
     components: {
-    SearchFilter,
-    Icon,
-    Pagination,
-    PageHeading,
-},
+        SearchFilter,
+        Icon,
+        Pagination,
+    },
     layout: Layout,
     props: {
         filters: Object,
@@ -105,7 +101,7 @@ export default {
     data() {
         return {
             form: {
-                search: null,
+                search: this.filters.search,
             },
             page_title: 'Case Files',
             breadcrumbs: [

@@ -5,7 +5,7 @@
 
     <div class="flex items-center justify-between mb-6">
         <search-filter v-model="form.search" class="mr-4 w-full max-w-md"  @reset="reset"></search-filter>
-        <Link class="btn-indigo" :href="`/lawyer/case-files/${case_file.id}/invoices/create`">
+        <Link class="btn-primary" :href="`/lawyer/case-files/${case_file.id}/invoices/create`">
             <span>Create</span>
             <span class="hidden md:inline">&nbsp;Invoice</span>
         </Link>
@@ -77,7 +77,7 @@
 import Layout from '../Shared/Layout';
 import SearchFilter from '../../../Shared/SearchFilter';
 import Icon from '../../../Shared/Icon';
-import Pagination from '../Shared/Pagination';
+import Pagination from '../../../Shared/Pagination';
 import throttle from 'lodash/throttle';
 import pickBy from 'lodash/pickBy'
 import mapValues from 'lodash/mapValues';

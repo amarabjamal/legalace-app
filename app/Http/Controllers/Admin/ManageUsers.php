@@ -8,6 +8,7 @@ use App\Models\User;
 use App\Models\UserRole;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Request as FacadesRequest;
 use Illuminate\Validation\Rule;
 use Inertia\Inertia;
 
@@ -19,27 +20,24 @@ class ManageUsers extends Controller
     public function index(Request $request)
     {
 
-        $users = User::query()
-                            ->where('company_id', '=', Auth::user()->company_id)
-                            ->where('id', '!=', Auth::id())
-                            ->when($request->input('search'), function ($query, $search) {
-                                $query->where('name', 'like', "%{$search}%");
-                            })
-                            ->orderBy('name')
-                            ->paginate(10)
-                            ->withQueryString()
-                            ->through(fn($user) => [
-                                'id' => $user->id,
-                                'name' => $user->name,
-                                'id_number' => $user->id_number,
-                                'employee_id' => $user->employee_id,
-                                'email' => $user->email,
-                            ]);
+        $users = User::where('id', '!=', Auth::id())
+            ->orderBy('name')
+            ->filter(FacadesRequest::only('search'))
+            ->paginate(25)
+            ->withQueryString()
+            ->through(fn($user) => [
+                'id' => $user->id,
+                'name' => $user->name,
+                'id_number' => $user->id_number,
+                'employee_id' => $user->employee_id,
+                'email' => $user->email,
+            ]);
+
         $filters = $request->only(['search']);
 
         return Inertia::render('Admin/User/Index', [
+            'filters' => FacadesRequest::all('search'),
             'users' => $users,
-            'filters' => $filters,
         ]);
     }
 

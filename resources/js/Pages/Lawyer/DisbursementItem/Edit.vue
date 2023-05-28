@@ -46,7 +46,7 @@
             </div>
             <div class="flex items-center px-8 py-4 bg-gray-50 border-t border-gray-100">
                 <button class="text-red-600 hover:underline" tabindex="-1" type="button" @click="destroy">Delete Item</button>
-                <loading-button :loading="form.processing" class="btn-indigo ml-auto" type="submit">Update Item</loading-button>
+                <loading-button :loading="form.processing" class="btn-primary ml-auto" type="submit">Update Item</loading-button>
             </div>
         </form>
     </div>

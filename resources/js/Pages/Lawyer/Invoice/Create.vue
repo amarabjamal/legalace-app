@@ -110,7 +110,7 @@
                         >
                         Cancel
                     </Link>
-                    <loading-button :loading="form.processing" class="btn-indigo" type="submit">Create Invoice</loading-button>
+                    <loading-button :loading="form.processing" class="btn-primary" type="submit">Create Invoice</loading-button>
                 </div>
             </form>
         </div>

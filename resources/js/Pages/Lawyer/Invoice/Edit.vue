@@ -113,7 +113,7 @@
                             >
                             Cancel
                         </Link>
-                        <loading-button :loading="form.processing" class="btn-indigo" type="submit">Update Invoice</loading-button>
+                        <loading-button :loading="form.processing" class="btn-primary" type="submit">Update Invoice</loading-button>
                     </div>
                 </div>
             </form>

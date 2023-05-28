@@ -1,5 +1,5 @@
 <template>
-    <div class="my-5">
+    <div class="mt-5 mb-8">
         <div>
             <nav class="sm:hidden" aria-label="Back">
                 <Link :href="back.link" class="flex items-center text-sm font-medium text-gray-500/100">
@@ -29,7 +29,7 @@
         
         <div class="mt-2 flex items-center justify-between">
             <div>
-                <h2 class="text-2xl font-bold leading-7 text-gray-900/100 sm:truncate sm:text-3xl sm:tracking-tight">
+                <h2 class="text-2xl font-bold leading-7 text-gray-900 sm:truncate sm:text-3xl sm:tracking-tight">
                     {{ page_title }}
                 </h2>
             </div>
@@ -47,7 +47,7 @@ export default {
     },
     data() {
         return {
-            back: nth(this.breadcrumbs, -2),
+            back: this.breadcrumbs.length >= 2 ? nth(this.breadcrumbs, -2) : { link: null},
         }
     }
 }
