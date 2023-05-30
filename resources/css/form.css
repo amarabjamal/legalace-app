@@ -4,8 +4,9 @@
 
 .form-input,
 .form-textarea,
-.form-select {
-  @apply p-2 leading-normal block w-full border text-gray-700 bg-white font-sans rounded text-left appearance-none relative focus:border-indigo-400 focus:ring;
+.form-select,
+.form-input-money {
+  @apply p-2 text-sm leading-normal block w-full border border-gray-300 text-gray-500 bg-white font-sans rounded text-left appearance-none relative focus:border-gray-400 focus:outline-none focus:text-gray-600;
 
   &::placeholder {
     @apply text-gray-500 opacity-100;
@@ -13,7 +14,7 @@
 }
 
 .form-input-money {
-  @apply p-2 leading-normal block w-full border text-gray-700 bg-white font-sans rounded-r text-left appearance-none relative focus:border-indigo-400 focus:ring;
+  @apply rounded-none rounded-r;
 
   &::placeholder {
     @apply text-gray-500 opacity-100;

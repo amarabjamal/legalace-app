@@ -3,7 +3,7 @@
 }
 
 .btn-secondary {
-  @apply px-6 py-3 rounded bg-white shadow-sm text-gray-900 text-sm leading-4 font-semibold ring-1 ring-inset ring-gray-300 hover:bg-gray-50;
+  @apply px-6 py-3 rounded bg-white shadow-sm text-gray-900 text-sm leading-4 font-semibold whitespace-nowrap ring-1 ring-inset ring-gray-300 hover:bg-gray-50;
 }
   
 .btn-spinner,
