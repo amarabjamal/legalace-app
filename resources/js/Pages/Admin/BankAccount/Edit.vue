@@ -120,7 +120,7 @@
             </button>
 
             <Link 
-                href="/admin/bankaccounts"
+                href="/admin/bank-accounts"
                 as="button"  
                 class="ml-2 text-gray-900 focus:outline-none bg-white border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-200 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center"
                 :disabled="form.processing"
@@ -148,7 +148,7 @@ export default {
         });
 
         let submit = () => {
-            form.put(`/admin/bankaccounts/${props.bankAccount.id}`);
+            form.put(`/admin/bank-accounts/${props.bankAccount.id}`);
         };
 
         return { form, submit };
@@ -166,7 +166,7 @@ export default {
             page_title: this.bankAccount.label,
             breadcrumbs: [
                 { link: '/admin', label: 'Dashboard'},
-                { link: '/admin/bankaccounts', label: 'Bank Accounts'},
+                { link: '/admin/bank-accounts', label: 'Bank Accounts'},
                 { link: null, label: this.bankAccount.label},
                 { link: null, label: 'Edit'},
             ],

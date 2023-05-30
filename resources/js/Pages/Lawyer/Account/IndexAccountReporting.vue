@@ -34,7 +34,7 @@
                 Client Accounts
             </h4>
 
-            <Link href="/bankaccounts/create">
+            <Link href="/bank-accounts/create">
                 <button class="px-4 py-2 ml-3 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-blue-800 border border-transparent rounded-lg active:bg-blue-900 hover:bg-blue-900 focus:outline-none focus:shadow-outline-blue">
                     Add New Client Account
                 </button>
@@ -107,7 +107,7 @@
                                 </tr>
                             </table>
                             <div class="flex justify-end mt-3 p-2 pr-4">
-                                <Link :href="`/bankaccounts/${ bankAccount.id }/edit`">Edit</Link>
+                                <Link :href="`/bank-accounts/${ bankAccount.id }/edit`">Edit</Link>
                                 <Link @click="deleteBankAccount(bankAccount)" as="button" class="ml-3 font-medium text-red-600 hover:underline">Delete</Link>
                             </div>
                         </p>
@@ -194,7 +194,7 @@
 <script>
 import { Head } from "@inertiajs/inertia-vue3";
 import Layout from "../Shared/Layout";
-import Pagination from "../Shared/Pagination";
+import Pagination from "../../../Shared/Pagination.vue";
 import { Inertia } from "@inertiajs/inertia";
 import throttle from 'lodash/throttle';
 import { ref, watch } from "vue";

@@ -5,9 +5,9 @@
         <page-heading :page_title="page_title" :breadcrumbs="breadcrumbs"/>
 
         <div class="flex items-center">
-            <Link href="/admin/bankaccounts/create">
+            <Link href="/admin/bank-accounts/create">
                 <button class="btn-primary">
-                    Add Bank Account
+                    Create Bank Account
                 </button>
             </Link>
         </div>
@@ -83,7 +83,7 @@
                     </tr>
                 </table>
                 <div class="flex justify-end mt-3 p-2 pr-4">
-                    <Link :href="`/admin/bankaccounts/${ bankAccount.id }/edit`">Edit</Link>
+                    <Link :href="`/admin/bank-accounts/${ bankAccount.id }/edit`">Edit</Link>
                     <Link @click="deleteBankAccount(bankAccount)" as="button" class="ml-3 font-medium text-red-600 hover:underline">Delete</Link>
                 </div>
             </p>
@@ -102,7 +102,7 @@ export default {
      methods: {
         deleteBankAccount(bankAccount) {
             if (confirm('Are you sure you want to delete this bank account?')) {
-                Inertia.delete(`/admin/bankaccounts/${ bankAccount.id }`);
+                Inertia.delete(`/admin/bank-accounts/${ bankAccount.id }`);
             }
         }
     },

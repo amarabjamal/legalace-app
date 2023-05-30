@@ -63,7 +63,7 @@ Route::group(['middleware' => 'auth'], function() {
 
         Route::resources([
             'users' => ManageUsers::class,
-            'bankaccounts' => ManageBankAccount::class,
+            'bank-accounts' => ManageBankAccount::class,
             'voucherapprovals' => ApproveVoucher::class,
         ]);
     
@@ -91,12 +91,19 @@ Route::group(['middleware' => 'auth'], function() {
                 Route::get('/email', [QuotationController::class, 'sendEmail']);
             });
 
-            Route::singleton('quotation', QuotationController::class)->creatable();
+            Route::prefix('/invoices/{invoice}')->group(function() {
+                Route::post('set-open', [InvoiceController::class, 'setOpen']);
+                Route::post('email-invoice', [InvoiceController::class, 'emailInvoice']);
+                Route::post('mark-paid', [InvoiceController::class, 'markPaid']);
+                Route::get('pdf', [InvoiceController::class, 'downloadPDF']);
+                Route::get('mark-paid', [InvoiceController::class, 'markPaidForm']);
+            });
 
+            Route::singleton('quotation', QuotationController::class)->creatable();
             Route::resource('disbursement-items', DisbursementItemController::class);
             Route::resource('invoices', InvoiceController::class);
         });
         
-        Route::get('/getbankaccountdetails/{bankaccount}', [ManageBankAccount::class, 'getBankAccountDetails']);
+        Route::get('/getbankaccountdetails/{bank_account}', [ManageBankAccount::class, 'getBankAccountDetails']);
     });
 });

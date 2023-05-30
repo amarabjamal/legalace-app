@@ -38,36 +38,36 @@ class ManageBankAccount extends Controller
 
         BankAccount::create($validated);
 
-        return redirect()->route('admin.bankaccounts.index')->with('message', 'Successfully added new bank account [' . $validated['label'] . '].');
+        return redirect()->route('admin.bank-accounts.index')->with('successMessage', 'Successfully added the new bank account.');
     }
 
-    public function edit(BankAccount $bankaccount)
+    public function edit(BankAccount $bank_account)
     {
-        $bankaccount->bankAccountType;
+        $bank_account->bankAccountType;
 
         return Inertia::render('Admin/BankAccount/Edit', [
-            'bankAccount' => $bankaccount,
+            'bankAccount' => $bank_account,
         ]);
     }
 
-    public function update(UpdateBankAccountRequest $request, BankAccount $bankaccount) 
+    public function update(UpdateBankAccountRequest $request, BankAccount $bank_account) 
     {
         $validated = $request->validated();
 
-        $bankaccount->update($validated);
+        $bank_account->update($validated);
  
-         return redirect()->route('admin.bankaccounts.index')->with('message', 'Successfully updated the bank account [' . $request->label . '].');
+         return redirect()->route('admin.bank-accounts.index')->with('successMessage', 'Successfully updated the bank account.');
     }
 
-    public function destroy(BankAccount $bankaccount)
+    public function destroy(BankAccount $bank_account)
     {
         //Add conditional checking before delete
-        $bankaccount->delete();   
+        $bank_account->delete();   
 
-        return redirect()->route('admin.bankaccounts.index')->with('message', 'Successfully deleted the bank account.');
+        return redirect()->route('admin.bank-accounts.index')->with('successMessage', 'Successfully deleted the bank account.');
     }
 
-    public function getBankAccountDetails(Request $request,BankAccount $bankaccount)
+    public function getBankAccountDetails(Request $request,BankAccount $bank_account)
     {
         if($request->ajax()) {
             return response()->json([ 'hello' => 'hihiho']);
