@@ -15,53 +15,80 @@
                         <div v-else-if="invoice.status_value === 2" class="p-1.5 text-sm font-semibold uppercase tracking-wider text-blue-600 border-2 border-blue-600 rounded-lg">
                             {{ invoice.status_label }}
                         </div>
-                        <div v-else-if="invoice.status_value === 3" class="p-1.5 text-sm font-semibold uppercase tracking-wider text-green-600 border-2 border-green-600 rounded-lg">
+                        <div v-else-if="invoice.status_value === 3" class="p-1.5 text-sm font-semibold uppercase tracking-wider text-blue-600 border-2 border-blue-600 rounded-lg">
                             {{ invoice.status_label }}
                         </div>
-                        <div v-else-if="invoice.status_value === 4" class="p-1.5 text-sm font-semibold uppercase tracking-wider text-red-600 border-2 border-red-600 rounded-lg">
+                        <div v-else-if="invoice.status_value === 4" class="p-1.5 text-sm font-semibold uppercase tracking-wider text-green-600 border-2 border-green-600 rounded-lg">
                             {{ invoice.status_label }}
                         </div>
-                        <div v-else-if="invoice.status_value === 5" class="p-1.5 text-sm font-semibold uppercase tracking-wider text-gray-600 border-2 border-gray-600 rounded-lg">
+                        <div v-else-if="invoice.status_value === 5" class="p-1.5 text-sm font-semibold uppercase tracking-wider text-red-600 border-2 border-red-600 rounded-lg">
                             {{ invoice.status_label }}
                         </div>
-                        <div v-else-if="invoice.status_value === 6" class="p-1.5 text-sm font-semibold uppercase tracking-wider text-yellow-600 border-2 border-yellow-600 rounded-lg">
+                        <div v-else-if="invoice.status_value === 6" class="p-1.5 text-sm font-semibold uppercase tracking-wider text-gray-600 border-2 border-gray-600 rounded-lg">
+                            {{ invoice.status_label }}
+                        </div>
+                        <div v-else-if="invoice.status_value === 7" class="p-1.5 text-sm font-semibold uppercase tracking-wider text-yellow-600 border-2 border-yellow-600 rounded-lg">
                             {{ invoice.status_label }}
                         </div>
                     </div>
-                    <div class="flex items-center space-x-2">
-                        <Link 
-                            :href="`/lawyer/case-files/${case_file.id}/invoices/${invoice.id}/edit`"
-                            as="button" 
-                            class="btn-primary"
-                            v-if="invoice.is.editable"
-                        >
-                            Change to Open
-                        </Link>
+                    <div v-if="invoice.status_value === 1" class="flex flex-wrap items-center space-x-2">
+                        <form @submit.prevent="setInvoiceToOpen">
+                            <button type="submit" class="btn-primary">
+                                Change to Open
+                            </button>
+                        </form>
                         <Link 
                             :href="`/lawyer/case-files/${case_file.id}/invoices/${invoice.id}/edit`"
                             as="button" 
                             class="btn-secondary"
-                            v-if="invoice.is.editable"
                         >
                             Edit
                         </Link>
                     </div>
+                    <div v-else-if="invoice.status_value === 2" class="flex flex-wrap items-center space-x-2">
+                        <form @submit.prevent="emailInvoice">
+                            <button type="submit" class="btn-primary">
+                                Send Email
+                            </button>
+                        </form>
+                        <action-dropdown :status_code="invoice.status_value" :case_file_id="case_file.id" :invoice_id="invoice.id" />
+                    </div>
+                    <div v-else-if="invoice.status_value === 3" class="flex flex-wrap items-center space-x-2">
+                        <Link :href="`/lawyer/case-files/${case_file.id}/invoices/${invoice.id}/mark-paid`" as="button" class="btn-primary">
+                            Mark Paid
+                        </Link>
+                        <action-dropdown :status_code="invoice.status_value" :case_file_id="case_file.id" :invoice_id="invoice.id" @send-email="emailInvoice" />
+                    </div>
+                    <div v-else-if="invoice.status_value === 4" class="flex flex-wrap items-center space-x-2">
+                        <Link as="button" class="btn-primary">
+                            Generate Receipt
+                        </Link>
+                        <action-dropdown :status_code="invoice.status_value" :case_file_id="case_file.id" :invoice_id="invoice.id" />
+                    </div>
                 </div>
 
                 <div class="flex flex-wrap w-full mt-6 border-b border-gray-200 text-sm">
-                    <div class="flex flex-wrap pb-8 pr-6 w-full lg:w-1/2">
-                        <div class="text-gray-500 mr-4">
+                    <div class="flex pb-2 pr-6 w-full">
+                        <div class="text-gray-500 mr-4 w-20">
+                            File Number
+                        </div> 
+                        <div class="text-gray-700 font-medium mr-16">
+                            {{  case_file.file_number }}
+                        </div>
+                    </div>
+                    <div class="flex pb-8 pr-6 w-full lg:w-1/2">
+                        <div class="text-gray-500 mr-4 w-20">
                             Issued on
                         </div> 
-                        <div class="text-gray-700 mr-16">
+                        <div class="text-gray-700 font-medium mr-16">
                             {{  invoice.invoice_date }}
                         </div>
                     </div>
-                    <div class="flex flex-wrap pb-8 pr-6 w-full lg:w-1/2">
-                        <div class="text-gray-00 mr-4">
+                    <div class="flex pb-8 pr-6 w-full lg:w-1/2">
+                        <div class="text-gray-500 mr-4 w-20">
                             Due on
                         </div> 
-                        <div class="text-gray-700 mr-16">
+                        <div class="text-gray-700 font-medium mr-16">
                             {{  invoice.due_date }}
                         </div>
                     </div>
@@ -152,14 +179,21 @@
             </div>
         </div> -->
     </div>
+
+    <upload-proof-of-payment-modal v-if="invoice.status_value === 3" :isOpen="ppm_is_open" @close-modal="closePPM"/>
 </template>
 
 <script>
 import Layout from '../Shared/Layout';
+import Dropdown from '../.../../../../Shared/Dropdown';
+import ActionDropdown from './ActionDropdown';
+import UploadProofOfPaymentModal from './UploadProofOfPaymentModal';
 
 export default { 
     components: { 
-        
+        Dropdown,
+        ActionDropdown,
+        UploadProofOfPaymentModal,
     },
     layout: Layout,
     props: {
@@ -177,10 +211,34 @@ export default {
                 { link: `/lawyer/case-files/${this.case_file.id}/invoices`, label: 'Invoices'},
                 { link: null, label: this.invoice.number},
             ],
+            ppm_is_open: false,
         }
     },
     methods: {
-        
+        setInvoiceToOpen() {
+            if(confirm('The invoice will be set to open and you no longer can edit the invoice. Are you sure to proceed?')) {
+                this.$inertia.post(`/lawyer/case-files/${this.case_file.id}/invoices/${this.invoice.id}/set-open`);
+            }
+        },
+        emailInvoice() {
+            if(confirm('The invoice will be send to the client registered email address. Are you sure to proceed?')) {
+                this.$inertia.post(`/lawyer/case-files/${this.case_file.id}/invoices/${this.invoice.id}/email-invoice`);
+            }
+        },
+        downloadPDF() {
+            if(confirm('Download invoice PDF. Are you sure to proceed?')) {
+                this.$inertia.post(`/lawyer/case-files/${this.case_file.id}/invoices/${this.invoice.id}/pdf`);
+            }
+        },
+        openPPM() {
+            this.ppm_is_open = true;
+            // if(confirm('Mark invoice as Paid. Are you sure to proceed?')) {
+            //     this.$inertia.post(`/lawyer/case-files/${this.case_file.id}/invoices/${this.invoice.id}/mark-paid`);
+            // }
+        },
+        closePPM() {
+            this.ppm_is_open = false;
+        }
     },
 };
 </script>

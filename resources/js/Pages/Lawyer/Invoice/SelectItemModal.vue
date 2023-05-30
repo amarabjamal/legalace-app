@@ -60,6 +60,9 @@
                                                         <span v-else class="italic text-sm text-gray-400 mt-1">Added</span>
                                                     </td>
                                                 </tr>
+                                                <tr v-if="items.length === 0">
+                                                    <td colspan="100" class="py-5 text-center text-gray-500">No items available</td>
+                                                </tr>
                                             </tbody>
                                         </table>
                                     </div>
@@ -84,7 +87,6 @@ import {
     Dialog,
     DialogPanel,
     DialogTitle,
-    DialogDescription,
 } from '@headlessui/vue'
 
 export default {

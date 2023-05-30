@@ -98,7 +98,7 @@
                         </tfoot>
                     </table>
 
-                    <textarea-input v-model="form.notes" :error="form.errors.notes" class="w-full" label="Notes"/>
+                    <textarea-input v-model="form.notes" :error="form.errors.notes" rows="4" class="w-full" label="Notes"/>
                 </div>
                 <div class="flex items-center justify-between px-8 py-4 bg-gray-50 border-t border-gray-100">
                     <div class="">

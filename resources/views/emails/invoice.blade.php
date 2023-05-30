@@ -1,0 +1,5 @@
+Dear,
+
+{{ $body }}
+
+Thank you.

@@ -46,10 +46,11 @@ class Invoice extends Model
     public const STATUS = [
         1 => 'Draft',
         2 => 'Open',
-        3 => 'Paid',
-        4 => 'Overdue',
-        5 => 'Void',
-        6 => 'Uncollectible',
+        3 => 'Sent',
+        4 => 'Paid',
+        5 => 'Overdue',
+        6 => 'Void',
+        7 => 'Uncollectible',
     ];
 
 
@@ -125,12 +126,17 @@ class Invoice extends Model
     
     public function isEditable() : bool
     {
-        return $this->status->value == InvoiceStatusEnum::Draft->value;
+        return $this->status == InvoiceStatusEnum::Draft;
+    }
+
+    public function isOpen() : bool
+    {
+        return $this->status == InvoiceStatusEnum::Open;
     }
 
     public function isDeletable() : bool
     {
-        return $this->status->value == InvoiceStatusEnum::Draft->value;
+        return $this->status == InvoiceStatusEnum::Draft;
     }
 
 

@@ -3,17 +3,23 @@
 namespace App\Http\Controllers\Lawyer;
 
 use App\Enums\DisbursementItemStatusEnum;
+use App\Enums\InvoiceStatusEnum;
+use App\Enums\PaymentMethodEnum;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\StoreInvoicePaymentRequest;
 use App\Http\Requests\StoreInvoiceRequest;
 use App\Http\Requests\UpdateInvoiceRequest;
 use App\Jobs\CalculateInvoiceTotal;
+use App\Models\BankAccount;
+use App\Models\BankAccountType;
 use App\Models\CaseFile;
 use App\Models\CaseFile\DisbursementItem\DisbursementItem;
 use App\Models\CaseFile\Invoices\Invoice;
-use Carbon\Carbon;
-use Illuminate\Http\Request;
+use Barryvdh\DomPDF\Facade\Pdf as PDF;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Request as FacadesRequest;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Request;
+use Spatie\LaravelOptions\Options;
 
 class InvoiceController extends Controller
 {
@@ -24,9 +30,9 @@ class InvoiceController extends Controller
                 'id' => $case_file->id,
                 'file_number' => $case_file->file_number,
             ],
-            'filters' => FacadesRequest::all('search'),
+            'filters' => Request::all('search'),
             'invoices' => $case_file->invoices()
-                ->filter(FacadesRequest::only('search'))
+                ->filter(Request::only('search'))
                 ->paginate(25)
                 ->withQueryString()
                 ->through(fn ($invoice) => [
@@ -126,9 +132,6 @@ class InvoiceController extends Controller
                 'notes' => $invoice->notes,
                 'status_value' => $invoice->status->value,
                 'status_label' => Invoice::STATUS[$invoice->status->value],
-                'is' => [
-                    'editable' => $invoice->isEditable(),
-                ],
             ],
             'items' => $invoice->disbursementItems->map(fn($item) => 
                 [
@@ -144,7 +147,7 @@ class InvoiceController extends Controller
     {
         if(!$invoice->isEditable()) 
         {
-            return redirect()->route('lawyer.invoices.show', ['case_file' => $case_file, 'invoice' => $invoice])->with('infoMessage', 'This invoice cannot be edited since it is no longer a draft.');
+            return redirect()->route('lawyer.invoices.show', ['case_file' => $case_file, 'invoice' => $invoice])->with('warningMessage', 'This invoice cannot be edited since it is no longer a draft.');
         }
 
         return inertia('Lawyer/Invoice/Edit', [
@@ -174,6 +177,11 @@ class InvoiceController extends Controller
 
     public function update(UpdateInvoiceRequest $request, CaseFile $case_file, Invoice $invoice)
     {
+        if(!$invoice->isEditable()) 
+        {
+            return redirect()->route('lawyer.invoices.show', ['case_file' => $case_file, 'invoice' => $invoice])->with('warningMessage', 'This invoice cannot be edited since it is no longer a draft.');
+        }
+
         try {
             $items = DisbursementItem::whereIn('id', $request->items_id)->get();
 
@@ -236,9 +244,123 @@ class InvoiceController extends Controller
                 return redirect()->route('lawyer.invoices.index', $case_file)->with('successMessage', 'Successfully deleted the record.');
             }
 
-            return back()->with('infoMessage', 'You are not allowed to delete this record since its status is not draft.');
+            return back()->with('warningMessage', 'You are not allowed to delete this record since its status is not draft.');
         } catch (\Exception $e) {
             return back()->with('errorMessage', 'Error: failed to delete.' . $e->getMessage());
         }
+    }
+
+    public function setOpen(CaseFile $case_file, Invoice $invoice) 
+    {
+        if($invoice->status != InvoiceStatusEnum::Draft) {
+            return back()->with('errorMessage', 'The invoice status is no longer a draft.');
+        }
+
+        DB::transaction(function() use ($invoice) {
+            $invoice->update(['status' => InvoiceStatusEnum::Open]);
+        });
+
+        return back()->with('successMessage', 'The invoice status is set to open.');
+    }
+    
+    public function downloadPDF(CaseFile $case_file, Invoice $invoice) 
+    {
+        $data = [
+            'case_file' => [ 
+                'number' => $case_file->file_number,
+            ],
+            'invoice' => [
+                'company' => $invoice->company->only('name', 'address'),
+                'client' => $invoice->caseFile->client->only('name', 'address'),
+                'number' => $invoice->invoice_number,
+                'invoice_date' => $invoice->formatted_invoice_date,
+                'due_date' => $invoice->formatted_due_date,
+                'subtotal' => $invoice->subtotal->formatTo('en-MY'),
+                'tax' => $invoice->tax_amount->formatTo('en-MY'),
+                'total' => $invoice->grand_total->formatTo('en-MY'),
+                'notes' => $invoice->notes,
+            ],
+            'items' => $invoice->disbursementItems->map(fn($item) => 
+                [
+                    'name' => $item->name,
+                    'description' => $item->description,
+                    'amount' => $item->amount->formatTo('en-MY'),
+                ]
+            ),
+        ];
+        $pdf = PDF::loadView('templates.invoice', $data);
+        $pdf->render();
+
+        return $pdf->stream();
+    }
+
+    public function emailInvoice(CaseFile $case_file, Invoice $invoice) 
+    {
+        if($invoice->status != InvoiceStatusEnum::Open && $invoice->status != InvoiceStatusEnum::Sent) {
+            return back()->with('errorMessage', 'Invalid action.');
+        }
+
+        $pdf = PDF::loadView('templates.invoice');
+
+        $email = [
+            'client_email' => 'client@example.com',
+            'subject' => 'Invoice',
+            'body' => 'Please find the attached invoice.',
+        ];
+
+        try {
+            DB::beginTransaction();
+
+            Mail::send('emails.invoice', $email, function ($message) use ($email, $pdf) {
+                $message->to($email["client_email"], $email["client_email"])
+                    ->subject($email["subject"])
+                    ->attachData($pdf->output(), "invoice.pdf");
+            });
+
+            $invoice->update(['status' => InvoiceStatusEnum::Sent]);
+            $invoice->disbursementItems()->update(['status' => DisbursementItemStatusEnum::Invoiced]);            
+
+            DB::commit();
+        } catch (\Exception $e) {
+            DB::rollBack();
+
+            return back()->with('errorMessage', 'Failed to send the invoice email.');            
+        }
+
+        return back()->with('successMessage', 'The invoice is emailed to the client.');
+    }
+
+    public function markPaidForm(CaseFile $case_file, Invoice $invoice) 
+    {
+        return inertia('Lawyer/Invoice/MarkPaidForm', [
+            'case_file' => [ 
+                'id' => $case_file->id,
+                'file_number' => $case_file->file_number,
+            ],
+            'invoice' => [
+                'id' => $invoice->id,
+                'number' => $invoice->invoice_number,
+            ],
+            'payment_methods' => Options::forEnum(PaymentMethodEnum::class),
+            'client_bank_accounts' => BankAccount::where([ 'company_id' => auth()->user()->company_id, 'bank_account_type_id' => BankAccountType::IS_CLIENT_ACCOUNT ])
+                ->get(['id', 'label']),
+            'suggested_description' => 'Payment for Invoice No. ' . $invoice->invoice_number,
+        ]);   
+    }
+
+    public function markPaid(StoreInvoicePaymentRequest $request, CaseFile $case_file, Invoice $invoice)
+    {
+        //Integrate the input to client account
+
+        try {
+            DB::transaction(function() use ($invoice) {
+                $invoice->update(['status' => InvoiceStatusEnum::Paid]);
+                $invoice->disbursementItems()->update(['status' => DisbursementItemStatusEnum::PaidByClient]);
+            });
+        } catch(\Exception $e) {
+            return back()->with('errorMessage', 'Failed to update invoice payment.');  
+        }
+
+        return redirect()->route('lawyer.invoices.show', ['case_file' => $case_file, 'invoice' => $invoice])->with('successMessage', 'The invoice payment is saved.');
     }
 }
