@@ -18,7 +18,7 @@ class ManageCompany extends Controller
 
         if ($company == null)
         {
-            return redirect()->route('company.create')->with('message', 'You have not configure your company profile yet.');
+            return redirect()->route('company.create')->with('infoMessage', 'You have not configure your company profile yet.');
         }
 
         return Inertia::render('Admin/Company/Index', [
@@ -48,6 +48,6 @@ class ManageCompany extends Controller
             'updated_at' => now(),
         ]);
 
-        return redirect()->route('admin.company.index')->with('message', 'Successfully updated your company profile [' . $company->name . '].');
+        return redirect()->route('admin.company.index')->with('successMessage', 'Successfully updated your company profile.');
     }
 }

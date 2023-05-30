@@ -28,12 +28,10 @@ class ManageUsers extends Controller
             ->through(fn($user) => [
                 'id' => $user->id,
                 'name' => $user->name,
-                'id_number' => $user->id_number,
                 'employee_id' => $user->employee_id,
                 'email' => $user->email,
+                'roles' => $user->role_list,
             ]);
-
-        $filters = $request->only(['search']);
 
         return Inertia::render('Admin/User/Index', [
             'filters' => FacadesRequest::all('search'),
@@ -113,7 +111,7 @@ class ManageUsers extends Controller
             ]);
         }
 
-        return redirect()->route('admin.users.index')->with('message', 'Successfully added new user account.');
+        return redirect()->route('admin.users.index')->with('successMessage', 'Successfully added new employee account.');
     }
 
     /**
@@ -240,7 +238,7 @@ class ManageUsers extends Controller
             ])->delete();
         }
 
-        return redirect()->route('admin.users.index')->with('message', 'Successfully updated the user account.');
+        return redirect()->route('admin.users.index')->with('successMessage', 'Successfully updated the employee account.');
     }
 
     /**
@@ -255,6 +253,6 @@ class ManageUsers extends Controller
         }
         $user->delete();   
 
-        return redirect()->route('admin.users.index')->with('message', 'Successfully deleted the user account.');
+        return redirect()->route('admin.users.index')->with('successMessage', 'Successfully deleted the employee account.');
     }
 }

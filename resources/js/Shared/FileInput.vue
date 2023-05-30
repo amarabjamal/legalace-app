@@ -13,7 +13,7 @@
             <button type="button" class="px-4 py-1 text-white text-xs font-medium bg-gray-500 hover:bg-gray-700 rounded-sm" @click="remove">Remove</button>
         </div>
         </div>
-        <div v-if="errors.length" class="form-error">{{ errors[0] }}</div>
+        <div v-if="errors.length" class="form-error">{{ errors }}</div>
     </div>
 </template>
 

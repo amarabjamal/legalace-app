@@ -86,7 +86,7 @@
 <script>
 import { Head } from "@inertiajs/inertia-vue3";
 import Layout from "../Shared/Layout";
-import Pagination from "../Shared/Pagination";
+import Pagination from "../../../Shared/Pagination.vue";
 import { Inertia } from "@inertiajs/inertia";
 import throttle from 'lodash/throttle';
 import { ref, watch } from "vue";

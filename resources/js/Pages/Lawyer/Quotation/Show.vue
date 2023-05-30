@@ -224,9 +224,7 @@
 </template>
 
 <script>
-import { Head, Link } from "@inertiajs/inertia-vue3";
 import Layout from "../Shared/Layout";
-import Pagination from "../Shared/Pagination";
 import { useForm } from "@inertiajs/inertia-vue3";
 import { TrashIcon } from "@heroicons/vue/outline";
 import { ref } from "vue";
@@ -290,7 +288,9 @@ export default {
             this.form.put(`/lawyer/case-files/${this.case_file.id}/quotation/`);
         }
     },
-    components: { Head, Pagination, TrashIcon, Link },
+    components: { 
+        TrashIcon,
+    },
     props: {
         case_file : Object,
         client_bank_accounts : Object,

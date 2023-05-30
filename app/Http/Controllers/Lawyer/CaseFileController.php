@@ -48,16 +48,21 @@ class CaseFileController extends Controller
         ]);
     }
 
-    public function show($id) 
+    public function show(CaseFile $case_file) 
     {
+        $this->authorize('view', $case_file);
+
+        $case_file->client->pluck('name');
 
         return Inertia::render('Lawyer/CaseFile/Show', [
-            'case_file' => $this->casefile->getCaseFileById($id),
+            'case_file' => $case_file,
         ]);   
     }
 
     public function create()
     {
+        $this->authorize('create', CaseFile::class);
+
         $lawyerRoleID = DB::table('roles')->select('id')->where('slug', 'lawyer');
         $userRole = DB::table('user_role')->select('user_id')->whereIn('role_id', $lawyerRoleID);
         $lawyers = DB::table('users')
@@ -78,6 +83,8 @@ class CaseFileController extends Controller
 
     public function store(StoreCaseFileRequest $request)
     {
+        $this->authorize('create', CaseFile::class);
+
         $validated = $request->validated();
 
         CaseFile::create($validated);
@@ -87,6 +94,8 @@ class CaseFileController extends Controller
 
     public function edit(CaseFile $case_file) 
     {
+        $this->authorize('update', $case_file);
+
         $lawyerRoleID = DB::table('roles')->select('id')->where('slug', 'lawyer');
         $userRole = DB::table('user_role')->select('user_id')->whereIn('role_id', $lawyerRoleID);
         $lawyers = DB::table('users')
@@ -108,6 +117,8 @@ class CaseFileController extends Controller
 
     public function update(UpdateCaseFileRequest $request,CaseFile $case_file) 
     {
+        $this->authorize('update', $case_file);
+
         $validated = $request->validated();
 
         $case_file->update($validated);

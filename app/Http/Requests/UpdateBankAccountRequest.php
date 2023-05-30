@@ -29,7 +29,7 @@ class UpdateBankAccountRequest extends FormRequest
             'label' => [
                 'required', 
                 'string', 
-                Rule::unique('bank_accounts')->ignore($this->bankaccount)->where(fn ($query) => $query->where('company_id', Auth::user()->company_id))
+                Rule::unique('bank_accounts')->ignore($this->bank_account)->where(fn ($query) => $query->where('company_id', Auth::user()->company_id))
             ],
             'account_name' => [
                 'required', 
@@ -43,7 +43,7 @@ class UpdateBankAccountRequest extends FormRequest
                 'required', 
                 'numeric', 
                 'digits_between:6,17', 
-                Rule::unique('bank_accounts')->ignore($this->bankaccount)->where(fn ($query) => $query->where('company_id', Auth::user()->company_id))
+                Rule::unique('bank_accounts')->ignore($this->bank_account)->where(fn ($query) => $query->where('company_id', Auth::user()->company_id))
             ],
             'bank_address' => [
                 'required', 

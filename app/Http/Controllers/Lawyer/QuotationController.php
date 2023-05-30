@@ -160,7 +160,7 @@ class QuotationController extends Controller
 
         //dd($data);
         
-        $pdf = PDF::loadView('templates.quotation.quotation', $data)->setPaper('a4', 'portrait');
+        $pdf = PDF::loadView('templates.quotation', $data)->setPaper('a4', 'portrait');
 
         return $pdf->stream();
     }
@@ -173,7 +173,7 @@ class QuotationController extends Controller
             'deposit_amount' =>  $case_file->quotation()->pluck('deposit_amount')->toArray()[0],
         ];
         
-        $pdf = PDF::loadView('templates.quotation.quotation', $data);
+        $pdf = PDF::loadView('templatesquotation', $data);
 
         $email = [
             'client_email' => 'client@example.com',
