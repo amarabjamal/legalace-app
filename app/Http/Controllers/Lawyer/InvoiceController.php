@@ -4,22 +4,18 @@ namespace App\Http\Controllers\Lawyer;
 
 use App\Enums\DisbursementItemStatusEnum;
 use App\Enums\InvoiceStatusEnum;
-use App\Enums\PaymentMethodEnum;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\StoreInvoicePaymentRequest;
 use App\Http\Requests\StoreInvoiceRequest;
 use App\Http\Requests\UpdateInvoiceRequest;
 use App\Jobs\CalculateInvoiceTotal;
-use App\Models\BankAccount;
-use App\Models\BankAccountType;
 use App\Models\CaseFile;
 use App\Models\CaseFile\DisbursementItem\DisbursementItem;
 use App\Models\CaseFile\Invoices\Invoice;
+use App\Models\InvoicePayment;
 use Barryvdh\DomPDF\Facade\Pdf as PDF;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Request;
-use Spatie\LaravelOptions\Options;
 
 class InvoiceController extends Controller
 {
@@ -59,7 +55,7 @@ class InvoiceController extends Controller
             'invoice' => [
                 'company' => auth()->user()->company->only('name', 'address'),
                 'client' => $case_file->client->only('name', 'address'),
-                'number' => Invoice::getNewInvoiceNumber(),
+                'number' => Invoice::getNextInvoiceNumber(),
             ],
             'items' => $case_file->disbursementItems()->recorded()->get(['id', 'name', 'description', 'amount'])->map(fn ($item) => [
                 'id' => $item->id,
@@ -132,6 +128,13 @@ class InvoiceController extends Controller
                 'notes' => $invoice->notes,
                 'status_value' => $invoice->status->value,
                 'status_label' => Invoice::STATUS[$invoice->status->value],
+                'payment' => isset($invoice->payment) ? [
+                    'date' => $invoice->payment->formatted_date,
+                    'method' => InvoicePayment::PAYMENT_METHODS[$invoice->payment->payment_method_code->value],
+                    'amount' => $invoice->payment->amount->formatTo('en-MY'),
+                    'created_by' => $invoice->payment->createdBy->only('name'),
+                ] : null,
+                'has_receipt' => isset($invoice->payment->receipt),
             ],
             'items' => $invoice->disbursementItems->map(fn($item) => 
                 [
@@ -328,39 +331,5 @@ class InvoiceController extends Controller
         }
 
         return back()->with('successMessage', 'The invoice is emailed to the client.');
-    }
-
-    public function markPaidForm(CaseFile $case_file, Invoice $invoice) 
-    {
-        return inertia('Lawyer/Invoice/MarkPaidForm', [
-            'case_file' => [ 
-                'id' => $case_file->id,
-                'file_number' => $case_file->file_number,
-            ],
-            'invoice' => [
-                'id' => $invoice->id,
-                'number' => $invoice->invoice_number,
-            ],
-            'payment_methods' => Options::forEnum(PaymentMethodEnum::class),
-            'client_bank_accounts' => BankAccount::where([ 'company_id' => auth()->user()->company_id, 'bank_account_type_id' => BankAccountType::IS_CLIENT_ACCOUNT ])
-                ->get(['id', 'label']),
-            'suggested_description' => 'Payment for Invoice No. ' . $invoice->invoice_number,
-        ]);   
-    }
-
-    public function markPaid(StoreInvoicePaymentRequest $request, CaseFile $case_file, Invoice $invoice)
-    {
-        //Integrate the input to client account
-
-        try {
-            DB::transaction(function() use ($invoice) {
-                $invoice->update(['status' => InvoiceStatusEnum::Paid]);
-                $invoice->disbursementItems()->update(['status' => DisbursementItemStatusEnum::PaidByClient]);
-            });
-        } catch(\Exception $e) {
-            return back()->with('errorMessage', 'Failed to update invoice payment.');  
-        }
-
-        return redirect()->route('lawyer.invoices.show', ['case_file' => $case_file, 'invoice' => $invoice])->with('successMessage', 'The invoice payment is saved.');
     }
 }
