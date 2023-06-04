@@ -7,6 +7,7 @@ use App\Enums\InvoiceStatusEnum;
 use App\Models\CaseFile;
 use App\Models\CaseFile\DisbursementItem\DisbursementItem;
 use App\Models\Company;
+use App\Models\InvoicePayment;
 use App\Models\User;
 use App\Traits\HasCompanyScope;
 use Brick\Math\RoundingMode;
@@ -89,6 +90,11 @@ class Invoice extends Model
         return $this->hasMany(DisbursementItem::class);
     }
 
+    public function payment()
+    {
+        return $this->hasOne(InvoicePayment::class);
+    }
+
     public function scopeFilter($query, array $filters) 
     {
         $query->when($filters['search'] ?? null, function ($query, $search) {
@@ -140,9 +146,9 @@ class Invoice extends Model
     }
 
 
-    public static function getNewInvoiceNumber() : string
+    public static function getNextInvoiceNumber() : string
     {
-        $number =Invoice::where('invoice_number', 'like', 'INV-%')->where('company_id', '=', auth()->user()->company_id)->withTrashed()->count();
+        $number =Invoice::where('invoice_number', 'like', 'INV-%')->where('company_id', '=', auth()->user()->company_id)->count();
 
         do {
             $number++;
