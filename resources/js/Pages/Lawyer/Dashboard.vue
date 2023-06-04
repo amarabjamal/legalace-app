@@ -1,12 +1,9 @@
 <template>
     <Head title="Dashboard" />
 
-    <h2 class="my-6 text-2xl font-semibold text-gray-700 dark:text-gray-200">
-        Dashboard
-    </h2>
+    <page-heading :page_title="page_title" :breadcrumbs="breadcrumbs"/>
     
-    <div class="max-w-7xl py-6 sm:px-6 lg:px-8">
-        <div class="grid gap-6 mb-8 md:grid-cols-2 xl:grid-cols-3">
+    <div class="grid gap-6 mb-8 md:grid-cols-2 xl:grid-cols-3">
         <!-- Card -->
         <div class="flex items-center p-8 bg-white rounded-lg shadow-xs dark:bg-gray-800">
             <div class="p-3 mr-4 text-orange-500 bg-orange-100 rounded-full dark:text-orange-100 dark:bg-orange-500">
@@ -71,20 +68,28 @@
             </p>
             </div>
         </div>
-        </div>
     </div>
 </template>
 
 <script>
-import { Head } from "@inertiajs/inertia-vue3";
 import Layout from "./Shared/Layout";
 
 export default { 
-    components: { Head },
+    components: { 
+
+    },
     layout: Layout,
     props: { 
         firmAccBalance: Object,
         totalClient: Object,
-     },
+    },
+    data() {
+        return {
+            page_title: 'Dashboard',
+            breadcrumbs: [
+                { link: null, label: 'Dashboard'},
+            ],
+        }
+    },
 };
 </script>
