@@ -19,8 +19,10 @@ use App\Http\Controllers\Lawyer\AccountReportingController;
 use App\Http\Controllers\Lawyer\CaseFileController;
 use App\Http\Controllers\Lawyer\DisbursementItemController;
 use App\Http\Controllers\Lawyer\InvoiceController;
+use App\Http\Controllers\Lawyer\InvoicePaymentController;
 use App\Http\Controllers\Lawyer\QuotationController;
 use App\Http\Controllers\Lawyer\OperationalCostController;
+use App\Http\Controllers\Lawyer\ReceiptController;
 use App\Models\CaseFile;
 use Illuminate\Support\Facades\Auth;
 
@@ -94,9 +96,12 @@ Route::group(['middleware' => 'auth'], function() {
             Route::prefix('/invoices/{invoice}')->group(function() {
                 Route::post('set-open', [InvoiceController::class, 'setOpen']);
                 Route::post('email-invoice', [InvoiceController::class, 'emailInvoice']);
-                Route::post('mark-paid', [InvoiceController::class, 'markPaid']);
                 Route::get('pdf', [InvoiceController::class, 'downloadPDF']);
-                Route::get('mark-paid', [InvoiceController::class, 'markPaidForm']);
+
+                Route::get('/payment/receipt', [InvoicePaymentController::class, 'downloadReceipt']);
+
+                Route::singleton('payment', InvoicePaymentController::class)->creatable()->only('create', 'store');
+                Route::singleton('receipt', ReceiptController::class)->creatable();
             });
 
             Route::singleton('quotation', QuotationController::class)->creatable();
