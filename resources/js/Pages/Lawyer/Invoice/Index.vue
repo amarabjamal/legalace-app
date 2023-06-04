@@ -20,8 +20,7 @@
             <th class="w-32 py-4 px-6">Invoice Date</th>
             <th class="w-32 py-4 px-6">Due Date</th>
             <th class="w-24 py-4 px-6">Status</th>
-            <th class="w-24 py-4 px-6">Amount</th>
-            <th class="py-4 px-6">Payment Method</th>
+            <th class="w-24 py-4 px-6 text-right">Amount</th>
             <th class="w-24 py-4 px-6">Creator</th>
             <th class="py-4 px-6"></th>
           </tr>
@@ -45,12 +44,8 @@
                 {{ invoice.status }}
               </span>
             </td>
-            <td class="border-t px-6 py-4 whitespace-nowrap ">
+            <td class="border-t px-6 py-4 whitespace-nowrap text-right">
               {{ invoice.total }}
-            </td>
-            <td class="border-t px-6 py-4 whitespace-nowrap">
-              <span v-if="invoice.desc == null" class="text-gray-400">None</span>
-              {{  }}
             </td>
             <td class="border-t px-6 py-4 whitespace-nowrap ">
               {{ invoice.created_by.name }}
@@ -81,7 +76,6 @@ import Pagination from '../../../Shared/Pagination';
 import throttle from 'lodash/throttle';
 import pickBy from 'lodash/pickBy'
 import mapValues from 'lodash/mapValues';
-
 
 export default {
     components: {
