@@ -2,11 +2,11 @@
 
 namespace App\Http\Requests;
 
-use App\Enums\PaymentMethodEnum;
+use Illuminate\Database\Query\Builder;
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Validation\Rules\Enum;
+use Illuminate\Validation\Rule;
 
-class StoreInvoicePaymentRequest extends FormRequest
+class StoreReceiptRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -28,7 +28,6 @@ class StoreInvoicePaymentRequest extends FormRequest
         $this->merge([
             'company_id' => auth()->user()->company_id,
             'created_by_user_id' => auth()->id(),
-            'amount' => $this->invoice->grand_total,
         ]);
     }
 
@@ -40,11 +39,8 @@ class StoreInvoicePaymentRequest extends FormRequest
     public function rules()
     {
         return [
-            'date' => ['required', 'date', 'before_or_equal:today'],
-            'client_bank_account_id' => ['required', 'exists:bank_accounts,id'],
-            'payment_method_code' => ['required', new Enum(PaymentMethodEnum::class)],
-            'receipt' => ['required', 'file', 'mimes:pdf,xlxs,xlx,docx,doc,csv,txt,png,gif,jpg,jpeg', 'max:2048'],
-            'description' => ['required', 'string', 'max:255'],
+            'receipt_number' => ['required', 'string', 'max:255', Rule::unique('receipts', 'receipt_number')->where(fn(Builder $query) => $query->where('company_id', auth()->user()->company->id))],
+            'notes' => ['nullable', 'string', 'max:500'],
         ];
     }
 }
