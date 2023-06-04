@@ -7,18 +7,17 @@
 .form-select,
 .form-input-money {
   @apply p-2 text-sm leading-normal block w-full border border-gray-300 text-gray-500 bg-white font-sans rounded text-left appearance-none relative focus:border-gray-400 focus:outline-none focus:text-gray-600;
+}
 
-  &::placeholder {
-    @apply text-gray-500 opacity-100;
-  }
+.form-input::placeholder,
+.form-textarea::placeholder,
+.form-select::placeholder,
+.form-input-money::placeholder {
+  @apply text-gray-400 opacity-100;
 }
 
 .form-input-money {
   @apply rounded-none rounded-r;
-
-  &::placeholder {
-    @apply text-gray-500 opacity-100;
-  }
 }
 
 .form-select {
@@ -28,10 +27,10 @@
   background-size: 0.7rem;
   background-repeat: no-repeat;
   background-position: right 0.7rem center;
+}
 
-  &::-ms-expand {
-    @apply opacity-0;
-  }
+.form-select::-ms-expand {
+  @apply opacity-0;
 }
 
 .form-input.error,
