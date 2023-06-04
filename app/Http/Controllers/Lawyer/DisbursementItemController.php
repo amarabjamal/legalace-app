@@ -10,8 +10,6 @@ use App\Models\CaseFile;
 use App\Models\CaseFile\DisbursementItem\DisbursementItem;
 use App\Models\CaseFile\DisbursementItem\DisbursementItemType;
 use Brick\Money\Money;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Request as FacadesRequest;
@@ -85,7 +83,7 @@ class DisbursementItemController extends Controller
             DB::rollBack();
             if(Storage::exists($filePath))
             {
-                File::delete($filePath);
+                Storage::delete($filePath);
             }
 
             return back()->with('errorMessage', 'Failed: ' . $e->getMessage());
