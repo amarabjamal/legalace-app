@@ -1,9 +1,9 @@
 <template>
-    <Head title="View Invoice" />
+    <Head :title="page_title" />
 
     <page-heading :page_title="page_title" :breadcrumbs="breadcrumbs"/>
     
-    <div class="flex flex-col xl:flex-row">
+    <div class="flex flex-col xl:flex-row xl:space-x-6 space-y-6 xl:space-y-0">
         <div class="max-w-3xl bg-white rounded-md shadow-xl overflow-hidden">
             <div class="flex flex-wrap px-8 py-12">
                 <div class="flex justify-between items-center w-full mb-4">
@@ -54,14 +54,17 @@
                         <action-dropdown :status_code="invoice.status_value" :case_file_id="case_file.id" :invoice_id="invoice.id" />
                     </div>
                     <div v-else-if="invoice.status_value === 3" class="flex flex-wrap items-center space-x-2">
-                        <Link :href="`/lawyer/case-files/${case_file.id}/invoices/${invoice.id}/mark-paid`" as="button" class="btn-primary">
-                            Mark Paid
+                        <Link :href="`/lawyer/case-files/${case_file.id}/invoices/${invoice.id}/payment/create`" as="button" class="btn-primary">
+                            Add Payment
                         </Link>
                         <action-dropdown :status_code="invoice.status_value" :case_file_id="case_file.id" :invoice_id="invoice.id" @send-email="emailInvoice" />
                     </div>
                     <div v-else-if="invoice.status_value === 4" class="flex flex-wrap items-center space-x-2">
-                        <Link as="button" class="btn-primary">
-                            Generate Receipt
+                        <Link v-if="invoice.has_receipt" :href="`/lawyer/case-files/${case_file.id}/invoices/${invoice.id}/receipt`" as="button" class="btn-primary">
+                            Receipt
+                        </Link>
+                        <Link v-else :href="`/lawyer/case-files/${case_file.id}/invoices/${invoice.id}/receipt/create`" as="button" class="btn-primary">
+                            Convert to Receipt
                         </Link>
                         <action-dropdown :status_code="invoice.status_value" :case_file_id="case_file.id" :invoice_id="invoice.id" />
                     </div>
@@ -172,28 +175,69 @@
             </div>
         </div>
         
-        <!-- <div class="w-full max-w-3xl h-fit xl:max-w-xs bg-gray-50 border-1 border-gray-100 shadow ring-gray-900 rounded-md overflow-hidden mt-5 xl:mt-0 xl:ml-5 py-6 px-4">
-            <div>
-                Invoice status: Draft
-                <button>Change status to open</button>
-            </div>
-        </div> -->
-    </div>
+        <div v-if="invoice.status_value === 4"  class="w-full max-w-3xl h-fit xl:max-w-xs bg-gray-100 bg-clip-padding backdrop-filter backdrop-blur-3xl bg-opacity-20 border-1 border-gray-100 shadow ring-gray-900 rounded-md overflow-hidden">
+            <!-- <div>
+                Payment
+                Date: {{ invoice.payment.date }}
+                Amount: {{ invoice.payment.amount }}
+                Paid through: {{ invoice.payment.method }}
+                Recorded by: {{ invoice.payment.created_by.name }}
+            </div> -->
 
-    <upload-proof-of-payment-modal v-if="invoice.status_value === 3" :isOpen="ppm_is_open" @close-modal="closePPM"/>
+            <dl class="flex flex-wrap">
+                <div class="flex-auto pl-6 pt-6">
+                    <dt class="text-sm font-semibold leading-6 text-gray-900">Amount</dt>
+                    <dd class="mt-1 text-base font-semibold leading-6 text-gray-900">{{ invoice.payment.amount }}</dd>
+                </div>
+                <!-- <div class="flex-none self-end px-6 pt-4">
+                    <dt class="sr-only">Status</dt>
+                    <dd class="adp ajc aqy ark avx font-medium axt bbo bbs bcn">Paid</dd>
+                </div> -->
+                <div class="mt-6 flex w-full flex-none gap-x-4 border-t border-gray-900/[.05] px-6 pt-6">
+                    <dt class="flex-none">
+                        <span class="sr-only">Payment date</span>
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true" class="h-6 w-5 text-gray-400"><path d="M5.25 12a.75.75 0 01.75-.75h.01a.75.75 0 01.75.75v.01a.75.75 0 01-.75.75H6a.75.75 0 01-.75-.75V12zM6 13.25a.75.75 0 00-.75.75v.01c0 .414.336.75.75.75h.01a.75.75 0 00.75-.75V14a.75.75 0 00-.75-.75H6zM7.25 12a.75.75 0 01.75-.75h.01a.75.75 0 01.75.75v.01a.75.75 0 01-.75.75H8a.75.75 0 01-.75-.75V12zM8 13.25a.75.75 0 00-.75.75v.01c0 .414.336.75.75.75h.01a.75.75 0 00.75-.75V14a.75.75 0 00-.75-.75H8zM9.25 10a.75.75 0 01.75-.75h.01a.75.75 0 01.75.75v.01a.75.75 0 01-.75.75H10a.75.75 0 01-.75-.75V10zM10 11.25a.75.75 0 00-.75.75v.01c0 .414.336.75.75.75h.01a.75.75 0 00.75-.75V12a.75.75 0 00-.75-.75H10zM9.25 14a.75.75 0 01.75-.75h.01a.75.75 0 01.75.75v.01a.75.75 0 01-.75.75H10a.75.75 0 01-.75-.75V14zM12 9.25a.75.75 0 00-.75.75v.01c0 .414.336.75.75.75h.01a.75.75 0 00.75-.75V10a.75.75 0 00-.75-.75H12zM11.25 12a.75.75 0 01.75-.75h.01a.75.75 0 01.75.75v.01a.75.75 0 01-.75.75H12a.75.75 0 01-.75-.75V12zM12 13.25a.75.75 0 00-.75.75v.01c0 .414.336.75.75.75h.01a.75.75 0 00.75-.75V14a.75.75 0 00-.75-.75H12zM13.25 10a.75.75 0 01.75-.75h.01a.75.75 0 01.75.75v.01a.75.75 0 01-.75.75H14a.75.75 0 01-.75-.75V10zM14 11.25a.75.75 0 00-.75.75v.01c0 .414.336.75.75.75h.01a.75.75 0 00.75-.75V12a.75.75 0 00-.75-.75H14z"></path><path fill-rule="evenodd" d="M5.75 2a.75.75 0 01.75.75V4h7V2.75a.75.75 0 011.5 0V4h.25A2.75 2.75 0 0118 6.75v8.5A2.75 2.75 0 0115.25 18H4.75A2.75 2.75 0 012 15.25v-8.5A2.75 2.75 0 014.75 4H5V2.75A.75.75 0 015.75 2zm-1 5.5c-.69 0-1.25.56-1.25 1.25v6.5c0 .69.56 1.25 1.25 1.25h10.5c.69 0 1.25-.56 1.25-1.25v-6.5c0-.69-.56-1.25-1.25-1.25H4.75z" clip-rule="evenodd"></path></svg>
+                    </dt>
+                    <dd class="text-sm leading-6 text-gray-500">
+                        Paid on <time class="font-medium text-gray-900">{{ invoice.payment.date }}</time>
+                    </dd>
+                </div>
+                <div class="mt-4 flex w-full flex-none gap-x-4 px-6">
+                    <dt class="flex-none">
+                        <span class="sr-only">Payment method</span>
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true" class="h-6 w-5 text-gray-400"><path fill-rule="evenodd" d="M2.5 4A1.5 1.5 0 001 5.5V6h18v-.5A1.5 1.5 0 0017.5 4h-15zM19 8.5H1v6A1.5 1.5 0 002.5 16h15a1.5 1.5 0 001.5-1.5v-6zM3 13.25a.75.75 0 01.75-.75h1.5a.75.75 0 010 1.5h-1.5a.75.75 0 01-.75-.75zm4.75-.75a.75.75 0 000 1.5h3.5a.75.75 0 000-1.5h-3.5z" clip-rule="evenodd"></path></svg>
+                    </dt>
+                    <dd class="text-sm leading-6 text-gray-500">Through <span class="font-medium text-gray-900">{{ invoice.payment.method }}</span></dd>
+                </div>
+                <div class="mt-4 flex w-full flex-none gap-x-4 px-6">
+                    <dt class="flex-none">
+                        <span class="sr-only">Recorded by</span>
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true" class="h-6 w-5 text-gray-400"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-5.5-2.5a2.5 2.5 0 11-5 0 2.5 2.5 0 015 0zM10 12a5.99 5.99 0 00-4.793 2.39A6.483 6.483 0 0010 16.5a6.483 6.483 0 004.793-2.11A5.99 5.99 0 0010 12z" clip-rule="evenodd"></path></svg>
+                    </dt>
+                    <dd class="text-sm leading-6 text-gray-500">Recorded by <span class="font-medium text-gray-900">{{ invoice.payment.created_by.name }}</span></dd>
+                </div>
+            </dl>
+
+            <div class="mt-6 border-t border-gray-900/[.05] p-6">
+                <a 
+                    :href="`/lawyer/case-files/${case_file.id}/invoices/${invoice.id}/payment/receipt`" 
+                    target="_blank"
+                    class="text-sm font-semibold leading-6 text-gray-900"
+                >
+                    Download receipt <span aria-hidden="true">→</span>
+                </a>
+            </div>
+        </div>
+    </div>
 </template>
 
 <script>
 import Layout from '../Shared/Layout';
-import Dropdown from '../.../../../../Shared/Dropdown';
-import ActionDropdown from './ActionDropdown';
-import UploadProofOfPaymentModal from './UploadProofOfPaymentModal';
+import ActionDropdown from './Components/ActionDropdown';
 
 export default { 
     components: { 
-        Dropdown,
         ActionDropdown,
-        UploadProofOfPaymentModal,
     },
     layout: Layout,
     props: {
@@ -203,7 +247,7 @@ export default {
     },
     data() {
         return {
-            page_title: 'View Invoice',
+            page_title: 'Invoice',
             breadcrumbs: [
                 { link: '/lawyer', label: 'Dashboard'},
                 { link: '/lawyer/case-files/', label: 'Case Files'},
@@ -230,15 +274,6 @@ export default {
                 this.$inertia.post(`/lawyer/case-files/${this.case_file.id}/invoices/${this.invoice.id}/pdf`);
             }
         },
-        openPPM() {
-            this.ppm_is_open = true;
-            // if(confirm('Mark invoice as Paid. Are you sure to proceed?')) {
-            //     this.$inertia.post(`/lawyer/case-files/${this.case_file.id}/invoices/${this.invoice.id}/mark-paid`);
-            // }
-        },
-        closePPM() {
-            this.ppm_is_open = false;
-        }
     },
 };
 </script>
