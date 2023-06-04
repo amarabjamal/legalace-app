@@ -27,7 +27,7 @@ class StoreDisbursementItemRequest extends FormRequest
     protected function prepareForValidation()
     {
         $this->merge([
-            'company_id' => Auth()->user()->company->id,
+            'company_id' => auth()->user()->company_id,
             'status' => DisbursementItemStatusEnum::Recorded->value,
             'case_file_id' => $this->case_file->id,
         ]);
