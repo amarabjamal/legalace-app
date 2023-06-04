@@ -133,7 +133,7 @@ import TextInput from '../../../Shared/TextInput';
 import DateInput from '../../../Shared/DateInput';
 import TextareaInput from '../../../Shared/TextareaInput';
 import LoadingButton from '../../../Shared/LoadingButton';
-import SelectItemModal from './SelectItemModal';
+import SelectItemModal from './Components/SelectItemModal';
 
 export default { 
     components: { 
