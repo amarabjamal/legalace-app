@@ -58,6 +58,11 @@ class CaseFile extends Model
         return $this->hasMany(Invoice::class);
     }
 
+    public function invoicePayments()
+    {
+        return $this->hasManyThrough(InvoicePayment::class, Invoice::class);
+    }
+
     public function scopeOrderByDate($query) 
     {
         $query->orderBy('created_at', 'desc');
