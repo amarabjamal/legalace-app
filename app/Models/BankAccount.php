@@ -2,13 +2,14 @@
 
 namespace App\Models;
 
+use App\Traits\HasCompanyScope;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Auth;
 
 class BankAccount extends Model
 {
-    use HasFactory;
+    use HasFactory, HasCompanyScope;
 
     protected $table = 'bank_accounts';
     protected $primaryKey = 'id';
@@ -46,6 +47,11 @@ class BankAccount extends Model
     {
     
         return $this->belongsTo(Company::class, 'company_id', 'id');
+    }
+
+    public function scopeClientAccount($query)
+    {
+        $query->where('bank_account_type_id', '=',  BankAccountType::IS_CLIENT_ACCOUNT);
     }
 
     public function allBankAccounts() 
