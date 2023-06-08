@@ -33,6 +33,7 @@
                     {{ page_title }}
                 </h2>
             </div>
+            <slot/>
         </div>
     </div>
 </template>
