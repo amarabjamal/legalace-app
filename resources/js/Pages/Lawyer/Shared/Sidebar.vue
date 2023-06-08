@@ -39,7 +39,7 @@ export default {
                 {href: '/lawyer/case-files', label: 'Case Files', icon:'folder-5-line', isActive: this.$page.url.startsWith('/lawyer/case-files')},
                 {href: '/lawyer', label: 'Firm Accounts', icon:'increase-decrease-line', isActive: this.$page.url.startsWith('/lawyer/firm-accounts')},
                 {href: '/lawyer', label: 'Client Accounts', icon:'booklet-line', isActive: this.$page.url.startsWith('/lawyer/client-accounts')},
-                {href: '/lawyer', label: 'Claim Vouchers', icon:'ticket-line', isActive: this.$page.url.startsWith('/lawyer/clients/claim-vouchers')},
+                {href: '/lawyer/claim-vouchers', label: 'Claim Vouchers', icon:'ticket-line', isActive: this.$page.url.startsWith('/lawyer/claim-vouchers')},
             ],
         }
     },
