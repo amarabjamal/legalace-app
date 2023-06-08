@@ -26,7 +26,7 @@ class RegisterController extends Controller
             'id_type_id' => ['required', 'exists:id_types,id'],
             'id_number' => ['required', $request->id_type_id == 1 ? 'regex:/^\d{6}-\d{2}-\d{4}$/' : null ],
             'employee_id' => 'required',
-            'contact_number' => ['required', 'min:9', 'numeric'],
+            'contact_number' => ['required', 'numeric', 'digits:9'],
             'birthdate' => ['required', 'date'],
             'company_name' => 'required',
             'reg_number' => 'required',
@@ -80,11 +80,6 @@ class RegisterController extends Controller
             throw $e;
         }
 
-        return redirect('/login')->with('infoMessage', 'Account has been succesfully registered.');
-    }
-
-    public function testInfoMessage() {
-        
         return redirect('/login')->with('infoMessage', 'Account has been succesfully registered.');
     }
 }

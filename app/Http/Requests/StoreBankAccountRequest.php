@@ -4,6 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Validation\Rule;
 
 class StoreBankAccountRequest extends FormRequest
 {
@@ -28,7 +29,7 @@ class StoreBankAccountRequest extends FormRequest
             'label' => [
                 'required', 
                 'string', 
-                'unique:bank_accounts'
+                Rule::unique('bank_accounts')->where(fn ($query) => $query->where('company_id', Auth::user()->company_id)),
             ],
             'account_name' => [
                 'required', 
@@ -40,7 +41,7 @@ class StoreBankAccountRequest extends FormRequest
             ],
             'account_number' => [
                 'required', 
-                'unique:bank_accounts', 
+                Rule::unique('bank_accounts')->where(fn ($query) => $query->where('company_id', Auth::user()->company_id)),
                 'numeric', 
                 'digits_between:6,17'
             ],

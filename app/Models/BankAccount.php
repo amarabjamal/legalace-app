@@ -2,13 +2,14 @@
 
 namespace App\Models;
 
+use App\Traits\HasCompanyScope;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Auth;
 
 class BankAccount extends Model
 {
-    use HasFactory;
+    use HasFactory, HasCompanyScope;
 
     protected $table = 'bank_accounts';
     protected $primaryKey = 'id';
@@ -30,22 +31,47 @@ class BankAccount extends Model
         'updated_at'
     ];
 
-    public function bankAccountType() {
+    public function bankAccountType() 
+    {
+
         return $this->belongsTo(BankAccountType::class, 'bank_account_type_id', 'id');
     }
 
-    public function createdBy() {
+    public function createdBy() 
+    {
+
         return $this->belongsTo(User::class, 'created_by', 'id');
     }
 
-    public function company() {
+    public function company() 
+    {
+    
         return $this->belongsTo(Company::class, 'company_id', 'id');
     }
 
-    public function allBankAccounts() {
+    public function scopeClientAccount($query)
+    {
+        $query->where('bank_account_type_id', '=',  BankAccountType::IS_CLIENT_ACCOUNT);
+    }
+
+    public function allBankAccounts() 
+    {
         
         return $this->where([ 'company_id' => Auth::user()->company_id ])
             ->with('createdBy:id,name', 'bankAccountType:id,name')
             ->get();
+    }
+
+    public function clientAccountOptions() 
+    {
+
+        return $this->where([ 'company_id' => Auth::user()->company_id, 'bank_account_type_id' => BankAccountType::IS_CLIENT_ACCOUNT ])
+            ->get(['id', 'label']);
+    }
+
+    public function getById($id) 
+    {
+
+        return $this->where(['id' => $id])->get();
     }
 }

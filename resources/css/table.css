@@ -1,0 +1,19 @@
+.table-head {
+    @apply bg-gray-50 border-b-2 border-gray-200;
+}
+
+.table-head-row {
+    @apply text-left text-sm tracking-wide font-semibold;
+}
+
+.table-head-column {
+    @apply py-4 px-6;
+}
+
+.table-body-row {
+    @apply text-sm text-gray-700 hover:bg-gray-100 focus-within:bg-gray-100;
+}
+
+.table-body-data {
+    @apply border-t px-6 py-4 whitespace-nowrap;
+}

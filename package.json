@@ -23,7 +23,12 @@
         "@inertiajs/inertia": "^0.11.0",
         "@inertiajs/inertia-vue3": "^0.6.0",
         "@inertiajs/progress": "^0.2.7",
+        "class-variance-authority": "^0.6.0",
+        "jquery": "^3.6.4",
+        "puppeteer": "^20.5.0",
+        "uuid": "^9.0.0",
+        "v-money": "^0.8.1",
         "vue": "^3.2.36",
-        "vue-multiselect": "^2.1.6"
+        "vue-multiselect": "^2.1.7"
     }
 }

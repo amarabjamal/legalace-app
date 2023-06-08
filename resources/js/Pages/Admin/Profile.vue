@@ -11,7 +11,7 @@
                 Account Overview
                 </h2>
 
-                {{ $props.user }}
+                <!-- {{ $props.user }} -->
 
                 <table>
                     <tr>
