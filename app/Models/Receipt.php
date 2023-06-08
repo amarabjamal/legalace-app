@@ -5,10 +5,11 @@ namespace App\Models;
 use App\Traits\HasCompanyScope;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Receipt extends Model
 {
-    use HasFactory, HasCompanyScope;
+    use HasFactory, HasCompanyScope, SoftDeletes;
 
     protected $table = 'receipts';
     protected $primaryKey= 'id';
@@ -24,6 +25,11 @@ class Receipt extends Model
     public function payment() 
     {
         return $this->belongsTo(InvoicePayment::class, 'invoice_payment_id', 'id');
+    }
+
+    public function getClientAttribute()
+    {
+        return $this->payment->caseFile->client;
     }
 
     public static function getNextReceiptNumber() : string
