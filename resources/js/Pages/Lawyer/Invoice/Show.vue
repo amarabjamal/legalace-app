@@ -32,11 +32,6 @@
                         </div>
                     </div>
                     <div v-if="invoice.status_value === 1" class="flex flex-wrap items-center space-x-2">
-                        <form @submit.prevent="setInvoiceToOpen">
-                            <button type="submit" class="btn-primary">
-                                Change to Open
-                            </button>
-                        </form>
                         <Link 
                             :href="`/lawyer/case-files/${case_file.id}/invoices/${invoice.id}/edit`"
                             as="button" 
@@ -44,6 +39,11 @@
                         >
                             Edit
                         </Link>
+                        <form @submit.prevent="setInvoiceToOpen">
+                            <button type="submit" class="btn-primary">
+                                Change to Open
+                            </button>
+                        </form>
                     </div>
                     <div v-else-if="invoice.status_value === 2" class="flex flex-wrap items-center space-x-2">
                         <form @submit.prevent="emailInvoice">
@@ -175,24 +175,12 @@
             </div>
         </div>
         
-        <div v-if="invoice.status_value === 4"  class="w-full max-w-3xl h-fit xl:max-w-xs bg-gray-100 bg-clip-padding backdrop-filter backdrop-blur-3xl bg-opacity-20 border-1 border-gray-100 shadow ring-gray-900 rounded-md overflow-hidden">
-            <!-- <div>
-                Payment
-                Date: {{ invoice.payment.date }}
-                Amount: {{ invoice.payment.amount }}
-                Paid through: {{ invoice.payment.method }}
-                Recorded by: {{ invoice.payment.created_by.name }}
-            </div> -->
-
+        <div v-if="invoice.status_value === 4"  class="w-full max-w-3xl h-fit xl:max-w-xs bg-white border-1 border-gray-100 shadow ring-gray-900 rounded-md overflow-hidden">
             <dl class="flex flex-wrap">
                 <div class="flex-auto pl-6 pt-6">
                     <dt class="text-sm font-semibold leading-6 text-gray-900">Amount</dt>
                     <dd class="mt-1 text-base font-semibold leading-6 text-gray-900">{{ invoice.payment.amount }}</dd>
                 </div>
-                <!-- <div class="flex-none self-end px-6 pt-4">
-                    <dt class="sr-only">Status</dt>
-                    <dd class="adp ajc aqy ark avx font-medium axt bbo bbs bcn">Paid</dd>
-                </div> -->
                 <div class="mt-6 flex w-full flex-none gap-x-4 border-t border-gray-900/[.05] px-6 pt-6">
                     <dt class="flex-none">
                         <span class="sr-only">Payment date</span>
