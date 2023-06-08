@@ -134,7 +134,7 @@ class InvoiceController extends Controller
                     'amount' => $invoice->payment->amount->formatTo('en-MY'),
                     'created_by' => $invoice->payment->createdBy->only('name'),
                 ] : null,
-                'has_receipt' => isset($invoice->payment->receipt),
+                'has_receipt' => isset($invoice->receipt),
             ],
             'items' => $invoice->disbursementItems->map(fn($item) => 
                 [
