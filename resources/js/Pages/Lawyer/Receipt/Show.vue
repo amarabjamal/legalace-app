@@ -3,15 +3,41 @@
 
     <page-heading :page_title="page_title" :breadcrumbs="breadcrumbs"/>
     
-    <div class="max-w-3xl bg-white rounded-md shadow-lg overflow-hidden">
-        <div class="flex flex-wrap p-8 py-12">
-            <div class="flex justify-between w-full">
-                <div class="text-2xl font-medium leading-6 text-gray-500">
-                    Receipt
+    <div class="max-w-3xl overflow-hidden">
+        <div class="flex items-center justify-between px-2 py-4">
+            <div class="flex flex-wrap items-center space-x-2">
+                    <h2 class="text-lg font-semibold leading-6 text-gray-700">
+                        {{  receipt.number }}
+                    </h2>
+                    <div v-if="!receipt.is_sent" class="px-1.5 py-1 text-xs font-medium uppercase tracking-wider text-gray-400 border border-gray-400 rounded-lg">
+                        Pending
+                    </div>
+                    <div v-else class="px-1.5 py-1 text-xs font-medium uppercase tracking-wider text-green-600 border border-green-600 rounded-lg">
+                        Sent
+                    </div>
                 </div>
+            <div class="flex flex-wrap items-center space-x-2">
+                <a target="_blank" :href="`/lawyer/case-files/${case_file.id}/invoices/${invoice.id}/receipt/pdf`" as="button" class="btn-secondary">
+                    Download PDF
+                </a>
+                <form v-if="!receipt.is_sent" @submit.prevent="markSent">
+                    <button type="submit" class="btn-secondary">
+                        <!-- <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="h-4 w-4 inline-block mr-1"><path d="M11.602 13.7599L13.014 15.1719L21.4795 6.7063L22.8938 8.12051L13.014 18.0003L6.65 11.6363L8.06421 10.2221L10.189 12.3469L11.6025 13.7594L11.602 13.7599ZM11.6037 10.9322L16.5563 5.97949L17.9666 7.38977L13.014 12.3424L11.6037 10.9322ZM8.77698 16.5873L7.36396 18.0003L1 11.6363L2.41421 10.2221L3.82723 11.6352L3.82604 11.6363L8.77698 16.5873Z"></path></svg> -->
+                        Mark Sent
+                    </button>
+                </form>
+                <form @submit.prevent="emailReceipt">
+                    <button type="submit" class="btn-primary flex items-center">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="h-4 w-4 inline-block mr-1"><path d="M1.94631 9.31555C1.42377 9.14137 1.41965 8.86034 1.95706 8.6812L21.0433 2.31913C21.5717 2.14297 21.8748 2.43878 21.7268 2.95706L16.2736 22.0433C16.1226 22.5718 15.8179 22.5901 15.5946 22.0877L12.0002 14.0002L18.0002 6.00017L10.0002 12.0002L1.94631 9.31555Z"></path></svg>
+                        <span v-if="!receipt.is_sent">Send</span>
+                        <span v-else>Re-send</span>
+                    </button>
+                </form>
             </div>
+        </div>
 
-            <div class="flex flex-wrap w-full mt-6 border-b border-gray-200 text-sm">
+        <div class="flex flex-wrap bg-white rounded-md shadow-lg p-8 py-10">
+            <div class="flex flex-wrap w-full border-b border-gray-200 text-sm">
                 <div class="flex pb-2 pr-6 w-full lg:w-1/2">
                     <div class="text-gray-500 mr-4 w-20">
                         Ref. Invoice
@@ -149,6 +175,12 @@ export default {
         }
     },
     methods: {
+        emailReceipt() {
+            this.$inertia.post(`/lawyer/case-files/${this.case_file.id}/invoices/${this.invoice.id}/receipt/email-receipt`);
+        },
+        markSent() {
+            this.$inertia.post(`/lawyer/case-files/${this.case_file.id}/invoices/${this.invoice.id}/receipt/mark-sent`);
+        },
     },
 };
 </script>
