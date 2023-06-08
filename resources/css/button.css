@@ -1,9 +1,9 @@
 .btn-primary {
-  @apply px-6 py-3 rounded bg-blue-500 shadow text-white text-sm leading-4 font-bold whitespace-nowrap hover:bg-blue-600 focus:bg-blue-600 !important;
+  @apply px-6 py-2 rounded-sm bg-blue-500 shadow text-white fill-white text-sm leading-4 font-medium whitespace-nowrap hover:bg-blue-600 focus:bg-blue-600 !important;
 }
 
 .btn-secondary {
-  @apply px-6 py-3 rounded bg-white shadow-sm text-gray-900 text-sm leading-4 font-semibold whitespace-nowrap ring-1 ring-inset ring-gray-300 hover:bg-gray-50;
+  @apply px-6 py-2 rounded-sm bg-white shadow-sm text-gray-900 fill-gray-900 text-sm leading-4 font-light whitespace-nowrap ring-1 ring-inset ring-gray-300 hover:bg-gray-50;
 }
   
 .btn-spinner,
