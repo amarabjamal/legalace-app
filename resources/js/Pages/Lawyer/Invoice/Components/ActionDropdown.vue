@@ -50,7 +50,7 @@
                         'group flex w-full items-center rounded-md px-3 py-2 text-sm',
                         ]"
                     >
-                        Invoice PDF
+                        Download PDF
                     </a>
                 </MenuItem>
             </div>
