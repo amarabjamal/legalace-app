@@ -33,9 +33,7 @@
                     <th scope="col" class="py-4 px-6">
                         Client
                     </th>
-                    <th scope="col" class="py-4 px-6 w-24">
-                        <span>Actions</span>
-                    </th>
+                    <th scope="col" class="py-4 px-6 w-px"></th>
                 </tr>
             </thead>
             <tbody>
@@ -65,7 +63,9 @@
                         {{ case_file.client }}
                     </td>
                     <td class="border-t px-6 py-4 whitespace-nowrap">
-                        <Link :href="`/lawyer/case-files/${case_file.id}`" class="font-medium hover:text-blue-600">View</Link>
+                        <Link class="flex items-center px-2" :href="`/lawyer/case-files/${case_file.id}`" tabindex="-1">
+                            <icon name="cheveron-right" class="block w-5 h-5 fill-gray-400" />
+                        </Link>
                     </td>
                 </tr>
                 <tr>
