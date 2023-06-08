@@ -82,9 +82,4 @@ class RegisterController extends Controller
 
         return redirect('/login')->with('infoMessage', 'Account has been succesfully registered.');
     }
-
-    public function testInfoMessage() {
-        
-        return redirect('/login')->with('infoMessage', 'Account has been succesfully registered.');
-    }
 }
