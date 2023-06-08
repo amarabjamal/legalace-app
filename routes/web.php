@@ -11,19 +11,18 @@ use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\Common\DashboardController;
 use App\Http\Controllers\Common\ProfileController;
-use App\Http\Controllers\Email\MailController;
 use App\Http\Controllers\Lawyer\ClientController;
 use App\Http\Controllers\Lawyer\FirmAccountController;
 use App\Http\Controllers\Lawyer\ClientAccountController;
 use App\Http\Controllers\Lawyer\AccountReportingController;
 use App\Http\Controllers\Lawyer\CaseFileController;
+use App\Http\Controllers\Lawyer\ClaimVoucherController;
 use App\Http\Controllers\Lawyer\DisbursementItemController;
 use App\Http\Controllers\Lawyer\InvoiceController;
 use App\Http\Controllers\Lawyer\InvoicePaymentController;
 use App\Http\Controllers\Lawyer\QuotationController;
 use App\Http\Controllers\Lawyer\OperationalCostController;
 use App\Http\Controllers\Lawyer\ReceiptController;
-use App\Models\CaseFile;
 use Illuminate\Support\Facades\Auth;
 
 /*
@@ -36,9 +35,6 @@ use Illuminate\Support\Facades\Auth;
 | contains the "web" middleware group. Now create something great!
 |
 */
-
-Route::get('/sendmail', [MailController::class, 'index']);
-Route::get('/testInfoMessage', [RegisterController::class, 'testInfoMessage']);
 
 // Route::group(['middleware' => 'guest'],function() {
     Route::get('/', [LoginController::class, 'index']);
@@ -86,6 +82,7 @@ Route::group(['middleware' => 'auth'], function() {
 
         Route::resource('clients', ClientController::class);
         Route::resource('case-files', CaseFileController::class);
+        Route::resource('claim-vouchers', ClaimVoucherController::class);
 
         Route::scopeBindings()->prefix('/case-files/{case_file}')->group(function() {
             Route::prefix('/quotation')->group(function() {
@@ -99,6 +96,10 @@ Route::group(['middleware' => 'auth'], function() {
                 Route::get('pdf', [InvoiceController::class, 'downloadPDF']);
 
                 Route::get('/payment/receipt', [InvoicePaymentController::class, 'downloadReceipt']);
+
+                Route::get('receipt/pdf', [ReceiptController::class, 'downloadPDF']);
+                Route::post('receipt/mark-sent', [ReceiptController::class, 'markSent']);
+                Route::post('receipt/email-receipt', [ReceiptController::class, 'emailReceipt']);
 
                 Route::singleton('payment', InvoicePaymentController::class)->creatable()->only('create', 'store');
                 Route::singleton('receipt', ReceiptController::class)->creatable();
