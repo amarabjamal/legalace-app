@@ -27,6 +27,11 @@ class Receipt extends Model
         return $this->belongsTo(InvoicePayment::class, 'invoice_payment_id', 'id');
     }
 
+    public function createdBy() 
+    {
+        return $this->belongsTo(User::class, 'created_by_user_id', 'id');
+    }
+
     public function getClientAttribute()
     {
         return $this->payment->caseFile->client;
