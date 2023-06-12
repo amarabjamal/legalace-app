@@ -7,16 +7,15 @@ use Illuminate\Http\Request;
 use Inertia\Inertia;
 use App\Models\Client;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Request as FacadesRequest;
 
 class ClientController extends Controller
 {
     public function index(Request $request)
     {
-        $clients = Client::query()
-            ->when($request->input('search'), function ($query, $search) {
-                $query->where('name', 'like', "%{$search}%");
-            })
-            ->paginate(10)
+        $filters = FacadesRequest::all(['search']);
+        $clients = Client::filter(FacadesRequest::only('search'))
+            ->paginate(25)
             ->withQueryString()
             ->through(fn($user) => [
                 'id' => $user->id,
@@ -25,11 +24,10 @@ class ClientController extends Controller
                 'phone_num' => $user->phone_num,
                 'id_num' => $user->id_num
             ]);
-        $filters = $request->only(['search']);
     
         return Inertia::render('Lawyer/Client/Index', [
+            'filters' => $filters,
             'clients'=> $clients,
-            'filters' => $filters
         ]);
     }
 
