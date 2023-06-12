@@ -126,4 +126,16 @@ class User extends Authenticatable
             });
         });     
     }
+
+    public function scopeAdmin($query)
+    {
+        $query->whereHas('roles', function ($query) {
+            $query->where('slug', '=', 'admin');
+        });
+    }
+
+    public function scopeNotCurrentUser($query)
+    {
+        $query->where('id', '!=', auth()->id());
+    }
 }
