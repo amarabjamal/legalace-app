@@ -91,8 +91,23 @@ class DisbursementItem extends Model
         $query->where('status', '=', DisbursementItemStatusEnum::Recorded->value);
     }
 
+    public function scopePaidByLawyer($query)
+    {
+        $query->where('fund_type', '=', DisbursementItemFundTypeEnum::PaidByLawyer->value)
+            ->where('status', '=', DisbursementItemStatusEnum::PaidByClient->value);   
+    }
+
+    public function scopeFromInvoiceCreatedByCurrentUser($query)
+    {
+        $query->whereHas('caseFile', function ($query) {
+            $query->where('created_by', '=', auth()->id());
+        });
+    }
+
     public function isDeletable() : bool 
     {
-        return $this->status->value == DisbursementItemStatusEnum::Recorded->value;
+        return $this->status == DisbursementItemStatusEnum::Recorded;
     }
+
+
 }
