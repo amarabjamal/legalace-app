@@ -1,5 +1,10 @@
 .btn-primary {
-  @apply px-6 py-2 rounded-sm bg-blue-500 shadow text-white fill-white text-sm leading-4 font-medium whitespace-nowrap hover:bg-blue-600 focus:bg-blue-600 !important;
+  background-color: #3C3D5B !important;
+  @apply px-6 py-2 rounded-sm shadow text-white fill-white text-sm leading-4 font-medium whitespace-nowrap hover:bg-blue-600 focus:bg-blue-600 !important;
+}
+
+.btn-primary:hover, .btn-primary:focus {
+  background-color: #50527A !important;
 }
 
 .btn-secondary {
