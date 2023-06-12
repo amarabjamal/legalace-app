@@ -17,29 +17,6 @@
     --color-font-lighter: #9aa5b1;
     --color-outline: #a0c2ff;
 
-    /* Sizes */
-    --size-10: 10px;
-    --size-12: 12px;
-    --size-14: 14px;
-    --size-16: 16px;
-    --size-18: 18px;
-    --size-20: 20px;
-    --size-22: 22px;
-    --size-24: 24px;
-    --size-28: 28px;
-    --size-32: 32px;
-    --size-48: 48px;
-    --size-64: 64px;
-
-    /* Box Shadows */
-    --shadow-sm: 0 -1px 3px rgba(0, 0, 0, 0.02), 0 1px 2px rgba(0, 0, 0, 0.03),
-        0 4px 4px rgba(0, 0, 0, 0.03);
-    --shadow-lg: 0 -1px 3px rgba(0, 0, 0, 0.02), 0 1px 2px rgba(0, 0, 0, 0.05),
-        0 3px 4px rgba(0, 0, 0, 0.05), 0 5px 8px rgba(0, 0, 0, 0.05);
-    --shadow-xl: 0 -1px 3px rgba(0, 0, 0, 0.02), 0 1px 2px rgba(0, 0, 0, 0.05),
-        0 3px 4px rgba(0, 0, 0, 0.05), 0 5px 8px rgba(0, 0, 0, 0.05),
-        0 16px 16px rgba(0, 0, 0, 0.05);
-
     /* Other Variables */
     --font-default: "Inter","Montserrat","Poppins", sans-serif;
 
@@ -67,6 +44,10 @@ body {
     font-family: var(--font-default);
 }
 
+.text-primary {
+    color: #3C3D5B;
+}
+
 .bg-primary {
     background-color: var(--color-primary) !important;
 }
@@ -92,38 +73,6 @@ body {
 
 .standard-button:hover {
     background-color: var(--color-secondary);
-}
-
-.card {
-    position: relative;
-    display: flex;
-    flex-direction: column;
-    min-width: 0;
-    word-wrap: break-word;
-    background-color: #fff;
-    background-clip: border-box;
-    border: 1px solid rgba(0, 0, 0, .125);
-    border-radius: .25rem;
-    margin-bottom: 30px;
-}
-
-.card-header {
-    padding: .75rem 1.25rem;
-    margin-bottom: 0;
-    color: inherit;
-    background-color: rgba(0, 0, 0, .03);
-    border-bottom: 1px solid rgba(0, 0, 0, .125)
-}
-
-.card-body {
-    padding: .75rem 1.25rem;
-    margin-bottom: 0;
-}
-
-.card-footer {
-    padding: .75rem 1.25rem;
-    background-color: rgba(0, 0, 0, .03);
-    border-top: 1px solid rgba(0, 0, 0, .125)
 }
 
 select {
