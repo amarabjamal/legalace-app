@@ -227,7 +227,7 @@ export default {
         return {
             page_title: 'Voucher Approvals',
             breadcrumbs: [
-                { link: '/admin', label: 'Dashboard'},
+                { link: '/admin/dashboard', label: 'Admin'},
                 { link: null, label: 'Voucher Approvals'},
             ],
         }

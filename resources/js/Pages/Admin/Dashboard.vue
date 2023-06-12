@@ -439,6 +439,7 @@ export default {
         return {
             page_title: 'Dashboard',
             breadcrumbs: [
+                { link: '/admin/dashboard', label: 'Admin'},
                 { link: null, label: 'Dashboard'},
             ],
         }

@@ -2,6 +2,8 @@
     <nav id="sidebar" :class="`${!isSidebarOpen ? 'close' : ''}`">
         <div class="menu-items">
             <ul class="nav-links">
+                <li class="logo-container"><div class="logo"></div></li>
+                
                 <li v-for="(navigation, index) in navigations" :key="index">
                     <div>
                         <Link :href="navigation.href">
@@ -34,7 +36,7 @@ export default {
     data() {
         return {
             navigations: [
-                {href: '/admin', label: 'Dashboard', icon:'home-smile-line', isActive: this.$page.url.startsWith('/lawyer')},
+                {href: '/admin/dashboard', label: 'Dashboard', icon:'home-smile-line', isActive: this.$page.url.startsWith('/lawyer')},
                 {href: '/admin/company', label: 'Company Profile', icon:'donut-chart-line', isActive: this.$page.url.startsWith('/admin/company')},
                 {href: '/admin/users', label: 'Employees', icon:'group-line', isActive: this.$page.url.startsWith('/admin/users')},
                 {href: '/admin/bank-accounts', label: 'Bank Accounts', icon:'bank-card-line', isActive: this.$page.url.startsWith('/admin/bank-accounts')},

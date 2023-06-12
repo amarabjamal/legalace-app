@@ -150,7 +150,7 @@ export default {
         return {
             page_title: 'Edit Company Profile',
             breadcrumbs: [
-                { link: '/admin', label: 'Dashboard'},
+                { link: '/admin/dashboard', label: 'Admin'},
                 { link: '/admin/company', label: 'Company Profile'},
                 { link: null, label: 'Edit'},
             ],

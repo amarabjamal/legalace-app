@@ -67,7 +67,7 @@ export default {
         return {
             page_title: 'Company Profile',
             breadcrumbs: [
-                { link: '/admin', label: 'Dashboard'},
+                { link: '/admin/dashboard', label: 'Admin'},
                 { link: null, label: 'Company Profile'},
             ],
         }

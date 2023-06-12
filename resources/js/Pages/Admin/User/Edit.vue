@@ -234,7 +234,7 @@ export default {
         return {
             page_title: this.user.name,
             breadcrumbs: [
-                { link: '/admin', label: 'Dashboard'},
+                { link: '/admin/dashboard', label: 'Admin'},
                 { link: '/admin/users', label: 'Employees'},
                 { link: null, label: this.user.name },
                 { link: null, label: 'Edit' },

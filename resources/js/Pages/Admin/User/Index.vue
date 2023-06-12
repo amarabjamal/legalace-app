@@ -93,7 +93,7 @@ export default {
             },
             page_title: 'Employees',
             breadcrumbs: [
-                { link: '/admin', label: 'Dashboard'},
+                { link: '/admin/dashboard', label: 'Admin'},
                 { link: null, label: 'Employees'},
             ],
         }

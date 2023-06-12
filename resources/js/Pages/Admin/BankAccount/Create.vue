@@ -162,7 +162,7 @@ export default {
         return {
             page_title: 'Create Bank Account',
             breadcrumbs: [
-                { link: '/admin', label: 'Dashboard'},
+                { link: '/admin/dashboard', label: 'Admin'},
                 { link: '/admin/bank-accounts', label: 'Bank Accounts'},
                 { link: null, label: 'Create'},
             ],

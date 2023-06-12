@@ -114,7 +114,7 @@ export default {
         return {
             page_title: 'Bank Accounts',
             breadcrumbs: [
-                { link: '/admin', label: 'Dashboard'},
+                { link: '/admin/dashboard', label: 'Admin'},
                 { link: null, label: 'Bank Accounts'},
             ],
         }

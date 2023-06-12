@@ -253,7 +253,7 @@ export default {
         return {
             page_title: 'Create Employee',
             breadcrumbs: [
-                { link: '/admin', label: 'Dashboard'},
+                { link: '/admin/dashboard', label: 'Admin'},
                 { link: '/admin/users', label: 'Employees'},
                 { link: null, label: 'Create'},
             ],
