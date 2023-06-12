@@ -80,6 +80,8 @@ Route::group(['middleware' => 'auth'], function() {
         Route::get('/dashboard', [DashboardController::class, 'showLawyerDashboard']);
         Route::get('/profile', [ProfileController::class, 'showLawyerProfile']);
 
+        Route::post('claim-vouchers/{claim_voucher}/submit', [ClaimVoucherController::class, 'submitClaimVoucher']);
+
         Route::resource('clients', ClientController::class);
         Route::resource('case-files', CaseFileController::class);
         Route::resource('claim-vouchers', ClaimVoucherController::class);
