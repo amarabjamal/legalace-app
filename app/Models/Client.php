@@ -31,4 +31,13 @@ class Client extends Model
     public function caseFiles() {
         return $this->hasMany(CaseFile::class);
     }
+
+    public function scopeFilter($query, array $filters) 
+    {
+        $query->when($filters['search'] ?? null, function ($query, $search) {
+            $query->where(function ($query) use ($search) {
+                $query->where('name', 'like', '%'.$search.'%');
+            });
+        });
+    }
 }
