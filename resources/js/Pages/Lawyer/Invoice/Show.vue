@@ -237,7 +237,7 @@ export default {
         return {
             page_title: 'Invoice',
             breadcrumbs: [
-                { link: '/lawyer', label: 'Dashboard'},
+                { link: '/lawyer/dashboard', label: 'Lawyer'},
                 { link: '/lawyer/case-files/', label: 'Case Files'},
                 { link: `/lawyer/case-files/${this.case_file.id}`, label: this.case_file.file_number},
                 { link: `/lawyer/case-files/${this.case_file.id}/invoices`, label: 'Invoices'},

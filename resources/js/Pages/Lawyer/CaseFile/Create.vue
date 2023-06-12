@@ -58,7 +58,7 @@ export default {
             }),
             page_title: 'Create File',
             breadcrumbs: [
-                { link: '/lawyer', label: 'Dashboard'},
+                { link: '/lawyer/dashboard', label: 'Lawyer'},
                 { link: '/lawyer/case-files/', label: 'Case Files'},
                 { link: null, label: 'Create'},
             ],

@@ -110,7 +110,7 @@ export default {
         return {
             page_title: 'Case File: ' + this.case_file.file_number,
             breadcrumbs: [
-                { link: '/lawyer', label: 'Dashboard'},
+                { link: '/lawyer/dashboard', label: 'Lawyer'},
                 { link: '/lawyer/case-files/', label: 'Case Files'},
                 { link: null, label: this.case_file.file_number},
             ],
