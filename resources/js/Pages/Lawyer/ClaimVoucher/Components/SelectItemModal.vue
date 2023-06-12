@@ -27,9 +27,9 @@
                         <div class="flex min-h-full items-end justify-center p-4 text-center sm:items-center sm:p-0">
                             <DialogPanel class="relative transform overflow-hidden rounded-lg bg-white text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-2xl">
                                 <div class="p-6 mt-3 text-center sm:mt-0 sm:text-left">
-                                    <DialogTitle as="h3" class="text-base font-semibold leading-6 text-gray-900">Invoice Items</DialogTitle>
+                                    <DialogTitle as="h3" class="text-base font-semibold leading-6 text-gray-900">Claim Voucher Items</DialogTitle>
                         
-                                    <p class="mt-2 text-sm text-gray-500">Please select the items to be added to this invoice.</p>
+                                    <p class="mt-2 text-sm text-gray-500">Please select the items to be added to this claim voucher.</p>
 
                                     <div class="mt-2 overflow-hidden overflow-y-scroll max-h-80">
                                         <table class="w-full my-4 whitespace-nowrap text-left text-sm leading-6 mr-6">
@@ -53,11 +53,11 @@
                                                         </div>
                                                     </td>
                                                     <td class="pr-0 pl-8 py-5 align-top text-right">
-                                                        {{ item.amount }}
+                                                        {{ item.amount_display }}
                                                     </td>
                                                     <td class="flex justify-center py-5 align-top">
-                                                        <button v-if="isNotAdded(item.id)" type="button" @click="addItem(item.id)">Add</button>   
-                                                        <span v-else class="italic text-sm text-gray-400 mt-1">Added</span>
+                                                        <span v-if="isAdded(item.id)" class="italic text-sm text-gray-400 mt-1">Added</span>
+                                                        <button v-else  type="button" @click="addItem(item.id)">Add</button>   
                                                     </td>
                                                 </tr>
                                                 <tr v-if="items.length === 0">
@@ -109,8 +109,8 @@ export default {
         addItem(id) {
             this.$emit('add-item', id);
         },
-        isNotAdded(id) {
-            return !this.addedItems.find((item) => item.id === id);
+        isAdded(id) {
+            return this.addedItems.find((item) => item.id === id);
         }
     },
 }

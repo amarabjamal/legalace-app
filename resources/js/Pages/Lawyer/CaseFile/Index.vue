@@ -1,7 +1,7 @@
 <template>
-    <Head title="Case Files" />
+    <Head :title="page_title" />
     
-    <page-heading :page_title="page_title" :breadcrumbs="breadcrumbs"/>
+    <page-heading :page_title="page_title" :page_subtitle="page_subtitle" :breadcrumbs="breadcrumbs"/>
 
     <div class="flex items-center justify-between mb-6">
         <search-filter v-model="form.search" class="mr-4 w-full max-w-md"  @reset="reset"></search-filter>
@@ -104,8 +104,9 @@ export default {
                 search: this.filters.search,
             },
             page_title: 'Case Files',
+            page_subtitle: 'Manage your case files.',
             breadcrumbs: [
-                { link: '/lawyer', label: 'Dashboard'},
+                { link: '/lawyer/dashboard', label: 'Lawyer'},
                 { link: null, label: 'Case Files'},
             ],
         }

@@ -19,7 +19,7 @@
             <th class="w-32 py-4 px-6">Record Type</th>
             <th class="py-4 px-6">Name</th>
             <th class="py-4 px-6">Desc</th>
-            <th class="w-32 py-4 px-6">Amount</th>
+            <th class="w-32 py-4 px-6 text-right">Amount</th>
             <th class="w-24 py-4 px-6">Status</th>
             <th class="w-24 py-4 px-6">Fund Type</th>
             <th class="py-4 px-6"></th>
@@ -40,11 +40,20 @@
               <span v-if="item.desc == null" class="text-gray-400">None</span>
               {{ item.desc }}
             </td>
-            <td class="border-t px-6 py-4 whitespace-nowrap text-right">
+            <td class="border-t px-6 py-4 whitespace-nowrap text-right tabular-nums">
               {{ item.amount }}
             </td>
             <td class="border-t px-6 py-4 whitespace-nowrap">
-              <span class="p-1.5 text-xs font-medium uppercase tracking-wider text-gray-800 bg-gray-200 rounded-lg bg-opacity-50">
+              <span v-if="item.status === 'Drafted'" class="p-1.5 text-xs font-medium uppercase tracking-wider text-gray-800 bg-gray-200 rounded-lg bg-opacity-50">
+                {{ item.status }}
+              </span>
+              <span v-else-if="item.status === 'Paid'" class="p-1.5 text-xs font-medium uppercase tracking-wider text-blue-800 bg-blue-200 rounded-lg bg-opacity-50">
+                {{ item.status }}
+              </span>
+              <span v-else-if="item.status === 'Claiming'" class="p-1.5 text-xs font-medium uppercase tracking-wider text-yellow-800 bg-yellow-200 rounded-lg bg-opacity-50">
+                {{ item.status }}
+              </span>
+              <span v-else class="p-1.5 text-xs font-medium uppercase tracking-wider text-gray-800 bg-gray-200 rounded-lg bg-opacity-50">
                 {{ item.status }}
               </span>
             </td>
@@ -100,7 +109,7 @@ export default {
         },
         page_title: 'Disbursement Items',
         breadcrumbs: [
-            { link: '/lawyer', label: 'Dashboard'},
+            { link: '/lawyer/dashboard', label: 'Lawyer'},
             { link: '/lawyer/case-files/', label: 'Case Files'},
             { link: `/lawyer/case-files/${this.case_file.id}`, label: this.case_file.file_number},
             { link: null, label: 'Items'},

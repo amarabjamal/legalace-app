@@ -40,11 +40,17 @@
               {{ invoice.due_at }}
             </td>
             <td class="border-t px-6 py-4 whitespace-nowrap ">
-              <span class="p-1.5 text-xs font-medium uppercase tracking-wider text-gray-800 bg-gray-200 rounded-lg bg-opacity-50">
+              <span v-if="invoice.status === 'Draft'" class="p-1.5 text-xs font-medium uppercase tracking-wider text-gray-800 bg-gray-200 rounded-lg bg-opacity-50">
+                {{ invoice.status }}
+              </span>
+              <span v-else-if="invoice.status === 'Open'" class="p-1.5 text-xs font-medium uppercase tracking-wider text-blue-800 bg-blue-200 rounded-lg bg-opacity-50">
+                {{ invoice.status }}
+              </span>
+              <span  v-else-if="invoice.status === 'Paid'" class="p-1.5 text-xs font-medium uppercase tracking-wider text-green-800 bg-green-200 rounded-lg bg-opacity-50">
                 {{ invoice.status }}
               </span>
             </td>
-            <td class="border-t px-6 py-4 whitespace-nowrap text-right">
+            <td class="border-t px-6 py-4 whitespace-nowrap text-right tabular-nums">
               {{ invoice.total }}
             </td>
             <td class="border-t px-6 py-4 whitespace-nowrap ">
@@ -96,7 +102,7 @@ export default {
         },
         page_title: 'Invoices',
         breadcrumbs: [
-            { link: '/lawyer', label: 'Dashboard'},
+            { link: '/lawyer/dashboard', label: 'Lawyer'},
             { link: '/lawyer/case-files/', label: 'Case Files'},
             { link: `/lawyer/case-files/${this.case_file.id}`, label: this.case_file.file_number},
             { link: null, label: 'Invoices'},

@@ -9,54 +9,6 @@
         <span class="font-medium">Quotation</span>
     </h1>
 
-    <div class="mx-auto max-w-7xl py-16 px-4 sm:px-6 lg:px-8">
-        <div class="mx-auto grid max-w-2xl grid-rows-1 items-start gap-x-8 gap-y-8 lg:mx-0 lg:max-w-none lg:grid-cols-3">
-            <div class="lg:col-start-3 lg:row-end-1">
-                <div class="rounded-lg bg-gray-50/100 shadow-sm ring-gray-900/5">
-                    <dl></dl>
-                    <div class="mt-6 border-t border-gray-900/5 px-6 py-6">
-                        <a href="#" class="text-sm font-semibold leading-6 text-gray-900/100">Download receipt →</a>
-                    </div>
-                </div>
-            </div>
-    
-            <div class="bg-white/100 mx-4 px-4 py-8 shadow-sm ring-gray-900/5 sm:mx-0 sm:rounded-lg sm:px-8 sm:pb-14 lg:row-span-2">
-                <h2 class="text-base font-semibold text-gray-900/100">Invoice</h2>
-    
-                <dl class="mt-6 grid grid-cols-1 text-sm leading-6 sm:grid-cols-2 ">
-                    <div class="pr-4">
-                        <dt class="inline text-gray-700/100">Issued on</dt>
-                        <dd class="inline text-gray-700/100">
-                            <time datetime="2023-23-01">January 23, 2023</time>
-                        </dd>
-                    </div>
-                    <div class="mt-2 sm:mt-0 sm:pl-4">
-                        <dt class="inline text-gray-700/100">Due on</dt>
-                        <dd class="inline text-gray-700/100">
-                            <time datetime="2023-23-01">January 23, 2023</time>
-                        </dd>
-                    </div>
-                    <div class="mt-6 border-t border-gray-900/5 pt-6 sm:pr-4"></div>
-                    <div class="mt-8 sm:mt-6 sm:border-t sm:border-gray-900/5 sm:pl-4 sm:pt-6"></div>
-                </dl>
-
-                <table class="mt-16 w-full whitespace-nowrap text-left text-sm leading-6">
-                    <thead class="border-b border-gray-200/100 text-gray-900/100">
-                        <tr>
-                            <th scope="col"></th>
-                            <th scope="col"></th>
-                            <th scope="col"></th>
-                        </tr>
-                    </thead>
-                </table>
-            </div>
-
-            <div class="col-start-3">
-                <h2 class="text-sm leading-6 font-semibold text-gray-900/100">Activity</h2>
-            </div>
-        </div>
-    </div>
-
     <div class="card">
         <div class="card-header flex justify-between items-center">
             <div class="card-header-title font-size-lg text-capitalize font-weight-normal">
