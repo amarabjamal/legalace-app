@@ -42,7 +42,7 @@ createInertiaApp({
 
       app.mount(el)
   },
-  title: (title) => title ? `${title} - Legal Ace` : 'Legal Ace',
+  title: (title) => title ? `${title} | Legal Ace - Easy Legal Firm Accounting` : 'Legal Ace',
 })
 
 InertiaProgress.init({
