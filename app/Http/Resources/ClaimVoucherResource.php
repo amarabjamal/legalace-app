@@ -25,6 +25,7 @@ class ClaimVoucherResource extends JsonResource
             'amount' => $this->amount->formatTo('en_MY'),
             'status' =>ClaimVoucher::STATUS[$this->status->value],
             'approver' => $this->approver->only('name'),
+            'requester' => $this->requester->only('name'),
         ];
     }
 }
