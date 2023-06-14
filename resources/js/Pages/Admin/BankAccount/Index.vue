@@ -1,9 +1,9 @@
 <template>
     <Head :title="page_title" />
 
-    <div class="flex justify-between items-center">
-        <page-heading :page_title="page_title" :breadcrumbs="breadcrumbs"/>
-
+    <page-heading :page_title="page_title" :breadcrumbs="breadcrumbs"/>
+    
+    <div class="flex justify-between items-center mb-4">
         <div class="flex items-center">
             <Link href="/admin/bank-accounts/create">
                 <button class="btn-primary">

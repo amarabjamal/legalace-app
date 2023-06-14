@@ -11,6 +11,7 @@ use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\Common\DashboardController;
 use App\Http\Controllers\Common\ProfileController;
+use App\Http\Controllers\Common\UserNotificationController;
 use App\Http\Controllers\Lawyer\ClientController;
 use App\Http\Controllers\Lawyer\FirmAccountController;
 use App\Http\Controllers\Lawyer\ClientAccountController;
@@ -53,32 +54,36 @@ use Illuminate\Support\Facades\Auth;
 
 
 Route::group(['middleware' => 'auth'], function() {
+    Route::get('/notifications', [UserNotificationController::class, 'index'])->name('notifications');
+
     //Routes for Administrator ONLY
     Route::group(['middleware' => 'check.role:admin', 'prefix' => 'admin', 'as' => 'admin.'], function() {
-        Route::get('/', [DashboardController::class, 'showAdminDashboard']);
-        Route::get('/dashboard', [DashboardController::class, 'showAdminDashboard'])->name('dashboard');
-        Route::get('/profile', [ProfileController::class, 'showAdminProfile'])->name('profile');
+        Route::get('/', [DashboardController::class, 'indexAdmin']);
+        Route::get('/dashboard', [DashboardController::class, 'indexAdmin'])->name('dashboard');
+        Route::get('/profile', [ProfileController::class, 'indexAdmin'])->name('profile');
+        Route::get('/notifications', [UserNotificationController::class, 'indexAdmin'])->name('notifications');
 
         Route::resources([
             'users' => ManageUsers::class,
             'bank-accounts' => ManageBankAccount::class,
-            'voucherapprovals' => ApproveVoucher::class,
+            'voucher-requests' => ApproveVoucher::class,
         ]);
     
         Route::resource('company', ManageCompany::class)->except(['show','edit', 'destroy']);
         Route::get('company/edit', [ManageCompany::class, 'edit'])->name('company.edit');
         
         Route::get('/settings', function () {
-            $userId = Auth::id();
+            $userId = auth::id();
             return Inertia::render('Admin/Settings', [$userId]);
         });
     });
 
     //Routes for Lawyer ONLY
     Route::group(['middleware' => 'check.role:lawyer', 'prefix' => 'lawyer', 'as' => 'lawyer.'], function() {
-        Route::get('/', [DashboardController::class, 'showLawyerDashboard']);
-        Route::get('/dashboard', [DashboardController::class, 'showLawyerDashboard']);
-        Route::get('/profile', [ProfileController::class, 'showLawyerProfile']);
+        Route::get('/', [DashboardController::class, 'indexLawyer']);
+        Route::get('/dashboard', [DashboardController::class, 'indexLawyer']);
+        Route::get('/profile', [ProfileController::class, 'indexLawyer']);
+        Route::get('/notifications', [UserNotificationController::class, 'indexLawyer'])->name('notifications');
 
         Route::post('claim-vouchers/{claim_voucher}/submit', [ClaimVoucherController::class, 'submitClaimVoucher']);
 
