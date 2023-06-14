@@ -148,7 +148,7 @@ export default {
             page_title: 'Create Receipt',
             breadcrumbs: [
                 { link: '/lawyer/dashboard', label: 'Lawyer'},
-                { link: '/lawyer/case-files/', label: 'Case Files'},
+                { link: '/lawyer/case-files/', label: 'My Cases'},
                 { link: `/lawyer/case-files/${this.case_file.id}`, label: this.case_file.file_number},
                 { link: `/lawyer/case-files/${this.case_file.id}/invoices`, label: 'Invoices'},
                 { link: `/lawyer/case-files/${this.case_file.id}/invoices/${this.invoice.id}`, label: this.invoice.number},

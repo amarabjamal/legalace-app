@@ -1,5 +1,5 @@
 <template>
-    <Head title="View Case File" />
+    <Head :title="page_title" />
 
     <page-heading :page_title="page_title" :breadcrumbs="breadcrumbs"/>
 
@@ -108,10 +108,10 @@ export default {
     },
     data() {
         return {
-            page_title: 'Case File: ' + this.case_file.file_number,
+            page_title: 'CASE FILE ' + this.case_file.file_number,
             breadcrumbs: [
                 { link: '/lawyer/dashboard', label: 'Lawyer'},
-                { link: '/lawyer/case-files/', label: 'Case Files'},
+                { link: '/lawyer/case-files/', label: 'My Cases'},
                 { link: null, label: this.case_file.file_number},
             ],
         }

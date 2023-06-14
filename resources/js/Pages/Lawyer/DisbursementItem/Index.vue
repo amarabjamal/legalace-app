@@ -53,6 +53,9 @@
               <span v-else-if="item.status === 'Claiming'" class="p-1.5 text-xs font-medium uppercase tracking-wider text-yellow-800 bg-yellow-200 rounded-lg bg-opacity-50">
                 {{ item.status }}
               </span>
+              <span v-else-if="item.status === 'Pending Approval'" class="p-1.5 text-xs font-medium uppercase tracking-wider text-orange-800 bg-orange-200 rounded-lg bg-opacity-50">
+                {{ item.status }}
+              </span>
               <span v-else class="p-1.5 text-xs font-medium uppercase tracking-wider text-gray-800 bg-gray-200 rounded-lg bg-opacity-50">
                 {{ item.status }}
               </span>
@@ -110,7 +113,7 @@ export default {
         page_title: 'Disbursement Items',
         breadcrumbs: [
             { link: '/lawyer/dashboard', label: 'Lawyer'},
-            { link: '/lawyer/case-files/', label: 'Case Files'},
+            { link: '/lawyer/case-files/', label: 'My Cases'},
             { link: `/lawyer/case-files/${this.case_file.id}`, label: this.case_file.file_number},
             { link: null, label: 'Items'},
         ],

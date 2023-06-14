@@ -58,7 +58,7 @@ export default {
             page_title: 'Edit File',
             breadcrumbs: [
                 { link: '/lawyer/dashboard', label: 'Lawyer'},
-                { link: '/lawyer/case-files/', label: 'Case Files'},
+                { link: '/lawyer/case-files/', label: 'My Cases'},
                 { link: `/lawyer/case-files/${this.case_file.id}`, label: this.case_file.file_number},
                 { link: null, label: 'Edit'},
             ],

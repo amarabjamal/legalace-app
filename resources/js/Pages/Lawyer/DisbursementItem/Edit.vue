@@ -108,7 +108,7 @@ export default {
             page_title: 'Edit Disbursement Item',
             breadcrumbs: [
                 { link: '/lawyer/dashboard', label: 'Lawyer'},
-                { link: '/lawyer/case-files/', label: 'Case Files'},
+                { link: '/lawyer/case-files/', label: 'My Cases'},
                 { link: `/lawyer/case-files/${this.case_file.id}`, label: this.case_file.file_number},
                 { link: `/lawyer/case-files/${this.case_file.id}/disbursement-items`, label: 'Items'},
                 { link: null, label: this.disbursement_item.name},

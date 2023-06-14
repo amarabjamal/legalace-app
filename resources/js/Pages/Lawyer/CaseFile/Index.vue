@@ -68,8 +68,8 @@
                         </Link>
                     </td>
                 </tr>
-                <tr>
-                    <td v-if="case_files.data.length === 0" class="px-6 py-4 border-t text-center text-slate-500 bg-slate-100" colspan="100%">No case files found.</td>
+                <tr v-if="case_files.data.length === 0">
+                    <td class="px-6 py-4 border-t text-center text-slate-500 bg-slate-100" colspan="100%">No case files found.</td>
                 </tr>
             </tbody>
         </table>
@@ -103,11 +103,11 @@ export default {
             form: {
                 search: this.filters.search,
             },
-            page_title: 'Case Files',
+            page_title: 'My Cases',
             page_subtitle: 'Manage your case files.',
             breadcrumbs: [
                 { link: '/lawyer/dashboard', label: 'Lawyer'},
-                { link: null, label: 'Case Files'},
+                { link: null, label: 'My Cases'},
             ],
         }
     },
