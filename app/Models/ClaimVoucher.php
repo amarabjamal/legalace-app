@@ -75,6 +75,11 @@ class ClaimVoucher extends Model
         });
     }
 
+    public function scopePending($query)
+    {
+        $query->where('status', '=', ClaimVoucherStatusEnum::Submitted->value);
+    }
+
     public function calculateTotal() : BrickMoney
     {
         $amount = $this->items()->sum('amount');
