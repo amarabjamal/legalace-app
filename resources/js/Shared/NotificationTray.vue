@@ -117,7 +117,7 @@
                                             </div>
                                         </div>
                                         <div v-else class="flex justify-center py-4">
-                                            <button v-if="notifications.next_page_url !== null" @click="loadMore" class="text-sm text-blue-500 hover:text-blue-700 hover:underline">Load More</button>
+                                            <button v-if="notifications.next_page_url !== null" @click="loadMore" class="text-sm text-blue-500 hover:text-blue-700 hover:underline">Show More Notifications</button>
                                             <span v-else class="text-gray-400">No more notifications</span>
                                         </div>
                                     </div>
@@ -129,6 +129,10 @@
             </TransitionChild>
         </Dialog>
     </TransitionRoot>
+
+    <!-- <div class="fixed top-20 right-4 z-50 space-y-4 w-full max-w-sm h-5 bg-black">
+        
+    </div> -->
 </template>
 
 <script>
@@ -198,6 +202,12 @@ export default {
                     console.log(error);
                 })
         },
+    },
+    mounted() {
+        window.Echo.private(`App.Models.User.${this.$page.props.auth.user.id}`).notification((notification) => {
+            console.log(notification);
+            this.$page.props.auth.notifications.unreadCount++;
+        })
     },
 }
 </script>
