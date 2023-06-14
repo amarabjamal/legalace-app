@@ -1,26 +1,18 @@
 <template>
-    <transition
-        enter-from-class="translate-x-full opacity-0"
-        enter-active-class="duration-500"
-        leave-active-class="duration-500"
-        leave-to-class="translate-x-full opacity-0"
-        appear
-    >
-        <div v-if="show" :class="containerClass">
-            <div class="shrink-0">
-                <component :is="iconComponent" :class="iconClass"/>
-            </div>
-            <div class="flex-1 space-y-1">
-                <h2 :class="titleClass">{{ title }}</h2>
-                <div :class="contentClass"><slot /></div>
-            </div>
-            <div class="shrink-0">
-                <button @click="dismissToast" :class="buttonClass">
-                    <x-icon class="w-6 h-6"/>
-                </button>
-            </div>
+    <div v-if="showToast" :class="containerClass">
+        <div class="shrink-0">
+            <component :is="iconComponent" :class="iconClass"/>
         </div>
-    </transition>
+        <div class="flex-1 space-y-1">
+            <h2 :class="titleClass">{{ title }}</h2>
+            <div :class="contentClass"><slot /></div>
+        </div>
+        <div class="shrink-0">
+            <button @click="dismissToast" :class="buttonClass">
+                <x-icon class="w-6 h-6"/>
+            </button>
+        </div>
+    </div>
 </template>
 
 <script>
@@ -135,8 +127,12 @@ export default {
     },
     methods: {
         dismissToast() {
+            this.showToast = false;
             this.$emit('dismiss-toast');
         },
+    },
+    mounted() {
+        setTimeout(this.dismissToast, 8000);
     },
 }
 </script>
