@@ -27,7 +27,7 @@ nav#sidebar .menu-items{
 }
 
 .menu-items .logo-container {
-    @apply w-10 h-10 p-1 border-2 border-gray-200 bg-gray-300 rounded-3xl mb-12;
+    @apply w-10 h-10 p-1 border-2 border-gray-200 bg-gray-300 rounded-3xl mb-8;
 }
 
 .menu-items .logo {

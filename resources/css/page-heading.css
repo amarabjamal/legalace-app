@@ -1,6 +1,6 @@
 .page-title {
     color: #3C3D5B;
-    @apply text-2xl font-semibold leading-7 sm:truncate sm:text-3xl sm:tracking-tight;
+    @apply text-2xl font-bold sm:truncate sm:tracking-tight;
 }
 
 .page-subtitle {
