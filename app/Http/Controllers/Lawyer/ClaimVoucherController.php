@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Lawyer;
 
+use App\Enums\ClaimVoucherStatusEnum;
 use App\Enums\DisbursementItemStatusEnum;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreClaimVoucherRequest;
@@ -9,6 +10,7 @@ use App\Jobs\CalculateclaimVoucherTotal;
 use App\Models\CaseFile\DisbursementItem\DisbursementItem;
 use App\Models\ClaimVoucher;
 use App\Models\User;
+use App\Notifications\SubmitClaimVoucherNotification;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Request;
 
@@ -105,6 +107,24 @@ class ClaimVoucherController extends Controller
 
     public function submitClaimVoucher(ClaimVoucher $claim_voucher)
     {
-        dd('Sending...');
+        if($claim_voucher->status !== ClaimVoucherStatusEnum::Draft) {
+            return back()->with('errorMessage', 'The claim voucher status is no longer a draft.');
+        }
+
+        try {
+            DB::transaction(function() use ($claim_voucher) {
+                $claim_voucher->submission_date = today();
+                $claim_voucher->status = ClaimVoucherStatusEnum::Submitted;
+                $claim_voucher->save();
+                
+                $claim_voucher->items()->update(['status' => DisbursementItemStatusEnum::PendingClaimApproval]);
+            });
+
+            $claim_voucher->approver->notify(new SubmitClaimVoucherNotification($claim_voucher, auth()->user()));
+        } catch (\Exception $e) {
+            return back()->with('errorMessage', 'Failed to submit the claim voucher.');           
+        }
+
+        return back()->with('successMessage', 'The claim voucher has been submitted to ' . $claim_voucher->approver->name . '.');
     }
 }
