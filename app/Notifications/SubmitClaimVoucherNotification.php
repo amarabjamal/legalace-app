@@ -5,11 +5,12 @@ namespace App\Notifications;
 use App\Models\ClaimVoucher;
 use App\Models\User;
 use Illuminate\Bus\Queueable;
+use Illuminate\Contracts\Broadcasting\ShouldBroadcastNow;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
-class SubmitClaimVoucherNotification extends Notification
+class SubmitClaimVoucherNotification extends Notification implements ShouldBroadcastNow
 {
     use Queueable;
     protected $claimVoucher, $requester;
@@ -33,7 +34,7 @@ class SubmitClaimVoucherNotification extends Notification
      */
     public function via($notifiable)
     {
-        return ['database'];
+        return ['database', 'broadcast'];
     }
 
     /**
