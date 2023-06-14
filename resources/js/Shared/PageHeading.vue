@@ -1,5 +1,5 @@
 <template>
-    <div class="mt-5 mb-8">
+    <div class="w-full flex sm:flex-row-reverse flex-wrap md: justify-between mb-9">
         <div>
             <nav class="sm:hidden" aria-label="Back">
                 <Link :href="back.link" class="flex items-center text-sm font-medium text-gray-500">
@@ -32,8 +32,8 @@
                 </ol>
             </nav>
         </div>
-        
-        <div class="mt-3 flex items-center justify-between">
+
+        <div class="flex items-center justify-between">
             <div>
                 <h2 class="page-title">
                     {{ page_title }}
