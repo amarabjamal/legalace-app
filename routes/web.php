@@ -54,28 +54,36 @@ use Illuminate\Support\Facades\Auth;
 
 
 Route::group(['middleware' => 'auth'], function() {
-    Route::get('/notifications', [UserNotificationController::class, 'index'])->name('notifications');
+    // Ajax call routes
+    Route::get('/notifications', [UserNotificationController::class, 'index']);
+    Route::get('/notifications/mark-all-as-read', [UserNotificationController::class, 'markAllAsRead']);
+    Route::get('/bank-accounts', [ManageBankAccount::class, 'fetchBankAccounts']);
+    Route::get('/bank-accounts/{bank_account}', [ManageBankAccount::class, 'fetchBankAccountDetails']);
 
     //Routes for Administrator ONLY
     Route::group(['middleware' => 'check.role:admin', 'prefix' => 'admin', 'as' => 'admin.'], function() {
         Route::get('/', [DashboardController::class, 'indexAdmin']);
         Route::get('/dashboard', [DashboardController::class, 'indexAdmin'])->name('dashboard');
         Route::get('/profile', [ProfileController::class, 'indexAdmin'])->name('profile');
-        Route::get('/notifications', [UserNotificationController::class, 'indexAdmin'])->name('notifications');
 
-        Route::resources([
-            'users' => ManageUsers::class,
-            'bank-accounts' => ManageBankAccount::class,
-            'voucher-requests' => ApproveVoucher::class,
-        ]);
+        // Voucher Request Approvals
+        Route::post('/voucher-requests/{voucher_request}/approve', [ApproveVoucher::class, 'approveVoucher']);
+        Route::resource('voucher-requests', ApproveVoucher::class)->only('index','show');
+
+        // Employee
+        Route::resource('users', ManageUsers::class)->except('show');
+
+        // Bank Accounts
+        Route::resource('bank-accounts', ManageBankAccount::class)->except('show');
     
+        // Company Profile
         Route::resource('company', ManageCompany::class)->except(['show','edit', 'destroy']);
         Route::get('company/edit', [ManageCompany::class, 'edit'])->name('company.edit');
         
-        Route::get('/settings', function () {
-            $userId = auth::id();
-            return Inertia::render('Admin/Settings', [$userId]);
-        });
+        // Route::get('/settings', function () {
+        //     $userId = auth::id();
+        //     return Inertia::render('Admin/Settings', [$userId]);
+        // });
     });
 
     //Routes for Lawyer ONLY
@@ -85,10 +93,12 @@ Route::group(['middleware' => 'auth'], function() {
         Route::get('/profile', [ProfileController::class, 'indexLawyer']);
         Route::get('/notifications', [UserNotificationController::class, 'indexLawyer'])->name('notifications');
 
-        Route::post('claim-vouchers/{claim_voucher}/submit', [ClaimVoucherController::class, 'submitClaimVoucher']);
-
+        
         Route::resource('clients', ClientController::class);
+        
         Route::resource('case-files', CaseFileController::class);
+        
+        Route::post('claim-vouchers/{claim_voucher}/submit', [ClaimVoucherController::class, 'submitClaimVoucher']);
         Route::resource('claim-vouchers', ClaimVoucherController::class);
 
         Route::scopeBindings()->prefix('/case-files/{case_file}')->group(function() {
