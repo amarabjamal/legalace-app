@@ -46,9 +46,9 @@
                                 <div class="px-6 py-2">
                                     <DialogTitle class="text-xl font-bold tracking-tight">Notifications</DialogTitle>
                                     <div class="mt-2 text-sm">
-                                        <button class="inline-flex items-center gap-0.5 font-medium outline-none hover:underline focus:underline text-gray-600 hover:text-gray-500">Mark all as read</button>
-                                        <span> • </span>
-                                        <button class="inline-flex items-center gap-0.5 font-medium outline-none hover:underline focus:underline text-gray-600 hover:text-gray-500">Clear</button>
+                                        <button @click="markAllAsRead" class="inline-flex items-center gap-0.5 font-medium outline-none hover:underline focus:underline text-gray-600 hover:text-gray-500">Mark all as read</button>
+                                        <span class="hidden"> • </span>
+                                        <button @click="clearAll" class="hidden inline-flex items-center gap-0.5 font-medium outline-none hover:underline focus:underline text-gray-600 hover:text-gray-500">Clear</button>
                                     </div>
                                 </div>
                             </div>
@@ -58,11 +58,13 @@
                                     <div class="mt-[calc(-1rem-1px)]">
 
                                         <!-- Notification card -->
-                                        <div v-for="notification in notifications.data" class="-mx-6 border-b border-t">
-                                            <div class="py-2 pl-4 pr-2 bg-primary-50 -mb-px bg-blue-50">
-                                                <div class="pointer-events-auto invisible flex gap-3 w-full transition duration-300" x-transition:enter-start="opacity-0 translate-x-12" x-transition:leave-end="scale-95 opacity-0" x-data="notificationComponent({ notification: JSON.parse('{\u0022id\u0022:\u0022180e375f-3d29-4d71-bd02-ce7d551780fe\u0022,\u0022actions\u0022:[{\u0022name\u0022:\u0022View\u0022,\u0022color\u0022:null,\u0022event\u0022:null,\u0022eventData\u0022:[],\u0022emitDirection\u0022:false,\u0022emitToComponent\u0022:null,\u0022extraAttributes\u0022:[],\u0022icon\u0022:null,\u0022iconPosition\u0022:null,\u0022isOutlined\u0022:false,\u0022isDisabled\u0022:false,\u0022label\u0022:\u0022View\u0022,\u0022shouldCloseNotification\u0022:false,\u0022shouldOpenUrlInNewTab\u0022:false,\u0022size\u0022:null,\u0022url\u0022:\u0022https:\\\/\\\/demo.filamentphp.com\\\/shop\\\/orders\\\/389\\\/edit\u0022,\u0022view\u0022:\u0022notifications::actions.link-action\u0022}],\u0022body\u0022:\u0022**Heather Cummerata ordered 2 products.**\u0022,\u0022duration\u0022:\u0022persistent\u0022,\u0022icon\u0022:\u0022heroicon-o-shopping-bag\u0022,\u0022iconColor\u0022:\u0022secondary\u0022,\u0022title\u0022:\u0022New order\u0022,\u0022view\u0022:\u0022notifications::notification\u0022,\u0022viewData\u0022:[]}') })" wire:key="hDdqnwAlUtFz1xzzNFU2.notifications.180e375f-3d29-4d71-bd02-ce7d551780fe" dusk="filament.notifications.notification" style="display: flex; visibility: visible;">
-                                                    <svg v-if="notification.type.includes('SubmitClaimVoucherNotification')" class="w-6 h-6 text-blue-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path fill-rule="evenodd" d="M5.478 5.559A1.5 1.5 0 016.912 4.5H9A.75.75 0 009 3H6.912a3 3 0 00-2.868 2.118l-2.411 7.838a3 3 0 00-.133.882V18a3 3 0 003 3h15a3 3 0 003-3v-4.162c0-.299-.045-.596-.133-.882l-2.412-7.838A3 3 0 0017.088 3H15a.75.75 0 000 1.5h2.088a1.5 1.5 0 011.434 1.059l2.213 7.191H17.89a3 3 0 00-2.684 1.658l-.256.513a1.5 1.5 0 01-1.342.829h-3.218a1.5 1.5 0 01-1.342-.83l-.256-.512a3 3 0 00-2.684-1.658H3.265l2.213-7.191z" clip-rule="evenodd" /><path fill-rule="evenodd" d="M12 2.25a.75.75 0 01.75.75v6.44l1.72-1.72a.75.75 0 111.06 1.06l-3 3a.75.75 0 01-1.06 0l-3-3a.75.75 0 011.06-1.06l1.72 1.72V3a.75.75 0 01.75-.75z" clip-rule="evenodd" /></svg>
-                                                    <svg v-else class="h-6 w-6 text-gray-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path></svg>    
+                                        <div v-for="notification in notifications.data" :key="notification.id" class="-mx-6 border-b border-t">
+                                            <div class="py-2 pl-4 pr-2 bg-primary-50 -mb-px" :class="{'bg-blue-50' : notification.read_at === null}">
+                                                <div class="pointer-events-auto flex gap-3 w-full transition duration-300">
+                                                    <!-- Receive tray icon -->
+                                                    <svg v-if="notification.type.includes('SubmitClaimVoucherNotification')" class="w-6 h-6 text-gray-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path fill-rule="evenodd" d="M5.478 5.559A1.5 1.5 0 016.912 4.5H9A.75.75 0 009 3H6.912a3 3 0 00-2.868 2.118l-2.411 7.838a3 3 0 00-.133.882V18a3 3 0 003 3h15a3 3 0 003-3v-4.162c0-.299-.045-.596-.133-.882l-2.412-7.838A3 3 0 0017.088 3H15a.75.75 0 000 1.5h2.088a1.5 1.5 0 011.434 1.059l2.213 7.191H17.89a3 3 0 00-2.684 1.658l-.256.513a1.5 1.5 0 01-1.342.829h-3.218a1.5 1.5 0 01-1.342-.83l-.256-.512a3 3 0 00-2.684-1.658H3.265l2.213-7.191z" clip-rule="evenodd" /><path fill-rule="evenodd" d="M12 2.25a.75.75 0 01.75.75v6.44l1.72-1.72a.75.75 0 111.06 1.06l-3 3a.75.75 0 01-1.06 0l-3-3a.75.75 0 011.06-1.06l1.72 1.72V3a.75.75 0 01.75-.75z" clip-rule="evenodd" /></svg>
+                                                    <!-- Mail Icon -->
+                                                    <svg v-else class="w-6 h-6 text-gray-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M1.5 8.67v8.58a3 3 0 003 3h15a3 3 0 003-3V8.67l-8.928 5.493a3 3 0 01-3.144 0L1.5 8.67z" /><path d="M22.5 6.908V6.75a3 3 0 00-3-3h-15a3 3 0 00-3 3v.158l9.714 5.978a1.5 1.5 0 001.572 0L22.5 6.908z" /></svg>
 
 
                                                     <div class="grid flex-1">
@@ -70,7 +72,7 @@
                                                             <p>{{ notification.data.title }}</p>
                                                         </div>
                                                         <p class="text-xs text-gray-500">
-                                                            2 minutes ago
+                                                            {{ notification.created_at }}
                                                         </p>
                     
                                                         <div class="mt-1 text-sm text-gray-500">
@@ -83,7 +85,7 @@
                                                             </a>
                                                         </div>
                                                     </div>
-                                                    <svg class="h-4 w-4 cursor-pointer text-gray-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg>
+                                                    <!-- <svg class="h-4 w-4 cursor-pointer text-gray-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg> -->
                                                 </div>
                                             </div>
                                         </div> 
@@ -92,7 +94,7 @@
                                         <div v-if="loadingNotification">
                                             <div v-for="n in 2" class="-mx-6 border-b border-t">
                                                 <div class="py-2 pl-4 pr-2 bg-primary-50 -mb-px bg-white">
-                                                    <div class="pointer-events-auto invisible flex gap-3 w-full transition duration-300" x-transition:enter-start="opacity-0 translate-x-12" x-transition:leave-end="scale-95 opacity-0" x-data="notificationComponent({ notification: JSON.parse('{\u0022id\u0022:\u0022180e375f-3d29-4d71-bd02-ce7d551780fe\u0022,\u0022actions\u0022:[{\u0022name\u0022:\u0022View\u0022,\u0022color\u0022:null,\u0022event\u0022:null,\u0022eventData\u0022:[],\u0022emitDirection\u0022:false,\u0022emitToComponent\u0022:null,\u0022extraAttributes\u0022:[],\u0022icon\u0022:null,\u0022iconPosition\u0022:null,\u0022isOutlined\u0022:false,\u0022isDisabled\u0022:false,\u0022label\u0022:\u0022View\u0022,\u0022shouldCloseNotification\u0022:false,\u0022shouldOpenUrlInNewTab\u0022:false,\u0022size\u0022:null,\u0022url\u0022:\u0022https:\\\/\\\/demo.filamentphp.com\\\/shop\\\/orders\\\/389\\\/edit\u0022,\u0022view\u0022:\u0022notifications::actions.link-action\u0022}],\u0022body\u0022:\u0022**Heather Cummerata ordered 2 products.**\u0022,\u0022duration\u0022:\u0022persistent\u0022,\u0022icon\u0022:\u0022heroicon-o-shopping-bag\u0022,\u0022iconColor\u0022:\u0022secondary\u0022,\u0022title\u0022:\u0022New order\u0022,\u0022view\u0022:\u0022notifications::notification\u0022,\u0022viewData\u0022:[]}') })" wire:key="hDdqnwAlUtFz1xzzNFU2.notifications.180e375f-3d29-4d71-bd02-ce7d551780fe" dusk="filament.notifications.notification" style="display: flex; visibility: visible;">
+                                                    <div class="pointer-events-auto flex gap-3 w-full transition duration-300">
                                                         <div class="h-5 w-5 animated-background rounded-sm"></div>
                                                         <div class="grid flex-1">
                                                             <div class="h-6 animated-background rounded-sm">
@@ -129,10 +131,6 @@
             </TransitionChild>
         </Dialog>
     </TransitionRoot>
-
-    <!-- <div class="fixed top-20 right-4 z-50 space-y-4 w-full max-w-sm h-5 bg-black">
-        
-    </div> -->
 </template>
 
 <script>
@@ -175,15 +173,16 @@ export default {
 
             axios.get('/notifications')
                 .then(response => {
-                    this.loadingNotification = false;
-
+                    //console.log(response.data.data);
                     this.notifications = {
                         ...response.data,
                         data: [...response.data.data],
                     }
                 })
-                .catch(function (error) {
+                .catch(error => {
                     console.log(error);
+                }).finally(() => {
+                    this.loadingNotification = false;
                 })
         },
         loadMore() {
@@ -198,16 +197,25 @@ export default {
                         data: [...this.notifications.data ,...response.data.data],
                     }
                 })
-                .catch(function (error) {
+                .catch(error => {
                     console.log(error);
                 })
         },
-    },
-    mounted() {
-        window.Echo.private(`App.Models.User.${this.$page.props.auth.user.id}`).notification((notification) => {
-            console.log(notification);
-            this.$page.props.auth.notifications.unreadCount++;
-        })
+        markAllAsRead() {
+            axios.get(`/notifications/mark-all-as-read`)
+            .then(response => {
+                // console.log(response.request.status);
+            })
+            .catch (error => {
+                console.log(error);
+            })
+            .finally(() => {
+                this.fetchNotification();
+            });
+        },
+        clearAll() {
+            alert('yihahahaahah');
+        },
     },
 }
 </script>
