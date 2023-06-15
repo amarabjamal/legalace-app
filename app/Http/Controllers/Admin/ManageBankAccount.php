@@ -11,18 +11,18 @@ use Inertia\Inertia;
 
 class ManageBankAccount extends Controller
 {
-    protected $bankaccount;
+    protected $bank_account;
 
-    public function __construct(BankAccount $bankaccount)
+    public function __construct(BankAccount $bank_account)
     {
-        $this->bankaccount = $bankaccount;
+        $this->bank_account = $bank_account;
     }
 
     public function index()
     {
 
         return Inertia::render('Admin/BankAccount/Index', [
-            'bankAccounts' => $this->bankaccount->allBankAccounts(),
+            'bankAccounts' => $this->bank_account->allBankAccounts(),
         ]);
     }
 
@@ -74,5 +74,23 @@ class ManageBankAccount extends Controller
         }
 
         return response()->json([ 'hello' => 'hihihu']);
+    }
+
+    public function fetchBankAccounts()
+    {
+        return [
+            'client_accounts' => $this->bank_account->clientAccountOptions(),
+            'firm_accounts' => $this->bank_account->firmAccountOptions(),
+        ];
+    }
+
+    public function fetchBankAccountDetails(BankAccount $bank_account)
+    {
+        $bank_account->bankAccountType;
+
+        return array_merge(
+            $bank_account->only(['label', 'account_name', 'bank_name', 'account_number', 'swift_code']),
+            [ 'account_type' => $bank_account->bankAccountType->name ]
+        );
     }
 }
