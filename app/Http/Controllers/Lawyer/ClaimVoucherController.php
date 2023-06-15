@@ -118,9 +118,10 @@ class ClaimVoucherController extends Controller
                 $claim_voucher->save();
                 
                 $claim_voucher->items()->update(['status' => DisbursementItemStatusEnum::PendingClaimApproval]);
+                
+                $claim_voucher->approver->notify(new SubmitClaimVoucherNotification($claim_voucher, auth()->user()));
             });
 
-            $claim_voucher->approver->notify(new SubmitClaimVoucherNotification($claim_voucher, auth()->user()));
         } catch (\Exception $e) {
             return back()->with('errorMessage', 'Failed to submit the claim voucher.');           
         }
