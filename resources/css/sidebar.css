@@ -27,10 +27,20 @@ nav#sidebar .menu-items{
 }
 
 .menu-items .logo-container {
-    @apply w-10 h-10 p-1 border-2 border-gray-200 bg-gray-300 rounded-3xl mb-8;
+    transition: all ease .075s;
+    @apply w-full h-16 mb-2.5 border-transparent border-2;
 }
 
 .menu-items .logo {
+    background-image: url('../../public/images/app/logo.png');
+    @apply  w-full h-full bg-contain bg-no-repeat bg-center;
+}
+
+nav#sidebar.close .menu-items .logo-container {
+    @apply w-10 h-10 p-1 border-2 border-gray-200 bg-gray-200 rounded-3xl mb-8;
+}
+
+nav#sidebar.close .menu-items .logo {
     background-image: url('../../public/images/app/logo-min.png');
     @apply  w-full h-full bg-contain bg-no-repeat bg-left;
 }
@@ -66,7 +76,6 @@ nav#sidebar.close .menu-items li a:hover svg {
 }
 
 .menu-items li a .link-name{
-    transition: 0.1s ease-in;
     @apply text-gray-400 capitalize truncate font-medium text-sm w-full;
 }
 
@@ -79,7 +88,6 @@ nav#sidebar.close li a .link-name{
 
 .nav-links li a:hover {
     background-color: #50527A;
-    transition: 0.15s ease;
 }
 
 .nav-links li a:hover svg {
@@ -112,14 +120,6 @@ nav#sidebar.close li a .link-name{
 nav#sidebar.close .menu-items .bottom-container li a {
     @apply shadow-none
 }
-
-/* nav#sidebar.close .menu-items .bottom-container li a svg {
-    @apply fill-gray-400;
-}
-
-nav#sidebar.close .menu-items .bottom-container li a:hover svg {
-    @apply fill-white;
-} */
 
 .menu-items .bottom-container li a svg{
     flex-shrink: 0;

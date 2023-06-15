@@ -1,5 +1,5 @@
 <template>
-    <div v-if="showToast" :class="containerClass">
+    <div v-if="show" :class="containerClass">
         <div class="shrink-0">
             <component :is="iconComponent" :class="iconClass"/>
         </div>
@@ -37,11 +37,6 @@ export default {
         },
         title: String,
         show: Boolean,
-    },
-    data() {
-        return {
-            showToast: this.show,
-        }
     },
     computed: {
         containerClass() {
@@ -127,7 +122,6 @@ export default {
     },
     methods: {
         dismissToast() {
-            this.showToast = false;
             this.$emit('dismiss-toast');
         },
     },

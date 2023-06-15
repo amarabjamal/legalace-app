@@ -56,6 +56,9 @@
               <span v-else-if="item.status === 'Pending Approval'" class="p-1.5 text-xs font-medium uppercase tracking-wider text-orange-800 bg-orange-200 rounded-lg bg-opacity-50">
                 {{ item.status }}
               </span>
+              <span v-else-if="item.status === 'Approved'" class="p-1.5 text-xs font-medium uppercase tracking-wider text-purple-800 bg-purple-200 rounded-lg bg-opacity-50">
+                {{ item.status }}
+              </span>
               <span v-else class="p-1.5 text-xs font-medium uppercase tracking-wider text-gray-800 bg-gray-200 rounded-lg bg-opacity-50">
                 {{ item.status }}
               </span>

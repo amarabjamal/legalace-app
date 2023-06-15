@@ -54,19 +54,25 @@ class BankAccount extends Model
         $query->where('bank_account_type_id', '=',  BankAccountType::IS_CLIENT_ACCOUNT);
     }
 
+    public function scopeFirmAccount($query)
+    {
+        $query->where('bank_account_type_id', '=',  BankAccountType::IS_FIRM_ACCOUNT);
+    }
+
     public function allBankAccounts() 
     {
-        
-        return $this->where([ 'company_id' => Auth::user()->company_id ])
-            ->with('createdBy:id,name', 'bankAccountType:id,name')
-            ->get();
+
+        return $this->with('createdBy:id,name', 'bankAccountType:id,name')->get();
     }
 
     public function clientAccountOptions() 
     {
-
-        return $this->where([ 'company_id' => Auth::user()->company_id, 'bank_account_type_id' => BankAccountType::IS_CLIENT_ACCOUNT ])
-            ->get(['id', 'label']);
+        return $this->clientAccount()->get(['id', 'label']);
+    }
+    
+    public function firmAccountOptions() 
+    {
+        return $this->firmAccount()->get(['id', 'label']);
     }
 
     public function getById($id) 
