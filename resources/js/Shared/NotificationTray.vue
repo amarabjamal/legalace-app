@@ -48,7 +48,7 @@
                                     <div class="mt-2 text-sm">
                                         <button @click="markAllAsRead" class="inline-flex items-center gap-0.5 font-medium outline-none hover:underline focus:underline text-gray-600 hover:text-gray-500">Mark all as read</button>
                                         <span class="hidden"> • </span>
-                                        <button @click="clearAll" class="hidden inline-flex items-center gap-0.5 font-medium outline-none hover:underline focus:underline text-gray-600 hover:text-gray-500">Clear</button>
+                                        <button @click="clearAll" class="hidden items-center gap-0.5 font-medium outline-none hover:underline focus:underline text-gray-600 hover:text-gray-500">Clear</button>
                                     </div>
                                 </div>
                             </div>
