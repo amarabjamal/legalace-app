@@ -3,30 +3,14 @@
 
     <page-heading :page_title="page_title" :breadcrumbs="breadcrumbs"/>
     
-    <div class="max-w-3xl overflow-hidden">
-        <div class="flex items-center justify-between px-2 py-4">
-            <div class="flex flex-wrap items-center space-x-2">
-                    <h2 class="text-lg font-semibold leading-6 text-gray-700">
-                        {{  claim_voucher.number }}
-                    </h2>
-                    <div v-if="claim_voucher.status === 'Draft'" class="px-1.5 py-1 text-xs font-medium uppercase tracking-wider text-gray-600 border border-gray-600 rounded-lg">
-                        {{ claim_voucher.status }}
-                    </div>
-                    <div v-else-if="claim_voucher.status === 'Sent'" class="px-1.5 py-1 text-xs font-medium uppercase tracking-wider text-green-600 border border-green-600 rounded-lg">
-                        {{ claim_voucher.status }}
-                    </div>
-                </div>
-            <div class="flex flex-wrap items-center space-x-2">
-                <form @submit.prevent="submitClaimVoucher">
-                    <button type="submit" class="btn-primary flex items-center">
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="h-4 w-4 inline-block mr-1"><path d="M1.94631 9.31555C1.42377 9.14137 1.41965 8.86034 1.95706 8.6812L21.0433 2.31913C21.5717 2.14297 21.8748 2.43878 21.7268 2.95706L16.2736 22.0433C16.1226 22.5718 15.8179 22.5901 15.5946 22.0877L12.0002 14.0002L18.0002 6.00017L10.0002 12.0002L1.94631 9.31555Z"></path></svg>
-                        Submit
-                    </button>
-                </form>
-            </div>
+    <div class="max-w-3xl bg-white rounded-md shadow-lg overflow-hidden">
+        <div class="flex items-center justify-between px-8 py-4 bg-gray-50 border-t border-gray-100">
+            <h2 class="text-xl font-semibold leading-6 text-gray-700">
+                Pending approval
+            </h2>
         </div>
-
-        <div class="flex flex-wrap bg-white rounded-md shadow-lg p-8 py-10">
+        
+        <div class="flex flex-wrap p-8 py-8">     
             <div class="flex flex-wrap w-full border-b border-gray-200 text-sm">
                 <div class="flex pb-2 pr-6 w-full lg:w-1/2">
                     <div class="text-gray-500 mr-4 w-26">
@@ -78,15 +62,28 @@
                     </tr>
                 </tfoot>
             </table>
+
+        </div>
+        <div class="flex items-center justify-end px-8 py-4 bg-gray-50 border-t border-gray-100">
+            <div class="flex items-center space-x-2 justify-center">
+                <button class="btn-danger">Reject</button>
+                <button class="btn-primary" @click="openApproveVoucherModal">Approve</button>
+            </div>
         </div>
     </div>
+
+    <approve-voucher-modal :isOpen="showApproveClaimModal" :claim_voucher="claim_voucher" @close-modal="closeApproveVoucherModal"/>
 </template>
 
 <script>
 import Layout from '../Shared/Layout';
+import LoadingButton from '../../../Shared/LoadingButton';
+import ApproveVoucherModal from './Components/ApproveVoucherModal';
 
 export default { 
     components: { 
+        LoadingButton,
+        ApproveVoucherModal,
     },
     layout: Layout,
     props: {
@@ -101,6 +98,7 @@ export default {
                 { link: '/admin/voucher-requests/', label: 'Voucher Requests'},
                 { link: null, label: this.claim_voucher.number},
             ],
+            showApproveClaimModal: false,
         }
     },
     methods: {
@@ -108,6 +106,12 @@ export default {
             if(confirm('Please ensure that all the details are correct before submitting this claim voucher. Are you sure to proceed?')) {
                 this.$inertia.post(`/lawyer/claim-vouchers/${this.claim_voucher.id}/submit`);
             }
+        },
+        openApproveVoucherModal() {
+            this.showApproveClaimModal = true;
+        },
+        closeApproveVoucherModal() {
+            this.showApproveClaimModal = false;
         },
     },
 };

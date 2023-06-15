@@ -10,20 +10,20 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
-class SubmitClaimVoucherNotification extends Notification implements ShouldBroadcastNow
+class ClaimVoucherApprovedNotification extends Notification implements ShouldBroadcastNow
 {
     use Queueable;
-    protected $claimVoucher, $requester;
+    protected $claimVoucher, $approver;
 
     /**
      * Create a new notification instance.
      *
      * @return void
      */
-    public function __construct(ClaimVoucher $claimVoucher, User $requester)
+    public function __construct(ClaimVoucher $claimVoucher, User $approver)
     {
         $this->claimVoucher = $claimVoucher;
-        $this->requester = $requester;
+        $this->approver = $approver;
     }
 
     /**
@@ -60,9 +60,9 @@ class SubmitClaimVoucherNotification extends Notification implements ShouldBroad
     public function toArray($notifiable)
     {
         return [
-            'title' => 'New claim voucher request',
-            'body' => $this->requester->name . ' submitted claim voucher ' . $this->claimVoucher->ticket_number . '.',
-            'action_link' => '/admin/voucher-requests/' . $this->claimVoucher->id,
+            'title' => $this->claimVoucher->ticket_number . ' claim voucher is approved',
+            'body' => $this->approver->name . ' has approved your claim.',
+            'action_link' => '/lawyer/claim-vouchers/' . $this->claimVoucher->id,
         ];
     }
 }

@@ -12,7 +12,7 @@
                     <div v-if="claim_voucher.status === 'Draft'" class="px-1.5 py-1 text-xs font-medium uppercase tracking-wider text-gray-600 border border-gray-600 rounded-lg">
                         {{ claim_voucher.status }}
                     </div>
-                    <div v-else-if="claim_voucher.status === 'Sent'" class="px-1.5 py-1 text-xs font-medium uppercase tracking-wider text-green-600 border border-green-600 rounded-lg">
+                    <div v-else-if="claim_voucher.status === 'Submitted'" class="px-1.5 py-1 text-xs font-medium uppercase tracking-wider text-green-600 border border-green-600 rounded-lg">
                         {{ claim_voucher.status }}
                     </div>
                 </div>
