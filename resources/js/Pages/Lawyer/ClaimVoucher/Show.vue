@@ -9,10 +9,7 @@
                     <h2 class="text-lg font-semibold leading-6 text-gray-700">
                         {{  claim_voucher.number }}
                     </h2>
-                    <div v-if="claim_voucher.status === 'Draft'" class="px-1.5 py-1 text-xs font-medium uppercase tracking-wider text-gray-600 border border-gray-600 rounded-lg">
-                        {{ claim_voucher.status }}
-                    </div>
-                    <div v-else-if="claim_voucher.status === 'Submitted'" class="px-1.5 py-1 text-xs font-medium uppercase tracking-wider text-green-600 border border-green-600 rounded-lg">
+                    <div :class="statusClass">
                         {{ claim_voucher.status }}
                     </div>
                 </div>
@@ -45,35 +42,6 @@
                     </div>
                 </div>
             </div>
-
-            <!-- <div class="flex flex-wrap w-full mt-4 mb-6 text-sm">
-                <div class="flex flex-col flex-wrap w-full lg:w-1/2">
-                    <div class="font-semibold text-gray-900">
-                        From
-                    </div>
-                    <div class="flex flex-col mt-3 text-gray-500">
-                        <div class="font-medium text-gray-900 mb-2">
-                            {{ invoice.company.name }}
-                        </div>
-                        <div>
-                            {{ invoice.company.address }}
-                        </div>
-                    </div>  
-                </div>
-                <div class="flex flex-col flex-wrap w-full lg:w-1/2">
-                    <div class="font-semibold text-gray-900">
-                        To
-                    </div>
-                    <div class="flex flex-col mt-3 text-gray-500">
-                        <div class="font-medium text-gray-900 mb-2">
-                            {{ invoice.client.name }}
-                        </div>
-                        <div>
-                            {{ invoice.client.address }}
-                        </div>
-                    </div>  
-                </div>
-            </div> -->
 
             <table class="w-full my-4 whitespace-nowrap text-left text-sm leading-6">
                 <thead class="border-b border-gray-200 text-gray-900">
@@ -120,6 +88,7 @@
 
 <script>
 import Layout from '../Shared/Layout';
+import { cva } from 'class-variance-authority';
 
 export default { 
     components: { 
@@ -146,5 +115,22 @@ export default {
             }
         },
     },
+    computed: {
+        statusClass() {
+            return cva("px-1.5 py-1 text-xs font-medium uppercase tracking-wider border rounded-lg", {
+                variants: {
+                    status: {
+                        Draft:"text-gray-600 border-gray-600",
+                        Submitted:"text-yellow-600 border-yellow-600",
+                        Approved:"text-orange-600 border-orange-600",
+                        Rejected:"text-red-600 border-red-600",
+                        Reimbursed:"text-green-600 border-green-600",
+                    }
+                }
+            }) ({
+                status: this.claim_voucher.status,
+            })
+        }
+    }
 };
 </script>

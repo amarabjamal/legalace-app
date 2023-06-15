@@ -45,19 +45,7 @@
                         {{ claim_voucher.amount }}
                     </td>
                     <td class="border-t px-6 py-4 whitespace-nowrap">
-                        <span v-if="claim_voucher.status === 'Draft'" class="p-1.5 text-xs font-medium uppercase tracking-wider text-gray-800 bg-gray-200 rounded-lg bg-opacity-50">
-                            {{ claim_voucher.status }}
-                        </span>
-                        <span v-else-if="claim_voucher.status === 'Submitted'" class="p-1.5 text-xs font-medium uppercase tracking-wider text-blue-800 bg-blue-200 rounded-lg bg-opacity-50">
-                            {{ claim_voucher.status }}
-                        </span>
-                        <span v-else-if="claim_voucher.status === 'Approved'" class="p-1.5 text-xs font-medium uppercase tracking-wider text-green-800 bg-green-200 rounded-lg bg-opacity-50">
-                            {{ claim_voucher.status }}
-                        </span>
-                        <span v-else-if="claim_voucher.status === 'Rejected'" class="p-1.5 text-xs font-medium uppercase tracking-wider text-red-800 bg-red-200 rounded-lg bg-opacity-50">
-                            {{ claim_voucher.status }}
-                        </span>
-                        <span v-else-if="claim_voucher.status === 'Reimbursed'" class="p-1.5 text-xs font-medium uppercase tracking-wider text-green-800 bg-green-200 rounded-lg bg-opacity-50">
+                        <span  :class="statusClass(claim_voucher.status)">
                             {{ claim_voucher.status }}
                         </span>
                     </td>
@@ -88,6 +76,7 @@ import Pagination from '../../../Shared/Pagination';
 import throttle from 'lodash/throttle';
 import pickBy from 'lodash/pickBy';
 import mapValues from 'lodash/mapValues';
+import { cva } from "class-variance-authority";
 
 export default { 
     components: {
@@ -124,6 +113,21 @@ export default {
         reset() {
           this.form = mapValues(this.form, () => null);
         },
+        statusClass(status) {
+            return cva("p-1.5 text-xs font-medium uppercase tracking-wider rounded-lg bg-opacity-50", {
+                variants: {
+                    status: {
+                        Draft:"text-gray-800 bg-gray-200",
+                        Submitted:"text-yellow-800 bg-yellow-200",
+                        Approved:"text-orange-800 bg-orange-200",
+                        Rejected:"text-red-800 bg-red-200",
+                        Reimbursed:"text-green-800 bg-green-200",
+                    }
+                }
+            }) ({
+                status: status,
+            })
+        }
     },
 };
 </script>
