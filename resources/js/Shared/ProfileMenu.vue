@@ -1,18 +1,8 @@
 <template>
-    <li class="relative">
+    <Menu as="div" class="relative inline-block text-left">
         <!-- Profile Button -->
-        <button
-            class="align-middle flex items-center focus:shadow-outline-blue focus:outline-none"
-            @click="toggleProfileMenu"
-            aria-label="Account"
-            aria-haspopup="true"
-        >
-            <img
-                class="object-cover w-8 h-8 rounded-full shadow"
-                :src="'/images/profileImage/default.png'"
-                alt="user profile image"
-                aria-hidden="true"
-            />
+        <menu-button class="align-middle flex items-center focus:shadow-outline-blue focus:outline-none" >
+            <avatar/>
             <div class="auth-nav">
                 <p class="auth-name">
                     {{ auth.user.name }}
@@ -22,62 +12,92 @@
                     <span v-else class="capitalize">{{ auth.user.roles[0] }}</span>
                 </p>
             </div>
-        </button>
-
+        </menu-button>
+    
         <!-- Profile Menu -->
         <transition
-            enter-active-class="transition transform duration-100 ease-out"
-            enter-from-class="opacitv-0 scale-75"
-            enter-to-class="opacity-100 scale-100"
-            leave-active-class="transition transform duration-100 ease-in" 
-            leave-from-class="opacity-100 scale-100"
-            leave-to-class="opacity-0 scale-75"
+            enter-active-class="transition duration-100 ease-out"
+            enter-from-class="transform scale-95 opacity-0"
+            enter-to-class="transform scale-100 opacity-100"
+            leave-active-class="transition duration-75 ease-in"
+            leave-from-class="transform scale-100 opacity-100"
+            leave-to-class="transform scale-95 opacity-0"
         >
-            <template v-if="isOpen">
-                <ul
-                    class="absolute right-0 w-56 p-2 mt-2 space-y-2 text-gray-600 bg-white border border-gray-100 rounded-md shadow-md dark:border-gray-700 dark:text-gray-300 dark:bg-gray-700"
-                    aria-label="submenu"
-                >
-                <li class="flex">
-                    <Link as="a" href="/admin/profile" class="inline-flex items-center w-full px-2 py-1 text-sm font-semibold transition-colors duration-150 rounded-md hover:bg-gray-100 hover:text-gray-800 dark:hover:bg-gray-800 dark:hover:text-gray-200">
-                        <svg class="w-4 h-4 mr-3" aria-hidden="true" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" stroke="currentColor"><path d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>
-                        <span>Profile</span>
-                    </Link>
-                </li>
-                <li class="flex">
-                    <Link as="a" href="/admin/setting" class="inline-flex items-center w-full px-2 py-1 text-sm font-semibold transition-colors duration-150 rounded-md hover:bg-gray-100 hover:text-gray-800 dark:hover:bg-gray-800 dark:hover:text-gray-200">
-                        <svg class="w-4 h-4 mr-3" aria-hidden="true" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" stroke="currentColor">
-                            <path d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path>
-                            <path d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+        <menu-items class="absolute right-0 mt-4 w-56 origin-top-right divide-y divide-gray-100 rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+            <div class="px-1 py-1">
+                <menu-item v-slot="{ active }">
+                    <Link
+                        as="button"
+                        :href="profileLink"
+                        :class="[
+                        active ? 'bg-violet-500 text-white' : 'text-gray-900',
+                        'group flex w-full items-center rounded-md px-2 py-2 text-sm',
+                        ]"
+                    >
+                        <svg class="mr-2 h-5 w-5 text-violet-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                            <path fill-rule="evenodd" d="M7.5 6a4.5 4.5 0 119 0 4.5 4.5 0 01-9 0zM3.751 20.105a8.25 8.25 0 0116.498 0 .75.75 0 01-.437.695A18.683 18.683 0 0112 22.5c-2.786 0-5.433-.608-7.812-1.7a.75.75 0 01-.437-.695z" clip-rule="evenodd" />
                         </svg>
-                        <span>Settings</span>
+                        Profile
                     </Link>
-                </li>
-                <li class="flex">
-                    <Link as="button" href="/logout" method="post" class="inline-flex items-center w-full px-2 py-1 text-sm font-semibold transition-colors duration-150 rounded-md hover:bg-gray-100 hover:text-gray-800 dark:hover:bg-gray-800 dark:hover:text-gray-200">
-                        <svg class="w-4 h-4 mr-3" aria-hidden="true" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" stroke="currentColor"><path d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1"></path></svg>
-                        <span>Log out</span>
-                    </Link>
-                </li>
-                </ul>
-            </template>
+                </menu-item>
+            </div>
+
+            <div class="px-1 py-1">
+                <menu-item v-slot="{ active }">
+                    <form @submit.prevent="logOut">
+                        <button
+                            type="submit"
+                            :class="[
+                            active ? 'bg-violet-500 text-white' : 'text-gray-900',
+                            'group flex w-full items-center rounded-md px-2 py-2 text-sm',
+                            ]"
+                        >
+                            <svg class="mr-2 h-5 w-5 text-violet-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                                <path fill-rule="evenodd" d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25zm-4.28 9.22a.75.75 0 000 1.06l3 3a.75.75 0 101.06-1.06l-1.72-1.72h5.69a.75.75 0 000-1.5h-5.69l1.72-1.72a.75.75 0 00-1.06-1.06l-3 3z" clip-rule="evenodd" />
+                            </svg>
+                            Logout
+                        </button>
+                    </form>
+                </menu-item>
+            </div>
+            </menu-items>
         </transition>
-    </li>
+    </Menu>
 </template>
 
 <script>
+import { Link } from '@inertiajs/inertia-vue3';
+import Avatar from './Avatar';
+import { Menu, MenuButton, MenuItems, MenuItem } from '@headlessui/vue';
 
 export default {
+    components: {
+        Avatar,
+        Menu,
+        MenuButton,
+        MenuItems,
+        MenuItem,
+        Link
+    },
     data() {
         return {
-            isOpen: false,
             auth: this.$page.props.auth,
+            atAdminLayout: window.location.href.includes('/admin'),
         }
     },
     methods: {
-        toggleProfileMenu() {
-            this.isOpen = !this.isOpen;
+        logOut() {
+            this.$inertia.post('/logout');
         },
-    }
+    },
+    computed: {
+        profileLink() {
+            if(this.atAdminLayout) {
+                return '/admin/profile';
+            }
+
+            return '/lawyer/profile';
+        },
+    },
 }
 </script>
