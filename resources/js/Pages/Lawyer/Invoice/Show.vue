@@ -243,7 +243,6 @@ export default {
                 { link: `/lawyer/case-files/${this.case_file.id}/invoices`, label: 'Invoices'},
                 { link: null, label: this.invoice.number},
             ],
-            ppm_is_open: false,
         }
     },
     methods: {
@@ -255,11 +254,6 @@ export default {
         emailInvoice() {
             if(confirm('The invoice will be send to the client registered email address. Are you sure to proceed?')) {
                 this.$inertia.post(`/lawyer/case-files/${this.case_file.id}/invoices/${this.invoice.id}/email-invoice`);
-            }
-        },
-        downloadPDF() {
-            if(confirm('Download invoice PDF. Are you sure to proceed?')) {
-                this.$inertia.post(`/lawyer/case-files/${this.case_file.id}/invoices/${this.invoice.id}/pdf`);
             }
         },
     },

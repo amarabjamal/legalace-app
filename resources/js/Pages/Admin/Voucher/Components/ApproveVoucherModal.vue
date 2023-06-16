@@ -126,12 +126,12 @@ export default {
                 'pay_from_bank_account_id': null,
                 'notes': null,
             }),
-            'client_accounts': [],
-            'firm_accounts': [],
-            'selected_bank_account': null,
-            'loading_bank_account_details': false,
-            'errors': {
-                'loading_bank_account_details': false,
+            client_accounts: [],
+            firm_accounts: [],
+            selected_bank_account: null,
+            loading_bank_account_details: false,
+            errors: {
+                loading_bank_account_details: false,
             },
         }
     },

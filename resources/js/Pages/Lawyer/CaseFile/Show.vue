@@ -103,6 +103,7 @@ import Layout from "../Shared/Layout";
 export default { 
     components: { 
     },
+    layout: Layout,
     props: {
         'case_file' : Object,
     },
@@ -116,7 +117,6 @@ export default {
             ],
         }
     },
-    layout: Layout,
 };
 </script>
 
