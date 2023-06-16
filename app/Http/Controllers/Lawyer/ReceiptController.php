@@ -140,7 +140,7 @@ class ReceiptController extends Controller
 
         try
         {
-            $pdf = $this->generatePDF($case_file, $invoice);
+            $pdf = $this->generatePdf($case_file, $invoice);
 
             Mail::to($email['client_email'])->send(new SendReceipt($invoice->receipt, $pdf, $case_file->client->name));
 
@@ -174,9 +174,9 @@ class ReceiptController extends Controller
         return back()->with('successMessage', 'The receipt is marked as sent.');
     }
 
-    public function downloadPDF(CaseFile $case_file, Invoice $invoice)
+    public function downloadPdf(CaseFile $case_file, Invoice $invoice)
     {
-        $pdf = $this->generatePDF($case_file, $invoice);
+        $pdf = $this->generatePdf($case_file, $invoice);
 
         return response()->stream(function () use ($pdf) {
             echo $pdf;
@@ -186,7 +186,7 @@ class ReceiptController extends Controller
         ]);
     }
 
-    private function generatePDF(CaseFile $case_file, Invoice $invoice)
+    private function generatePdf(CaseFile $case_file, Invoice $invoice)
     {
         $data = [
             'case_file' => [ 

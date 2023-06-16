@@ -70,7 +70,7 @@ Route::group(['middleware' => 'auth'], function() {
         Route::post('/voucher-requests/{voucher_request}/approve', [ApproveVoucher::class, 'approveVoucher']);
         Route::resource('voucher-requests', ApproveVoucher::class)->only('index','show');
 
-        // Employee
+        // Employees
         Route::resource('users', ManageUsers::class)->except('show');
 
         // Bank Accounts
@@ -79,11 +79,6 @@ Route::group(['middleware' => 'auth'], function() {
         // Company Profile
         Route::resource('company', ManageCompany::class)->except(['show','edit', 'destroy']);
         Route::get('company/edit', [ManageCompany::class, 'edit'])->name('company.edit');
-        
-        // Route::get('/settings', function () {
-        //     $userId = auth::id();
-        //     return Inertia::render('Admin/Settings', [$userId]);
-        // });
     });
 
     //Routes for Lawyer ONLY
@@ -102,27 +97,31 @@ Route::group(['middleware' => 'auth'], function() {
         Route::resource('claim-vouchers', ClaimVoucherController::class);
 
         Route::scopeBindings()->prefix('/case-files/{case_file}')->group(function() {
+            // Quotation/Estimate
             Route::prefix('/quotation')->group(function() {
-                Route::get('/pdf', [QuotationController::class, 'viewPDF']);
+                Route::get('/pdf', [QuotationController::class, 'viewPdf']);
                 Route::get('/email', [QuotationController::class, 'sendEmail']);
             });
+            Route::singleton('quotation', QuotationController::class)->creatable();
 
+            // Invoices
             Route::prefix('/invoices/{invoice}')->group(function() {
                 Route::post('set-open', [InvoiceController::class, 'setOpen']);
                 Route::post('email-invoice', [InvoiceController::class, 'emailInvoice']);
-                Route::get('pdf', [InvoiceController::class, 'downloadPDF']);
+                Route::get('pdf', [InvoiceController::class, 'downloadPdf']);
 
+                // Payment
                 Route::get('/payment/receipt', [InvoicePaymentController::class, 'downloadReceipt']);
+                Route::singleton('payment', InvoicePaymentController::class)->creatable()->only('create', 'store');
 
-                Route::get('receipt/pdf', [ReceiptController::class, 'downloadPDF']);
+                // Receipt
+                Route::get('receipt/pdf', [ReceiptController::class, 'downloadPdf']);
                 Route::post('receipt/mark-sent', [ReceiptController::class, 'markSent']);
                 Route::post('receipt/email-receipt', [ReceiptController::class, 'emailReceipt']);
-
-                Route::singleton('payment', InvoicePaymentController::class)->creatable()->only('create', 'store');
                 Route::singleton('receipt', ReceiptController::class)->creatable();
+
             });
 
-            Route::singleton('quotation', QuotationController::class)->creatable();
             Route::resource('disbursement-items', DisbursementItemController::class);
             Route::resource('invoices', InvoiceController::class);
         });

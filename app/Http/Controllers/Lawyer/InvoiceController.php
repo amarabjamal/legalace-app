@@ -266,7 +266,7 @@ class InvoiceController extends Controller
         return back()->with('successMessage', 'The invoice status is set to open.');
     }
     
-    public function downloadPDF(CaseFile $case_file, Invoice $invoice) 
+    public function downloadPdf(CaseFile $case_file, Invoice $invoice) 
     {
         $data = [
             'case_file' => [ 

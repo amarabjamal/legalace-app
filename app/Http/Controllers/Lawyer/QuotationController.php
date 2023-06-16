@@ -81,6 +81,10 @@ class QuotationController extends Controller
 
     public function show(CaseFile $case_file) 
     {
+        if(!$case_file->quotation()->exists()) {
+            return redirect()->route('lawyer.quotation.create', $case_file);
+        }
+
         $case_file->quotation;
         $case_file->workDescriptions;
 
@@ -151,7 +155,7 @@ class QuotationController extends Controller
         return back()->with('errorMessage', 'Failed update!');
     }
 
-    public function viewPDF(CaseFile $case_file)
+    public function viewPdf(CaseFile $case_file)
     {
         $data = [
             'workdescriptions' => $case_file->workDescriptions()->get()->toArray(),
