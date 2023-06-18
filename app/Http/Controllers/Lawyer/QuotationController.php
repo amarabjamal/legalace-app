@@ -148,12 +148,30 @@ class QuotationController extends Controller
             return redirect()->route('lawyer.quotation.create', $case_file);
         }
 
-        $case_file->quotation;
-        $case_file->workDescriptions;
+        $quotation = $case_file->quotation;
+        $bankAccount = $quotation->bankAccount;
+        $workDescriptions = $quotation->workDescriptions;
 
         return inertia('Lawyer/Quotation/Show', [
-            'case_file' => $case_file,
-            'client_bank_accounts' => $this->bankaccount->clientAccountOptions(),
+            'case_file' => [
+                'id' => $case_file->id,
+                'file_number' => $case_file->file_number,
+            ],
+            'quotation' => [
+                'deposit_amount' => $quotation->deposit_amount->formatTo('en_MY'),
+                'bank_account_id' => $quotation->bank_account_id,
+                'bank_account' => [
+                    'label' => $bankAccount->label,
+                    'bank_name' => $bankAccount->bank_name,
+                    'account_name' => $bankAccount->account_name,
+                    'account_number' => $bankAccount->account_number,
+                    'type' => $bankAccount->bankAccountType->name,
+                ],
+                'work_descriptions' => $workDescriptions->map(fn ($workDescription) => [
+                    'description' => $workDescription->description,
+                    'fee' => $workDescription->fee->formatTo('en_MY'),
+                ])
+            ],
         ]);
     }
 
