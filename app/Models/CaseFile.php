@@ -7,7 +7,6 @@ use App\Models\CaseFile\Invoices\Invoice;
 use App\Traits\HasCompanyScope;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Facades\Auth;
 
 class CaseFile extends Model
 {
@@ -87,27 +86,8 @@ class CaseFile extends Model
         $query->where('created_by', '=', auth()->id())->with('client:id,name');
     }
 
-    public function myCaseFile() 
+    public function hasQuotation(): bool
     {
-
-        return $this->where('created_by', '=', Auth::id())
-            ->with('client:id,name')
-            ->get();
-    }
-
-    public function getCaseFileById($id)  
-    {
-        
-        return $this->where('id', '=', $id)
-            ->with('client:id,name', 'createdBy:id,name')
-            ->first();
-    }
-
-    public function getCaseFileByIdWithAddress($id)  
-    {
-        
-        return $this->where('id', '=', $id)
-            ->with('client:id,name,address', 'createdBy:id,name')
-            ->first();
+        return $this->quotation()->exists();
     }
 }

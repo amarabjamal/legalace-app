@@ -5,7 +5,6 @@ namespace App\Models;
 use App\Traits\HasCompanyScope;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Facades\Auth;
 
 class BankAccount extends Model
 {
@@ -26,26 +25,18 @@ class BankAccount extends Model
         'company_id',
     ];
 
-    protected $hidden = [
-        'created_at',
-        'updated_at'
-    ];
-
     public function bankAccountType() 
     {
-
         return $this->belongsTo(BankAccountType::class, 'bank_account_type_id', 'id');
     }
 
     public function createdBy() 
     {
-
         return $this->belongsTo(User::class, 'created_by', 'id');
     }
 
     public function company() 
     {
-    
         return $this->belongsTo(Company::class, 'company_id', 'id');
     }
 
@@ -61,7 +52,6 @@ class BankAccount extends Model
 
     public function allBankAccounts() 
     {
-
         return $this->with('createdBy:id,name', 'bankAccountType:id,name')->get();
     }
 
@@ -73,11 +63,5 @@ class BankAccount extends Model
     public function firmAccountOptions() 
     {
         return $this->firmAccount()->get(['id', 'label']);
-    }
-
-    public function getById($id) 
-    {
-
-        return $this->where(['id' => $id])->get();
     }
 }
