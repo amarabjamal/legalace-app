@@ -33,12 +33,12 @@
             <!-- Notification Tray -->
             <TransitionChild 
                 as="template"
-                enter="transition ease-in-out duration-300 transform"
-                enter-from="-translate-x-full"
+                enter="transition ease-in-out duration-500 transform"
+                enter-from="translate-x-full"
                 enter-to="translate-x-0"
-                leave="transition ease-in-out duration-300 transform"
+                leave="transition ease-in-out duration-500 transform"
                 leave-from="translate-x-0"
-                leave-to="-translate-x-full"
+                leave-to="translate-x-full"
             >
                 <div class="bg-white fixed inset-y-0 right-0 w-full max-w-md py-2">
                     <DialogPanel class="flex flex-col h-full">
