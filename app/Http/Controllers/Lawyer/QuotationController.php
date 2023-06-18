@@ -13,7 +13,9 @@ use Exception;
 use Illuminate\Support\Facades\DB;
 use Inertia\Inertia;
 use Barryvdh\DomPDF\Facade\Pdf as PDF;
+use Brick\Money\Money;
 use Illuminate\Support\Facades\Mail;
+use PhpParser\Node\Expr\Cast\Object_;
 
 class QuotationController extends Controller
 {
@@ -37,7 +39,7 @@ class QuotationController extends Controller
 
     public function create(CaseFile $case_file) 
     {
-        if($case_file->quotation()->exists()) {
+        if($case_file->hasQuotation()) {
             return redirect()->route('lawyer.quotation.edit', $case_file);
         }
 
@@ -48,40 +50,101 @@ class QuotationController extends Controller
             ],
             'client_bank_accounts' => $this->bankaccount->clientAccountOptions(),
         ]);
-        
     }
 
-    public function store(
-        StoreQuotationRequest $request, 
-        CaseFile $case_file
-    ) 
+    public function store(StoreQuotationRequest $request, CaseFile $case_file) 
     {
-        
-        $validated = $request->validated();
+        try {
+            DB::beginTransaction();
 
-        $workDescriptions = [];
+            $quotationInputs = $request->except('work_descriptions');
+            $quotationInputs['deposit_amount'] = Money::of($quotationInputs['deposit_amount'], 'MYR');
 
-        foreach($validated['work_descriptions'] as $workDescription) {
-            array_push(
-                $workDescriptions, 
-                new WorkDescription([
-                        'description' => $workDescription['description'],
-                        'fee' => $workDescription['fee']
-                    ]
-                )
-            );
+            $quotation = Quotation::create($quotationInputs);
+
+            $workDescriptions = $request->work_descriptions;
+
+            foreach($workDescriptions as &$workDescription) {
+                $workDescription['company_id'] = auth()->user()->company_id;
+                $workDescription['fee'] = Money::of($workDescription['fee'], 'MYR');
+            }
+
+            $quotation->workDescriptions()->createMany($workDescriptions);
+
+            DB::commit();
+        } catch (\Exception $e) {
+            DB::rollBack();
+
+            dd($e);
+            return back()->with('errorMessage', 'Failed to create the quotation. Please try again.');
         }
 
-        $quotation = Quotation::create($validated);
+        return redirect()->route('lawyer.quotation.edit', $case_file)->with('successMessage', 'The quotation has been created.');
+    }
 
-        $quotation->workDescriptions()->saveMany($workDescriptions);
+    public function edit(CaseFile $case_file) 
+    {
+        if(!$case_file->hasQuotation()) {
+            return redirect()->route('lawyer.quotation.create', $case_file);
+        }
 
-        return redirect()->route('lawyer.quotation.edit', $case_file);
+        $quotation = $case_file->quotation;
+
+        return inertia('Lawyer/Quotation/Edit', [
+            'case_file' => [
+                'id' => $case_file->id,
+                'file_number' => $case_file->file_number,
+            ],
+            'quotation' => [
+                'deposit_amount' => $quotation->deposit_amount,
+                'bank_account_id' => $quotation->bank_account_id,
+                'work_descriptions' => $quotation->workDescriptions->map(fn ($workDescription) => [
+                    'description' => $workDescription->description,
+                    'fee' => $workDescription->fee->getAmount(),
+                ])
+            ],
+            'client_bank_accounts' => $this->bankaccount->clientAccountOptions(),
+        ]);
+    }
+
+    public function update(UpdateQuotationRequest $request, CaseFile $case_file) 
+    {
+        if(!$case_file->hasQuotation()) {
+            return redirect()->route('lawyer.quotation.create', $case_file);
+        }
+
+        try {
+            DB::beginTransaction();
+            
+            $quotation = $case_file->quotation;
+            $quotation->deposit_amount = Money::of($request->deposit_amount, 'MYR');
+            $quotation->bank_account_id = $request->bank_account_id;
+            $quotation->save();
+
+            $workDescriptions = $quotation->workDescriptions();
+            $workDescriptions->delete();
+            $workDescriptionArray = $request->work_descriptions;
+
+            foreach($workDescriptionArray as &$workDescription) {
+                $workDescription['company_id'] = auth()->user()->company_id;
+                $workDescription['fee'] = Money::of($workDescription['fee'], 'MYR');
+            }
+
+            $workDescriptions->createMany($workDescriptionArray);
+            
+            DB::commit();
+
+            return back()->with('successMessage', 'Successfully update!');
+        } catch (Exception $e) {
+            DB::rollback();
+        }
+
+        return back()->with('errorMessage', 'Failed to update!');
     }
 
     public function show(CaseFile $case_file) 
     {
-        if(!$case_file->quotation()->exists()) {
+        if(!$case_file->hasQuotation()) {
             return redirect()->route('lawyer.quotation.create', $case_file);
         }
 
@@ -92,67 +155,6 @@ class QuotationController extends Controller
             'case_file' => $case_file,
             'client_bank_accounts' => $this->bankaccount->clientAccountOptions(),
         ]);
-    }
-
-    public function edit(CaseFile $case_file) 
-    {
-        if(!$case_file->quotation()->exists()) {
-            return redirect()->route('lawyer.quotation.create', $case_file);
-        }
-
-        $case_file->quotation;
-        $case_file->workDescriptions;
-
-        return inertia('Lawyer/Quotation/Edit', [
-            'case_file' => $case_file,
-            'client_bank_accounts' => $this->bankaccount->clientAccountOptions(),
-        ]);
-    }
-
-    public function update(UpdateQuotationRequest $request, CaseFile $case_file) 
-    {
-        if(!$case_file->quotation()->exists()) {
-            return redirect()->route('lawyer.quotation.create', $case_file);
-        }
-
-        $quotation = $this->quotation->getQuotationByFileCaseId($case_file->id);
-
-        try {
-            DB::beginTransaction();
-    
-            $quotation->update($request->safe()->only(['deposit_amount', 'bank_account_id']));
-            
-            $deleteStatus = $this->workdescription->deleteAll($quotation->id);
-            
-            if(!$deleteStatus) {
-                DB::rollback();
-
-                return back()->with('errorMessage', 'Failed to delete old work descriptions');
-            }
-
-            $workDescriptions = [];
-            
-            foreach($request->safe()->only(['work_descriptions'])['work_descriptions'] as $workDescription) {
-                array_push(
-                    $workDescriptions, 
-                    new WorkDescription([
-                            'description' => $workDescription['description'],
-                            'fee' => $workDescription['fee']
-                        ]
-                    )
-                );
-            }
-            
-            $quotation->workDescriptions()->saveMany($workDescriptions);
-            
-            DB::commit();
-
-            return back()->with('successMessage', 'Successfully update!');
-        } catch (Exception $e) {
-            DB::rollback();
-        }
-
-        return back()->with('errorMessage', 'Failed update!');
     }
 
     public function viewPdf(CaseFile $case_file)
