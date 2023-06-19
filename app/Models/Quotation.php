@@ -4,6 +4,8 @@ namespace App\Models;
 
 use App\Casts\Money;
 use App\Traits\HasCompanyScope;
+use Brick\Math\RoundingMode;
+use Brick\Money\Money as BrickMoney;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -16,6 +18,10 @@ class Quotation extends Model
     protected $fillable = [
         'company_id',
         'deposit_amount',
+        'subtotal',
+        'tax_rate',
+        'tax_amount',
+        'total',
         'is_paid',
         'payment_date',
         'created_by_user_id',
@@ -25,6 +31,9 @@ class Quotation extends Model
 
     protected $casts = [
         'deposit_amount' => Money::class . ':deposit_amount,MYR,0',
+        'subtotal' => Money::class . ':subtotal,MYR,0',
+        'tax_amount' => Money::class . ':tax_amount,MYR,0',
+        'total' => Money::class . ':total,MYR,0',
     ];
     
     public function workDescriptions() {
@@ -41,5 +50,31 @@ class Quotation extends Model
 
     public function bankAccount() {
         return $this->belongsTo(BankAccount::class, 'bank_account_id', 'id');
+    }
+
+    public function calculateSubtotal() 
+    {
+        $amount = $this->workDescriptions()->sum('fee');
+
+        return BrickMoney::of($amount, 'MYR');
+    }
+
+    public function calculateTaxRate() {
+        return 0;
+    }
+
+    public function calculateTax() 
+    {
+        $taxRate = $this->calculateTaxRate();
+
+        return $this->calculateSubtotal()->multipliedBy($taxRate, RoundingMode::UP);
+    }
+
+    public function calculateTotal() 
+    {
+        $subtotal = $this->calculateSubtotal();
+        $tax = $this->calculateTax();
+
+        return  $subtotal->plus($tax);
     }
 }
