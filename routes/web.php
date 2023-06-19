@@ -99,8 +99,8 @@ Route::group(['middleware' => 'auth'], function() {
         Route::scopeBindings()->prefix('/case-files/{case_file}')->group(function() {
             // Quotation/Estimate
             Route::prefix('/quotation')->group(function() {
-                Route::get('/pdf', [QuotationController::class, 'viewPdf']);
-                Route::get('/email', [QuotationController::class, 'sendEmail']);
+                Route::get('/pdf', [QuotationController::class, 'downloadPdf']);
+                Route::get('/email', [QuotationController::class, 'emailQuotation']);
             });
             Route::singleton('quotation', QuotationController::class)->creatable();
 
