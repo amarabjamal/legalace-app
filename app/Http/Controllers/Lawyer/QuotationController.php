@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Lawyer;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreQuotationRequest;
 use App\Http\Requests\UpdateQuotationRequest;
+use App\Jobs\CalculateQuotationTotal;
+use App\Mail\SendQuotation;
 use App\Models\BankAccount;
 use App\Models\CaseFile;
 use App\Models\Quotation;
@@ -16,6 +18,7 @@ use Barryvdh\DomPDF\Facade\Pdf as PDF;
 use Brick\Money\Money;
 use Illuminate\Support\Facades\Mail;
 use PhpParser\Node\Expr\Cast\Object_;
+use Spatie\Browsershot\Browsershot;
 
 class QuotationController extends Controller
 {
@@ -70,6 +73,8 @@ class QuotationController extends Controller
             }
 
             $quotation->workDescriptions()->createMany($workDescriptions);
+
+            dispatch_sync(new CalculateQuotationTotal($quotation));            
 
             DB::commit();
         } catch (\Exception $e) {
@@ -131,6 +136,8 @@ class QuotationController extends Controller
             }
 
             $workDescriptions->createMany($workDescriptionArray);
+
+            dispatch_sync(new CalculateQuotationTotal($quotation));
             
             DB::commit();
 
@@ -149,6 +156,11 @@ class QuotationController extends Controller
         }
 
         $quotation = $case_file->quotation;
+
+        if($quotation->subtotal == null) {
+            dispatch_sync(new CalculateQuotationTotal($quotation));
+            $this->show($case_file);
+        }
         $bankAccount = $quotation->bankAccount;
         $workDescriptions = $quotation->workDescriptions;
 
@@ -170,47 +182,71 @@ class QuotationController extends Controller
                 'work_descriptions' => $workDescriptions->map(fn ($workDescription) => [
                     'description' => $workDescription->description,
                     'fee' => $workDescription->fee->formatTo('en_MY'),
-                ])
+                ]),
+                'subtotal' => $quotation->subtotal->formatTo('en_MY'),
+                'tax' => $quotation->tax_amount->formatTo('en_MY'),
+                'total' => $quotation->total->formatTo('en_MY'),
             ],
         ]);
     }
 
-    public function viewPdf(CaseFile $case_file)
+    public function emailQuotation(CaseFile $case_file)
     {
-        $data = [
-            'workdescriptions' => $case_file->workDescriptions()->get()->toArray(),
-            'deposit_amount' =>  $case_file->quotation()->pluck('deposit_amount')->toArray()[0],
-        ];
+        try { 
+            DB::transaction(function() use ($case_file) {
+                // $invoice->update(['status' => InvoiceStatusEnum::Sent]);
+                // $invoice->disbursementItems()->update(['status' => DisbursementItemStatusEnum::Invoiced]);       
 
-        //dd($data);
-        
-        $pdf = PDF::loadView('templates.quotation', $data)->setPaper('a4', 'portrait');
+                $pdf = $this->generatePdf($case_file);
 
-        return $pdf->stream();
+                Mail::to($case_file->client->email)
+                    ->send(new SendQuotation($case_file->quotation, $pdf, $case_file->client->name));
+            });
+        } catch (\Exception $e) {
+            dd($e);
+            return back()->with('errorMessage', 'Failed to send the receipt');
+        }
+
+        return back()->with('successMessage', 'The invoice is emailed to the client.');
     }
 
-    public function sendEmail(CaseFile $case_file) 
+    public function downloadPdf(CaseFile $case_file)
     {
+        $pdf = $this->generatePdf($case_file);
+
+        return response()->stream(function () use ($pdf) {
+            echo $pdf;
+        }, 200, [
+            'Content-Type' => 'application/pdf',
+            'Content-Disposition' => 'inline; filename=quotation.pdf',
+        ]);
+    }
+
+    private function generatePdf(CaseFile $caseFile)
+    {
+        $quotation = $caseFile->quotation;
 
         $data = [
-            'workdescriptions' => $case_file->workDescriptions()->get()->toArray(),
-            'deposit_amount' =>  $case_file->quotation()->pluck('deposit_amount')->toArray()[0],
+            'case_file' => [ 
+                'number' => $caseFile->file_number,
+                'company' => $caseFile->company->only('name', 'address'),
+                'client' => $caseFile->client->only('name', 'address'),
+            ],
+            'date' => today()->format('d/m/Y'),
+            'items' => $quotation->workDescriptions,
+            'subtotal' => $quotation->subtotal->formatTo('en_MY'),
+            'tax' => $quotation->tax_amount->formatTo('en_MY'),
+            'total' => $quotation->total->formatTo('en_MY'),
+            'deposit_amount' =>  $quotation->deposit_amount->formatTo('en-MY'),
+            'bank_account' => $quotation->bankAccount,
         ];
-        
-        $pdf = PDF::loadView('templatesquotation', $data);
 
-        $email = [
-            'client_email' => 'client@example.com',
-            'subject' => 'Quotation: Matter',
-            'body' => 'Please find the attached quotation.',
-        ];
+        $html = view('templates.quotation', $data)->render();
 
-        Mail::send('emails.quotation', $email, function ($message) use ($email, $pdf) {
-            $message->to($email["client_email"], $email["client_email"])
-                ->subject($email["subject"])
-                ->attachData($pdf->output(), "quotation.pdf");
-        });
-
-        echo "email send successfully !!";
+        return Browsershot::html($html)
+                ->margins(18, 18, 24, 18)
+                ->format('A4')
+                ->showBackground()
+                ->pdf();
     }
 }
