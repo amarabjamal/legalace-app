@@ -28,6 +28,7 @@ class DisbursementItem extends Model
         'fund_type',
         'case_file_id',
         'record_type_id',
+        'created_by_user_id',
     ];
 
     protected $casts = [

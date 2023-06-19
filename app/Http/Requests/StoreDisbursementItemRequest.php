@@ -30,6 +30,7 @@ class StoreDisbursementItemRequest extends FormRequest
             'company_id' => auth()->user()->company_id,
             'status' => DisbursementItemStatusEnum::Recorded->value,
             'case_file_id' => $this->case_file->id,
+            'created_by_user_id' => auth()->id(),
         ]);
     }
 
