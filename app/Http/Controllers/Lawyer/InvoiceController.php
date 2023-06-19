@@ -13,7 +13,6 @@ use App\Models\CaseFile;
 use App\Models\CaseFile\DisbursementItem\DisbursementItem;
 use App\Models\CaseFile\Invoices\Invoice;
 use App\Models\InvoicePayment;
-use Barryvdh\DomPDF\Facade\Pdf as PDF;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Request;
@@ -108,7 +107,7 @@ class InvoiceController extends Controller
     public function show(CaseFile $case_file, Invoice $invoice)
     {
         if($invoice->subtotal == null) {
-            CalculateInvoiceTotal::dispatchSync($invoice);
+            dispatch_sync(new CalculateInvoiceTotal($invoice));
             $this->show($case_file, $invoice);
         }
 
@@ -331,9 +330,9 @@ class InvoiceController extends Controller
             ),
         ];
 
-        $content = view('templates.invoice', $data)->render();
+        $html = view('templates.invoice', $data)->render();
 
-        return Browsershot::html($content)
+        return Browsershot::html($html)
                 ->margins(18, 18, 8, 18)
                 ->format('A4')
                 ->showBackground()
