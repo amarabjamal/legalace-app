@@ -3,7 +3,7 @@
 
     <page-heading :page_title="page_title" :breadcrumbs="breadcrumbs"/>
 
-    <div class="max-w-3xl bg-white rounded-md shadow overflow-hidden">
+    <div class="max-w-3xl bg-white rounded-md border border-gray-300 overflow-hidden">
         <form @submit.prevent="update">
             <div class="flex flex-wrap px-8 py-6">
                 <h3 class="font-semibold leading-6 text-gray-800 text-lg tracking-tight mb-4">Scope of services & legal fees</h3>
@@ -27,7 +27,7 @@
                                 leave-to-class="scale-75  opacity-0"
                                 appear 
                             >
-                                <tr v-for="(work_description, index) in form.work_descriptions" :key="work_description.id ? work_description : work_description.key" class="border border-gray-300">
+                                <tr v-for="(work_description, index) in form.work_descriptions" :key="getKey" class="border border-gray-300">
                                     <td class="max-w-0 px-4 py-2 align-top">
                                         {{ index + 1 }}
                                     </td>
@@ -209,6 +209,9 @@ export default {
         },
         removeItem(index) {
             this.form.work_descriptions.splice(index, 1);
+        },
+        getKey() {
+            return Symbol();
         },
         update() {
             this.form.work_descriptions.forEach((work_description) => {
