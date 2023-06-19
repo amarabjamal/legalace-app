@@ -36,15 +36,15 @@
                     <tfoot>
                         <tr>
                             <th scope="row" colspan="2" class="sm:pt-2 sm:text-right font-normal text-gray-700 border-t border-l border-gray-300">Subtotal</th>
-                            <td colspan="1" class="pt-2 px-4 text-right text-gray-900 tabular-nums border-t border-r border-gray-300">{{ $filters.currency(subtotal) }}</td>
+                            <td colspan="1" class="pt-2 px-4 text-right text-gray-900 tabular-nums border-t border-r border-gray-300">{{ quotation.subtotal }}</td>
                         </tr>
                         <tr>
                             <th scope="row" colspan="2" class="py-2 sm:text-right font-normal text-gray-700 border-b border-l border-gray-300">Tax (0%)</th>
-                            <td colspan="1" class="py-2 px-4 text-right tabular-nums text-gray-900 border-b border-r border-gray-300">{{ $filters.currency(tax) }}</td>
+                            <td colspan="1" class="py-2 px-4 text-right tabular-nums text-gray-900 border-b border-r border-gray-300">{{ quotation.tax }}</td>
                         </tr>
                         <tr>
                             <th scope="row" colspan="2" class="py-2 sm:text-right font-semibold text-gray-900 border-l border-b border-gray-300 bg-gray-100">Total</th>
-                            <td colspan="1" class="py-2 px-4 text-right font-semibold tabular-nums text-gray-900 border-b border-r border-gray-300 bg-gray-100">{{ $filters.currency(total) }}</td>
+                            <td colspan="1" class="py-2 px-4 text-right font-semibold tabular-nums text-gray-900 border-b border-r border-gray-300 bg-gray-100">{{  quotation.total }}</td>
                         </tr>
                     </tfoot>
                 </table>
@@ -100,12 +100,7 @@ export default {
                 { link: `/lawyer/case-files/${this.case_file.id}`, label: this.case_file.file_number},
                 { link: null, label: 'Quotation'},
             ],
-            subtotal: 0,
-            tax: 0,
-            total: 0,
         }
-    },
-    methods: {
     },
 };
 </script>
