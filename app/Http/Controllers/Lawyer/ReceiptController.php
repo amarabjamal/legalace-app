@@ -99,7 +99,7 @@ class ReceiptController extends Controller
             'invoice' => [
                 'id' => $invoice->id,
                 'company' => $invoice->company->only('name', 'address'),
-                'client' => $invoice->caseFile->client->only('name', 'address'),
+                'client' => $case_file->client->only('name', 'address'),
                 'number' => $invoice->invoice_number,
                 'subtotal' => $invoice->subtotal->formatTo('en-MY'),
                 'tax' => $invoice->tax_amount->formatTo('en-MY'),
@@ -132,17 +132,12 @@ class ReceiptController extends Controller
             return back()->with('errorMessage', 'The receipt does not exist.');
         }
 
-        $email = [
-            'client_email' => $invoice->caseFile->client->email,
-            'subject' => '',
-            'body' => '',
-        ];
-
         try
         {
             $pdf = $this->generatePdf($case_file, $invoice);
 
-            Mail::to($email['client_email'])->send(new SendReceipt($invoice->receipt, $pdf, $case_file->client->name));
+            Mail::to($case_file->client->email)
+                ->send(new SendReceipt($invoice->receipt, $pdf, $case_file->client->name));
 
             DB::transaction(function() use ($invoice) {
                 $invoice->receipt()->update(['is_sent' => true]);
@@ -220,7 +215,7 @@ class ReceiptController extends Controller
 
         $content = view('templates.receipt', $data)->render();
         return Browsershot::html($content)
-                ->margins(18, 18, 24, 18)
+                ->margins(18, 18, 8, 18)
                 ->format('A4')
                 ->showBackground()
                 ->pdf();

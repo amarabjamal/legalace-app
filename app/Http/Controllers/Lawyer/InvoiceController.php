@@ -8,6 +8,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreInvoiceRequest;
 use App\Http\Requests\UpdateInvoiceRequest;
 use App\Jobs\CalculateInvoiceTotal;
+use App\Mail\SendInvoice;
 use App\Models\CaseFile;
 use App\Models\CaseFile\DisbursementItem\DisbursementItem;
 use App\Models\CaseFile\Invoices\Invoice;
@@ -16,6 +17,7 @@ use Barryvdh\DomPDF\Facade\Pdf as PDF;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Request;
+use Spatie\Browsershot\Browsershot;
 
 class InvoiceController extends Controller
 {
@@ -265,16 +267,53 @@ class InvoiceController extends Controller
 
         return back()->with('successMessage', 'The invoice status is set to open.');
     }
-    
-    public function downloadPdf(CaseFile $case_file, Invoice $invoice) 
+
+    public function emailInvoice(CaseFile $case_file, Invoice $invoice) 
+    {
+        if($invoice->status != InvoiceStatusEnum::Open && $invoice->status != InvoiceStatusEnum::Sent) {
+            return back()->with('errorMessage', 'Invalid action.');
+        }
+
+        try { 
+            DB::transaction(function() use ($case_file, $invoice) {
+                $invoice->update(['status' => InvoiceStatusEnum::Sent]);
+                $invoice->disbursementItems()->update(['status' => DisbursementItemStatusEnum::Invoiced]);       
+
+                $pdf = $this->generatePdf($case_file, $invoice);
+
+                Mail::to($case_file->client->email)
+                    ->send(new SendInvoice($invoice, $pdf, $case_file->client->name));
+            });
+        } catch (\Exception $e) {
+            dd($e);
+            return back()->with('errorMessage', 'Failed to send the receipt');
+        }
+
+        return back()->with('successMessage', 'The invoice is emailed to the client.');
+    }
+
+    public function downloadPdf(CaseFile $case_file, Invoice $invoice)
+    {
+        $pdf = $this->generatePdf($case_file, $invoice);
+
+        return response()->stream(function () use ($pdf) {
+            echo $pdf;
+        }, 200, [
+            'Content-Type' => 'application/pdf',
+            'Content-Disposition' => 'inline; filename=invoice.pdf',
+        ]);
+    }
+
+    private function generatePdf(CaseFile $case_file, Invoice $invoice)
     {
         $data = [
             'case_file' => [ 
                 'number' => $case_file->file_number,
+                'client' => $case_file->client->only('name', 'address'),
+
             ],
             'invoice' => [
                 'company' => $invoice->company->only('name', 'address'),
-                'client' => $invoice->caseFile->client->only('name', 'address'),
                 'number' => $invoice->invoice_number,
                 'invoice_date' => $invoice->formatted_invoice_date,
                 'due_date' => $invoice->formatted_due_date,
@@ -291,45 +330,13 @@ class InvoiceController extends Controller
                 ]
             ),
         ];
-        $pdf = PDF::loadView('templates.invoice', $data);
-        $pdf->render();
 
-        return $pdf->stream();
-    }
+        $content = view('templates.invoice', $data)->render();
 
-    public function emailInvoice(CaseFile $case_file, Invoice $invoice) 
-    {
-        if($invoice->status != InvoiceStatusEnum::Open && $invoice->status != InvoiceStatusEnum::Sent) {
-            return back()->with('errorMessage', 'Invalid action.');
-        }
-
-        $pdf = PDF::loadView('templates.invoice');
-
-        $email = [
-            'client_email' => 'client@example.com',
-            'subject' => 'Invoice',
-            'body' => 'Please find the attached invoice.',
-        ];
-
-        try {
-            DB::beginTransaction();
-
-            Mail::send('emails.invoice', $email, function ($message) use ($email, $pdf) {
-                $message->to($email["client_email"], $email["client_email"])
-                    ->subject($email["subject"])
-                    ->attachData($pdf->output(), "invoice.pdf");
-            });
-
-            $invoice->update(['status' => InvoiceStatusEnum::Sent]);
-            $invoice->disbursementItems()->update(['status' => DisbursementItemStatusEnum::Invoiced]);            
-
-            DB::commit();
-        } catch (\Exception $e) {
-            DB::rollBack();
-
-            return back()->with('errorMessage', 'Failed to send the invoice email.');            
-        }
-
-        return back()->with('successMessage', 'The invoice is emailed to the client.');
+        return Browsershot::html($content)
+                ->margins(18, 18, 8, 18)
+                ->format('A4')
+                ->showBackground()
+                ->pdf();
     }
 }

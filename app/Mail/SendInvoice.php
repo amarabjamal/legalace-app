@@ -10,20 +10,20 @@ use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
 
-class SendReceipt extends Mailable
+class SendInvoice extends Mailable
 {
     use Queueable, SerializesModels;
 
-    public $receipt, $pdf, $client;
+    public $invoice, $pdf, $client;
 
     /**
      * Create a new message instance.
      *
      * @return void
      */
-    public function __construct($receipt, $pdf, $client)
+    public function __construct($invoice, $pdf, $client)
     {
-        $this->receipt = $receipt;
+        $this->invoice = $invoice;
         $this->pdf = $pdf;
         $this->client = $client;
     }
@@ -36,7 +36,7 @@ class SendReceipt extends Mailable
     public function envelope()
     {
         return new Envelope(
-            subject: 'New Receipt',
+            subject: 'New Invoice',
         );
     }
 
@@ -48,7 +48,7 @@ class SendReceipt extends Mailable
     public function content()
     {
         return new Content(
-            view: 'emails.receipt',
+            view: 'emails.invoice',
         );
     }
 
@@ -60,7 +60,7 @@ class SendReceipt extends Mailable
     public function attachments()
     {
         return [
-            Attachment::fromData(fn () => $this->pdf , 'Receipt.pdf')
+            Attachment::fromData(fn () => $this->pdf , 'Invoice.pdf')
                 ->withMime('application/pdf'),
         ];
     }
