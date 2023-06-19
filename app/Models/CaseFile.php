@@ -10,7 +10,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class CaseFile extends Model
 {
-    use HasFactory;
+    use HasFactory, HasCompanyScope;
 
     protected $table = 'case_files';
     protected $primaryKey= 'id';
@@ -20,12 +20,13 @@ class CaseFile extends Model
         'file_number',
         'no_conflict_checked',
         'client_id',
-        'created_by',
+        'created_by_user_id',
     ];
-    protected $hidden = [
-        'created_at',
-        'updated_at',
-    ];
+
+    public function company()
+    {
+        return $this->belongsTo(Company::class, 'company_id', 'id');
+    }
 
     public function client() 
     {
@@ -34,7 +35,7 @@ class CaseFile extends Model
 
     public function createdBy() 
     {
-        return $this->belongsTo(User::class, 'created_by', 'id');
+        return $this->belongsTo(User::class, 'created_by_user_id', 'id');
     }
 
     public function quotation()
@@ -83,7 +84,7 @@ class CaseFile extends Model
 
     public function scopeMyFiles($query) 
     {
-        $query->where('created_by', '=', auth()->id())->with('client:id,name');
+        $query->where('created_by_user_id', '=', auth()->id())->with('client:id,name');
     }
 
     public function hasQuotation(): bool
