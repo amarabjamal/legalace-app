@@ -49,10 +49,16 @@ class CaseFileController extends Controller
     {
         $this->authorize('view', $case_file);
 
-        $case_file->client->pluck('name');
-
         return Inertia::render('Lawyer/CaseFile/Show', [
-            'case_file' => $case_file,
+            'case_file' => [
+                'id' => $case_file->id,
+                'file_number' => $case_file->file_number,
+                'matter' => $case_file->matter,
+                'type' => $case_file->type,
+                'no_conflict_checked' => $case_file->no_conflict_checked,
+                'client' => $case_file->client->name,
+                'creator' => $case_file->createdBy->name,
+            ],
         ]);   
     }
 
