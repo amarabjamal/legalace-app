@@ -31,7 +31,7 @@ class CaseFilePolicy
      */
     public function view(User $user, CaseFile $caseFile)
     {
-        return $user->id === $caseFile->created_by;
+        return $user->id === $caseFile->created_by_user_id;
     }
 
     /**
@@ -54,7 +54,7 @@ class CaseFilePolicy
      */
     public function update(User $user, CaseFile $caseFile)
     {
-        return $user->id === $caseFile->created_by;
+        return $user->id === $caseFile->created_by_user_id;
     }
 
     /**
@@ -66,7 +66,7 @@ class CaseFilePolicy
      */
     public function delete(User $user, CaseFile $caseFile)
     {
-        return $user->id === $caseFile->created_by;
+        return $user->id === $caseFile->created_by_user_id;
     }
 
     /**
@@ -78,7 +78,7 @@ class CaseFilePolicy
      */
     public function restore(User $user, CaseFile $caseFile)
     {
-        return $user->id === $caseFile->created_by;
+        return $user->id === $caseFile->created_by_user_id;
     }
 
     /**
@@ -90,6 +90,6 @@ class CaseFilePolicy
      */
     public function forceDelete(User $user, CaseFile $caseFile)
     {
-        return $user->id === $caseFile->created_by;
+        return $user->id === $caseFile->created_by_user_id;
     }
 }
