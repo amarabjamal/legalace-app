@@ -40,13 +40,13 @@ export default {
     },
     computed: {
         containerClass() {
-            return cva("flex p-4 rounded-lg space-x-3 ring-black/[.05] shadow-lg", {
+            return cva("flex p-4 rounded-lg space-x-3 ring-black/[.05] shadow-lg border", {
                 variants: {
                     intent: {
-                        info:"bg-blue-100",
-                        success:"bg-green-100",
-                        warning:"bg-orange-100",
-                        danger:"bg-red-100",
+                        info:"bg-blue-100 border-blue-700",
+                        success:"bg-green-100 border-green-700",
+                        warning:"bg-orange-100 border-orange-700",
+                        danger:"bg-red-100 border-red-700",
                     }
                 }
             }) ({
