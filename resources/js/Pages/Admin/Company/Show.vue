@@ -1,24 +1,9 @@
 <template>
-    <Head title="Company profile" />
+    <Head :title="page_title" />
 
     <page-heading :page_title="page_title" :breadcrumbs="breadcrumbs"/>
 
-    <div class="max-w-3xl bg-white rounded-md shadow-md overflow-hidden">
-        <div class="flex justify-between items-center px-4 py-5 sm:px-6 border-b dark:border-gray-700 bg-gray-50 dark:bg-gray-800">
-            <div>
-                <h3 class="text-lg leading-6 font-medium text-gray-500 dark:text-gray-400 ">Company Profile</h3>
-            </div>
-
-            <div>
-                <Link
-                    href="/admin/company/edit"
-                    class="text-white bg-blue-500 hover:bg-blue-600 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center"
-                    >
-                    Update
-                </Link>
-            </div>
-        </div>
-        <div class="border-t border-gray-200">
+    <div class="max-w-3xl bg-white rounded-md border border-gray-300 overflow-hidden">
         <dl>
             <div class="bg-white border-b px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
                 <dt class="text-sm font-medium text-gray-500">Company Name</dt>
@@ -27,16 +12,8 @@
                 </dd>
             </div>
             <div class="bg-white border-b px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                <dt class="text-sm font-medium text-gray-500">Registration Number</dt>
-                <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-                    {{ company.reg_number }}
-                </dd>
-            </div>
-            <div class="bg-white border-b px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
                 <dt class="text-sm font-medium text-gray-500">Office Address</dt>
-                <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-                    {{ company.address }}
-                </dd>
+                <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2 whitespace-pre-wrap">{{ company.address }}</dd>
             </div>
             <div class="bg-white border-b px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
                 <dt class="text-sm font-medium text-gray-500">Email Address</dt>
@@ -47,10 +24,21 @@
             <div class="bg-white border-b px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
                 <dt class="text-sm font-medium text-gray-500">Website URL</dt>
                 <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-                    {{ company.website }}
+                    <a class="text-blue-700 hover:underline" target="_blank" :href="company.website">
+                        {{ company.website }}
+                    </a>
                 </dd>
             </div>
         </dl>
+
+        <div class="flex items-center justify-end px-8 py-4 bg-gray-50 border-t border-gray-100">
+            <Link
+                as="button"
+                href="/admin/company/edit"
+                class="btn-primary"
+            >
+                Edit
+            </Link> 
         </div>
     </div>
 </template>
@@ -65,10 +53,10 @@ export default {
     },
     data() {
         return {
-            page_title: 'Company Profile',
+            page_title: 'Company',
             breadcrumbs: [
                 { link: '/admin/dashboard', label: 'Admin'},
-                { link: null, label: 'Company Profile'},
+                { link: null, label: 'Company'},
             ],
         }
     },
