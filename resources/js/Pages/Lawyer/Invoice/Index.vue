@@ -63,7 +63,7 @@
             </td>
           </tr>
           <tr>
-            <td v-if="invoices.data.length === 0" class="px-6 py-4 border-t text-center text-slate-500 bg-slate-100" colspan="100%">No invoices found.</td>
+            <td v-if="invoices.data.length === 0" class="px-6 py-4 border-t text-center text-slate-500 bg-slate-100" colspan="100%">No records found.</td>
           </tr>
         </tbody>
       </table>

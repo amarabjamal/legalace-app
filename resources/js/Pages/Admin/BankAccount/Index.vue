@@ -14,7 +14,7 @@
     </div>
 
     <div class="grid gap-6 mb-8 md:grid-cols-2">
-        <div v-if="bankAccounts.length <= 0" class="shadow width-full text-center p-3 bg-gray-100 text-gray-500  rounded-lg  dark:bg-gray-800 dark:text-gray-300">No data.</div>
+        <div v-if="bankAccounts.length <= 0" class="shadow width-full text-center p-3 bg-gray-100 text-gray-500  rounded-lg  dark:bg-gray-800 dark:text-gray-300">No records found.</div>
         <div 
             v-else
             v-for="bankAccount in bankAccounts" 

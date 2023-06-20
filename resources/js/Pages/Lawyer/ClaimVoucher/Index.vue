@@ -59,7 +59,7 @@
                     </td>
                 </tr>
                 <tr v-if="claim_vouchers.data.length === 0" >
-                    <td class="px-6 py-4 border-t text-center text-slate-500 bg-slate-100" colspan="100%">No vouchers found.</td>
+                    <td class="px-6 py-4 border-t text-center text-slate-500 bg-slate-100" colspan="100%">No records found.</td>
                 </tr>
             </tbody>
         </table>
