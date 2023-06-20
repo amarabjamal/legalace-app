@@ -47,14 +47,9 @@ export default {
         clients: Object,
         lawyers: Object,
     },
+    remember: 'form',
     data () {
         return {
-            form: this.$inertia.form({
-                matter: this.case_file.matter,
-                type: this.case_file.type,
-                file_number: this.case_file.file_number,
-                client_id: this.case_file.client_id,
-            }),
             page_title: 'Edit File',
             breadcrumbs: [
                 { link: '/lawyer/dashboard', label: 'Lawyer'},
@@ -62,11 +57,21 @@ export default {
                 { link: `/lawyer/case-files/${this.case_file.id}`, label: this.case_file.file_number},
                 { link: null, label: 'Edit'},
             ],
+            form: this.$inertia.form({
+                matter: this.case_file.matter,
+                type: this.case_file.type,
+                file_number: this.case_file.file_number,
+                client_id: this.case_file.client_id,
+            }),
         }
     },
     methods: {
         update() {
-            this.form.put(`/lawyer/case-files/${this.case_file.id}`);
+            if(this.form.isDirty) { 
+                this.form.put(`/lawyer/case-files/${this.case_file.id}`);
+            } else {
+                alert('No changes to be saved.');
+            }
         }
     },
 };

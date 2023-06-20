@@ -34,10 +34,10 @@
                 </span>
             </div>
             <div>
-                Client: {{ case_file.client.name }}
+                Client: {{ case_file.client }}
             </div>
             <div>
-                File Owner: {{ case_file.created_by.name }} <span v-if="case_file.created_by.name == $page.props.auth.user.name" class="text-sm text-gray-400">(You)</span>
+                File Owner: {{ case_file.creator }} <span v-if="case_file.ccreator == $page.props.auth.user.name" class="text-sm text-gray-400">(You)</span>
             </div>
         </div>
 
