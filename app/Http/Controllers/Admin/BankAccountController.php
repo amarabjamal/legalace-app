@@ -9,7 +9,7 @@ use App\Models\BankAccount;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
-class ManageBankAccount extends Controller
+class BankAccountController extends Controller
 {
     protected $bank_account;
 

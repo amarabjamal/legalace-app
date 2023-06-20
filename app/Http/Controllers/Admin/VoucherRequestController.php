@@ -10,7 +10,7 @@ use App\Models\ClaimVoucher;
 use App\Notifications\ClaimVoucherApprovedNotification;
 use Illuminate\Support\Facades\DB;
 
-class ApproveVoucher extends Controller
+class VoucherRequestController extends Controller
 {
     public function index()
     {

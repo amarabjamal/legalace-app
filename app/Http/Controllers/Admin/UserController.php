@@ -12,11 +12,8 @@ use Illuminate\Support\Facades\Request as FacadesRequest;
 use Illuminate\Validation\Rule;
 use Inertia\Inertia;
 
-class ManageUsers extends Controller
+class UserController extends Controller
 {
-     /**
-     * Display a listing of the resource.
-     */
     public function index(Request $request)
     {
 
@@ -39,21 +36,15 @@ class ManageUsers extends Controller
         ]);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
     public function create()
     {
-        $idTypes = IDType::all();
+        $id_types = IDType::all();
 
         return Inertia::render('Admin/User/Create', [
-            "idTypes" => $idTypes,
+            "idTypes" => $id_types,
         ]);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
         //Validate the request
@@ -114,9 +105,6 @@ class ManageUsers extends Controller
         return redirect()->route('admin.users.index')->with('successMessage', 'Successfully added new employee account.');
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
     public function edit(User $user)
     {
         $userRoles = $user->userRoles;
@@ -142,21 +130,17 @@ class ManageUsers extends Controller
             'access_expiry_date' => $user->access_expiry_date,
         ];
 
-        $idTypes = IDType::all();
+        $id_types = IDType::all();
 
         return Inertia::render('Admin/User/Edit', [
             'user' => $filteredUser,
-            "idTypes" => $idTypes,
+            "idTypes" => $id_types,
         ]);
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
     public function update(Request $request,User $user)
     {
         //Validate the request
-
         $validated = $request->validate([
             'name' => 'required',
             'email' => ['required', 'email', Rule::unique('users')->where(fn ($query) => $query->where([['id', '!=' , $request->id]]))],
@@ -241,9 +225,7 @@ class ManageUsers extends Controller
         return redirect()->route('admin.users.index')->with('successMessage', 'Successfully updated the employee account.');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
+
     public function destroy(User $user)
     {
         //Add conditional checking before delete

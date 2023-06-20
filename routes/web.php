@@ -1,11 +1,10 @@
 <?php
 
-use App\Http\Controllers\Admin\ApproveVoucher;
-use App\Http\Controllers\Admin\ManageBankAccount;
-use App\Http\Controllers\Admin\ManageCompany;
-use App\Http\Controllers\Admin\ManageUsers;
+use App\Http\Controllers\Admin\VoucherRequestController;
+use App\Http\Controllers\Admin\BankAccountController;
+use App\Http\Controllers\Admin\CompanyController;
+use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Auth\ForgotPasswordController;
-use Inertia\Inertia;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
@@ -24,7 +23,6 @@ use App\Http\Controllers\Lawyer\InvoicePaymentController;
 use App\Http\Controllers\Lawyer\QuotationController;
 use App\Http\Controllers\Lawyer\OperationalCostController;
 use App\Http\Controllers\Lawyer\ReceiptController;
-use Illuminate\Support\Facades\Auth;
 
 /*
 |--------------------------------------------------------------------------
@@ -57,8 +55,8 @@ Route::group(['middleware' => 'auth'], function() {
     // Ajax call routes
     Route::get('/notifications', [UserNotificationController::class, 'index']);
     Route::get('/notifications/mark-all-as-read', [UserNotificationController::class, 'markAllAsRead']);
-    Route::get('/bank-accounts', [ManageBankAccount::class, 'fetchBankAccounts']);
-    Route::get('/bank-accounts/{bank_account}', [ManageBankAccount::class, 'fetchBankAccountDetails']);
+    Route::get('/bank-accounts', [BankAccountController::class, 'fetchBankAccounts']);
+    Route::get('/bank-accounts/{bank_account}', [BankAccountController::class, 'fetchBankAccountDetails']);
 
     //Routes for Administrator ONLY
     Route::group(['middleware' => 'check.role:admin', 'prefix' => 'admin', 'as' => 'admin.'], function() {
@@ -67,18 +65,17 @@ Route::group(['middleware' => 'auth'], function() {
         Route::get('/profile', [ProfileController::class, 'indexAdmin'])->name('profile');
 
         // Voucher Request Approvals
-        Route::post('/voucher-requests/{voucher_request}/approve', [ApproveVoucher::class, 'approveVoucher']);
-        Route::resource('voucher-requests', ApproveVoucher::class)->only('index','show');
+        Route::post('/voucher-requests/{voucher_request}/approve', [VoucherRequestController::class, 'approveVoucher']);
+        Route::resource('voucher-requests', VoucherRequestController::class)->only('index','show');
 
         // Employees
-        Route::resource('users', ManageUsers::class)->except('show');
+        Route::resource('users', UserController::class)->except('show');
 
         // Bank Accounts
-        Route::resource('bank-accounts', ManageBankAccount::class)->except('show');
+        Route::resource('bank-accounts', BankAccountController::class)->except('show');
     
         // Company Profile
-        Route::resource('company', ManageCompany::class)->except(['show','edit', 'destroy']);
-        Route::get('company/edit', [ManageCompany::class, 'edit'])->name('company.edit');
+        Route::singleton('company', CompanyController::class)->except('destroy');
     });
 
     //Routes for Lawyer ONLY
@@ -126,6 +123,6 @@ Route::group(['middleware' => 'auth'], function() {
             Route::resource('invoices', InvoiceController::class);
         });
         
-        Route::get('/getbankaccountdetails/{bank_account}', [ManageBankAccount::class, 'getBankAccountDetails']);
+        Route::get('/getbankaccountdetails/{bank_account}', [BankAccountController::class, 'getBankAccountDetails']);
     });
 });
