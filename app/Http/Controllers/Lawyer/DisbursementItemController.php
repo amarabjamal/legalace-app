@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Lawyer;
 
 use App\Enums\DisbursementItemFundTypeEnum;
+use App\Enums\DisbursementItemStatusEnum;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreDisbursementItemRequest;
 use App\Http\Requests\UpdateDisbursementItemRequest;
@@ -92,6 +93,9 @@ class DisbursementItemController extends Controller
 
     public function edit(CaseFile $case_file, DisbursementItem $disbursement_item) 
     {
+        if($disbursement_item->status !== DisbursementItemStatusEnum::Recorded) {
+            return back()->with('warningMessage', 'This item can no longer be edited');
+        }
 
         return inertia('Lawyer/DisbursementItem/Edit', [
             'case_file' => [ 
@@ -110,6 +114,10 @@ class DisbursementItemController extends Controller
         DisbursementItem $disbursement_item
     ) 
     {
+        if($disbursement_item->status !== DisbursementItemStatusEnum::Recorded) {
+            return back()->with('warningMessage', 'This item can no longer be edited');
+        }
+        
         $data =  $request->all();
         $data['amount'] = Money::of($data['amount'], 'MYR');
         $filePath = null;
