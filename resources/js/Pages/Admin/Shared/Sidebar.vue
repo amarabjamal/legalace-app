@@ -37,7 +37,7 @@ export default {
         return {
             navigations: [
                 {href: '/admin/dashboard', label: 'Dashboard', icon:'home-smile-line', isActive: this.$page.url.startsWith('/lawyer')},
-                {href: '/admin/company', label: 'Company Profile', icon:'donut-chart-line', isActive: this.$page.url.startsWith('/admin/company')},
+                {href: '/admin/company', label: 'Company', icon:'donut-chart-line', isActive: this.$page.url.startsWith('/admin/company')},
                 {href: '/admin/users', label: 'Employees', icon:'group-line', isActive: this.$page.url.startsWith('/admin/users')},
                 {href: '/admin/bank-accounts', label: 'Bank Accounts', icon:'bank-card-line', isActive: this.$page.url.startsWith('/admin/bank-accounts')},
                 {href: '/admin/voucher-requests', label: 'Voucher Requests', icon:'inbox-line', isActive: this.$page.url.startsWith('/admin/voucher-requests')},
