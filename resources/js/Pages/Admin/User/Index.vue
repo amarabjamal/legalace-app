@@ -4,7 +4,7 @@
     <page-heading :page_title="page_title" :breadcrumbs="breadcrumbs"/>
 
     <div class="flex items-center justify-between mb-6">
-        <search-filter v-model="form.search" class="mr-4 w-full max-w-md"  @reset="reset"></search-filter>
+        <search-filter v-model="form.search" placeholder="Search employee" class="mr-4 w-full max-w-md"  @reset="reset"></search-filter>
         <Link class="btn-primary" :href="`/admin/users/create`">
             <span>Create</span>
             <span class="hidden md:inline">&nbsp;Employee</span>
@@ -59,7 +59,7 @@
                 </td>
             </tr>
             <tr v-if="users.data.length === 0">
-                    <td class="px-6 py-4 border-t text-center text-slate-500 bg-slate-100" colspan="100%">No users found.</td>
+                    <td class="px-6 py-4 border-t text-center text-slate-500 bg-slate-100" colspan="100%">No record found.</td>
                 </tr>
         </tbody>
         </table>
