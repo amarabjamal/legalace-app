@@ -215,7 +215,7 @@ class ReceiptController extends Controller
 
         $content = view('templates.receipt', $data)->render();
         return Browsershot::html($content)
-                ->margins(18, 18, 8, 18)
+                ->margins(18, 18, 18, 18)
                 ->format('A4')
                 ->showBackground()
                 ->pdf();

@@ -333,7 +333,7 @@ class InvoiceController extends Controller
         $html = view('templates.invoice', $data)->render();
 
         return Browsershot::html($html)
-                ->margins(18, 18, 8, 18)
+                ->margins(18, 18, 18, 18)
                 ->format('A4')
                 ->showBackground()
                 ->pdf();
