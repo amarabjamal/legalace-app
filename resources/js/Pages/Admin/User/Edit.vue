@@ -37,12 +37,24 @@
                     <p class="mt-1 text-sm leading-6 text-gray-600">The role will determine the employee's permissions.</p>
 
                     <div class="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 md:grid-cols-2">
-                        <div>
+                        <div class="md:col-span-2">
                             <label for="role" class="form-label">Roles</label>
-                            <input v-model="form.isAdmin" type="checkbox" id="isAdmin" value="admin">
-                            <label for="isAdmin"> Administrator</label><br/>
-                            <input v-model="form.isLawyer" type="checkbox" id="isLawyer" value="lawyer">
-                            <label for="isLawyer"> Lawyer</label><br/>
+
+                            <ul class="grid w-1/2 gap-2 md:grid-cols-2">
+                                <li>
+                                    <input v-model="form.isAdmin" type="checkbox" id="is_admin" value="admin" class="hidden peer">
+                                    <label for="is_admin" class="inline-flex items-center justify-between w-40 p-3 text-gray-300 bg-white border-2 border-gray-200 rounded-lg cursor-pointer peer-checked:border-blue-600 hover:text-gray-600 peer-checked:text-gray-600 hover:bg-gray-50">
+                                        <div class="block w-full text-sm text-center font-semibold">Administrator</div>
+                                    </label>
+                                </li>
+                                <li>
+                                    <input v-model="form.isLawyer" type="checkbox" id="is_lawyer" value="lawyer" class="hidden peer">
+                                    <label for="is_lawyer" class="inline-flex items-center justify-between w-40 p-3 text-gray-300 bg-white border-2 border-gray-200 rounded-lg cursor-pointer peer-checked:border-blue-600 hover:text-gray-600 peer-checked:text-gray-600 hover:bg-gray-50">
+                                        <div class="block w-full text-sm text-center font-semibold">Lawyer</div>
+                                    </label>
+                                </li>
+                            </ul>
+
                             <p v-if="form.errors.role" v-text="form.errors.role" class="mt-2 text-sm text-red-600"></p>
                         </div>
                     </div>
@@ -54,12 +66,19 @@
 
                     <div class="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 md:grid-cols-2">
                         <div>
-                            <label for="is_active" class="form-label">
-                                Enabled
-                            </label>
-
-                            <input v-model="form.is_active" type="checkbox" id="is_active" value="is_active">
-                            <label for="is_active"> Grant Access</label><br/>
+                            <label for="is_active" class="form-label">Enabled</label>
+                            <Switch
+                                v-model="form.is_active"
+                                :class="form.is_active ? 'bg-green-400' : 'bg-gray-200'"
+                                class="relative inline-flex h-[38px] w-[74px] shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75"
+                            >
+                                <span class="sr-only">Enabled</span>
+                                <span
+                                    aria-hidden="true"
+                                    :class="form.is_active ? 'translate-x-9' : 'translate-x-0'"
+                                    class="pointer-events-none inline-block h-[34px] w-[34px] transform rounded-full bg-white shadow-lg ring-0 transition duration-200 ease-in-out"
+                                />
+                            </Switch>
                             <p v-if="form.errors.is_active" v-text="form.errors.is_active" class="mt-2 text-sm text-red-600"></p>
                         </div>
                         <date-input v-model="form.access_expiry_date" :error="form.errors.access_expiry_date" label="Access Expiry Date"/>
@@ -68,13 +87,8 @@
             </div>
 
             <div class="flex flex-row-reverse space-x-2 space-x-reverse  items-center justify-start px-8 py-4 bg-gray-50 border-t border-gray-100">
-                <loading-button :loading="form.processing" :disabled="!form.isDirty" class="btn-primary" type="submit">Save Changes</loading-button>
-                <Link 
-                    :href="`/admin/users/`"
-                    as="button"  
-                    class="text-gray-500 focus:outline-none hover:text-blue-700 hover:underline focus:z-10 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center"
-                    :disabled="form.processing"
-                    >
+                <loading-button :loading="form.processing" :disabled="form.processing || !form.isDirty" class="btn-primary" type="submit">Update Employee</loading-button>
+                <Link :href="`/admin/users/`" as="button" class="btn-cancel" :disabled="form.processing">
                     Cancel
                 </Link>
             </div>
@@ -89,6 +103,7 @@ import TextInput from '../../../Shared/TextInput';
 import SelectInput from '../../../Shared/SelectInput';
 import DateInput from '../../../Shared/DateInput';
 import LoadingButton from '../../../Shared/LoadingButton';
+import { Switch } from "@headlessui/vue";
 
 export default { 
     components: { 
@@ -96,6 +111,7 @@ export default {
         SelectInput,
         DateInput,
         LoadingButton,
+        Switch,
      },
     layout: Layout,
     props: { 
