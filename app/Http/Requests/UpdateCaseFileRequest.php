@@ -32,7 +32,7 @@ class UpdateCaseFileRequest extends FormRequest
             'file_number' => [
                 'required', 
                 'String', 
-                Rule::unique('case_files')->ignore($this->case_file)->where(fn ($query) => $query->whereIn('created_by', User::where('company_id', Auth::user()->company_id)->get('id') ))
+                Rule::unique('case_files')->ignore($this->case_file)->where(fn ($query) => $query->whereIn('created_by_user_id', User::where('company_id', auth()->user()->company_id)->get('id') ))
             ],
             'client_id' => ['required', 'exists:clients,id'],
         ];
