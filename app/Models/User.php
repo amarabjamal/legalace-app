@@ -133,9 +133,21 @@ class User extends Authenticatable
             $query->where('slug', '=', 'admin');
         });
     }
+    
+    public function scopeLawyer($query)
+    {
+        $query->whereHas('roles', function ($query) {
+            $query->where('slug', '=', 'lawyer');
+        });
+    }
 
     public function scopeNotCurrentUser($query)
     {
         $query->where('id', '!=', auth()->id());
+    }
+
+    public function hasRole($roleName): bool
+    {
+        return $this->roles->contains('slug', $roleName);
     }
 }
