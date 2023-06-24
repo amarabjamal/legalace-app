@@ -16,9 +16,9 @@
             <thead class="bg-gray-50 border-b-2 border-gray-200">
                 <tr class="text-left text-sm tracking-wide font-semibold">
                     <th class="w-24 py-4 px-6">Date</th>
-                    <th class="w-32 py-4 px-6">Record Type</th>
                     <th class="py-4 px-6">Name</th>
                     <th class="py-4 px-6">Desc</th>
+                    <th class="w-32 py-4 px-6">Record Type</th>
                     <th class="w-32 py-4 px-6 text-right">Amount</th>
                     <th class="w-24 py-4 px-6">Status</th>
                     <th class="w-24 py-4 px-6">Fund Type</th>
@@ -30,15 +30,15 @@
                 <td class="border-t px-6 py-4 whitespace-nowrap">
                     {{ item.date }}
                 </td>
-                <td class="border-t px-6 py-4 whitespace-nowrap">
-                    {{ item.record_type.name }}
-                </td>
-                <td class="border-t px-6 py-4 whitespace-nowrap ">
+                <td class="border-t px-6 py-4 whitespace-nowrap font-semibold">
                     {{ item.name }}
                 </td>
                 <td class="border-t px-6 py-4 whitespace-nowrap">
                     <span v-if="item.desc == null" class="text-gray-400">None</span>
                     {{ item.desc }}
+                </td>
+                <td class="border-t px-6 py-4 whitespace-nowrap">
+                    {{ item.record_type.name }}
                 </td>
                 <td class="border-t px-6 py-4 whitespace-nowrap text-right tabular-nums">
                     {{ item.amount }}
@@ -49,12 +49,12 @@
                     </span>
                 </td>
                 <td class="border-t px-6 py-4 whitespace-nowrap">
-                <span class="text-xs font-medium uppercase tracking-wide">
+                <span class="text-xs font-medium tracking-wide">
                     {{ item.fund_type }}
                 </span>
                 </td>
                 <td class="w-px border-t px-6 py-4 whitespace-nowrap">
-                    <Link class="flex items-center px-2" :href="`/lawyer/case-files/${case_file.id}/disbursement-items/${item.id}/edit`" tabindex="-1">
+                    <Link class="flex items-center px-2" :href="`/lawyer/case-files/${case_file.id}/disbursement-items/${item.id}`" tabindex="-1">
                         <icon name="cheveron-right" class="block w-5 h-5 fill-gray-400" />
                     </Link>
                 </td>
