@@ -32,11 +32,7 @@
         </dl>
 
         <div class="flex items-center justify-end px-8 py-4 bg-gray-50 border-t border-gray-100">
-            <Link
-                as="button"
-                href="/admin/company/edit"
-                class="btn-primary"
-            >
+            <Link as="button" href="/admin/company/edit" class="btn-primary">
                 Edit
             </Link> 
         </div>
