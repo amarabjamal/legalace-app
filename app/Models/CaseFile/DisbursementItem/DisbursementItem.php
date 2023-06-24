@@ -7,9 +7,12 @@ use App\Enums\DisbursementItemFundTypeEnum;
 use App\Enums\DisbursementItemStatusEnum;
 use App\Models\CaseFile;
 use App\Models\CaseFile\Invoices\Invoice;
+use App\Models\User;
 use App\Traits\HasCompanyScope;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class DisbursementItem extends Model
 {
@@ -57,6 +60,11 @@ class DisbursementItem extends Model
 
     public const RECEIPT_PATH = 'case-files/disbursement-items/receipts';
 
+    public function getFormattedDateAttribute()
+    {
+        return Carbon::parse($this->date)->format('d/m/Y');
+    }
+
     public function caseFile() 
     {
         return $this->belongsTo(CaseFile::class, 'case_file_id', 'id');
@@ -70,6 +78,11 @@ class DisbursementItem extends Model
     public function invoice()
     {
         return $this->belongsTo(Invoice::class, 'invoice_id', 'id');
+    }
+
+    public function createdBy() : BelongsTo
+    {
+        return $this->belongsTo(User::class, 'created_by_user_id', 'id');
     }
 
     public function scopeOrderByDate($query) 
