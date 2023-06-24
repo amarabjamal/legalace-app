@@ -105,15 +105,10 @@
                         <button class="text-red-600 hover:underline" tabindex="-1" type="button" @click="destroy">Delete Invoice</button>
                     </div>
                     <div class="flex items-center justify-center">
-                        <Link 
-                            :href="`/lawyer/case-files/${case_file.id}/invoices/${invoice.id}`"
-                            as="button"  
-                            class="mr-2 text-gray-500 focus:outline-none hover:text-blue-700 hover:underline focus:z-10 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center"
-                            :disabled="form.processing"
-                            >
+                        <loading-button :loading="form.processing" class="btn-primary" type="submit">Update Invoice</loading-button>
+                        <Link :href="`/lawyer/case-files/${case_file.id}/invoices/${invoice.id}`" as="button" class="btn-cancel" :disabled="form.processing">
                             Cancel
                         </Link>
-                        <loading-button :loading="form.processing" class="btn-primary" type="submit">Update Invoice</loading-button>
                     </div>
                 </div>
             </form>

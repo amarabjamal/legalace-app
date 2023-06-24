@@ -14,16 +14,11 @@
                 <text-input v-model="form.matter" :error="form.errors.matter" class="pb-8 pr-6 w-full lg:w-1/2" label="Matter" required/>
                 <text-input v-model="form.type" :error="form.errors.type" class="pb-8 pr-6 w-full lg:w-1/2" label="File Type" required/>
             </div>
-            <div class="flex items-center justify-end px-8 py-4 bg-gray-50 border-t border-gray-100">
-                <Link 
-                    :href="`/lawyer/case-files/${case_file.id}`"
-                    as="button"  
-                    class="mr-2 text-gray-500 focus:outline-none hover:text-blue-700 hover:underline focus:z-10 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center"
-                    :disabled="form.processing"
-                    >
+            <div class="flex flex-row-reverse space-x-2 space-x-reverse items-center justify-start px-8 py-4 bg-gray-50 border-t border-gray-100">
+                <loading-button :loading="form.processing" class="btn-primary" type="submit">Update File</loading-button>
+                <Link :href="`/lawyer/case-files/${case_file.id}`" as="button" class="btn-cancel" :disabled="form.processing">
                     Cancel
                 </Link>
-                <loading-button :loading="form.processing" class="btn-primary" type="submit">Update File</loading-button>
             </div>
         </form>
     </div>
