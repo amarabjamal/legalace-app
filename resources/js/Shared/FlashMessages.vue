@@ -1,15 +1,4 @@
 <template>
-  <!-- 
-    enter-from-class="translate-x-full opacity-0"
-    enter-active-class="duration-500"
-    leave-active-class="duration-500"
-    leave-to-class="translate-x-full opacity-0"
-    appear 
-
-    @before-enter="onBeforeEnter"
-    @enter="onEnter"
-    @leave="onLeave"
-  -->
   <transition-group
         tag="div"
         @before-enter="onBeforeEnter"
@@ -98,7 +87,7 @@ export default {
   mounted() {
         window.Echo.private(`App.Models.User.${this.$page.props.auth.user.id}`).notification((notification) => {
             this.notifications.unshift(notification);
-            this.$page.props.auth.notifications.unreadCount++;
+            this.$page.props.auth.notifications.unreadCount += 1;
         })
     },
 }
