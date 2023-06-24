@@ -1,7 +1,7 @@
 <template>
     <div :class="$attrs.class">
         <label v-if="label" class="form-label" :for="id">{{ label }}</label>
-        <input :id="id" ref="input" v-bind="{ ...$attrs, class: null }" class="form-input" :class="{ error: error }" :value="modelValue" @input="$emit('update:modelValue', $event.target.value)" />
+        <input :id="id" ref="input" v-bind="{ ...$attrs, class: null }" v-money="money" class="form-input text-right tabular-nums" :class="{ error: error }" :value="modelValue" @input="$emit('update:modelValue', $event.target.value)" />
         <div v-if="error" class="form-error">{{ error }}</div>
     </div>
 </template>
@@ -9,6 +9,7 @@
 <script>
 import { v4 as uuid } from 'uuid';
 import { VMoney } from 'v-money';
+import MoneyConfig from '../Stores/MoneyConfig';
 
 export default {
   inheritAttrs: false,
@@ -25,20 +26,7 @@ export default {
   },
   data() {
     return {
-        money: {
-            // The character used to show the decimal place.
-            decimal: '.',
-            // The character used to separate numbers in groups of three.
-            thousands: ',',
-            // The currency name or symbol followed by a space.
-            prefix: 'RM ',
-            // The suffix (If a suffix is used by the target currency.)
-            suffix: '',
-            // Level of decimal precision. REQUIRED
-            precision: 2,
-            // If mask is false, outputs the number to the model. Otherwise outputs the masked string.
-            masked: false
-        },
+        money: MoneyConfig,
     }
   },
   directives: {money: VMoney},
