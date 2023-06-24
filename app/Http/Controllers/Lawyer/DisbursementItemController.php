@@ -156,6 +156,27 @@ class DisbursementItemController extends Controller
         }
     }
 
+    public function show(CaseFile $case_file, DisbursementItem $disbursement_item) 
+    {
+        return inertia('Lawyer/DisbursementItem/Show', [
+            'case_file' => [ 
+                'id' => $case_file->id,
+                'file_number' => $case_file->file_number,
+            ],
+            'disbursement_item' => [
+                'id' => $disbursement_item->id,
+                'date' => $disbursement_item->formatted_date,
+                'record_type' => $disbursement_item->recordType->name,
+                'name' => $disbursement_item->name,
+                'description' => $disbursement_item->description,
+                'amount' => $disbursement_item->amount->formatTo('EN-MY'),
+                'fund_type' => DisbursementItem::FUND_TYPE[$disbursement_item->fund_type->value],
+                'receipt' => $disbursement_item->receipt,
+                'creator' => $disbursement_item->createdBy->id === auth()->id() ? $disbursement_item->createdBy->name . ' (You)' : $disbursement_item->createdBy->name,
+            ],
+        ]);
+    }
+
     public function destroy(CaseFile $case_file, DisbursementItem $disbursement_item) 
     {
         try {
