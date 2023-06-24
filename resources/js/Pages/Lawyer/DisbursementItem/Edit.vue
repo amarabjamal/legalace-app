@@ -1,52 +1,58 @@
 <template>
-    <Head title="Disbursement Item" />
+    <Head :title="page_title" />
 
     <page-heading :page_title="page_title" :breadcrumbs="breadcrumbs"/>    
 
-    <div class="max-w-3xl bg-white rounded-md shadow overflow-hidden">
+    <div class="max-w-3xl bg-white rounded-md border border-gray-300 overflow-hidden">
         <form @submit.prevent="update">
-            <div class="flex flex-wrap -mb-8 -mr-6 p-8">
-                <date-input v-model="form.date" :error="form.errors.date" class="pb-8 pr-6 w-full lg:w-1/2" label="Date" required/>
+            <div class="p-8 space-y-12">
+                <div class="border-b border-gray-900/10 pb-12">
+                    <h2 class="text-base font-semibold leading-7 text-gray-900">Item Information</h2>
+                    <p class="mt-1 text-sm leading-6 text-gray-600">Provide an identifiable name.</p>
 
-                <select-input v-model="form.record_type_id" :error="form.errors.record_type_id" class="pb-8 pr-6 w-full lg:w-1/2" label="Record Type" required>
-                    <option :value="null" />
-                    <option v-for="record_type in record_types" :value="record_type.id">{{ record_type.name }}</option>
-                </select-input>
+                    <div class="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 md:grid-cols-2">
+                        <select-input v-model="form.record_type_id" :error="form.errors.record_type_id" label="Record Type" required>
+                            <option disabled value="">Select record type</option>
+                            <option v-for="record_type in record_types" :value="record_type.id">{{ record_type.name }}</option>
+                        </select-input>
 
-                <text-input v-model="form.name" :error="form.errors.name" class="pb-8 pr-6 w-full lg:w-1/2" label="Name" required/>
-                <text-input v-model="form.description" :error="form.errors.description" class="pb-8 pr-6 w-full lg:w-1/2" label="Description (Optional)"/>
-                
-                <div class="pb-8 pr-6 w-full lg:w-1/2">
-                    <label class="form-label">Amount</label>
-                    <div class="flex">
-                        <span class="inline-flex items-center px-3 text-sm text-gray-900 bg-gray-100 border border-r-0 border-gray-200 rounded-l-md dark:bg-gray-600 dark:text-gray-400 dark:border-gray-600">
-                            RM
-                        </span>
-                        <input v-model.lazy="form.amount" v-money="moneyConfig" class="form-input-money text-right" :class="{ error: form.errors.amount }" required/>
+                        <text-input v-model="form.name" :error="form.errors.name" label="Name" required/>
+                        <text-input v-model="form.description" :error="form.errors.description" label="Description (Optional)"/>
                     </div>
-                    <div v-if="form.errors.amount" class="form-error">{{ form.errors.amount }}</div>
                 </div>
-                
-                <select-input v-model="form.fund_type" :error="form.errors.fund_type" class="pb-8 pr-6 w-full lg:w-1/2" label="Fund Type">
-                    <option :value="null" />
-                    <option v-for="fund_type in fund_types" :value="fund_type.value" required>{{ fund_type.label }}</option>
-                </select-input>
 
-                <file-input v-model="form.receipt" :error="form.errors.receipt" class="pb-8 pr-6 w-full lg:w-1/2" label="Receipt" accept=".jpg,.png,.pdf,.doc,.docx"/>
+                <div>
+                    <h2 class="text-base font-semibold leading-7 text-gray-900">Payment Information</h2>
+                    <p class="mt-1 text-sm leading-6 text-gray-600">Only the creater of the item can reimburse the amount give the fund type is paid by lawyer.</p>
 
-                <div v-if="disbursement_item.receipt" class="pb-8 pr-6 w-full lg:w-1/2">
-                    <label class="form-label">Uploaded File</label>
-                    <div class="form-input">
-                        <div class="flex">
-                            <icon name="file-fill" class="block w-6 h-6 fill-blue-500"></icon>
-                            <div class="ml-2 whitespace-nowrap overflow-ellipsis overflow-hidden ">{{ disbursement_item.receipt }}</div>
+                    <div class="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 md:grid-cols-2">
+                        <date-input v-model="form.date" :error="form.errors.date" label="Date" required/>
+                        <select-input v-model="form.fund_type" :error="form.errors.fund_type" label="Fund Type" required>
+                            <option :value="null" disabled></option>
+                            <option v-for="fund_type in fund_types" :value="fund_type.value" required>{{ fund_type.label }}</option>
+                        </select-input>
+                        <money-input v-model.lazy="form.amount" :error="form.errors.amount" label="Amount"  required/>
+                        <file-input v-model="form.receipt" :error="form.errors.receipt" label="Receipt" accept=".jpg,.png,.pdf,.doc,.docx" required/>
+                        <div v-if="disbursement_item.receipt">
+                            <label class="form-label">Uploaded File</label>
+                            <div class="form-input">
+                                <div class="flex">
+                                    <icon name="file-fill" class="block w-6 h-6 fill-blue-500"></icon>
+                                    <div class="ml-2 whitespace-nowrap overflow-ellipsis overflow-hidden ">{{ disbursement_item.receipt }}</div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-            <div class="flex items-center px-8 py-4 bg-gray-50 border-t border-gray-100">
+            <div class="flex flex-row-reverse  items-center justify-between px-8 py-4 bg-gray-50 border-t border-gray-100">
+                <div class="flex flex-row-reverse space-x-2 space-x-reverse">
+                    <loading-button :loading="form.processing" :disabled="form.processing || !form.isDirty" class="btn-primary" type="submit">Saves Changes</loading-button>
+                    <Link :href="`/lawyer/case-files/${this.case_file.id}/disbursement-items/${disbursement_item.id}`" as="button"  class="btn-cancel" :disabled="form.processing">
+                        Cancel
+                    </Link>
+                </div>
                 <button class="text-red-600 hover:underline" tabindex="-1" type="button" @click="destroy">Delete Item</button>
-                <loading-button :loading="form.processing" class="btn-primary ml-auto" type="submit">Update Item</loading-button>
             </div>
         </form>
     </div>
@@ -58,9 +64,10 @@ import TextInput from '../../../Shared/TextInput';
 import SelectInput from '../../../Shared/SelectInput';
 import DateInput from '../../../Shared/DateInput';
 import FileInput from '../../../Shared/FileInput'
+import MoneyInput from '../../../Shared/MoneyInput';
 import LoadingButton from '../../../Shared/LoadingButton';
 import Icon from '../../../Shared/Icon';
-import { VMoney } from 'v-money';
+import { unmaskMoneyToNumeric } from '../../../Stores/Utils';
 
 export default {
     components: {
@@ -68,6 +75,7 @@ export default {
         SelectInput,
         DateInput,
         FileInput,
+        MoneyInput,
         LoadingButton,
         Icon,
     },
@@ -91,39 +99,29 @@ export default {
                 record_type_id: this.disbursement_item.record_type_id,
                 fund_type: this.disbursement_item.fund_type,
             }),
-            moneyConfig: {
-                // The character used to show the decimal place.
-                decimal: '.',
-                // The character used to separate numbers in groups of three.
-                thousands: ',',
-                // The currency name or symbol followed by a space.
-                prefix: '',
-                // The suffix (If a suffix is used by the target currency.)
-                suffix: '',
-                // Level of decimal precision. REQUIRED
-                precision: 2,
-                // If mask is false, outputs the number to the model. Otherwise outputs the masked string.
-                masked: false
-            },
-            page_title: 'Edit Disbursement Item',
+            page_title: this.disbursement_item.name,
             breadcrumbs: [
                 { link: '/lawyer/dashboard', label: 'Lawyer'},
                 { link: '/lawyer/case-files/', label: 'My Cases'},
                 { link: `/lawyer/case-files/${this.case_file.id}`, label: this.case_file.file_number},
                 { link: `/lawyer/case-files/${this.case_file.id}/disbursement-items`, label: 'Items'},
-                { link: null, label: this.disbursement_item.name},
+                { link: `/lawyer/case-files/${this.case_file.id}/disbursement-items/${this.disbursement_item.id}`, label: this.disbursement_item.name},
+                { link: null, label: 'Edit' },
             ],
         }
     },
-    directives: {money: VMoney},
     methods: {
         update() {
-            this.form.amount = this.form.amount.replace(/^\W|,/g,"");
-            this.form.post(
-                `/lawyer/case-files/${this.case_file.id}/disbursement-items/${this.disbursement_item.id}`, 
-                {
-                    onSuccess: () => this.form.reset('receipt'),
-            });
+            if(this.form.isDirty) {
+                this.form.amount = unmaskMoneyToNumeric(this.form.amount);
+                this.form.post(
+                    `/lawyer/case-files/${this.case_file.id}/disbursement-items/${this.disbursement_item.id}`, 
+                    {
+                        onSuccess: () => this.form.reset('receipt'),
+                });
+            } else {
+                alert('No changes to save.');
+            }
         },
         destroy() {
             if(confirm('Are you sure you want to delete this item?')) {
