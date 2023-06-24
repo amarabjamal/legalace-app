@@ -31,7 +31,7 @@ class CaseFilePolicy
      */
     public function view(User $user, CaseFile $caseFile)
     {
-        return $user->id === $caseFile->created_by_user_id;
+        return $user->id === $caseFile->created_by_user_id || $user->hasRole('lawyer');
     }
 
     /**
