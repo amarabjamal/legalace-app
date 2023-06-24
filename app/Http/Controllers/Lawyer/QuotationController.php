@@ -42,6 +42,10 @@ class QuotationController extends Controller
 
     public function create(CaseFile $case_file) 
     {
+        if(!$case_file->no_conflict_checked) {
+            return redirect()->route('lawyer.case-files.show', $case_file)->with('warningMessage', 'The case file conflict check is pending. Resolve the case file conflict check first before proceed.');
+        }
+
         if($case_file->hasQuotation()) {
             return redirect()->route('lawyer.quotation.edit', $case_file);
         }
@@ -84,7 +88,7 @@ class QuotationController extends Controller
             return back()->with('errorMessage', 'Failed to create the quotation. Please try again.');
         }
 
-        return redirect()->route('lawyer.quotation.edit', $case_file)->with('successMessage', 'The quotation has been created.');
+        return redirect()->route('lawyer.quotation.show', $case_file)->with('successMessage', 'The quotation has been created.');
     }
 
     public function edit(CaseFile $case_file) 
@@ -156,11 +160,6 @@ class QuotationController extends Controller
         }
 
         $quotation = $case_file->quotation;
-
-        if($quotation->subtotal == null) {
-            dispatch_sync(new CalculateQuotationTotal($quotation));
-            $this->show($case_file);
-        }
         $bankAccount = $quotation->bankAccount;
         $workDescriptions = $quotation->workDescriptions;
 
@@ -186,6 +185,7 @@ class QuotationController extends Controller
                 'subtotal' => $quotation->subtotal->formatTo('en_MY'),
                 'tax' => $quotation->tax_amount->formatTo('en_MY'),
                 'total' => $quotation->total->formatTo('en_MY'),
+                'sent_at' => $quotation->sent_at? $quotation->sent_at : 'N/A',
             ],
         ]);
     }
@@ -194,20 +194,40 @@ class QuotationController extends Controller
     {
         try { 
             DB::transaction(function() use ($case_file) {
-                // $invoice->update(['status' => InvoiceStatusEnum::Sent]);
-                // $invoice->disbursementItems()->update(['status' => DisbursementItemStatusEnum::Invoiced]);       
+                $quotation = $case_file->quotation;
+                $client = $case_file->client;
+
+                $quotation->sent_at = now();
+                $quotation->save();    
 
                 $pdf = $this->generatePdf($case_file);
 
-                Mail::to($case_file->client->email)
-                    ->send(new SendQuotation($case_file->quotation, $pdf, $case_file->client->name));
+                Mail::to($client->email)
+                    ->send(new SendQuotation($quotation, $pdf, $client->name));
             });
         } catch (\Exception $e) {
             dd($e);
-            return back()->with('errorMessage', 'Failed to send the receipt');
+            return back()->with('errorMessage', 'Failed to send the quotation');
         }
 
-        return back()->with('successMessage', 'The invoice is emailed to the client.');
+        return back()->with('successMessage', 'The quotation is emailed to the client.');
+    }
+
+    public function markSent(CaseFile $case_file)
+    {
+        try { 
+            DB::transaction(function() use ($case_file) {
+                $quotation = $case_file->quotation;
+
+                $quotation->sent_at = now();
+                $quotation->save();    
+            });
+        } catch (\Exception $e) {
+            dd($e);
+            return back()->with('errorMessage', 'Failed to mark sent the quotation. Please try again.');
+        }
+
+        return back()->with('successMessage', 'The quotation is marked sent.');
     }
 
     public function downloadPdf(CaseFile $case_file)
