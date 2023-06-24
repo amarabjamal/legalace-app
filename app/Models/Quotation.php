@@ -22,11 +22,10 @@ class Quotation extends Model
         'tax_rate',
         'tax_amount',
         'total',
-        'is_paid',
-        'payment_date',
         'created_by_user_id',
         'case_file_id',
         'bank_account_id',
+        'sent_at',
     ];
 
     protected $casts = [
