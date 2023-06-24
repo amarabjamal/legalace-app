@@ -6,7 +6,8 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreBankAccountRequest;
 use App\Http\Requests\UpdateBankAccountRequest;
 use App\Models\BankAccount;
-use Illuminate\Http\Request;
+use Brick\Money\Money;
+use Illuminate\Support\Facades\DB;
 use Inertia\Inertia;
 
 class BankAccountController extends Controller
@@ -28,15 +29,23 @@ class BankAccountController extends Controller
 
     public function create()
     {
-
         return Inertia::render('Admin/BankAccount/Create');
     }
 
     public function store(StoreBankAccountRequest $request) 
     {
-        $validated = $request->validated();
+        $input = $request->all();
+        $input['opening_balance'] = Money::of($input['opening_balance'], 'MYR');
 
-        BankAccount::create($validated);
+        try {
+            DB::transaction(function () use ($input) {
+                BankAccount::create($input);
+            });
+        } catch (\Exception $e) {
+            dd($e);
+
+            return back()->with('errorMessage', 'Failed to create new bank accounts ');
+        }
 
         return redirect()->route('admin.bank-accounts.index')->with('successMessage', 'Successfully added the new bank account.');
     }
@@ -52,28 +61,49 @@ class BankAccountController extends Controller
 
     public function update(UpdateBankAccountRequest $request, BankAccount $bank_account) 
     {
-        $validated = $request->validated();
+        $input = $request->all();
+        $input['opening_balance'] = Money::of($input['opening_balance'], 'MYR');
 
-        $bank_account->update($validated);
+        try {
+            DB::transaction(function () use ($input, $bank_account) {
+                $bank_account->update($input);
+            });
+        } catch (\Exception $e) {
+            dd($e);
+
+            return back()->with('errorMessage', 'Failed to create new bank accounts ');
+        }
  
-         return redirect()->route('admin.bank-accounts.index')->with('successMessage', 'Successfully updated the bank account.');
+        return redirect()->route('admin.bank-accounts.show', $bank_account)->with('successMessage', 'Successfully updated the bank account.');
+    }
+
+    public function show(BankAccount $bank_account)
+    {
+        return Inertia::render('Admin/BankAccount/Show', [
+            'bank_account' => [
+                'id' => $bank_account->id,
+                'label' => $bank_account->label,
+                'account_type' => $bank_account->bankAccountType->name,
+                'account_name' => $bank_account->account_name,
+                'bank_name' => $bank_account->bank_name,
+                'account_number' => $bank_account->account_number,
+                'opening_balance' => $bank_account->opening_balance->formatTo('EN-MY'),
+                'swift_code' => $bank_account->swift_code,
+                'bank_address' => $bank_account->bank_address,
+                'created_by' => $bank_account->createdBy->id === auth()->id() ? $bank_account->createdBy->name . ' (You)' : $bank_account->createdBy->name,
+            ],
+        ]);
     }
 
     public function destroy(BankAccount $bank_account)
     {
         //Add conditional checking before delete
-        $bank_account->delete();   
+
+        DB::transaction(function () use ($bank_account) {
+            $bank_account->delete();   
+        });
 
         return redirect()->route('admin.bank-accounts.index')->with('successMessage', 'Successfully deleted the bank account.');
-    }
-
-    public function getBankAccountDetails(Request $request,BankAccount $bank_account)
-    {
-        if($request->ajax()) {
-            return response()->json([ 'hello' => 'hihiho']);
-        }
-
-        return response()->json([ 'hello' => 'hihihu']);
     }
 
     public function fetchBankAccounts()
