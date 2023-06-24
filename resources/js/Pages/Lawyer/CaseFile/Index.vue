@@ -15,20 +15,20 @@
         <table class="w-full whitespace-nowrap">
             <thead class="bg-gray-50 border-b-2 border-gray-200">
                 <tr class="text-left text-sm tracking-wide font-semibold">
-                    <th scope="col" class="py-4 px-6 w-24">
+                    <th scope="col" class="py-4 px-6">
                         File Number
                     </th>
                     <th scope="col" class="py-4 px-6">
                         Matter
                     </th>
-                    <th scope="col" class="py-4 px-6 w-24">
+                    <th scope="col" class="py-4 px-6">
                         Type
                     </th>
-                    <th scope="col" class="py-4 px-6 w-24">
+                    <!-- <th scope="col" class="py-4 px-6 w-24">
                         Status
-                    </th>
+                    </th> -->
                     <th scope="col" class="py-4 px-6 w-24">
-                        No Conflict
+                        Conflict Check
                     </th>
                     <th scope="col" class="py-4 px-6">
                         Client
@@ -47,15 +47,14 @@
                     <td class="border-t px-6 py-4 whitespace-nowrap">
                         {{ case_file.type }}
                     </td>
-                    <td class="border-t px-6 py-4 whitespace-nowrap">
+                    <!-- <td class="border-t px-6 py-4 whitespace-nowrap">
                         None
-                    </td>
+                    </td> -->
                     <td class="border-t px-6 py-4 whitespace-nowrap">
-                        <span v-if="case_file.no_conflict_checked === 1" class="p-1.5 text-xs font-medium uppercase tracking-wider text-green-800 bg-green-200 rounded-lg bg-opacity-50">
-                            Verified
+                        <span v-if="case_file.no_conflict_checked" class="p-1.5 text-xs font-medium uppercase tracking-wider rounded-sm bg-opacity-50 text-green-800 bg-green-200">
+                            Resolved
                         </span>
-
-                        <span v-else class="p-1.5 text-xs font-medium uppercase tracking-wider text-gray-800 bg-gray-200 rounded-lg bg-opacity-50"> 
+                        <span v-else class="p-1.5 text-xs font-medium uppercase tracking-wider rounded-sm bg-opacity-50 text-red-800 bg-red-200"> 
                             Pending
                         </span>
                     </td>
@@ -100,15 +99,15 @@ export default {
     },
     data() {
         return {
-            form: {
-                search: this.filters.search,
-            },
             page_title: 'My Cases',
             page_subtitle: 'Manage your case files.',
             breadcrumbs: [
                 { link: '/lawyer/dashboard', label: 'Lawyer'},
                 { link: null, label: 'My Cases'},
             ],
+            form: {
+                search: this.filters.search,
+            },
         }
     },
     watch: {
