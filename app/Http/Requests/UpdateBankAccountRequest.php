@@ -3,7 +3,6 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\Rule;
 
 class UpdateBankAccountRequest extends FormRequest
@@ -26,38 +25,18 @@ class UpdateBankAccountRequest extends FormRequest
     public function rules()
     {
         return [
-            'label' => [
-                'required', 
-                'string', 
-                Rule::unique('bank_accounts')->ignore($this->bank_account)->where(fn ($query) => $query->where('company_id', Auth::user()->company_id))
+            'label' => ['required', 'string', 
+                Rule::unique('bank_accounts')->ignore($this->bank_account)->where(fn ($query) => $query->where('company_id', auth()->user()->company_id))
             ],
-            'account_name' => [
-                'required', 
-                'string'
+            'bank_account_type_id' => ['required', 'exists:bank_account_types,id'],
+            'account_name' => ['required', 'string'],
+            'account_number' => ['required', 'numeric', 'digits_between:6,17', 
+                Rule::unique('bank_accounts')->ignore($this->bank_account)->where(fn ($query) => $query->where('company_id', auth()->user()->company_id))
             ],
-            'bank_name' => [
-                'required', 
-                'string'
-            ],
-            'account_number' => [
-                'required', 
-                'numeric', 
-                'digits_between:6,17', 
-                Rule::unique('bank_accounts')->ignore($this->bank_account)->where(fn ($query) => $query->where('company_id', Auth::user()->company_id))
-            ],
-            'bank_address' => [
-                'required', 
-                'string'
-            ],
-            'swift_code' => [
-                'required', 
-                'string', 
-                'regex:/^([a-zA-Z]){4}([a-zA-Z]){2}([0-9a-zA-Z]){2}([0-9a-zA-Z]{3})?$/'
-            ],
-            'bank_account_type_id' => [
-                'required', 
-                'exists:bank_account_types,id'
-            ],
+            'swift_code' => ['required', 'string', 'regex:/^([a-zA-Z]){4}([a-zA-Z]){2}([0-9a-zA-Z]){2}([0-9a-zA-Z]{3})?$/'],
+            'opening_balance' => ['required', 'numeric', 'decimal:2', 'between:0,999999999.99'],
+            'bank_name' => ['required', 'string'],
+            'bank_address' => ['required', 'string'],
         ];
     }
 }
