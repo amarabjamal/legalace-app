@@ -44,8 +44,11 @@
                     {{ user.employee_id }}
                 </td>
                 <td class="table-body-data">
-                    <span class="px-2 py-1 font-semibold leading-tight text-green-700 bg-green-100 rounded-full dark:bg-green-700 dark:text-green-100">
+                    <span v-if="user.enabled" class="p-1.5 text-xs font-medium uppercase tracking-wider rounded-sm bg-opacity-50 text-green-800 bg-green-200">
                         Enabled
+                    </span>
+                    <span v-else class="p-1.5 text-xs font-medium uppercase tracking-wider rounded-sm bg-opacity-50 text-red-800 bg-red-200">
+                        Disabled
                     </span>
                 </td>
                 <td class="table-body-data">
