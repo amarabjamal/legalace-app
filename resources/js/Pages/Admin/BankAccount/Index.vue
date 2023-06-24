@@ -3,30 +3,24 @@
 
     <page-heading :page_title="page_title" :breadcrumbs="breadcrumbs"/>
     
-    <div class="flex justify-between items-center mb-4">
-        <div class="flex items-center">
-            <Link href="/admin/bank-accounts/create">
-                <button class="btn-primary">
-                    Create Bank Account
-                </button>
-            </Link>
-        </div>
+    <div class="flex justify-between items-center mb-6">
+        <search-filter v-model="form.search" class="mr-4 w-full max-w-md"  @reset="reset"></search-filter>
+        <Link class="btn-primary" :href="`/admin/bank-accounts/create`">
+            <span>Create</span>
+            <span class="hidden md:inline">&nbsp;Bank Account</span>
+        </Link>
     </div>
 
-    <div class="grid gap-6 mb-8 md:grid-cols-2">
-        <div v-if="bankAccounts.length <= 0" class="shadow width-full text-center p-3 bg-gray-100 text-gray-500  rounded-lg  dark:bg-gray-800 dark:text-gray-300">No records found.</div>
-        <div 
-            v-else
-            v-for="bankAccount in bankAccounts" 
-            class="min-w-0 bg-white  shadow-md rounded-lg overflow-hidden dark:bg-gray-800"
-        >
-            <h4 class="mb-4 p-4 uppercase font-semibold text-gray-500 border-b dark:border-gray-700 bg-gray-50 dark:text-gray-400 dark:bg-gray-800">
-            {{ bankAccount.label }}
-            </h4>
-            <p class="text-gray-600 p-2 dark:text-gray-400">
+    <div class="grid gap-6 mb-8 md:grid-cols-3 mt-4">
+        <div v-for="bankAccount in bankAccounts" class="min-w-0 bg-white border border-gray-300 rounded-md overflow-hidden ease-in-out duration-300 hover:shadow-md hover:scale-105 hover:-translate-y-5">
+            <div class="px-4 mb-2 border-b bg-gray-50 flex justify-between items-center">
+                <h4 class="py-2 text-sm uppercase font-semibold text-gray-500 w-1/2 truncate">{{ bankAccount.label }}</h4>
+                <span :class="accountTypeClass(bankAccount.bank_account_type.name)">{{ bankAccount.bank_account_type.name }}</span>
+            </div>
+            <p class="text-gray-600 p-2 text-sm">
                 <table class="border-separate border-spacing-2">
                     <tr>
-                        <td width="150px">
+                        <td width="120px">
                             Bank Name
                         </td>
                         <td class="font-bold">
@@ -51,14 +45,6 @@
                     </tr>
                     <tr>
                         <td>
-                            Bank Address
-                        </td>
-                        <td class="font-bold">
-                            {{ bankAccount.bank_address }}
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
                             SWIFT Code
                         </td>
                         <td class="font-bold">
@@ -73,43 +59,38 @@
                             {{ bankAccount.bank_account_type.name }}
                         </td>
                     </tr>
-                    <tr>
-                        <td>
-                            Created By
-                        </td>
-                        <td>
-                            <span class="font-bold">{{ bankAccount.created_by.name }}</span> <span v-if="bankAccount.created_by.name == $page.props.auth.user.name" class="text-sm text-gray-400">(You)</span>
-                        </td>
-                    </tr>
                 </table>
-                <div class="flex justify-end mt-3 p-2 pr-4">
+                <div class="flex space-x-2 justify-end p-2 pr-4">
+                    <Link :href="`/admin/bank-accounts/${ bankAccount.id }`">View</Link>
                     <Link :href="`/admin/bank-accounts/${ bankAccount.id }/edit`">Edit</Link>
-                    <Link @click="deleteBankAccount(bankAccount)" as="button" class="ml-3 font-medium text-red-600 hover:underline">Delete</Link>
+                    <Link @click="deleteBankAccount(bankAccount)" as="button" class="font-medium text-red-600 hover:underline">Delete</Link>
                 </div>
             </p>
         </div>
+        <div v-if="bankAccounts.length === 0" class="md:col-span-3 h-24 flex justify-center items-center border border-gray-300 w-full text-center bg-gray-100 text-gray-500 rounded-md"><span>No records found.</span></div>
     </div>
 </template>
 
 <script>
 import Layout from "../Shared/Layout";
-import { Inertia } from "@inertiajs/inertia";
+import SearchFilter from '../../../Shared/SearchFilter';
+import Icon from '../../../Shared/Icon';
+import Pagination from '../../../Shared/Pagination';
+import throttle from 'lodash/throttle';
+import pickBy from 'lodash/pickBy'
+import mapValues from 'lodash/mapValues';
+import { cva } from "class-variance-authority";
 
 export default { 
-    props: { 
-        bankAccounts: Object,
-     },
-     methods: {
-        deleteBankAccount(bankAccount) {
-            if (confirm('Are you sure you want to delete this bank account?')) {
-                Inertia.delete(`/admin/bank-accounts/${ bankAccount.id }`);
-            }
-        }
-    },
     components: { 
-
+        SearchFilter,
+        Icon,
+        Pagination,
     },
     layout: Layout,
+    props: { 
+        bankAccounts: Object,
+    },
     data() {
         return {
             page_title: 'Bank Accounts',
@@ -117,6 +98,39 @@ export default {
                 { link: '/admin/dashboard', label: 'Admin'},
                 { link: null, label: 'Bank Accounts'},
             ],
+            form: {
+                search: null,
+            },
+        }
+    },
+    watch: {
+        form: {
+          deep: true,
+          handler: throttle(function () {
+            //this.$inertia.get(`/lawyer/case-files`, pickBy(this.form), {preserveState: true})
+          }, 150),
+        },
+    },
+    methods: {
+        deleteBankAccount(bankAccount) {
+            if (confirm('Are you sure you want to delete this bank account?')) {
+                this.$inertia.delete(`/admin/bank-accounts/${ bankAccount.id }`);
+            }
+        },
+        reset() {
+          this.form = mapValues(this.form, () => null);
+        },
+        accountTypeClass(type) {
+            return cva("text-xs py-1 px-2 border rounded-sm", {
+                variants: {
+                    type: {
+                        'Client Account':'text-blue-500 bg-blue-50  border-blue-300',
+                        'Firm Account':'text-pink-500 bg-pink-50  border-pink-300',
+                    }
+                }
+            }) ({
+                type: type,
+            })
         }
     },
 };
