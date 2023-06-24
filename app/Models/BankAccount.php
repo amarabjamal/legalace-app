@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Casts\Money;
 use App\Traits\HasCompanyScope;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -18,11 +19,16 @@ class BankAccount extends Model
         'account_name',
         'bank_name',
         'account_number',
+        'opening_balance',
         'bank_address',
         'swift_code',
         'bank_account_type_id',
-        'created_by',
+        'created_by_user_id',
         'company_id',
+    ];
+
+    protected $casts = [
+        'opening_balance' => Money::class . ':opening_balance,MYR,0',
     ];
 
     public function bankAccountType() 
@@ -32,7 +38,7 @@ class BankAccount extends Model
 
     public function createdBy() 
     {
-        return $this->belongsTo(User::class, 'created_by', 'id');
+        return $this->belongsTo(User::class, 'created_by_user_id', 'id');
     }
 
     public function company() 
