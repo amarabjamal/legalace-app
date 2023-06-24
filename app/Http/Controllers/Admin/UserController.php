@@ -14,10 +14,10 @@ use Inertia\Inertia;
 
 class UserController extends Controller
 {
-    public function index(Request $request)
+    public function index()
     {
 
-        $users = User::where('id', '!=', Auth::id())
+        $users = User::where('id', '!=', auth()->id())
             ->orderBy('name')
             ->filter(FacadesRequest::only('search'))
             ->paginate(25)
@@ -25,9 +25,10 @@ class UserController extends Controller
             ->through(fn($user) => [
                 'id' => $user->id,
                 'name' => $user->name,
+                'roles' => $user->role_list,
                 'employee_id' => $user->employee_id,
                 'email' => $user->email,
-                'roles' => $user->role_list,
+                'enabled' => $user->is_active,
             ]);
 
         return Inertia::render('Admin/User/Index', [
@@ -41,7 +42,7 @@ class UserController extends Controller
         $id_types = IDType::all();
 
         return Inertia::render('Admin/User/Create', [
-            "idTypes" => $id_types,
+            "id_types" => $id_types,
         ]);
     }
 
@@ -138,7 +139,7 @@ class UserController extends Controller
         ]);
     }
 
-    public function update(Request $request,User $user)
+    public function update(Request $request, User $user)
     {
         //Validate the request
         $validated = $request->validate([
