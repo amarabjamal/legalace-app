@@ -25,7 +25,7 @@
                     >
                         <DisclosurePanel class="px-4 pt-4 pb-2 text-sm text-gray-500">
                             <div class="space-x-2">
-                                <button @click="emailQuotation" class="btn-primary">Send Email</button>
+                                <button @click="emailInvoice" class="btn-primary">Send Email</button>
                                 <button @click="markSent" class="btn-secondary">Mark Sent</button>
                             </div>
                         </DisclosurePanel>
@@ -57,18 +57,32 @@
                     >
                         <DisclosurePanel class="px-4 pt-4 pb-2 text-sm text-gray-500">
                             <button v-if="invoice.status_value === 4" disabled class="btn-primary">Add Payment</button>
-                            <button v-else @click="addPayment" class="btn-primary">Add Payment</button>
+                            <Link v-else :href="`/lawyer/case-files/${case_file.id}/invoices/${invoice.id}/payment/create`" as="button" class="btn-primary">
+                                Add Payment
+                            </Link>
                             <div class="mt-4">Payment received: 
                                 <span v-if="invoice.status_value !== 4" class="text-base font-medium">No record.</span>
                                 <div v-else>
                                     <div>
                                         Paid on {{ invoice.payment.date }} through {{ invoice.payment.method }}
                                     </div>
-                                    <a  :href="`/lawyer/case-files/${case_file.id}/invoices/${invoice.id}/payment/receipt`" target="_blank"
-                                        class="text-sm font-medium leading-6 text-blue-500 hover:underline"
-                                    >
-                                        Payment Proof
-                                    </a>
+                                    <div class="space-x-2">
+                                        <a  :href="`/lawyer/case-files/${case_file.id}/invoices/${invoice.id}/payment/receipt`" target="_blank"
+                                            class="text-sm font-medium leading-6 text-blue-500 hover:underline"
+                                        >
+                                            Payment Proof
+                                        </a>
+                                        <Link v-if="invoice.has_receipt" :href="`/lawyer/case-files/${case_file.id}/invoices/${invoice.id}/receipt`" as="button" 
+                                            class="text-sm font-medium leading-6 text-blue-500 hover:underline"
+                                        >
+                                            Send Receipt
+                                        </Link>
+                                        <Link v-else :href="`/lawyer/case-files/${case_file.id}/invoices/${invoice.id}/receipt/create`" as="button" 
+                                            class="text-sm font-medium leading-6 text-blue-500 hover:underline"
+                                        >
+                                            Convert to Receipt
+                                        </Link>
+                                    </div>
                                 </div>
                             </div>
                         </DisclosurePanel>
@@ -232,30 +246,6 @@
                         Edit
                     </Link>
                 </div>
-
-                <div v-else-if="invoice.status_value === 2" class="flex flex-row-reverse space-x-2 space-x-reverse items-center justify-start ">
-                    <form @submit.prevent="emailInvoice">
-                        <button type="submit" class="btn-primary">
-                            Send Email
-                        </button>
-                    </form>
-                    <action-dropdown :status_code="invoice.status_value" :case_file_id="case_file.id" :invoice_id="invoice.id" />
-                </div>
-                <div v-else-if="invoice.status_value === 3" class="flex flex-row-reverse space-x-2 space-x-reverse items-center justify-start ">
-                    <Link :href="`/lawyer/case-files/${case_file.id}/invoices/${invoice.id}/payment/create`" as="button" class="btn-primary">
-                        Add Payment
-                    </Link>
-                    <action-dropdown :status_code="invoice.status_value" :case_file_id="case_file.id" :invoice_id="invoice.id" @send-email="emailInvoice" />
-                </div>
-                <div v-else-if="invoice.status_value === 4" class="flex flex-row-reverse space-x-2 space-x-reverse items-center justify-start ">
-                    <Link v-if="invoice.has_receipt" :href="`/lawyer/case-files/${case_file.id}/invoices/${invoice.id}/receipt`" as="button" class="btn-primary">
-                        Receipt
-                    </Link>
-                    <Link v-else :href="`/lawyer/case-files/${case_file.id}/invoices/${invoice.id}/receipt/create`" as="button" class="btn-primary">
-                        Convert to Receipt
-                    </Link>
-                    <action-dropdown :status_code="invoice.status_value" :case_file_id="case_file.id" :invoice_id="invoice.id" />
-                </div>
                 
                 <div v-else-if="invoice.status_value === 5" class="flex flex-row-reverse space-x-2 space-x-reverse items-center justify-start "></div>
                 <div v-else-if="invoice.status_value === 6" class="flex flex-row-reverse space-x-2 space-x-reverse items-center justify-start "></div>
@@ -350,6 +340,9 @@ export default {
             if(confirm('The invoice will be send to the client registered email address. Are you sure to proceed?')) {
                 this.$inertia.post(`/lawyer/case-files/${this.case_file.id}/invoices/${this.invoice.id}/email-invoice`);
             }
+        },
+        markSent() {
+
         },
         statusClass(status) {
             return cva("absolute w-44 text-center select-none font-bold top-6 -right-12 py-2 px-12 rotate-45 z-30", {
