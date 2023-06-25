@@ -19,10 +19,12 @@ use App\Http\Controllers\Lawyer\CaseFileController;
 use App\Http\Controllers\Lawyer\ClaimVoucherController;
 use App\Http\Controllers\Lawyer\ConflictReportController;
 use App\Http\Controllers\Lawyer\DisbursementItemController;
+use App\Http\Controllers\Lawyer\DisbursementItemTypeController;
 use App\Http\Controllers\Lawyer\InvoiceController;
 use App\Http\Controllers\Lawyer\InvoicePaymentController;
 use App\Http\Controllers\Lawyer\QuotationController;
 use App\Http\Controllers\Lawyer\OperationalCostController;
+use App\Http\Controllers\Lawyer\QuotationPaymentController;
 use App\Http\Controllers\Lawyer\ReceiptController;
 
 /*
@@ -85,6 +87,7 @@ Route::group(['middleware' => 'auth'], function() {
         Route::get('/dashboard', [DashboardController::class, 'indexLawyer']);
         Route::get('/profile', [ProfileController::class, 'indexLawyer']);
         Route::get('/notifications', [UserNotificationController::class, 'indexLawyer'])->name('notifications');
+        Route::post('/disbursement-item-type', DisbursementItemTypeController::class);
 
         
         Route::resource('clients', ClientController::class);
@@ -105,6 +108,7 @@ Route::group(['middleware' => 'auth'], function() {
                 Route::get('/pdf', [QuotationController::class, 'downloadPdf']);
                 Route::post('/email-quotation', [QuotationController::class, 'emailQuotation']);
                 Route::post('/mark-sent', [QuotationController::class, 'markSent']);
+                Route::post('/save-payment', QuotationPaymentController::class);
             });
             Route::singleton('quotation', QuotationController::class)->creatable();
 
@@ -123,6 +127,10 @@ Route::group(['middleware' => 'auth'], function() {
                     Route::post('receipt/mark-sent', [ReceiptController::class, 'markSent']);
                     Route::post('receipt/email-receipt', [ReceiptController::class, 'emailReceipt']);
                     Route::singleton('receipt', ReceiptController::class)->creatable();
+                });
+
+                Route::group(['prefix' => '/disbursement-items/{disbursement_item}'], function () {
+                    Route::get('receipt', [DisbursementItemController::class, 'downloadReceipt']);
                 });
     
                 Route::resource('disbursement-items', DisbursementItemController::class);
