@@ -3,6 +3,8 @@
 
     <page-heading :page_title="page_title" :breadcrumbs="breadcrumbs"/>
 
+    <add-record-type-modal :isOpen="show_add_record_type_modal" @close-modal="show_add_record_type_modal = false" />
+
     <div class="max-w-3xl bg-white rounded-md shadow overflow-hidden">
         <form @submit.prevent="store">
             <div class="p-8 space-y-12">
@@ -11,10 +13,13 @@
                     <p class="mt-1 text-sm leading-6 text-gray-600">Provide an identifiable name.</p>
 
                     <div class="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 md:grid-cols-2">
-                        <select-input v-model="form.record_type_id" :error="form.errors.record_type_id" label="Record Type" required>
-                            <option disabled value="">Select record type</option>
-                            <option v-for="record_type in record_types" :value="record_type.id">{{ record_type.name }}</option>
-                        </select-input>
+                        <div class="space-y-2">
+                            <select-input v-model="form.record_type_id" :error="form.errors.record_type_id" label="Record Type" required>
+                                <option value="" disabled selected>Select record type</option>
+                                <option v-for="record_type in record_types" :value="record_type.id">{{ record_type.name }}</option>
+                            </select-input>
+                            <button @click="show_add_record_type_modal = true" type="button" class="text-sm text-blue-500 hover:underline">New record type</button>
+                        </div>
 
                         <text-input v-model="form.name" :error="form.errors.name" label="Name" required/>
                         <text-input v-model="form.description" :error="form.errors.description" label="Description (Optional)"/>
@@ -55,6 +60,7 @@ import FileInput from '../../../Shared/FileInput';
 import MoneyInput from '../../../Shared/MoneyInput';
 import LoadingButton from '../../../Shared/LoadingButton';
 import { unmaskMoneyToNumeric } from '../../../Stores/Utils';
+import AddRecordTypeModal from './Components/AddRecordTypeModal';
 
 export default {
     components: {
@@ -64,6 +70,7 @@ export default {
         FileInput,
         MoneyInput,
         LoadingButton,
+        AddRecordTypeModal,
     },
     layout: Layout,
     props: {
@@ -91,6 +98,7 @@ export default {
                 record_type_id: null,
                 fund_type: null,
             }),
+            show_add_record_type_modal: false,
         }
     },
     methods: {
