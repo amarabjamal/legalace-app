@@ -40,13 +40,7 @@
               {{ invoice.due_at }}
             </td>
             <td class="border-t px-6 py-4 whitespace-nowrap ">
-              <span v-if="invoice.status === 'Draft'" class="p-1.5 text-xs font-medium uppercase tracking-wider text-gray-800 bg-gray-200 rounded-lg bg-opacity-50">
-                {{ invoice.status }}
-              </span>
-              <span v-else-if="invoice.status === 'Open'" class="p-1.5 text-xs font-medium uppercase tracking-wider text-blue-800 bg-blue-200 rounded-lg bg-opacity-50">
-                {{ invoice.status }}
-              </span>
-              <span  v-else-if="invoice.status === 'Paid'" class="p-1.5 text-xs font-medium uppercase tracking-wider text-green-800 bg-green-200 rounded-lg bg-opacity-50">
+              <span :class="statusClass(invoice.status_value)">
                 {{ invoice.status }}
               </span>
             </td>
@@ -82,6 +76,7 @@ import Pagination from '../../../Shared/Pagination';
 import throttle from 'lodash/throttle';
 import pickBy from 'lodash/pickBy'
 import mapValues from 'lodash/mapValues';
+import { cva } from 'class-variance-authority';
 
 export default {
     components: {
@@ -121,6 +116,23 @@ export default {
         reset() {
           this.form = mapValues(this.form, () => null);
         },
+        statusClass(status) {
+            return cva("p-1.5 text-xs font-medium uppercase tracking-wider rounded-sm bg-opacity-50", {
+                variants: {
+                    status: {
+                        1: "text-blue-500 bg-blue-100", //Draft
+                        2: "text-cyan-500 bg-cyan-100", //Open
+                        3: "text-teal-500 bg-teal-100", //Sent
+                        4: "text-green-500 bg-green-100", //Paid
+                        5: "text-red-500 bg-red-100", //Overdue
+                        6: "text-gray-500 bg-gray-100", //Void
+                        7: "text-rose-500 bg-rose-100", //Uncollactable
+                    }
+                }
+            }) ({
+                status: status,
+            })
+        }
     },
 }
 

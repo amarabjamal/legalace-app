@@ -22,9 +22,7 @@
                                 <div class="font-medium text-gray-900 mb-2">
                                     {{ invoice.company.name }}
                                 </div>
-                                <div>
-                                    {{ invoice.company.address }}
-                                </div>
+                                <div class="whitespace-pre-wrap">{{ invoice.company.address }}</div>
                             </div>  
                         </div>
                         <div class="flex flex-col flex-wrap w-full lg:w-1/2">
@@ -35,9 +33,7 @@
                                 <div class="font-medium text-gray-900 mb-2">
                                     {{ invoice.client.name }}
                                 </div>
-                                <div>
-                                    {{ invoice.client.address }}
-                                </div>
+                                <div class="whitespace-pre-wrap">{{ invoice.client.address }}</div>
                             </div>  
                         </div>
                     </div>
