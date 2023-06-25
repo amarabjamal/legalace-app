@@ -192,4 +192,14 @@ class DisbursementItemController extends Controller
             return back()->with('errorMessage', 'Error: failed to delete.');
         }
     }
+
+    public function downloadReceipt(CaseFile $case_file, DisbursementItem $disbursement_item) {
+        if(!isset($disbursement_item->receipt)) {
+            return abort(404);
+        }
+        
+        $pathToFile = storage_path('app/public/' . DisbursementItem::RECEIPT_PATH . $disbursement_item->receipt);
+        
+        return response()->file($pathToFile);
+    }
 }
