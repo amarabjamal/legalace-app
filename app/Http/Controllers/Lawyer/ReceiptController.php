@@ -9,8 +9,6 @@ use App\Models\CaseFile;
 use App\Models\CaseFile\Invoices\Invoice;
 use App\Models\InvoicePayment;
 use App\Models\Receipt;
-use Barryvdh\DomPDF\Facade\Pdf as PDF;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
 use Spatie\Browsershot\Browsershot;
