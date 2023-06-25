@@ -1,7 +1,9 @@
 <template>
     <Head :title="page_title" />
 
-    <page-heading :page_title="page_title" :breadcrumbs="breadcrumbs"/>    
+    <page-heading :page_title="page_title" :breadcrumbs="breadcrumbs"/>   
+    
+    <display-receipt-modal :isOpen="show_display_receipt_modal" :url="receipt_url" @close-modal="show_display_receipt_modal = false" />
 
     <div class="max-w-3xl bg-white rounded-md border border-gray-300 overflow-hidden">
         <dl>
@@ -26,7 +28,10 @@
             <div class="bg-white border-b px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
                 <dt class="text-sm font-medium text-gray-500">Description</dt>
                 <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-                    {{ disbursement_item.description }}
+                    <span v-if="disbursement_item.description">
+                        {{ disbursement_item.description }}
+                    </span>
+                    <span v-else class="text-gray-400 italic">No description provided.</span>
                 </dd>
             </div>
             <div class="bg-white border-b px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
@@ -44,7 +49,10 @@
             <div class="bg-white border-b px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
                 <dt class="text-sm font-medium text-gray-500">Receipt</dt>
                 <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-                    {{ disbursement_item.receipt }}
+                    <button v-if=" disbursement_item.receipt" @click="loadReceipt" class="text-blue-500 hover:underline">
+                        {{ disbursement_item.receipt }}
+                    </button>
+                    <span v-else class="text-gray-400 italic">No receipt provided.</span>
                 </dd>
             </div>
             <div class="bg-white border-b px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
@@ -65,8 +73,12 @@
 
 <script>
 import Layout from '../Shared/Layout';
+import DisplayReceiptModal from './Components/DisplayReceiptModal';
 
 export default {
+    components: {
+        DisplayReceiptModal,
+    },
     layout: Layout,
     props: {
         case_file: Object,
@@ -82,7 +94,14 @@ export default {
                 { link: `/lawyer/case-files/${this.case_file.id}/disbursement-items`, label: 'Items'},
                 { link: null, label: this.disbursement_item.name},
             ],
+            show_display_receipt_modal: false,
+            receipt_url: `/lawyer/case-files/${this.case_file.id}/disbursement-items/${this.disbursement_item.id}/receipt`,
         }
+    },
+    methods: {
+        loadReceipt() {
+            this.show_display_receipt_modal = true;
+        },
     },
 }
 
