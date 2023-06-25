@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Lawyer;
 
+use App\Enums\PaymentMethodEnum;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreQuotationRequest;
 use App\Http\Requests\UpdateQuotationRequest;
@@ -14,11 +15,10 @@ use App\Models\WorkDescription;
 use Exception;
 use Illuminate\Support\Facades\DB;
 use Inertia\Inertia;
-use Barryvdh\DomPDF\Facade\Pdf as PDF;
 use Brick\Money\Money;
 use Illuminate\Support\Facades\Mail;
-use PhpParser\Node\Expr\Cast\Object_;
 use Spatie\Browsershot\Browsershot;
+use Spatie\LaravelOptions\Options;
 
 class QuotationController extends Controller
 {
@@ -93,11 +93,14 @@ class QuotationController extends Controller
 
     public function edit(CaseFile $case_file) 
     {
+        $quotation = $case_file->quotation;
+
         if(!$case_file->hasQuotation()) {
             return redirect()->route('lawyer.quotation.create', $case_file);
+        } else if($quotation->isPaid()) {
+            return redirect()->route('lawyer.quotation.show', $case_file)->with('warningMessage', 'This quotation is already paid and no longer editable.');
         }
 
-        $quotation = $case_file->quotation;
 
         return inertia('Lawyer/Quotation/Edit', [
             'case_file' => [
@@ -162,6 +165,7 @@ class QuotationController extends Controller
         $quotation = $case_file->quotation;
         $bankAccount = $quotation->bankAccount;
         $workDescriptions = $quotation->workDescriptions;
+        $payment = $quotation->payment;
 
         return inertia('Lawyer/Quotation/Show', [
             'case_file' => [
@@ -186,6 +190,15 @@ class QuotationController extends Controller
                 'tax' => $quotation->tax_amount->formatTo('en_MY'),
                 'total' => $quotation->total->formatTo('en_MY'),
                 'sent_at' => $quotation->sent_at? $quotation->sent_at : 'N/A',
+                'is_paid' => $quotation->isPaid(),
+                'payment' => [
+                    'date' => $payment?->date->format('d F Y'),
+                    'method' => $payment?->payment_method_display_text,
+                ],
+            ],
+            'modal_props' => [
+                'payment_methods' => Options::forEnum(PaymentMethodEnum::class),
+                'client_bank_accounts' => BankAccount::clientAccount()->get(['id', 'label']),
             ],
         ]);
     }
