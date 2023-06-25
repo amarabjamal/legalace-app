@@ -8,6 +8,7 @@ use Brick\Math\RoundingMode;
 use Brick\Money\Money as BrickMoney;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class Quotation extends Model
 {
@@ -51,6 +52,11 @@ class Quotation extends Model
         return $this->belongsTo(BankAccount::class, 'bank_account_id', 'id');
     }
 
+    public function payment() : HasOne
+    {
+        return $this->hasOne(QuotationPayment::class);
+    }
+
     public function calculateSubtotal() 
     {
         $amount = $this->workDescriptions()->sum('fee');
@@ -75,5 +81,10 @@ class Quotation extends Model
         $tax = $this->calculateTax();
 
         return  $subtotal->plus($tax);
+    }
+
+    public function isPaid() : bool
+    {
+        return $this->payment()->exists();
     }
 }
