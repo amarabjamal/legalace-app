@@ -64,7 +64,9 @@ class CaseFileController extends Controller
                 'client' => $case_file->client->name,
                 'creator' => $case_file->formatted_name,
                 'statuses' => [
-                    'quotation' => [],
+                    'quotation' => [
+                        'is_paid' => $case_file->quotation?->isPaid(),
+                    ],
                     'items' => [],
                     'invoices' => [],
                 ],
@@ -130,6 +132,10 @@ class CaseFileController extends Controller
     public function edit(CaseFile $case_file) 
     {
         $this->authorize('update', $case_file);
+
+        if($case_file->quotation?->isPaid()) {
+            return redirect()->route('lawyer.case-files.show', $case_file)->with('warningMessage', 'This case file is no longer editable since the quotation has been paid.');
+        }
 
         $lawyerRoleID = DB::table('roles')->select('id')->where('slug', 'lawyer');
         $userRole = DB::table('user_role')->select('user_id')->whereIn('role_id', $lawyerRoleID);
