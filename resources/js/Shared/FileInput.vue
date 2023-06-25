@@ -13,6 +13,7 @@
             <button type="button" class="px-4 py-1 text-white text-xs font-medium bg-gray-500 hover:bg-gray-700 rounded-sm" @click="remove">Remove</button>
         </div>
         </div>
+        <div v-if="error" class="form-error">{{ error }}</div>
         <div v-if="errors.length" class="form-error">{{ errors }}</div>
     </div>
 </template>
@@ -23,6 +24,7 @@ export default {
     modelValue: File,
     label: String,
     accept: String,
+    error: String,
     errors: {
       type: Array,
       default: () => [],
