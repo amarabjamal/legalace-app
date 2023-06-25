@@ -37,6 +37,7 @@ class InvoiceController extends Controller
                     'created_at' => $invoice->formatted_created_at,
                     'invoice_number' => $invoice->invoice_number,
                     'status' => Invoice::STATUS[$invoice->status->value],
+                    'status_value' => $invoice->status->value,
                     'issued_at' => $invoice->formatted_invoice_date,
                     'due_at' => $invoice->formatted_due_date,
                     'total' =>  $invoice->grand_total != null ? $invoice->grand_total->formatTo('en_MY') : null,
