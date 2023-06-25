@@ -1,10 +1,10 @@
 .btn-primary {
   background-color: #A6A85E !important;
-  @apply px-6 py-2 rounded-sm shadow text-white fill-white text-sm leading-4 font-medium whitespace-nowrap hover:bg-blue-600 focus:bg-blue-600 !important;
+  @apply px-6 py-2 rounded-sm shadow text-white fill-white text-sm leading-4 font-medium whitespace-nowrap focus:bg-blue-600 !important;
 }
 
 .btn-primary:hover, .btn-primary:focus {
-  background-color: #50527A !important;
+  background-color: #8c8e47 !important;
 }
 
 .btn-primary:disabled {
