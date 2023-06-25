@@ -58,7 +58,7 @@ class DisbursementItem extends Model
         9 => 'Denied',
     ];
 
-    public const RECEIPT_PATH = 'case-files/disbursement-items/receipts';
+    public const RECEIPT_PATH = 'case-files/disbursement-items/receipts/';
 
     public function getFormattedDateAttribute()
     {
