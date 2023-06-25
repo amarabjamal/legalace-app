@@ -23,8 +23,7 @@ class QuotationPaid
 
         $quotation = $caseFile->quotation;
 
-        // need refactor
-        if($quotation && (!$quotation->is_paid || $quotation->payment_date === null) ) {
+        if($quotation && !$quotation->isPaid()) {
             return back()->with('warningMessage', 'The client must pay the deposit first to proceed.');
         }
 
