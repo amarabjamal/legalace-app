@@ -51,7 +51,10 @@
     
             <div class="px-8 py-4 bg-gray-50 border-t border-gray-100">
                 <div v-if="view_as === 'owner'" class="flex flex-row-reverse space-x-2 space-x-reverse items-center justify-start ">
-                    <Link as="button" :href="`/lawyer/case-files/${case_file.id}/edit`" class="btn-primary">
+                    <button v-if="case_file.statuses.quotation.is_paid" disabled class="btn-primary">
+                        Edit
+                    </button> 
+                    <Link v-else as="button" :href="`/lawyer/case-files/${case_file.id}/edit`" class="btn-primary">
                         Edit
                     </Link> 
                     <!-- Only for pending conflict checked -->
@@ -78,21 +81,24 @@
 
         <div v-if="view_as === 'owner'" class="lg:w-full max-w-3xl h-fit bg-white rounded-md border border-gray-300 overflow-hidden">
             <div class="p-8 flex flex-col justify-center items-start space-y-4">
-                <Link as="button" :href="`/lawyer/case-files/${case_file.id}/quotation`">
+                <Link as="button" :href="`/lawyer/case-files/${case_file.id}/quotation`" class="flex w-full justify-between items-center rounded-sm bg-gray-100 px-4 py-2 text-left text-lg font-medium text-gray-900 hover:bg-gray-200 focus:outline-none focus-visible:ring focus-visible:ring-gray-500 focus-visible:ring-opacity-75">
                     Quotation
+                    <svg class="h-6 w-6" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13.1714 12.0007L8.22168 7.05093L9.63589 5.63672L15.9999 12.0007L9.63589 18.3646L8.22168 16.9504L13.1714 12.0007Z"></path></svg>
                 </Link>
                 
-                <Link as="button" :href="`/lawyer/case-files/${case_file.id}/disbursement-items`">
+                <Link class="flex w-full justify-between items-center rounded-sm bg-gray-100 px-4 py-2 text-left text-lg font-medium text-gray-900 hover:bg-gray-200 focus:outline-none focus-visible:ring focus-visible:ring-gray-500 focus-visible:ring-opacity-75" as="button" :href="`/lawyer/case-files/${case_file.id}/disbursement-items`">
                     Disbursement Items
+                    <svg class="h-6 w-6" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13.1714 12.0007L8.22168 7.05093L9.63589 5.63672L15.9999 12.0007L9.63589 18.3646L8.22168 16.9504L13.1714 12.0007Z"></path></svg>
                 </Link>
     
-                <Link as="button" :href="`/lawyer/case-files/${case_file.id}/invoices`">
+                <Link class="flex w-full justify-between items-center rounded-sm bg-gray-100 px-4 py-2 text-left text-lg font-medium text-gray-900 hover:bg-gray-200 focus:outline-none focus-visible:ring focus-visible:ring-gray-500 focus-visible:ring-opacity-75" as="button" :href="`/lawyer/case-files/${case_file.id}/invoices`">
                     Invoices
+                    <svg class="h-6 w-6" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13.1714 12.0007L8.22168 7.05093L9.63589 5.63672L15.9999 12.0007L9.63589 18.3646L8.22168 16.9504L13.1714 12.0007Z"></path></svg>
                 </Link>
                 <!-- to be implemented -->
-                <Link as="button" :href="`/lawyer/case-files/${case_file.id}/receipts`">
+                <!-- <Link as="button" :href="`/lawyer/case-files/${case_file.id}/receipts`">
                     Receipts
-                </Link>
+                </Link> -->
             </div>
         </div>
 
