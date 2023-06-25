@@ -121,7 +121,7 @@ export default {
         },
         statusClass(status) {
             return cva("p-1.5 text-xs font-medium uppercase tracking-wider rounded-sm bg-opacity-50", {
-            variants: {
+                variants: {
                     status: {
                         Recorded: "text-gray-800 bg-gray-200",
                         Drafted: "text-yellow-800 bg-yellow-200",
@@ -137,7 +137,7 @@ export default {
             }) ({
                 status: status,
             })
-        }
+        },
     },
 }
 
