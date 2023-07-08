@@ -114,7 +114,7 @@ class DisbursementItem extends Model
     public function scopeFromInvoiceCreatedByCurrentUser($query)
     {
         $query->whereHas('caseFile', function ($query) {
-            $query->where('created_by', '=', auth()->id());
+            $query->where('created_by_user_id', '=', auth()->id());
         });
     }
 

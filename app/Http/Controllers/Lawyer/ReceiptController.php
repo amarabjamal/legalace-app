@@ -71,10 +71,11 @@ class ReceiptController extends Controller
 
         try {
             DB::transaction(function() use ($receiptInputs, $invoice) {
-                $invoice->receipt()->create($receiptInputs);
+                $invoice->payment->receipt()->create($receiptInputs);
             });
         } catch (\Exception $e) {
-            return back()->with('errorMessage', 'Failed to create receipt. ' . $e->getMessage());  
+            dd($e);
+            return back()->with('errorMessage', 'Failed to create receipt.');  
         }
 
         return redirect()->route('lawyer.invoices.show', ['case_file' => $case_file, 'invoice' => $invoice])->with('successMessage', 'The receipt is created.');
@@ -118,7 +119,8 @@ class ReceiptController extends Controller
                 'number' => $receipt->receipt_number,
                 'date' => $receipt->created_at->format('Y/m/d'),
                 'notes' => $receipt->notes,
-                'is_sent' => $receipt->is_sent,
+                'sent_at' => $receipt->formatted_date,
+                'is_sent' => $receipt->sent_at !== null,
             ],
         ]);
     }
@@ -134,11 +136,16 @@ class ReceiptController extends Controller
         {
             $pdf = $this->generatePdf($case_file, $invoice);
 
-            Mail::to($case_file->client->email)
-                ->send(new SendReceipt($invoice->receipt, $pdf, $case_file->client->name));
+            $client = $case_file->client;
+            $receipt = $invoice->receipt;
 
-            DB::transaction(function() use ($invoice) {
-                $invoice->receipt()->update(['is_sent' => true]);
+            Mail::to($client->email)
+                ->send(new SendReceipt($receipt, $pdf, $client->name));
+
+            DB::transaction(function() use ($receipt) {
+                $receipt->is_sent = true;
+                $receipt->sent_at = now();
+                $receipt->save();
             });
         }
         catch(\Exception $e)
@@ -151,20 +158,25 @@ class ReceiptController extends Controller
 
     public function markSent(CaseFile $case_file, Invoice $invoice) 
     {
-        if (!isset($invoice->receipt)) 
+        $receipt = $invoice->receipt;
+
+        if (!isset($receipt)) 
         {
             return back()->with('errorMessage', 'The receipt does not exist.');
         }
 
+
         try {
-            DB::transaction(function() use ($invoice) {
-                $invoice->receipt()->update(['is_sent' => true]);
+            DB::transaction(function() use ($receipt) {
+                $receipt->is_sent = true;
+                $receipt->sent_at = now();
+                $receipt->save();
             });
         } catch (\Exception $e) {
             return back()->with('errorMessage', 'Failed to mark this receipt as sent.');
         }
 
-        return back()->with('successMessage', 'The receipt is marked as sent.');
+        return back()->with('successMessage', 'This receipt is marked as sent.');
     }
 
     public function downloadPdf(CaseFile $case_file, Invoice $invoice)

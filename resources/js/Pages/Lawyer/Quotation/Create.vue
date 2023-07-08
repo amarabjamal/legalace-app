@@ -20,8 +20,8 @@
                     </div>
         
                     <!-- Work Description Table -->
-                    <div class="mt-10 w-full overflow-x-auto overflow-y-hidden  mb-10">
-                        <table class="w-full whitespace-nowrap text-left text-sm leading-6">
+                    <div class="mt-10 w-full overflow-x-auto overflow-y-hidden mb-10">
+                        <table class="w-full whitespace-nowrap text-left text-sm leading-6 border">
                             <thead class="border border-gray-300 text-gray-900 bg-gray-100 select-none">
                                 <tr>
                                     <th class="w-12 px-4 py-2">No.</th>
@@ -45,7 +45,7 @@
                                         <td class="max-w-0 pr-4 py-2 align-top">
                                             <text-input v-model="work_description.description" :error="form.errors[`work_descriptions.${index}.description`]" required/>
                                         </td>
-                                        <td class="pr-0 pl-0 py-2 align-top text-right tabular-nums">
+                                        <td class="px-0 py-2 align-top text-right tabular-nums">
                                             <div>
                                                 <input v-model.lazy="work_description.fee" v-money="money" class="form-input text-right" :class="{ error: form.errors[`work_descriptions.${index}.fee`] }" required/>
                                                 <div v-if="form.errors[`work_descriptions.${index}.fee`]" class="form-error w-40">{{ form.errors[`work_descriptions.${index}.fee`] }}</div>
@@ -59,13 +59,15 @@
                                     </tr>
                                 </transition-group>
         
-                                <tr v-if="form.work_descriptions.length === 0" class="border-x border-gray-300 bg-gray-100">
-                                    <td v-if="form.errors.work_descriptions" class="text-center py-2 text-gray-500" colspan="100">{{ form.errors.work_descriptions }}</td>
-                                    <td v-else class="text-center py-2 text-gray-500" colspan="100">No items in the list</td>
+                                <tr v-if="form.work_descriptions.length === 0" class="border border-gray-300 bg-gray-50">
+                                    <td class="text-center py-4 text-gray-500" colspan="100">
+                                        <div v-if="form.errors.work_descriptions" class="form-error">{{ form.errors.work_descriptions }}</div>
+                                        <div v-else> No items in the list</div>
+                                    </td>
                                 </tr>
         
                                 <tr class="border border-gray-300">
-                                    <td class="" colspan="100">
+                                    <td colspan="100">
                                         <div class="w-100 flex justify-center px-4 py-2">
                                             <button type="button" class="select-none text-gray-700 text-sm font-medium" @click="addItem">+ Add item</button>
                                         </div>

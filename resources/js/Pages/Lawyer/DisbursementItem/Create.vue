@@ -42,7 +42,7 @@
                 </div>
             </div>
             <div class="flex flex-row-reverse space-x-2 space-x-reverse  items-center justify-start px-8 py-4 bg-gray-50 border-t border-gray-100">
-                <loading-button :loading="form.processing" :disabled="form.processing || !form.isDirty" class="btn-primary" type="submit">Create Item</loading-button>
+                <loading-button :loading="form.processing" :disabled="!form.isDirty" class="btn-primary" type="submit">Create Item</loading-button>
                 <Link :href="`/lawyer/case-files/${this.case_file.id}/disbursement-items`" as="button" class="btn-cancel" :disabled="form.processing">
                     Cancel
                 </Link>

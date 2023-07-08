@@ -10,7 +10,7 @@
                     <DisclosureButton class="flex w-full justify-between rounded-sm bg-gray-100 px-4 py-2 text-left text-lg font-medium text-gray-900 hover:bg-gray-200 focus:outline-none focus-visible:ring focus-visible:ring-gray-500 focus-visible:ring-opacity-75">
                         <div>
                             <span>Send</span>
-                            <div class="text-sm text-gray-600 font-light">Last Sent <span class="font-medium font-gray-700"> </span></div>
+                            <div class="text-sm text-gray-600 font-light">Last Sent <span class="font-medium font-gray-700">{{ receipt.sent_at }}</span></div>
                         </div>
                         <ChevronUpIcon :class="open ? 'rotate-180 transform' : ''" class="h-5 w-5 text-gray-500"/>
                     </DisclosureButton>
@@ -57,10 +57,10 @@
 
         <div class="lg:col-span-2 max-w-3xl relative bg-white rounded-md border border-gray-300 overflow-hidden">
             <!-- Status -->
-            <div v-if="receipt.is_sent" class="absolute w-44 text-center select-none font-bold top-6 -right-12 py-2 px-12 rotate-45 z-30 text-green-500 bg-green-100">
+            <div v-if="receipt.is_sent" class="absolute w-44 text-center select-none font-bold top-6 -right-12 py-2 px-12 rotate-45 text-green-500 bg-green-100">
                 Sent
             </div>
-            <div v-else class="absolute w-44 text-center select-none font-bold top-6 -right-12 py-2 px-12 rotate-45 z-30 text-blue-500 bg-blue-100">
+            <div v-else class="absolute w-44 text-center select-none font-bold top-6 -right-12 py-2 px-12 rotate-45 text-blue-500 bg-blue-100">
                 Pending
             </div>
 
@@ -216,10 +216,18 @@ export default {
     },
     methods: {
         emailReceipt() {
-            this.$inertia.post(`/lawyer/case-files/${this.case_file.id}/invoices/${this.invoice.id}/receipt/email-receipt`);
+            const proceed = confirm("You're about to send the receipt to client's email. Are you sure to continue?");
+
+            if(proceed) {
+                this.$inertia.post(`/lawyer/case-files/${this.case_file.id}/invoices/${this.invoice.id}/receipt/email-receipt`);
+            }
         },
         markSent() {
-            this.$inertia.post(`/lawyer/case-files/${this.case_file.id}/invoices/${this.invoice.id}/receipt/mark-sent`);
+            const proceed = confirm("You're marking this receipt as sent. Are you sure to continue?");
+
+            if(proceed) {
+                this.$inertia.post(`/lawyer/case-files/${this.case_file.id}/invoices/${this.invoice.id}/receipt/mark-sent`);
+            }
         },
     },
 };

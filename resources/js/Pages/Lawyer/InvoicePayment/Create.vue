@@ -22,7 +22,7 @@
                 <textarea-input v-model="form.description" rows="4"  class="pb-8 pr-6 w-full" label="Description" required/>
             </div>
             <div class="flex items-center justify-end px-8 py-4 bg-gray-50 border-t border-gray-100">
-                <loading-button :loading="form.processing" class="btn-primary" type="submit">Create Item</loading-button>
+                <loading-button :loading="form.processing" :disabled="!form.isDirty" class="btn-primary" type="submit">Save Payment</loading-button>
             </div>
         </form>
     </div>

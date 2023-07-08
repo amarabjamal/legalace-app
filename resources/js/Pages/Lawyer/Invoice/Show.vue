@@ -10,7 +10,7 @@
                     <DisclosureButton class="flex w-full justify-between rounded-sm bg-gray-100 px-4 py-2 text-left text-lg font-medium text-gray-900 hover:bg-gray-200 focus:outline-none focus-visible:ring focus-visible:ring-gray-500 focus-visible:ring-opacity-75">
                         <div>
                             <span>Send</span>
-                            <div class="text-sm text-gray-600 font-light">Last Sent <span class="font-medium font-gray-700"> </span></div>
+                            <div class="text-sm text-gray-600 font-light">Last Sent <span class="font-medium font-gray-700">{{ invoice.sent_at }}</span></div>
                         </div>
                         <ChevronUpIcon :class="open ? 'rotate-180 transform' : ''" class="h-5 w-5 text-gray-500"/>
                     </DisclosureButton>
@@ -235,21 +235,17 @@
                 </div>
             </div>
 
-            <div class="px-8 py-4 bg-gray-50 border-t border-gray-100">
-                <div v-if="invoice.status_value === 1" class="flex flex-row-reverse space-x-2 space-x-reverse items-center justify-start ">
-                    <form @submit.prevent="setInvoiceToOpen">
+            <div v-if="invoice.status_value >= 1 && invoice.status_value <= 3" class="px-8 py-4 bg-gray-50 border-t border-gray-100">
+                <div class="flex flex-row-reverse space-x-2 space-x-reverse items-center justify-start ">
+                    <!-- <form @submit.prevent="setInvoiceToOpen">
                         <button type="submit" class="btn-primary">
                             Change to Open
                         </button>
-                    </form>
-                    <Link :href="`/lawyer/case-files/${case_file.id}/invoices/${invoice.id}/edit`" as="button" class="btn-secondary">
+                    </form> -->
+                    <Link :href="`/lawyer/case-files/${case_file.id}/invoices/${invoice.id}/edit`" as="button" class="btn-primary">
                         Edit
                     </Link>
                 </div>
-                
-                <div v-else-if="invoice.status_value === 5" class="flex flex-row-reverse space-x-2 space-x-reverse items-center justify-start "></div>
-                <div v-else-if="invoice.status_value === 6" class="flex flex-row-reverse space-x-2 space-x-reverse items-center justify-start "></div>
-                <div v-else-if="invoice.status_value === 7" class="flex flex-row-reverse space-x-2 space-x-reverse items-center justify-start "></div>
             </div>
         </div>
         
@@ -337,15 +333,21 @@ export default {
             }
         },
         emailInvoice() {
-            if(confirm('The invoice will be send to the client registered email address. Are you sure to proceed?')) {
+            const proceed = confirm("You're about to send the invoice to client's email. Are you sure to continue?");
+            
+            if(proceed) {
                 this.$inertia.post(`/lawyer/case-files/${this.case_file.id}/invoices/${this.invoice.id}/email-invoice`);
             }
         },
         markSent() {
+            const proceed = confirm("You're marking this invoice as sent. Are you sure to continue?");
 
+            if(proceed) {
+                this.$inertia.post(`/lawyer/case-files/${this.case_file.id}/invoices/${this.invoice.id}/mark-sent`);
+            }
         },
         statusClass(status) {
-            return cva("absolute w-44 text-center select-none font-bold top-6 -right-12 py-2 px-12 rotate-45 z-30", {
+            return cva("absolute w-44 text-center select-none font-bold top-6 -right-12 py-2 px-12 rotate-45", {
                 variants: {
                     status: {
                         1: "text-blue-500 bg-blue-100", //Draft

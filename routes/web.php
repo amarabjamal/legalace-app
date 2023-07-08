@@ -61,6 +61,9 @@ Route::group(['middleware' => 'auth'], function() {
     Route::get('/bank-accounts', [BankAccountController::class, 'fetchBankAccounts']);
     Route::get('/bank-accounts/{bank_account}', [BankAccountController::class, 'fetchBankAccountDetails']);
 
+    //Common route
+    Route::get('/', [DashboardController::class, 'redirectToDashboard']);
+
     //Routes for Administrator ONLY
     Route::group(['middleware' => 'check.role:admin', 'prefix' => 'admin', 'as' => 'admin.'], function() {
         Route::get('/', [DashboardController::class, 'indexAdmin']);
@@ -69,6 +72,7 @@ Route::group(['middleware' => 'auth'], function() {
 
         // Voucher Request Approvals
         Route::post('/voucher-requests/{voucher_request}/approve', [VoucherRequestController::class, 'approveVoucher']);
+        Route::post('/voucher-requests/{voucher_request}/reject', [VoucherRequestController::class, 'rejectVoucher']);
         Route::resource('voucher-requests', VoucherRequestController::class)->only('index','show');
 
         // Employees
@@ -116,6 +120,7 @@ Route::group(['middleware' => 'auth'], function() {
                 Route::group(['prefix' => '/invoices/{invoice}'], function() {
                     Route::post('set-open', [InvoiceController::class, 'setOpen']);
                     Route::post('email-invoice', [InvoiceController::class, 'emailInvoice']);
+                    Route::post('mark-sent', [InvoiceController::class, 'markSent']);
                     Route::get('pdf', [InvoiceController::class, 'downloadPdf']);
     
                     // Payment

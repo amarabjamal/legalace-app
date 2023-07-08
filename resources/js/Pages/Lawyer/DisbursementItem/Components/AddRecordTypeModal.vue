@@ -37,7 +37,7 @@
                                     </div>
 
                                     <div class="px-4 py-6 flex flex-row-reverse space-x-2 space-x-reverse  sm:px-6">
-                                        <button type="submit" :disabled="form.processing || !form.isDirty" class="btn-primary">Create Record Type</button>
+                                        <loading-button type="submit" :loading="form.processing" :disabled="!form.isDirty" class="btn-primary">Create Record Type</loading-button>
                                         <button type="button" class="btn-close" @click="closeModal">Cancel</button>
                                     </div>
                                 </DialogPanel>
@@ -55,11 +55,12 @@ import {
     TransitionRoot,TransitionChild, Dialog, DialogPanel, DialogTitle,
 } from '@headlessui/vue'
 import TextInput from '../../../../Shared/TextInput';
+import LoadingButton from '../../../../Shared/LoadingButton';
 
 export default {
     components: {
         TransitionRoot, TransitionChild, Dialog, DialogPanel, DialogTitle,
-        TextInput,
+        TextInput, LoadingButton,
     },
     props: {
         isOpen: Boolean,

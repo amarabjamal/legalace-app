@@ -36,6 +36,13 @@ class Invoice extends Model
         'grand_total',
         'notes',
         'created_by',
+        'sent_at',
+    ];
+
+    protected $dates = [
+        'issued_at',
+        'due_at',
+        'sent_at'
     ];
 
     protected $casts = [
@@ -56,14 +63,19 @@ class Invoice extends Model
     ];
 
 
-    public function getFormattedInvoiceDateAttribute()
+    public function getFormattedInvoiceDateAttribute(): string
     {
-        return Carbon::parse($this->issued_at)->format('Y/m/d');
+        return $this->issued_at->format('Y/m/d');
     }
 
-    public function getFormattedDueDateAttribute()
+    public function getFormattedDueDateAttribute(): string
     {
-        return Carbon::parse($this->due_at)->format('Y/m/d');
+        return $this->due_at->format('Y/m/d');
+    }
+
+    public function getFormattedSentAtAttribute(): string
+    {
+        return $this->sent_at ? $this->sent_at->format('d F Y, h:i A') : 'N/A';
     }
 
     public function getFormattedCreatedAtAttribute()

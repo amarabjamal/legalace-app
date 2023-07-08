@@ -39,7 +39,7 @@
                 <textarea-input v-model="form.address" :error="form.errors.address" class="w-full" rows="4" label="Address" required></textarea-input>
             </div>
             <div class="flex flex-row-reverse space-x-2 space-x-reverse  items-center justify-start px-8 py-4 bg-gray-50 border-t border-gray-100">
-                <loading-button :loading="form.processing" :disabled="form.processing || !form.isDirty" class="btn-primary" type="submit">Update Company</loading-button>
+                <loading-button :loading="form.processing" :disabled="!form.isDirty" class="btn-primary" type="submit">Update Company</loading-button>
                 <Link :href="`/admin/company/`" as="button" class="btn-cancel" :disabled="form.processing">
                     Cancel
                 </Link>

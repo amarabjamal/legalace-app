@@ -3,7 +3,7 @@
 
     <page-heading :page_title="page_title" :breadcrumbs="breadcrumbs"/>
 
-    <div class="mb-4 border-b border-gray-200">
+    <!-- <div class="mb-4 border-b border-gray-200">
         <ul class="flex flex-wrap -mb-px text-sm font-medium text-center" role="tablist">
             <li class="mr-2" role="presentation">
                 <button class="inline-block p-4 pt-0 border-b-2 rounded-t-lg text-blue-600 hover:text-blue-600 border-blue-600" type="button" role="tab" aria-controls="pending" aria-selected="false">Pending</button>
@@ -19,7 +19,7 @@
     
     <h4 class="my-4 text-sm font-medium text-gray-700">
         Pending approval
-    </h4>
+    </h4> -->
 
     <div class="bg-white rounded-md shadow overflow-x-auto">
         <table class="w-full whitespace-no-wrap">
@@ -30,7 +30,7 @@
                 <th class="table-head-column w-28">Status</th>
                 <th class="table-head-column">Requester</th>
                 <th class="table-head-column w-44 text-right">Amount</th>
-                <th class="table-head-column w-24">
+                <th class="table-head-column w-16">
                     <span class="sr-only">Actions</span>
                 </th>
             </tr>
@@ -44,7 +44,9 @@
                     {{ voucher_request.submission_date }}
                 </td>
                 <td class="table-body-data">
-                    {{ voucher_request.status }}
+                    <span :class="statusClass(voucher_request.status)">
+                        {{ voucher_request.status }}
+                    </span>
                 </td>
                 <td class="table-body-data">
                     {{ voucher_request.requester }}
@@ -53,9 +55,9 @@
                     {{ voucher_request.amount }}
                 </td>
                 <td class="table-body-data">
-                    <div class="flex items-center space-x-4 text-sm">
-                        <Link :href="`/admin/voucher-requests/${voucher_request.id}`" class="font-medium hover:text-blue-600">Respond</Link>
-                    </div>
+                    <Link :href="`/admin/voucher-requests/${voucher_request.id}`" class="font-medium hover:text-blue-600">
+                        <icon name="cheveron-right" class="block w-5 h-5 fill-gray-400" />
+                    </Link>
                 </td>
             </tr>
             <tr v-if="voucher_requests.data.length === 0">
@@ -71,17 +73,17 @@
 <script>
 import Layout from "../Shared/Layout";
 import Pagination from '../../../Shared/Pagination';
-import { PencilIcon, TrashIcon } from "@heroicons/vue/outline";
+import Icon from '../../../Shared/Icon';
 import SearchFilter from '../../../Shared/SearchFilter';
 import throttle from 'lodash/throttle';
 import pickBy from 'lodash/pickBy'
 import mapValues from 'lodash/mapValues';
+import { cva } from "class-variance-authority";
 
 export default { 
     components: { 
         Pagination, 
-        PencilIcon, 
-        TrashIcon,
+        Icon,
         SearchFilter,
     },
     layout: Layout,
@@ -95,6 +97,23 @@ export default {
                 { link: '/admin/dashboard', label: 'Admin'},
                 { link: null, label: 'Voucher Requests'},
             ],
+        }
+    },
+    methods: {
+        statusClass(status) {
+            return cva("p-1.5 text-xs font-medium uppercase tracking-wider rounded-sm bg-opacity-50", {
+                variants: {
+                    status: {
+                        Draft:"text-gray-800 bg-gray-200",
+                        Submitted:"text-yellow-800 bg-yellow-200",
+                        Approved:"text-orange-800 bg-orange-200",
+                        Rejected:"text-red-800 bg-red-200",
+                        Reimbursed:"text-green-800 bg-green-200",
+                    }
+                }
+            }) ({
+                status: status,
+            })
         }
     },
 };

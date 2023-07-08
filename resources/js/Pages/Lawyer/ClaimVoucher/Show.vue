@@ -3,29 +3,18 @@
 
     <page-heading :page_title="page_title" :breadcrumbs="breadcrumbs"/>
     
-    <div class="max-w-3xl overflow-hidden">
-        <div class="flex items-center justify-between px-2 py-4">
-            <div class="flex flex-wrap items-center space-x-2">
-                    <h2 class="text-lg font-semibold leading-6 text-gray-700">
-                        {{  claim_voucher.number }}
-                    </h2>
-                    <div :class="statusClass">
-                        {{ claim_voucher.status }}
-                    </div>
-                </div>
-            <div class="flex flex-wrap items-center space-x-2">
-                <form v-if="claim_voucher.status === 'Draft'" @submit.prevent="submitClaimVoucher">
-                    <button type="submit" class="btn-primary flex items-center">
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="h-4 w-4 inline-block mr-1"><path d="M1.94631 9.31555C1.42377 9.14137 1.41965 8.86034 1.95706 8.6812L21.0433 2.31913C21.5717 2.14297 21.8748 2.43878 21.7268 2.95706L16.2736 22.0433C16.1226 22.5718 15.8179 22.5901 15.5946 22.0877L12.0002 14.0002L18.0002 6.00017L10.0002 12.0002L1.94631 9.31555Z"></path></svg>
-                        Submit
-                    </button>
-                </form>
-            </div>
+    <div class="max-w-3xl relative bg-white rounded-md border border-gray-300 overflow-hidden">
+        <div :class="statusClass">
+            {{ claim_voucher.status }}
         </div>
+        
+        <div class="p-8 space-y-12">
+            <h2 class="text-lg font-semibold leading-6 text-gray-700">
+                {{  claim_voucher.number }}
+            </h2>
 
-        <div class="flex flex-wrap bg-white rounded-md shadow-lg p-8 py-10">
-            <div class="flex flex-wrap w-full border-b border-gray-200 text-sm">
-                <div class="flex pb-2 pr-6 w-full lg:w-1/2">
+            <div class="grid lg:grid-cols-2 gap-4 w-full pb-6 border-b border-gray-200 text-sm">
+                <div class="flex">
                     <div class="text-gray-500 mr-4 w-26">
                         Approver
                     </div> 
@@ -33,7 +22,7 @@
                         {{  claim_voucher.approver.name }}
                     </div>
                 </div>
-                <div class="flex pb-8 pr-6 w-full lg:w-1/2">
+                <div class="flex">
                     <div class="text-gray-500 mr-4 w-26">
                         Submission Date
                     </div> 
@@ -43,45 +32,53 @@
                 </div>
             </div>
 
-            <table class="w-full my-4 whitespace-nowrap text-left text-sm leading-6">
-                <thead class="border-b border-gray-200 text-gray-900">
-                    <tr>
-                        <th class="w-12">No.</th>
-                        <th>Item</th>
-                        <th class="w-40 text-right">Amount</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr v-for="(item, index) in items" :key="index" class="border-b border-gray-100">
-                        <td class="max-w-0 px-0 py-5 align-top">{{ index + 1 }}</td>
-                        <td class="max-w-0 px-0 py-5 align-top">
-                            <div class="truncate font-medium text-gray-900/100">
-                                {{ item.name }}
-                            </div>
-                            <div class="truncate text-gray-500/100">
-                                {{ item.description }}
-                            </div>
-                        </td>
-                        <td class="pr-0 pl-8 py-5 align-top text-right tabular-nums">{{ item.amount }}</td>
-                    </tr>
-                    <tr v-if="items.length === 0" class="border-b border-gray-100/100 bg-gray-100">
-                        <td class="text-center py-4 text-gray-500" colspan="100">No items in the list</td>
-                    </tr>
-                </tbody>
-                <tfoot>
-                    <tr>
-                        <th scope="row" colspan="2" class="pt-4 sm:text-right font-semibold text-gray-900">Total</th>
-                        <td colspan="1" class="pb-0 pl-8 pr-0 pt-4 text-right font-semibold tabular-nums text-gray-900">{{ claim_voucher.amount }}</td>
-                    </tr>
-                </tfoot>
-            </table>
+            <div class="w-full overflow-x-auto overflow-y-hidden">
+                <table class="w-full whitespace-nowrap text-left text-sm leading-6">
+                    <thead class="border border-gray-300 text-gray-900 bg-gray-100 select-none">
+                        <tr>
+                            <th class="w-12 px-4 py-2">No.</th>
+                            <th>Item</th>
+                            <th class="w-40 px-4 py-2 text-right">Amount</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr v-for="(item, index) in items" :key="index" class="border border-gray-300">
+                            <td class="max-w-0 px-4 py-2 align-top">{{ index + 1 }}</td>
+                            <td class="max-w-0 px-4 py-2 align-top">
+                                <div class="truncate font-medium text-gray-900/100">
+                                    {{ item.name }}
+                                </div>
+                                <div class="truncate text-gray-500/100">
+                                    {{ item.description }}
+                                </div>
+                            </td>
+                            <td class="px-4 py-2 align-top text-right tabular-nums">{{ item.amount }}</td>
+                        </tr>
+                        <tr v-if="items.length === 0" class="border-b border-gray-100/100 bg-gray-100">
+                            <td class="text-center py-4 text-gray-500" colspan="100">No items in the list</td>
+                        </tr>
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                            <th scope="row" colspan="2" class="py-2 sm:text-right font-semibold text-gray-900 border-l border-b border-gray-300 bg-gray-100">Total</th>
+                            <td colspan="1" class="py-2 px-4 text-right font-semibold tabular-nums text-gray-900 border-b border-r border-gray-300 bg-gray-100">{{ claim_voucher.amount }}</td>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
 
-            <!-- <div class="flex flex-col mt-2 w-full">
-                <div class="text-gray-900 font-medium mb-3">Notes</div>
-                <div class="bg-gray-50 text-gray-500 text-sm px-4 py-6 border border-dashed whitespace-pre-wrap">
-                    
+            <div v-if="claim_voucher.approval" class="flex flex-col mt-2 w-full">
+                <div class="text-gray-900 font-medium mb-3">Approval Notes</div>
+                <div class="bg-gray-50 text-gray-700 text-sm px-4 py-6 border border-gray-300 whitespace-pre-wrap">
+                    {{ claim_voucher.approval }}
                 </div>
-            </div> -->
+            </div>
+        </div>
+
+        <div v-if="claim_voucher.status === 'Draft'" class="flex justify-end px-8 py-4 bg-gray-50 border-t border-gray-100">
+            <button @click="submitClaimVoucher" type="submit" class="btn-primary flex items-center">
+                Submit for Approval
+            </button>
         </div>
     </div>
 </template>
@@ -117,14 +114,14 @@ export default {
     },
     computed: {
         statusClass() {
-            return cva("px-1.5 py-1 text-xs font-medium uppercase tracking-wider border rounded-lg", {
+            return cva("absolute w-44 text-center select-none font-bold top-6 -right-12 py-2 px-12 rotate-45", {
                 variants: {
                     status: {
-                        Draft:"text-gray-600 border-gray-600",
-                        Submitted:"text-yellow-600 border-yellow-600",
-                        Approved:"text-orange-600 border-orange-600",
-                        Rejected:"text-red-600 border-red-600",
-                        Reimbursed:"text-green-600 border-green-600",
+                        Draft:"text-gray-500 bg-gray-100",
+                        Submitted:"text-yellow-500 bg-yellow-100",
+                        Approved:"text-orange-500 bg-orange-100",
+                        Rejected:"text-red-500 bg-red-100",
+                        Reimbursed:"text-green-500 bg-green-100",
                     }
                 }
             }) ({

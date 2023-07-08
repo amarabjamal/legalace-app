@@ -12,10 +12,10 @@
     </div>
 
     <div class="grid gap-6 mb-8 md:grid-cols-3 mt-4">
-        <div v-for="bankAccount in bankAccounts" class="min-w-0 bg-white border border-gray-300 rounded-md overflow-hidden ease-in-out duration-300 hover:shadow-md hover:scale-105 hover:-translate-y-5">
+        <div v-for="bank_account in bank_accounts.data" class="min-w-0 bg-white border border-gray-300 rounded-md overflow-hidden ease-in-out duration-300 hover:shadow-md hover:scale-105 hover:-translate-y-5">
             <div class="px-4 mb-2 border-b bg-gray-50 flex justify-between items-center">
-                <h4 class="py-2 text-sm uppercase font-semibold text-gray-500 w-1/2 truncate">{{ bankAccount.label }}</h4>
-                <span :class="accountTypeClass(bankAccount.bank_account_type.name)">{{ bankAccount.bank_account_type.name }}</span>
+                <h4 class="py-2 text-sm uppercase font-semibold text-gray-500 w-1/2 truncate">{{ bank_account.label }}</h4>
+                <span :class="accountTypeClass(bank_account.account_type)">{{ bank_account.account_type }}</span>
             </div>
             <p class="text-gray-600 p-2 text-sm">
                 <table class="border-separate border-spacing-2">
@@ -24,7 +24,7 @@
                             Bank Name
                         </td>
                         <td class="font-bold">
-                            <span class="font-bold">{{ bankAccount.bank_name }}</span>
+                            <span class="font-bold">{{ bank_account.bank_name }}</span>
                         </td>
                     </tr>
                     <tr>
@@ -32,7 +32,7 @@
                             Account Name
                         </td>
                         <td class="font-bold">
-                            {{ bankAccount.account_name }}
+                            {{ bank_account.account_name }}
                         </td>
                     </tr>
                     <tr>
@@ -40,7 +40,7 @@
                             Account Number
                         </td>
                         <td class="font-bold">
-                            {{ bankAccount.account_number }}
+                            {{ bank_account.account_number }}
                         </td>
                     </tr>
                     <tr>
@@ -48,7 +48,7 @@
                             SWIFT Code
                         </td>
                         <td class="font-bold">
-                            {{ bankAccount.swift_code }}
+                            {{ bank_account.swift_code }}
                         </td>
                     </tr>
                     <tr>
@@ -56,18 +56,18 @@
                             Account Type
                         </td>
                         <td class="font-bold">
-                            {{ bankAccount.bank_account_type.name }}
+                            {{ bank_account.account_type }}
                         </td>
                     </tr>
                 </table>
                 <div class="flex space-x-2 justify-end p-2 pr-4">
-                    <Link :href="`/admin/bank-accounts/${ bankAccount.id }`">View</Link>
-                    <Link :href="`/admin/bank-accounts/${ bankAccount.id }/edit`">Edit</Link>
-                    <Link @click="deleteBankAccount(bankAccount)" as="button" class="font-medium text-red-600 hover:underline">Delete</Link>
+                    <Link :href="`/admin/bank-accounts/${ bank_account.id }`">View</Link>
+                    <Link :href="`/admin/bank-accounts/${ bank_account.id }/edit`">Edit</Link>
+                    <Link @click="deleteBankAccount(bank_account)" as="button" class="font-medium text-red-600 hover:underline">Delete</Link>
                 </div>
             </p>
         </div>
-        <div v-if="bankAccounts.length === 0" class="md:col-span-3 h-24 flex justify-center items-center border border-gray-300 w-full text-center bg-gray-100 text-gray-500 rounded-md"><span>No records found.</span></div>
+        <div v-if="bank_accounts.data.length === 0" class="md:col-span-3 h-24 flex justify-center items-center border border-gray-300 w-full text-center bg-gray-100 text-gray-500 rounded-md"><span>No records found.</span></div>
     </div>
 </template>
 
@@ -89,7 +89,8 @@ export default {
     },
     layout: Layout,
     props: { 
-        bankAccounts: Object,
+        filters: Object,
+        bank_accounts: Object,
     },
     data() {
         return {
@@ -99,7 +100,7 @@ export default {
                 { link: null, label: 'Bank Accounts'},
             ],
             form: {
-                search: null,
+                search: this.filters.search,
             },
         }
     },
@@ -107,14 +108,14 @@ export default {
         form: {
           deep: true,
           handler: throttle(function () {
-            //this.$inertia.get(`/lawyer/case-files`, pickBy(this.form), {preserveState: true})
+            this.$inertia.get(`/admin/bank-accounts`, pickBy(this.form), {preserveState: true})
           }, 150),
         },
     },
     methods: {
-        deleteBankAccount(bankAccount) {
+        deleteBankAccount(bank_account) {
             if (confirm('Are you sure you want to delete this bank account?')) {
-                this.$inertia.delete(`/admin/bank-accounts/${ bankAccount.id }`);
+                this.$inertia.delete(`/admin/bank-accounts/${ bank_account.id }`);
             }
         },
         reset() {

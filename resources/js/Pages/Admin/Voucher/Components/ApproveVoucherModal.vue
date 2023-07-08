@@ -79,9 +79,9 @@
                                         </div>
                                     </div>
 
-                                    <div class="bg-gray-50 px-4 py-3 sm:flex sm:flex-row-reverse sm:px-6">
-                                        <button type="submit" class="inline-flex w-full justify-center rounded-md bg-green-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-green-500 sm:ml-3 sm:w-auto">Approve</button>
-                                        <button type="button" class="mt-3 inline-flex w-full justify-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 sm:mt-0 sm:w-auto" @click="closeModal">Close</button>
+                                    <div class="bg-gray-50 px-4 py-3 flex flex-row-reverse space-x-2 space-x-reverse">
+                                        <loading-button :loading="form.processing" :disabled="!form.isDirty" class="btn-primary" type="submit">Confirm</loading-button>
+                                        <button type="button" class="btn-cancel" @click="closeModal">Close</button>
                                     </div>
                                 </DialogPanel>
                             </div>
@@ -103,6 +103,7 @@ import {
 } from '@headlessui/vue'
 import SelectInput from '../../../../Shared/SelectInput';
 import TextareaInput from '../../../../Shared/TextareaInput';
+import LoadingButton from '../../../../Shared/LoadingButton'
 import axios from 'axios';
 
 export default {
@@ -114,6 +115,7 @@ export default {
         DialogTitle,
         SelectInput,
         TextareaInput,
+        LoadingButton,
     },
     props: {
         isOpen: Boolean,

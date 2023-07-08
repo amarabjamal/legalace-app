@@ -130,6 +130,7 @@ class InvoiceController extends Controller
                 'notes' => $invoice->notes,
                 'status_value' => $invoice->status->value,
                 'status_label' => Invoice::STATUS[$invoice->status->value],
+                'sent_at' => $invoice->formatted_sent_at,
                 'payment' => isset($invoice->payment) ? [
                     'date' => $invoice->payment->formatted_date,
                     'method' => InvoicePayment::PAYMENT_METHODS[$invoice->payment->payment_method_code->value],
@@ -165,8 +166,8 @@ class InvoiceController extends Controller
                 'company' => $invoice->company->only('name', 'address'),
                 'client' => $invoice->caseFile->client->only('name', 'address'),
                 'number' => $invoice->invoice_number,
-                'invoice_date' => $invoice->issued_at,
-                'due_date' => $invoice->due_at,
+                'invoice_date' => $invoice->issued_at->format('Y-m-d'),
+                'due_date' => $invoice->due_at->format('Y-m-d'),
                 'notes' => $invoice->notes,
                 'items_id' => $invoice->disbursementItems->pluck('id'),
             ],
@@ -270,7 +271,7 @@ class InvoiceController extends Controller
 
     public function emailInvoice(CaseFile $case_file, Invoice $invoice) 
     {
-        if($invoice->status != InvoiceStatusEnum::Open && $invoice->status != InvoiceStatusEnum::Sent) {
+        if($invoice->status != InvoiceStatusEnum::Draft && $invoice->status != InvoiceStatusEnum::Open && $invoice->status != InvoiceStatusEnum::Sent) {
             return back()->with('errorMessage', 'Invalid action.');
         }
 
@@ -290,6 +291,21 @@ class InvoiceController extends Controller
         }
 
         return back()->with('successMessage', 'The invoice is emailed to the client.');
+    }
+
+    public function markSent(CaseFile $case_file, Invoice $invoice)
+    {
+        try {
+            DB::transaction(function() use ($invoice) {
+                $invoice->sent_at = now();
+                $invoice->save();
+            });
+        } catch (\Exception $e)
+        {
+            return back()->with('errorMessage', 'Failed to mark this invoice as sent.');
+        }
+
+        return back()->with('successMessage', 'This invoice is marked as sent.');
     }
 
     public function downloadPdf(CaseFile $case_file, Invoice $invoice)

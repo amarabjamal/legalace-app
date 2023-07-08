@@ -8,6 +8,7 @@ use App\Http\Requests\UpdateBankAccountRequest;
 use App\Models\BankAccount;
 use Brick\Money\Money;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Request;
 use Inertia\Inertia;
 
 class BankAccountController extends Controller
@@ -23,7 +24,19 @@ class BankAccountController extends Controller
     {
 
         return Inertia::render('Admin/BankAccount/Index', [
-            'bankAccounts' => $this->bank_account->allBankAccounts(),
+            'filters' => Request::all('search'),
+            'bank_accounts' => BankAccount::filter(Request::only('search'))
+                ->paginate(25)
+                ->withQueryString()
+                ->through(fn($bank_account) => [
+                    'id' => $bank_account->id,
+                    'label' => $bank_account->label,
+                    'bank_name' => $bank_account->bank_name,
+                    'account_name' => $bank_account->account_name,
+                    'account_number' => $bank_account->account_number,
+                    'swift_code' => $bank_account->swift_code,
+                    'account_type' => $bank_account->bankAccountType->name,
+                ])
         ]);
     }
 

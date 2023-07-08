@@ -8,6 +8,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreClaimVoucherApprovalRequest;
 use App\Models\ClaimVoucher;
 use App\Notifications\ClaimVoucherApprovedNotification;
+use App\Notifications\ClaimVoucherRejectedNotification;
 use Illuminate\Support\Facades\DB;
 
 class VoucherRequestController extends Controller
@@ -16,8 +17,7 @@ class VoucherRequestController extends Controller
     {
 
         return inertia('Admin/Voucher/Index', [
-            'voucher_requests' => ClaimVoucher::pending()
-                ->where('approver_user_id', '=', auth()->id())
+            'voucher_requests' => ClaimVoucher::where('approver_user_id', '=', auth()->id())
                 ->paginate(25)
                 ->through(fn ($voucher) => [
                     'id' => $voucher->id,
@@ -71,8 +71,26 @@ class VoucherRequestController extends Controller
         return back()->with('successMessage', 'The claim voucher has been approved.');
     }
 
-    public function rejectVoucher()
+    public function rejectVoucher(ClaimVoucher $voucher_request)
     {
+        if($voucher_request->status !== ClaimVoucherStatusEnum::Submitted) {
+            return back()->with('errorMessage', "The claim voucher status is no longer 'Submitted'.");
+        }
         
+        try {
+            DB::transaction(function() use ($voucher_request) {
+                $voucher_request->status = ClaimVoucherStatusEnum::Rejected;
+                $voucher_request->save();
+
+                $voucher_request->items()->update(['status' => DisbursementItemStatusEnum::Denied]);
+                
+                $voucher_request->requester->notify(new ClaimVoucherRejectedNotification($voucher_request, auth()->user()));
+            });
+
+        } catch (\Exception $e) {
+            return back()->with('errorMessage', 'Failed to reject this claim voucher.');           
+        }
+
+        return back()->with('successMessage', 'This claim voucher has been rejected.');
     }
 }

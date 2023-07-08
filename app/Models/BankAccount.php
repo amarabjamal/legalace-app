@@ -56,6 +56,18 @@ class BankAccount extends Model
         $query->where('bank_account_type_id', '=',  BankAccountType::IS_FIRM_ACCOUNT);
     }
 
+    public function scopeFilter($query, array $filters)
+    {
+        $query->when($filters['search'] ?? null, function ($query, $search) {
+            $query->where(function ($query) use ($search) {
+                $query->where('label', 'like', '%'.$search.'%')
+                    ->orWhere('bank_name', 'like', '%'.$search.'%')
+                    ->orWhere('account_name', 'like', '%'.$search.'%')
+                    ->orWhere('account_number', 'like', '%'.$search.'%');
+            });
+        });
+    }
+
     public function allBankAccounts() 
     {
         return $this->with('createdBy:id,name', 'bankAccountType:id,name')->get();

@@ -78,7 +78,7 @@
                                     </div>
 
                                     <div class="px-4 py-6 flex flex-row-reverse space-x-2 space-x-reverse  sm:px-6">
-                                        <button type="submit" :disabled="form.processing || !form.isDirty" class="btn-primary">Save Payment</button>
+                                        <loading-button type="submit" :loading="form.processing" :disabled="!form.isDirty" class="btn-primary">Save Payment</loading-button>
                                         <button type="button" class="btn-close" @click="closeModal">Cancel</button>
                                     </div>
                                 </DialogPanel>
@@ -100,12 +100,13 @@ import DateInput from '../../../../Shared/DateInput';
 import SelectInput from '../../../../Shared/SelectInput';
 import FileInput from '../../../../Shared/FileInput';
 import TextareaInput from '../../../../Shared/TextareaInput';
+import LoadingButton from '../../../../Shared/LoadingButton';
 
 export default {
     components: {
         TransitionRoot, TransitionChild, Dialog, DialogPanel, DialogTitle,
         TabGroup, TabList, Tab, TabPanels, TabPanel,
-        DateInput, SelectInput, FileInput, TextareaInput,
+        DateInput, SelectInput, FileInput, TextareaInput, LoadingButton,
     },
     props: {
         isOpen: Boolean,
