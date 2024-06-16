@@ -1,327 +1,242 @@
 <template>
-    <Head title="Generate Quotation" />
+    <Head :title="page_title" />
 
-    <h1 class="mb-6 text-xl font-bold">
-        <Link class="text-blue-500 hover:text-blue-600" href="/lawyer/case-files/">Case Files</Link>
-        <span class="text-blue-500 font-medium mx-2">/</span>
-        <Link class="text-blue-500 hover:text-blue-600" :href="`/lawyer/case-files/${form.case_file_id}`">{{ case_file.file_number }}</Link>
-        <span class="text-blue-500 font-medium mx-2">/</span>
-        <span class="font-medium">Quotation</span>
-    </h1>
+    <page-heading :page_title="page_title" :breadcrumbs="breadcrumbs"/>
 
-    <div class="mx-auto max-w-7xl py-16 px-4 sm:px-6 lg:px-8">
-        <div class="mx-auto grid max-w-2xl grid-rows-1 items-start gap-x-8 gap-y-8 lg:mx-0 lg:max-w-none lg:grid-cols-3">
-            <div class="lg:col-start-3 lg:row-end-1">
-                <div class="rounded-lg bg-gray-50/100 shadow-sm ring-gray-900/5">
-                    <dl></dl>
-                    <div class="mt-6 border-t border-gray-900/5 px-6 py-6">
-                        <a href="#" class="text-sm font-semibold leading-6 text-gray-900/100">Download receipt →</a>
+    <div class="w-full grid lg:grid-cols-3 gap-4">
+        <div class="lg:col-start-3 lg:row-end-1 w-full max-w-3xl lg:max-w-md p-8 h-fit bg-white rounded-md border border-gray-300 overflow-hidden">
+            <div class="mx-auto w-full">
+                <Disclosure v-slot="{ open }">
+                    <DisclosureButton class="flex w-full justify-between rounded-sm bg-gray-100 px-4 py-2 text-left text-lg font-medium text-gray-900 hover:bg-gray-200 focus:outline-none focus-visible:ring focus-visible:ring-gray-500 focus-visible:ring-opacity-75">
+                        <div>
+                            <span>Send</span>
+                            <div class="text-sm text-gray-600 font-light">Last Sent <span class="font-medium font-gray-700">{{ quotation.sent_at }}</span></div>
+                        </div>
+                        <ChevronUpIcon :class="open ? 'rotate-180 transform' : ''" class="h-5 w-5 text-gray-500"/>
+                    </DisclosureButton>
+
+                    <transition
+                        enter-active-class="transition duration-100 ease-out"
+                        enter-from-class="transform scale-95 opacity-0"
+                        enter-to-class="transform scale-100 opacity-100"
+                        leave-active-class="transition duration-75 ease-out"
+                        leave-from-class="transform scale-100 opacity-100"
+                        leave-to-class="transform scale-95 opacity-0"
+                    >
+                        <DisclosurePanel class="px-4 pt-4 pb-2 text-sm text-gray-500">
+                            <div class="space-x-2">
+                                <button @click="emailQuotation" class="btn-primary">Send Email</button>
+                                <button @click="markSent" class="btn-secondary">Mark Sent</button>
+                            </div>
+                        </DisclosurePanel>
+                    </transition>
+                </Disclosure>
+                <Disclosure as="div" class="mt-2" v-slot="{ open }">
+                    <DisclosureButton class="flex w-full justify-between rounded-sm bg-gray-100 px-4 py-2 text-left text-lg font-medium text-gray-900 hover:bg-gray-200 focus:outline-none focus-visible:ring focus-visible:ring-gray-500 focus-visible:ring-opacity-75">
+                        <div>
+                            <span>Get Paid</span>
+                            <div class="text-sm text-gray-600 font-light">Amount Due 
+                                <span v-if="quotation.is_paid" class="font-medium font-gray-700 tabular-nums">
+                                    RM 0.00
+                                </span>
+                                <span v-else class="font-medium font-gray-700 tabular-nums">
+                                    {{  quotation.total }}
+                                </span>
+                            </div>
+                        </div>
+                        <ChevronUpIcon :class="open ? 'rotate-180 transform' : ''" class="h-5 w-5 text-gray-500"/>
+                    </DisclosureButton>
+                    
+                    <transition
+                        enter-active-class="transition duration-100 ease-out"
+                        enter-from-class="transform scale-95 opacity-0"
+                        enter-to-class="transform scale-100 opacity-100"
+                        leave-active-class="transition duration-75 ease-out"
+                        leave-from-class="transform scale-100 opacity-100"
+                        leave-to-class="transform scale-95 opacity-0"
+                    >
+                        <DisclosurePanel class="px-4 pt-4 pb-2 text-sm text-gray-500">
+                            <button v-if="quotation.is_paid" disabled class="btn-primary">Add Payment</button>
+                            <button v-else @click="addPayment" class="btn-primary">Add Payment</button>
+                            <div class="mt-4">Payment received: 
+                                <span v-if="!quotation.is_paid" class="text-base font-medium">No record.</span>
+                                <div v-else>Paid on {{  quotation.payment.date }} through {{ quotation.payment.method }}</div>
+                            </div>
+                        </DisclosurePanel>
+                    </transition>
+                </Disclosure>
+                <Disclosure as="div" class="mt-2" v-slot="{ open }">
+                    <DisclosureButton class="flex w-full justify-between rounded-sm bg-gray-100 px-4 py-2 text-left text-lg font-medium text-gray-900 hover:bg-gray-200 focus:outline-none focus-visible:ring focus-visible:ring-gray-500 focus-visible:ring-opacity-75">
+                        <span>Share</span>
+                        <ChevronUpIcon :class="open ? 'rotate-180 transform' : ''" class="h-5 w-5 text-gray-500"/>
+                    </DisclosureButton>
+                    
+                    <transition
+                        enter-active-class="transition duration-100 ease-out"
+                        enter-from-class="transform scale-95 opacity-0"
+                        enter-to-class="transform scale-100 opacity-100"
+                        leave-active-class="transition duration-75 ease-out"
+                        leave-from-class="transform scale-100 opacity-100"
+                        leave-to-class="transform scale-95 opacity-0"
+                    >
+                        <DisclosurePanel class="px-4 pt-4 pb-2 text-sm text-gray-500">
+                            <div>
+                                <a :href="`/lawyer/case-files/${this.case_file.id}/quotation/pdf`" target="_blank" class="btn-primary">Download PDF</a>
+                            </div>
+                        </DisclosurePanel>
+                    </transition>
+                </Disclosure>
+            </div>
+        </div>
+
+        <div class="lg:col-span-2 max-w-3xl relative bg-white rounded-md border border-gray-300 overflow-hidden">
+            <div v-if="quotation.is_paid" class="absolute w-44 text-center text-green-500 select-none font-bold top-6 -right-12 bg-green-100 py-2 px-12 rotate-45">
+                Paid
+            </div>
+            <div v-else class="absolute w-44 text-center text-blue-500 select-none font-bold top-6 -right-12 bg-blue-100 py-2 px-12 rotate-45">
+                Draft
+            </div>
+            <div class="p-8 space-y-12">
+                <div class="border-b border-gray-900/10 pb-12">
+                    <h2 class="text-base font-semibold leading-7 text-gray-900">Scope of services & legal fees</h2>
+                    <p class="mt-1 text-sm leading-6 text-gray-600">
+                        The total amount of the items below is the intial legal fees for this case file.
+                    </p>
+        
+                    <!-- Work Description Table -->
+                    <div class="mt-10 w-full overflow-x-auto overflow-y-hidden">
+                        <table class="w-full whitespace-nowrap text-left text-sm leading-6">
+                            <thead class="border border-gray-300 text-gray-900 bg-gray-100 select-none">
+                                <tr>
+                                    <th class="w-12 px-4 py-2">No.</th>
+                                    <th>Work Description</th>
+                                    <th class="w-40 px-4 text-right">Amount</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr v-for="(work_description, index) in quotation.work_descriptions" class="border border-gray-300">
+                                    <td class="max-w-0 px-4 py-2 align-top">
+                                        {{ index + 1 }}
+                                    </td>
+                                    <td class="max-w-0 pr-4 py-2 align-top whitespace-normal">
+                                        {{ work_description.description }}
+                                    </td>
+                                    <td class="pr-4 pl-0 py-2 align-top text-right tabular-nums">
+                                        {{  work_description.fee }}
+                                    </td>
+                                </tr>
+                                <tr v-if="quotation.work_descriptions.length === 0" class="border-x border-gray-300 bg-gray-100">
+                                    <td  class="text-center py-2 text-gray-500" colspan="100">No items in the list</td>
+                                </tr>
+                            </tbody>
+                            <tfoot>
+                                <tr>
+                                    <th scope="row" colspan="2" class="sm:pt-2 sm:text-right font-normal text-gray-700 border-t border-l border-gray-300">Subtotal</th>
+                                    <td colspan="1" class="pt-2 px-4 text-right text-gray-900 tabular-nums border-t border-r border-gray-300">{{ quotation.subtotal }}</td>
+                                </tr>
+                                <tr>
+                                    <th scope="row" colspan="2" class="py-2 sm:text-right font-normal text-gray-700 border-b border-l border-gray-300">Tax (0%)</th>
+                                    <td colspan="1" class="py-2 px-4 text-right tabular-nums text-gray-900 border-b border-r border-gray-300">{{ quotation.tax }}</td>
+                                </tr>
+                                <tr>
+                                    <th scope="row" colspan="2" class="py-2 sm:text-right font-semibold text-gray-900 border-l border-b border-gray-300 bg-gray-100">Total</th>
+                                    <td colspan="1" class="py-2 px-4 text-right font-semibold tabular-nums text-gray-900 border-b border-r border-gray-300 bg-gray-100">{{  quotation.total }}</td>
+                                </tr>
+                            </tfoot>
+                        </table>
                     </div>
                 </div>
-            </div>
-    
-            <div class="bg-white/100 mx-4 px-4 py-8 shadow-sm ring-gray-900/5 sm:mx-0 sm:rounded-lg sm:px-8 sm:pb-14 lg:row-span-2">
-                <h2 class="text-base font-semibold text-gray-900/100">Invoice</h2>
-    
-                <dl class="mt-6 grid grid-cols-1 text-sm leading-6 sm:grid-cols-2 ">
-                    <div class="pr-4">
-                        <dt class="inline text-gray-700/100">Issued on</dt>
-                        <dd class="inline text-gray-700/100">
-                            <time datetime="2023-23-01">January 23, 2023</time>
-                        </dd>
-                    </div>
-                    <div class="mt-2 sm:mt-0 sm:pl-4">
-                        <dt class="inline text-gray-700/100">Due on</dt>
-                        <dd class="inline text-gray-700/100">
-                            <time datetime="2023-23-01">January 23, 2023</time>
-                        </dd>
-                    </div>
-                    <div class="mt-6 border-t border-gray-900/5 pt-6 sm:pr-4"></div>
-                    <div class="mt-8 sm:mt-6 sm:border-t sm:border-gray-900/5 sm:pl-4 sm:pt-6"></div>
-                </dl>
 
-                <table class="mt-16 w-full whitespace-nowrap text-left text-sm leading-6">
-                    <thead class="border-b border-gray-200/100 text-gray-900/100">
-                        <tr>
-                            <th scope="col"></th>
-                            <th scope="col"></th>
-                            <th scope="col"></th>
-                        </tr>
-                    </thead>
-                </table>
+                <div>
+                    <h2 class="text-base font-semibold leading-7 text-gray-900">Initial deposit</h2>
+                    <p class="mt-1 text-sm leading-6 text-gray-600">
+                        The deposit amount and the payment instructions for the client.
+                    </p>
+
+                    <div class="mt-10 flex space-x-2">
+                        <div class="w-1/2">
+                            <label class="form-label">Amount</label>
+                            {{ quotation.deposit_amount }}
+                        </div>
+
+                        <div class="w-1/2">
+                            <div class="form-label">Pay To</div>
+                            <div class="relative w-full bg-gray-50 border-2 border-gray-200 rounded-md px-6 py-4">
+                                <div class="absolute top-0 right-0 p-1">
+                                    <div class="px-2 py-1 bg-blue-100 text-blue-500 text-xs rounded-md border border-blue-400">
+                                        {{ quotation.bank_account.type }}
+                                    </div>
+                                </div>
+                                <p class="mt-1 h-4 w-full rounded-sm text-sm truncate text-gray-700 font-semibold">{{ quotation.bank_account.label }}</p>
+                                <p class="mt-2.5 h-4 w-full rounded-sm truncate text-sm text-gray-600 font-medium"><span class="text-gray-400 select-none">Bank Name</span> {{ quotation.bank_account.bank_name }}</p>
+                                <p class="mt-2.5 h-4 w-full rounded-sm truncate text-sm text-gray-600 font-medium"><span class="text-gray-400 select-none">Account Name</span> {{ quotation.bank_account.account_name }}</p>
+                                <p class="mt-2.5 h-4 w-full rounded-sm truncate text-sm text-gray-600 font-medium"><span class="text-gray-400 select-none">Account Number</span> {{ quotation.bank_account.account_number }}</p>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
             </div>
 
-            <div class="col-start-3">
-                <h2 class="text-sm leading-6 font-semibold text-gray-900/100">Activity</h2>
+            <div :class="{'hidden': quotation.is_paid}" class="px-8 py-4 bg-gray-50 border-t border-gray-100">
+                <div class="flex flex-row-reverse space-x-2 space-x-reverse items-center justify-start ">
+                    <button v-if="quotation.is_paid" disabled class="btn-primary">
+                        Edit
+                    </button> 
+                    <Link v-else as="button" :href="`/lawyer/case-files/${case_file.id}/quotation/edit`" class="btn-primary">
+                        Edit
+                    </Link> 
+                </div>
             </div>
         </div>
     </div>
 
-    <div class="card">
-        <div class="card-header flex justify-between items-center">
-            <div class="card-header-title font-size-lg text-capitalize font-weight-normal">
-                Quotation for {{ case_file.matter }} ({{ case_file.file_number }})
-            </div>
-            <div>
-                <a target="_blank" :href="`/lawyer/case-files/${form.case_file_id}/quotation/pdf`" class="mr-2 text-white bg-blue-500 hover:bg-blue-600 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2 text-center">PDF</a>
-                <a :href="`/lawyer/case-files/${form.case_file_id}/quotation/email`"  class="text-white bg-blue-500 hover:bg-blue-600 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2 text-center">Email</a>
-            </div>
-        </div>
-
-        <div class="card-body">
-            <form @submit.prevent="submit">
-                <div class="quotation-section">
-                    <h3>SCOPE OF SERVICES & LEGAL FEES</h3>
-
-                    <table class="w-full">
-                        <thead class="text-xs text-gray-200 uppercase bg-blue-900">
-                            <th class="px-6 py-3">No.</th>
-                            <th class="px-6 py-3">Work Descriptions</th>
-                            <th class="px-6 py-3">Fee (RM)</th>
-                            <th class="px-3 py-3"></th>
-                        </thead>
-                        <tbody>
-                            <tr 
-                                v-for="(workDescription, index) in form.work_descriptions" 
-                                :key="index"
-                                class="border-slate-300 border-b text-gray-700"
-                                valign="top"
-                            >
-                                <td class="px-6 py-3">
-                                    {{ index + 1 }}
-                                </td>
-                                <td class="px-6 py-3">
-                                    <input 
-                                        v-model="workDescription.description"
-                                        :aria-label="`Work Description #${index+1}`"
-                                        type="text" 
-                                        required
-                                        class="mr-4 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
-                                    >
-                                    <p v-if="form.errors[`work_descriptions.${index}.description`]" v-text="form.errors[`work_descriptions.${index}.description`]" class="mt-2 text-sm text-red-600"></p>
-                                </td>
-                                <td class="px-6 py-3">
-                                    <input 
-                                        v-model="workDescription.fee"
-                                        @change="calculateTotal"
-                                        min="0.00"
-                                        step="0.01"
-                                        type="number"
-                                        required 
-                                        class="text-right mr-4 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
-                                    >
-                                    <p v-if="form.errors[`work_descriptions.${index}.fee`]" v-text="form.errors[`work_descriptions.${index}.fee`]" class="mt-2 text-sm text-red-600"></p>
-                                </td>
-                                <td class="py-3">
-                                    <button 
-                                        :disabled="form.work_descriptions.length <= 1" 
-                                        @click="removeWorkDescription(index)"
-                                        
-                                        :class="'text-red-500'"
-                                    >
-                                        <TrashIcon class="inline-block h-5 w-5"/>
-                                    </button>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-
-                    <div class="my-4 w-100 flex justify-center">
-                        <button class="button text-center" @click="addWorkDescription">
-                            + Add a description
-                        </button>
-                    </div>
-
-                    <div class="mt-5 flex justify-end">
-                        <div class="flex">
-                            <div class="mr-3">
-                                <div>
-                                    <p class="text-muted">Subtotal</p>
-                                </div>
-                                <div>
-                                    <p class="text-muted">Tax (6%)</p>
-                                </div>
-                                <div>
-                                    <h3 class="text-lg">Total</h3>
-                                </div>
-                            </div>
-                            <div class="total-column">
-                                <div>
-                                    <span>{{ subtotal }}</span>
-                                </div>
-                                <div>
-                                    <span>{{ tax }}</span>
-                                </div>
-                                <div>
-                                    <h3>{{ total }}</h3>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="quotation-section">
-                    <h3>INITIAL DEPOSIT</h3>
-
-                    <div class="flex">
-                        <div class="m-3 basis-1/2">
-                            <label 
-                                for="deposit_amount" 
-                                class="block mb-2 text-sm font-medium text-gray-900"
-                                >
-                                Initial Deposit
-                            </label>
-                            <input 
-                                v-model="form.deposit_amount"
-                                type="number" 
-                                min="0.00"
-                                step="0.01"
-                                id="deposit_amount" 
-                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" 
-                                placeholder="" 
-                                required
-                            />
-                            <p v-if="form.errors.deposit_amount" v-text="form.errors.deposit_amount" class="mt-2 text-sm text-red-600"></p>
-                        </div>
-
-
-                        <div class="m-3 basis-1/2">
-                            <label 
-                                for="bank_account_id" 
-                                class="block mb-2 text-sm font-medium text-gray-700 dark:text-gray-200"
-                                >
-                                Client Account
-                            </label>
-                            <select 
-                                v-model="form.bank_account_id"
-                                id="bank_account_id" 
-                                @change="getBankAccountDetails($event)"
-                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
-                                required
-                            >
-                                <option disabled value="">Please select client account</option>
-                                <option v-for="client_bank_account in client_bank_accounts" :value="client_bank_account.id">{{client_bank_account.label}}</option>
-                            </select>
-                            <p v-if="form.errors.bank_account_id" v-text="form.errors.bank_account_id" class="mt-2 text-sm text-red-600"></p>
-                        </div>
-                    </div>
-
-                </div>
-                
-                <div class="quotation-section flex justify-end">
-                    <button 
-                        type="submit" 
-                        class="text-white bg-blue-500 hover:bg-blue-600 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2 text-center"
-                        :disabled="form.processing"
-                        >
-                        Save
-                    </button>
-                </div>
-
-            </form>
-        </div>
-    </div>
+    <add-payment-modal v-if="!quotation.is_paid" :isOpen="show_add_payment_modal" :caseFileId="case_file.id" :modalProps="modal_props" @close-modal="show_add_payment_modal = false" />
 </template>
 
 <script>
 import Layout from "../Shared/Layout";
-import { useForm } from "@inertiajs/inertia-vue3";
-import { TrashIcon } from "@heroicons/vue/outline";
-import { ref } from "vue";
-import $ from "jquery";
+import { Disclosure, DisclosureButton, DisclosurePanel } from '@headlessui/vue'
+import { ChevronUpIcon } from "@heroicons/vue/outline"; 
+import AddPaymentModal from './Components/AddPaymentModal';
 
 export default { 
-    setup (props) {
-        let form = useForm({
-            'case_file_id' : props.case_file.id,
-            'work_descriptions' : props.case_file.work_descriptions,
-            'deposit_amount': props.case_file.quotation.deposit_amount,
-            'bank_account_id' : props.case_file.quotation.bank_account_id,
-        });
-
-        let subtotal = ref(0);
-        let tax = ref(0);
-        let total = ref(0);
-
-        return { 
-            form, 
-            subtotal,
-            tax,
-            total
-        };
-    },
-    methods: {
-        addWorkDescription() {
-            this.form.work_descriptions.push({
-                "description" : "",
-                "fee" : 0.00,
-            });
-        },
-        removeWorkDescription(index) {
-            this.form.work_descriptions.splice(index, 1);
-            this.calculateTotal();
-        },
-        calculateTotal() {
-            this.subtotal = 0;
-            this.form.work_descriptions.forEach(element => {
-                this.subtotal += element.fee;
-            });
-
-            this.tax = this.subtotal * 0.06;
-            this.total = this.subtotal + this.tax;
-        },
-        getBankAccountDetails(event) {
-            $.ajax({
-                URL:'/lawyer/getbankaccountdetails/' + event.target.value,
-                type: 'get',
-                dataType: 'text',
-                success: function (response) {
-                    // console.log(response);
-                    // alert('Response: ' + response.data);
-                },
-                error: function (request, error) {
-                    alert('error: ' + error);
-                }
-            });
-        },
-        submit() {
-            this.form.put(`/lawyer/case-files/${this.case_file.id}/quotation/`);
-        }
-    },
     components: { 
-        TrashIcon,
-    },
-    props: {
-        case_file : Object,
-        client_bank_accounts : Object,
-    },
-    mounted: function mounted() {
-        this.calculateTotal()
+        Disclosure,
+        DisclosureButton,
+        DisclosurePanel,
+        ChevronUpIcon,
+        AddPaymentModal,
     },
     layout: Layout,
+    props: {
+        case_file : Object,
+        quotation: Object,
+        modal_props: Object,
+    },
+    data() {
+        return {
+            page_title: 'Quotation',
+            breadcrumbs: [
+                { link: `/lawyer/dashboard`, label: 'Lawyer'},
+                { link: `/lawyer/case-files/`, label: 'My Cases'},
+                { link: `/lawyer/case-files/${this.case_file.id}`, label: this.case_file.file_number},
+                { link: null, label: 'Quotation'},
+            ],
+            show_add_payment_modal: false,
+        }
+    },
+    methods: {
+        emailQuotation() {
+            this.$inertia.post(`/lawyer/case-files/${this.case_file.id}/quotation/email-quotation`);
+        },
+        markSent() {
+            this.$inertia.post(`/lawyer/case-files/${this.case_file.id}/quotation/mark-sent`);
+        },
+        addPayment() {
+            this.show_add_payment_modal = true;
+        },
+    },
 };
 </script>
-
-<style scoped>
-.client-info {
-    margin: 20px 0px;
-    padding: 20px 0px;
-    border-top: 1px solid #000;
-    border-bottom: 1px solid #000;
-}
-
-.quotation-section {
-    margin: 20px 0px;
-    padding: 0px 10px;
-}
-
-.quotation-section h3 {
-    font-weight: bold;
-    margin-bottom: 10px;
-}
-
-.total-column {
-    min-width: 100px;
-    text-align: right;
-}
-</style>

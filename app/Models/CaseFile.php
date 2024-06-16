@@ -5,60 +5,80 @@ namespace App\Models;
 use App\Models\CaseFile\DisbursementItem\DisbursementItem;
 use App\Models\CaseFile\Invoices\Invoice;
 use App\Traits\HasCompanyScope;
+use Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Facades\Auth;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasManyThrough;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class CaseFile extends Model
 {
-    use HasFactory;
+    use HasFactory, HasCompanyScope;
 
     protected $table = 'case_files';
     protected $primaryKey= 'id';
     protected $fillable = [
+        'company_id',
         'matter',
         'type',
         'file_number',
         'no_conflict_checked',
         'client_id',
-        'created_by',
-    ];
-    protected $hidden = [
-        'created_at',
-        'updated_at',
+        'created_by_user_id',
     ];
 
-    public function client() 
+    protected $casts = [
+        'no_conflict_checked' => 'boolean',
+    ];
+
+    public function getFormattedNameAttribute(): String
+    {
+        return $this->createdBy->id === auth()->id() ? $this->createdBy->name . ' (You)' : $this->createdBy->name;
+    }
+
+    public function company(): BelongsTo
+    {
+        return $this->belongsTo(Company::class, 'company_id', 'id');
+    }
+
+    public function client(): BelongsTo
     {
         return $this->belongsTo(Client::class, 'client_id', 'id');
     }
 
-    public function createdBy() 
+    public function createdBy(): BelongsTo
     {
-        return $this->belongsTo(User::class, 'created_by', 'id');
+        return $this->belongsTo(User::class, 'created_by_user_id', 'id');
     }
 
-    public function quotation()
+    public function conflictReports(): HasMany
+    {
+        return $this->hasMany(ConflictReport::class);
+    }
+
+    public function quotation(): HasOne
     {
         return $this->hasOne(Quotation::class);
     }
 
-    public function workDescriptions() 
+    public function workDescriptions(): HasManyThrough
     {
         return $this->hasManyThrough(WorkDescription::class, Quotation::class);
     }
 
-    public function disbursementItems() 
+    public function disbursementItems(): HasMany
     {
         return $this->hasMany(DisbursementItem::class);
     }
 
-    public function invoices()
+    public function invoices(): HasMany
     {
         return $this->hasMany(Invoice::class);
     }
 
-    public function invoicePayments()
+    public function invoicePayments(): HasManyThrough
     {
         return $this->hasManyThrough(InvoicePayment::class, Invoice::class);
     }
@@ -84,30 +104,11 @@ class CaseFile extends Model
 
     public function scopeMyFiles($query) 
     {
-        $query->where('created_by', '=', auth()->id())->with('client:id,name');
+        $query->where('created_by_user_id', '=', auth()->id())->with('client:id,name');
     }
 
-    public function myCaseFile() 
+    public function hasQuotation(): bool
     {
-
-        return $this->where('created_by', '=', Auth::id())
-            ->with('client:id,name')
-            ->get();
-    }
-
-    public function getCaseFileById($id)  
-    {
-        
-        return $this->where('id', '=', $id)
-            ->with('client:id,name', 'createdBy:id,name')
-            ->first();
-    }
-
-    public function getCaseFileByIdWithAddress($id)  
-    {
-        
-        return $this->where('id', '=', $id)
-            ->with('client:id,name,address', 'createdBy:id,name')
-            ->first();
+        return $this->quotation()->exists();
     }
 }

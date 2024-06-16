@@ -24,9 +24,10 @@ class UpdateQuotationRequest extends FormRequest
     public function rules()
     {
         return [
+            'work_descriptions' => ['required', 'array'],
             'work_descriptions.*.description' => ['required', 'string'],
-            'work_descriptions.*.fee' => ['required', 'regex:/^\d+(\.\d{1,2})?$/'],
-            'deposit_amount' => ['required', 'regex:/^\d+(\.\d{1,2})?$/'],
+            'work_descriptions.*.fee' => ['required', 'numeric', 'decimal:2', 'between:0.01,999999999.99'],
+            'deposit_amount' => ['required', 'numeric', 'decimal:2', 'between:0.01,999999999.99'],
             'bank_account_id' => ['required', 'exists:bank_accounts,id']
         ];
     }
@@ -34,7 +35,9 @@ class UpdateQuotationRequest extends FormRequest
     public function messages()
     {
         return [
-            'work_descriptions.*.description.required' => 'The item :position description cannot be empty.'
+            'work_descriptions.required' => 'The item list cannot be empty.',
+            'work_descriptions.*.description.required' => 'The work desc :position cannot be empty.',
+            'work_descriptions.*.fee.between' => 'The work fee :position must be between 0.01 and 999999999.99.',
         ];
     }
 }

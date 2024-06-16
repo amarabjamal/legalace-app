@@ -30,6 +30,7 @@ class StoreDisbursementItemRequest extends FormRequest
             'company_id' => auth()->user()->company_id,
             'status' => DisbursementItemStatusEnum::Recorded->value,
             'case_file_id' => $this->case_file->id,
+            'created_by_user_id' => auth()->id(),
         ]);
     }
 
@@ -45,7 +46,7 @@ class StoreDisbursementItemRequest extends FormRequest
             'name' => ['required', 'string', 'max:255'],
             'description' => ['nullable', 'string', 'max:255'],
             'amount' => ['required', 'numeric', 'decimal:2', 'between:0.01,999999999.99'],
-            'receipt' => ['nullable', 'file', 'mimes:pdf,xlxs,xlx,docx,doc,csv,txt,png,gif,jpg,jpeg', 'max:2048'],
+            'receipt' => ['required', 'file', 'mimes:pdf,xlxs,xlx,docx,doc,csv,txt,png,gif,jpg,jpeg', 'max:2048'],
             'fund_type' => ['required', new Enum(DisbursementItemFundTypeEnum::class)],
             'record_type_id' => ['required', 'exists:disbursement_item_types,id'],
             'company_id' => ['required', 'exists:companies,id'],

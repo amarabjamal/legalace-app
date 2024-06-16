@@ -1,268 +1,273 @@
 <template>
-    <Head title="Generate Quotation" />
+    <Head :title="page_title"/>
 
-    <Link class="my-6" :href="'/lawyer/case-files/'">Back to Case File</Link>
+    <page-heading :page_title="page_title" :page_subtitle="page_subtitle" :breadcrumbs="breadcrumbs"/>
 
-    <div class="card">
-        <div class="card-header">
-            <div class="card-header-title font-size-lg text-capitalize font-weight-normal">
-                Quotation
-            </div>
-        </div>
+    <div class="max-w-3xl bg-white rounded-lg border border-gray-300 overflow-hidden">
+        <form @submit.prevent="store">
+            <div class="p-8 space-y-12">
+                <div class="border-b border-gray-900/10 pb-12">
+                    <h2 class="text-base font-semibold leading-7 text-gray-900">Scope of services & legal fees</h2>
+                    <p class="mt-1 text-sm leading-6 text-gray-600">
+                        Add work items to your quotation. The total fee amount will be the initial legal fees for this case file.
+                    </p>
+                    <div v-if="form.errors.case_file_id" class="w-full flex p-4 mt-4 text-red-800 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400" role="alert">
+                        <svg aria-hidden="true" class="flex-shrink-0 w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"></path></svg>
+                        <span class="sr-only">Info</span>
+                        <div class="ml-3 text-sm font-medium">
+                            {{ form.errors.case_file_id }}
+                        </div>
+                    </div>
+        
+                    <!-- Work Description Table -->
+                    <div class="mt-10 w-full overflow-x-auto overflow-y-hidden mb-10">
+                        <table class="w-full whitespace-nowrap text-left text-sm leading-6 border">
+                            <thead class="border border-gray-300 text-gray-900 bg-gray-100 select-none">
+                                <tr>
+                                    <th class="w-12 px-4 py-2">No.</th>
+                                    <th>Work Description</th>
+                                    <th class="w-40 text-right">Amount</th>
+                                    <th class="w-16"></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <transition-group
+                                    enter-from-class="opacity-0 scale-75"
+                                    enter-active-class="duration-300"
+                                    leave-active-class="duration-300"
+                                    leave-to-class="scale-75  opacity-0"
+                                    appear 
+                                >
+                                    <tr v-for="(work_description, index) in form.work_descriptions" :key="getKey" class="border border-gray-300">
+                                        <td class="max-w-0 px-4 py-2 align-top">
+                                            {{ index + 1 }}
+                                        </td>
+                                        <td class="max-w-0 pr-4 py-2 align-top">
+                                            <text-input v-model="work_description.description" :error="form.errors[`work_descriptions.${index}.description`]" required/>
+                                        </td>
+                                        <td class="px-0 py-2 align-top text-right tabular-nums">
+                                            <div>
+                                                <input v-model.lazy="work_description.fee" v-money="money" class="form-input text-right" :class="{ error: form.errors[`work_descriptions.${index}.fee`] }" required/>
+                                                <div v-if="form.errors[`work_descriptions.${index}.fee`]" class="form-error w-40">{{ form.errors[`work_descriptions.${index}.fee`] }}</div>
+                                            </div>
+                                        </td>
+                                        <td class="max-w-0 px-0 py-2 align-top">
+                                            <div class="flex justify-center items-center mt-2.5">
+                                                <button type="button" @click="removeItem(index)" tabindex="-1"><icon name="close-circle-fill" class="block w-5 h-5 fill-gray-400" /></button>    
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </transition-group>
+        
+                                <tr v-if="form.work_descriptions.length === 0" class="border border-gray-300 bg-gray-50">
+                                    <td class="text-center py-4 text-gray-500" colspan="100">
+                                        <div v-if="form.errors.work_descriptions" class="form-error">{{ form.errors.work_descriptions }}</div>
+                                        <div v-else> No items in the list</div>
+                                    </td>
+                                </tr>
+        
+                                <tr class="border border-gray-300">
+                                    <td colspan="100">
+                                        <div class="w-100 flex justify-center px-4 py-2">
+                                            <button type="button" class="select-none text-gray-700 text-sm font-medium" @click="addItem">+ Add item</button>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                            <!-- <tfoot>
+                                <tr>
+                                    <th scope="row" colspan="2" class="sm:pt-2 sm:text-right font-normal text-gray-700 border-t border-l border-gray-300">Subtotal</th>
+                                    <td colspan="1" class="pt-2 text-right text-gray-900 tabular-nums border-t border-gray-300">{{ $filters.currency(subtotal) }}</td>
+                                    <td class="border-r border-t border-gray-300"></td>
+                                </tr>
+                                <tr>
+                                    <th scope="row" colspan="2" class="py-2 sm:text-right font-normal text-gray-700 border-b border-l border-gray-300">Tax (0%)</th>
+                                    <td colspan="1" class="py-2 text-right tabular-nums text-gray-900 border-b border-gray-300">{{ $filters.currency(tax) }}</td>
+                                    <td class="border-b border-r border-gray-300 "></td>
+                                </tr>
+                                <tr>
+                                    <th scope="row" colspan="2" class="py-2 sm:text-right font-semibold text-gray-900 border-l border-b border-gray-300 bg-gray-100">Total</th>
+                                    <td colspan="1" class="py-2 text-right font-semibold tabular-nums text-gray-900 border-b border-gray-300 bg-gray-100">{{ $filters.currency(total) }}</td>
+                                    <td class="border-b border-r border-gray-300 bg-gray-100"></td>
+                                </tr>
+                            </tfoot> -->
+                        </table>
+                    </div>
+                </div>
 
-        <div class="card-body">
-            <form @submit.prevent="submit">
                 <div>
-                    File Number: {{ case_file.file_number }}
-                </div>
+                    <h2 class="text-base font-semibold leading-7 text-gray-900">Initial deposit</h2>
+                    <p class="mt-1 text-sm leading-6 text-gray-600">
+                        Add deposit amount and the payment instructions for client.
+                    </p>
 
-                <div class="quotation-section">
-                    <h3>SCOPE OF SERVICES & LEGAL FEES</h3>
-
-                    <table class="w-full">
-                        <thead class="text-xs text-gray-200 uppercase bg-blue-900">
-                            <th class="px-6 py-3">No.</th>
-                            <th class="px-6 py-3">Work Descriptions</th>
-                            <th class="px-6 py-3">Fee (RM)</th>
-                            <th class="px-3 py-3"></th>
-                        </thead>
-                        <tbody>
-                            <tr 
-                                v-for="(workDescription, index) in form.work_descriptions" 
-                                :key="index"
-                                class="border-slate-300 border-b text-gray-700"
-                                valign="top"
-                            >
-                                <td class="px-6 py-3">
-                                    {{ index + 1 }}
-                                </td>
-                                <td class="px-6 py-3">
-                                    <input 
-                                        v-model="workDescription.description"
-                                        :aria-label="`Work Description #${index+1}`"
-                                        type="text" 
-                                        
-                                        class="mr-4 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
-                                    >
-                                    <p v-if="form.errors[`work_descriptions.${index}.description`]" v-text="form.errors[`work_descriptions.${index}.description`]" class="mt-2 text-sm text-red-600"></p>
-                                </td>
-                                <td class="px-6 py-3">
-                                    <input 
-                                        v-model="workDescription.fee"
-                                        @change="calculateTotal"
-                                        min="0.00"
-                                        step="0.01"
-                                        type="number"
-                                        
-                                        class="text-right mr-4 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
-                                    >
-                                    <p v-if="form.errors[`work_descriptions.${index}.fee`]" v-text="form.errors[`work_descriptions.${index}.fee`]" class="mt-2 text-sm text-red-600"></p>
-                                </td>
-                                <td class="py-3">
-                                    <button 
-                                        :disabled="form.work_descriptions.length <= 1" 
-                                        @click="removeWorkDescription(index)"
-                                        
-                                        :class="'text-red-500'"
-                                    >
-                                        <TrashIcon class="inline-block h-5 w-5"/>
-                                    </button>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-
-                    <div class="my-4 w-100 flex justify-center">
-                        <button class="button text-center" @click="addWorkDescription">
-                            + Add an item
-                        </button>
-                    </div>
-
-                    <div class="mt-5 flex justify-end">
-                        <div class="flex">
-                            <div class="mr-3">
-                                <div>
-                                    <p class="text-muted">Subtotal</p>
-                                </div>
-                                <div>
-                                    <p class="text-muted">Tax (6%)</p>
-                                </div>
-                                <div>
-                                    <h3 class="text-lg">Total</h3>
-                                </div>
-                            </div>
-                            <div class="total-column">
-                                <div>
-                                    <span>{{ subtotal }}</span>
-                                </div>
-                                <div>
-                                    <span>{{ tax }}</span>
-                                </div>
-                                <div>
-                                    <h3>{{ total }}</h3>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="quotation-section">
-                    <h3>INITIAL DEPOSIT</h3>
-
-                    <div class="flex">
-                        <div class="m-3 basis-1/2">
-                            <label 
-                                for="deposit_amount" 
-                                class="block mb-2 text-sm font-medium text-gray-900"
-                                >
-                                Initial Deposit
-                            </label>
-                            <input 
-                                v-model="form.deposit_amount"
-                                type="number" 
-                                min="0.00"
-                                step="0.01"
-                                id="deposit_amount" 
-                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" 
-                                placeholder="" 
-                                required
-                            />
-                            <p v-if="form.errors.deposit_amount" v-text="form.errors.deposit_amount" class="mt-2 text-sm text-red-600"></p>
+                    <div class="mt-10 grid md:grid-cols-2 gap-2">
+                        <div>
+                            <label class="form-label">Amount</label>
+                            <input v-model.lazy="form.deposit_amount" v-money="money" class="form-input text-right" :class="{ error: form.errors.deposit_amount }" required/>
+                            <div v-if="form.errors.deposit_amount" class="form-error">{{ form.errors.deposit_amount }}</div>
                         </div>
 
-
-                        <div class="m-3 basis-1/2">
-                            <label 
-                                for="bank_account_id" 
-                                class="block mb-2 text-sm font-medium text-gray-700 dark:text-gray-200"
-                                >
-                                Client Account
-                            </label>
-                            <select 
-                                v-model="form.bank_account_id"
-                                id="bank_account_id" 
-                                @change="getBankAccountDetails($event)"
-                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
-                                required
-                            >
-                                <option disabled value="">Please select client account</option>
+                        <div class="flex flex-col space-y-2">
+                            <select-input v-model="form.bank_account_id"  @change="bankAccountSelected($event)" label="Pay to"  class="" required>
+                                <option disabled>Select client account</option>
                                 <option v-for="client_bank_account in client_bank_accounts" :value="client_bank_account.id">{{client_bank_account.label}}</option>
-                            </select>
-                            <p v-if="form.errors.bank_account_id" v-text="form.errors.bank_account_id" class="mt-2 text-sm text-red-600"></p>
+                            </select-input>
+
+                            <div>
+                                <div v-if="selected_bank_account === null">
+                                    <div v-if="errors.loading_bank_account_details" class="flex justify-center items-center w-full bg-red-50 border-2 border-red-200 rounded-md px-6 py-4" style="height: 134px;">
+                                        <span class="text-md text-red-500 tracking-tight">System encountered error.</span> 
+                                    </div>
+                                    <div v-else class="flex justify-center items-center w-full bg-gray-50 border-2 border-gray-200 rounded-md px-6 py-4" style="height: 134px;">
+                                        <span class="text-md text-gray-500 tracking-tight">Bank Account Details</span> 
+                                    </div>
+                                </div>
+                                <div v-else>         
+                                    <div v-if="loading_bank_account_details" class="w-full bg-gray-200 border-2 border-gray-200 rounded-md px-6 py-4">
+                                        <p class="mt-1 h-4 w-32 rounded-sm animated-background"></p>
+                                        <p class="mt-2.5 h-4 w-full rounded-sm animated-background"></p>
+                                        <p class="mt-2.5 h-4 w-full rounded-sm animated-background"></p>
+                                        <p class="mt-2.5 h-4 w-full rounded-sm animated-background"></p>
+                                    </div>
+        
+                                    <div v-else class="relative w-full bg-gray-50 border-2 border-gray-200 rounded-md px-6 py-4">
+                                        <div class="absolute top-0 right-0 p-1">
+                                            <div class="px-2 py-1 bg-blue-100 text-blue-500 text-xs rounded-md border border-blue-400">
+                                                {{ selected_bank_account.account_type }}
+                                            </div>
+                                        </div>
+                                        <p class="mt-1 h-4 w-full rounded-sm text-sm truncate text-gray-700 font-semibold">{{ selected_bank_account.label }}</p>
+                                        <p class="mt-2.5 h-4 w-full rounded-sm truncate text-sm text-gray-600 font-medium"><span class="text-gray-400 select-none">Bank Name</span> {{ selected_bank_account.bank_name }}</p>
+                                        <p class="mt-2.5 h-4 w-full rounded-sm truncate text-sm text-gray-600 font-medium"><span class="text-gray-400 select-none">Account Name</span> {{ selected_bank_account.account_name }}</p>
+                                        <p class="mt-2.5 h-4 w-full rounded-sm truncate text-sm text-gray-600 font-medium"><span class="text-gray-400 select-none">Account Number</span> {{ selected_bank_account.account_number }}</p>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
-
                 </div>
 
-                <button 
-                    type="submit" 
-                    class="text-white bg-blue-500 hover:bg-blue-600 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2 text-center"
-                    :disabled="form.processing"
-                    >
-                    Submit
-                </button>
-            </form>
-        </div>
+            </div>
+            
+            <!-- Form Footer -->
+            <div class="flex flex-row-reverse space-x-2 space-x-reverse items-center justify-start px-8 py-4 bg-gray-50 border-t border-gray-100">
+                <loading-button :loading="form.processing" class="btn-primary" type="submit">Create Quotation</loading-button>
+                <Link :href="`/lawyer/case-files/${case_file.id}`" as="button" class="btn-cancel" :disabled="form.processing">
+                    Cancel
+                </Link>
+            </div>
+        </form>
     </div>
 </template>
 
 <script>
 import Layout from "../Shared/Layout";
-import { useForm } from "@inertiajs/inertia-vue3";
+import TextInput from '../../../Shared/TextInput';
+import SelectInput from '../../../Shared/SelectInput';
+import LoadingButton from '../../../Shared/LoadingButton';
+import { VMoney } from "v-money";
 import { TrashIcon } from "@heroicons/vue/outline";
-import { ref } from "vue";
-import $ from "jquery";
+import axios from "axios";
+import MoneyConfig from '../../../Stores/MoneyConfig';
+import { unmaskMoneyToNumeric } from '../../../Stores/Utils';
 
 export default { 
-    setup (props) {
-        let form = useForm({
-            'case_file_id' : props.case_file.id,
-            'work_descriptions' : [{
-                "description" : "",
-                "fee" : 0.00,
-            }],
-            'deposit_amount': "",
-            'bank_account_id' : "",
-        });
-
-        let subtotal = ref(0);
-        let tax = ref(0);
-        let total = ref(0);
-
-        return { 
-            form, 
-            subtotal,
-            tax,
-            total
-        };
+    components: { 
+        TrashIcon,
+        TextInput,
+        SelectInput,
+        LoadingButton,
     },
-    components: { TrashIcon},
     layout: Layout,
     props: {
         case_file : Object,
         client_bank_accounts : Object,
     },
+    remember: 'form',
+    data() {
+        return {
+            page_title: 'Create Quotation',
+            page_subtitle: 'This file does not have a quotation yet. Create one now!.',
+            breadcrumbs: [
+                { link: `/lawyer/dashboard`, label: 'Lawyer'},
+                { link: `/lawyer/case-files/`, label: 'My Cases'},
+                { link: `/lawyer/case-files/${this.case_file.id}`, label: this.case_file.file_number},
+                { link: `/lawyer/case-files/${this.case_file.id}/quotation`, label: 'Quotation'},
+                { link: null, label: 'Create'},
+            ],
+            form: this.$inertia.form({
+                case_file_id : this.case_file.id,
+                work_descriptions : [
+                    {
+                        description : null,
+                        fee : null,
+                    }
+                ],
+                deposit_amount: null,
+                bank_account_id : null,
+            }),
+            subtotal: 0,
+            tax: 0,
+            total: 0,
+            selected_bank_account: null,
+            loading_bank_account_details: false,
+            errors: {
+                loading_bank_account_details: false,
+            },
+            money: MoneyConfig,
+        }
+    },
+    directives: {money: VMoney},
     methods: {
-        addWorkDescription() {
+        addItem() {
             this.form.work_descriptions.push({
-                "description" : "",
-                "fee" : 0.00,
+                description : null,
+                fee : null,
             });
         },
-        removeWorkDescription(index) {
+        removeItem(index) {
+            if(this.form.work_descriptions.length <= 1) {
+                alert('Item list cannot be empty');
+                return;
+            }
+
             this.form.work_descriptions.splice(index, 1);
-            this.calculateTotal();
         },
-        calculateTotal() {
-            this.subtotal = 0;
-            this.form.work_descriptions.forEach(element => {
-                this.subtotal += element.fee;
+        getKey() {
+            return Symbol();
+        },
+        store() {
+            this.form.work_descriptions.forEach((work_description) => {
+                work_description.fee = this.handleUnmasked(work_description.fee);
             });
 
-            this.tax = this.subtotal * 0.06;
-            this.total = this.subtotal + this.tax;
-        },
-        getBankAccountDetails(event) {
-            $.ajax({
-                URL:'/lawyer/getbankaccountdetails/' + event.target.value,
-                type: 'get',
-                dataType: 'text',
-                success: function (response) {
-                    // console.log(response);
-                    // alert('Response: ' + response.data);
-                },
-                error: function (request, error) {
-                    alert('error: ' + error);
-                }
-            });
-        },
-        submit() {
+            this.form.deposit_amount = this.handleUnmasked(this.form.deposit_amount);
+
             this.form.post(`/lawyer/case-files/${this.case_file.id}/quotation`);
+        },
+        handleUnmasked(amount) {
+            return unmaskMoneyToNumeric(amount);
+        },
+        bankAccountSelected(event) {
+            const bank_account_id = event.target.value;
+
+            this.loading_bank_account_details = true;
+            this.errors.loading_bank_account_details = false;
+            this.selected_bank_account = null;
+
+            axios.get(`/bank-accounts/${bank_account_id}`)
+                .then(response => {
+                    this.selected_bank_account = response.data;
+                })
+                .catch(error => {
+                    this.errors.loading_bank_account_details = true;
+                    console.log(error);
+                })
+                .finally(() => {
+                    this.loading_bank_account_details = false;
+                })
         }
     },
 };
 </script>
-
-<style scoped>
-.client-info {
-    margin: 20px 0px;
-    padding: 20px 0px;
-    border-top: 1px solid #000;
-    border-bottom: 1px solid #000;
-}
-
-.quotation-section {
-    margin: 30px 0px;
-    padding: 0px 30px
-}
-
-.quotation-section h3 {
-    font-weight: bold;
-    margin-bottom: 10px;
-}
-
-.total-column {
-    min-width: 100px;
-    text-align: right;
-}
-</style>

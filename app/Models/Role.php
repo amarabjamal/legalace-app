@@ -20,9 +20,9 @@ class Role extends Model
     public const IS_ADMIN = 1;
     public const IS_LAWYER = 2;
 
-    public function userRoles() {
-        return $this->hasMany(UserRole::class);
-    }
+    // public function userRoles() {
+    //     return $this->hasMany(UserRole::class);
+    // }
 
     public function users()
     {

@@ -6,7 +6,7 @@
 .form-textarea,
 .form-select,
 .form-input-money {
-  @apply p-2 text-sm leading-normal block w-full border border-gray-300 text-gray-500 bg-white font-sans rounded text-left appearance-none relative focus:border-gray-400 focus:outline-none focus:text-gray-600;
+  @apply p-2 text-sm leading-normal block w-full border border-gray-300 text-gray-500 bg-white rounded text-left appearance-none relative focus:border-gray-400 focus:outline-none focus:text-gray-600;
 }
 
 .form-input::placeholder,

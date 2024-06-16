@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Lawyer;
 
 use App\Enums\DisbursementItemFundTypeEnum;
+use App\Enums\DisbursementItemStatusEnum;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreDisbursementItemRequest;
 use App\Http\Requests\UpdateDisbursementItemRequest;
@@ -92,6 +93,9 @@ class DisbursementItemController extends Controller
 
     public function edit(CaseFile $case_file, DisbursementItem $disbursement_item) 
     {
+        if($disbursement_item->status !== DisbursementItemStatusEnum::Recorded) {
+            return back()->with('warningMessage', 'This item can no longer be edited');
+        }
 
         return inertia('Lawyer/DisbursementItem/Edit', [
             'case_file' => [ 
@@ -110,6 +114,10 @@ class DisbursementItemController extends Controller
         DisbursementItem $disbursement_item
     ) 
     {
+        if($disbursement_item->status !== DisbursementItemStatusEnum::Recorded) {
+            return back()->with('warningMessage', 'This item can no longer be edited');
+        }
+        
         $data =  $request->all();
         $data['amount'] = Money::of($data['amount'], 'MYR');
         $filePath = null;
@@ -148,6 +156,27 @@ class DisbursementItemController extends Controller
         }
     }
 
+    public function show(CaseFile $case_file, DisbursementItem $disbursement_item) 
+    {
+        return inertia('Lawyer/DisbursementItem/Show', [
+            'case_file' => [ 
+                'id' => $case_file->id,
+                'file_number' => $case_file->file_number,
+            ],
+            'disbursement_item' => [
+                'id' => $disbursement_item->id,
+                'date' => $disbursement_item->formatted_date,
+                'record_type' => $disbursement_item->recordType->name,
+                'name' => $disbursement_item->name,
+                'description' => $disbursement_item->description,
+                'amount' => $disbursement_item->amount->formatTo('EN-MY'),
+                'fund_type' => DisbursementItem::FUND_TYPE[$disbursement_item->fund_type->value],
+                'receipt' => $disbursement_item->receipt,
+                'creator' => $disbursement_item->createdBy->id === auth()->id() ? $disbursement_item->createdBy->name . ' (You)' : $disbursement_item->createdBy->name,
+            ],
+        ]);
+    }
+
     public function destroy(CaseFile $case_file, DisbursementItem $disbursement_item) 
     {
         try {
@@ -162,5 +191,15 @@ class DisbursementItemController extends Controller
         } catch (\Exception $e) {
             return back()->with('errorMessage', 'Error: failed to delete.');
         }
+    }
+
+    public function downloadReceipt(CaseFile $case_file, DisbursementItem $disbursement_item) {
+        if(!isset($disbursement_item->receipt)) {
+            return abort(404);
+        }
+        
+        $pathToFile = storage_path('app/public/' . DisbursementItem::RECEIPT_PATH . $disbursement_item->receipt);
+        
+        return response()->file($pathToFile);
     }
 }

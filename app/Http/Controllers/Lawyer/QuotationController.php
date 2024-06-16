@@ -2,9 +2,12 @@
 
 namespace App\Http\Controllers\Lawyer;
 
+use App\Enums\PaymentMethodEnum;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreQuotationRequest;
 use App\Http\Requests\UpdateQuotationRequest;
+use App\Jobs\CalculateQuotationTotal;
+use App\Mail\SendQuotation;
 use App\Models\BankAccount;
 use App\Models\CaseFile;
 use App\Models\Quotation;
@@ -12,8 +15,10 @@ use App\Models\WorkDescription;
 use Exception;
 use Illuminate\Support\Facades\DB;
 use Inertia\Inertia;
-use Barryvdh\DomPDF\Facade\Pdf as PDF;
+use Brick\Money\Money;
 use Illuminate\Support\Facades\Mail;
+use Spatie\Browsershot\Browsershot;
+use Spatie\LaravelOptions\Options;
 
 class QuotationController extends Controller
 {
@@ -37,7 +42,11 @@ class QuotationController extends Controller
 
     public function create(CaseFile $case_file) 
     {
-        if($case_file->quotation()->exists()) {
+        if(!$case_file->no_conflict_checked) {
+            return redirect()->route('lawyer.case-files.show', $case_file)->with('warningMessage', 'The case file conflict check is pending. Resolve the case file conflict check first before proceed.');
+        }
+
+        if($case_file->hasQuotation()) {
             return redirect()->route('lawyer.quotation.edit', $case_file);
         }
 
@@ -48,98 +57,94 @@ class QuotationController extends Controller
             ],
             'client_bank_accounts' => $this->bankaccount->clientAccountOptions(),
         ]);
-        
     }
 
-    public function store(
-        StoreQuotationRequest $request, 
-        CaseFile $case_file
-    ) 
+    public function store(StoreQuotationRequest $request, CaseFile $case_file) 
     {
-        
-        $validated = $request->validated();
+        try {
+            DB::beginTransaction();
 
-        $workDescriptions = [];
+            $quotationInputs = $request->except('work_descriptions');
+            $quotationInputs['deposit_amount'] = Money::of($quotationInputs['deposit_amount'], 'MYR');
 
-        foreach($validated['work_descriptions'] as $workDescription) {
-            array_push(
-                $workDescriptions, 
-                new WorkDescription([
-                        'description' => $workDescription['description'],
-                        'fee' => $workDescription['fee']
-                    ]
-                )
-            );
+            $quotation = Quotation::create($quotationInputs);
+
+            $workDescriptions = $request->work_descriptions;
+
+            foreach($workDescriptions as &$workDescription) {
+                $workDescription['company_id'] = auth()->user()->company_id;
+                $workDescription['fee'] = Money::of($workDescription['fee'], 'MYR');
+            }
+
+            $quotation->workDescriptions()->createMany($workDescriptions);
+
+            dispatch_sync(new CalculateQuotationTotal($quotation));            
+
+            DB::commit();
+        } catch (\Exception $e) {
+            DB::rollBack();
+
+            dd($e);
+            return back()->with('errorMessage', 'Failed to create the quotation. Please try again.');
         }
 
-        $quotation = Quotation::create($validated);
-
-        $quotation->workDescriptions()->saveMany($workDescriptions);
-
-        return redirect()->route('lawyer.quotation.edit', $case_file);
-    }
-
-    public function show(CaseFile $case_file) 
-    {
-        $case_file->quotation;
-        $case_file->workDescriptions;
-
-        return inertia('Lawyer/Quotation/Show', [
-            'case_file' => $case_file,
-            'client_bank_accounts' => $this->bankaccount->clientAccountOptions(),
-        ]);
+        return redirect()->route('lawyer.quotation.show', $case_file)->with('successMessage', 'The quotation has been created.');
     }
 
     public function edit(CaseFile $case_file) 
     {
-        if(!$case_file->quotation()->exists()) {
+        $quotation = $case_file->quotation;
+
+        if(!$case_file->hasQuotation()) {
             return redirect()->route('lawyer.quotation.create', $case_file);
+        } else if($quotation->isPaid()) {
+            return redirect()->route('lawyer.quotation.show', $case_file)->with('warningMessage', 'This quotation is already paid and no longer editable.');
         }
 
-        $case_file->quotation;
-        $case_file->workDescriptions;
 
         return inertia('Lawyer/Quotation/Edit', [
-            'case_file' => $case_file,
+            'case_file' => [
+                'id' => $case_file->id,
+                'file_number' => $case_file->file_number,
+            ],
+            'quotation' => [
+                'deposit_amount' => $quotation->deposit_amount,
+                'bank_account_id' => $quotation->bank_account_id,
+                'work_descriptions' => $quotation->workDescriptions->map(fn ($workDescription) => [
+                    'description' => $workDescription->description,
+                    'fee' => $workDescription->fee->getAmount(),
+                ])
+            ],
             'client_bank_accounts' => $this->bankaccount->clientAccountOptions(),
         ]);
     }
 
     public function update(UpdateQuotationRequest $request, CaseFile $case_file) 
     {
-        if(!$case_file->quotation()->exists()) {
+        if(!$case_file->hasQuotation()) {
             return redirect()->route('lawyer.quotation.create', $case_file);
         }
 
-        $quotation = $this->quotation->getQuotationByFileCaseId($case_file->id);
-
         try {
             DB::beginTransaction();
-    
-            $quotation->update($request->safe()->only(['deposit_amount', 'bank_account_id']));
             
-            $deleteStatus = $this->workdescription->deleteAll($quotation->id);
-            
-            if(!$deleteStatus) {
-                DB::rollback();
+            $quotation = $case_file->quotation;
+            $quotation->deposit_amount = Money::of($request->deposit_amount, 'MYR');
+            $quotation->bank_account_id = $request->bank_account_id;
+            $quotation->save();
 
-                return back()->with('errorMessage', 'Failed to delete old work descriptions');
+            $workDescriptions = $quotation->workDescriptions();
+            $workDescriptions->delete();
+            $workDescriptionArray = $request->work_descriptions;
+
+            foreach($workDescriptionArray as &$workDescription) {
+                $workDescription['company_id'] = auth()->user()->company_id;
+                $workDescription['fee'] = Money::of($workDescription['fee'], 'MYR');
             }
 
-            $workDescriptions = [];
-            
-            foreach($request->safe()->only(['work_descriptions'])['work_descriptions'] as $workDescription) {
-                array_push(
-                    $workDescriptions, 
-                    new WorkDescription([
-                            'description' => $workDescription['description'],
-                            'fee' => $workDescription['fee']
-                        ]
-                    )
-                );
-            }
-            
-            $quotation->workDescriptions()->saveMany($workDescriptions);
+            $workDescriptions->createMany($workDescriptionArray);
+
+            dispatch_sync(new CalculateQuotationTotal($quotation));
             
             DB::commit();
 
@@ -148,45 +153,136 @@ class QuotationController extends Controller
             DB::rollback();
         }
 
-        return back()->with('errorMessage', 'Failed update!');
+        return back()->with('errorMessage', 'Failed to update!');
     }
 
-    public function viewPDF(CaseFile $case_file)
+    public function show(CaseFile $case_file) 
     {
-        $data = [
-            'workdescriptions' => $case_file->workDescriptions()->get()->toArray(),
-            'deposit_amount' =>  $case_file->quotation()->pluck('deposit_amount')->toArray()[0],
-        ];
+        if(!$case_file->hasQuotation()) {
+            return redirect()->route('lawyer.quotation.create', $case_file);
+        }
 
-        //dd($data);
-        
-        $pdf = PDF::loadView('templates.quotation', $data)->setPaper('a4', 'portrait');
+        $quotation = $case_file->quotation;
+        $bankAccount = $quotation->bankAccount;
+        $workDescriptions = $quotation->workDescriptions;
+        $payment = $quotation->payment;
 
-        return $pdf->stream();
+        return inertia('Lawyer/Quotation/Show', [
+            'case_file' => [
+                'id' => $case_file->id,
+                'file_number' => $case_file->file_number,
+            ],
+            'quotation' => [
+                'deposit_amount' => $quotation->deposit_amount->formatTo('en_MY'),
+                'bank_account_id' => $quotation->bank_account_id,
+                'bank_account' => [
+                    'label' => $bankAccount->label,
+                    'bank_name' => $bankAccount->bank_name,
+                    'account_name' => $bankAccount->account_name,
+                    'account_number' => $bankAccount->account_number,
+                    'type' => $bankAccount->bankAccountType->name,
+                ],
+                'work_descriptions' => $workDescriptions->map(fn ($workDescription) => [
+                    'description' => $workDescription->description,
+                    'fee' => $workDescription->fee->formatTo('en_MY'),
+                ]),
+                'subtotal' => $quotation->subtotal->formatTo('en_MY'),
+                'tax' => $quotation->tax_amount->formatTo('en_MY'),
+                'total' => $quotation->total->formatTo('en_MY'),
+                'sent_at' => $quotation->sent_at? $quotation->sent_at : 'N/A',
+                'is_paid' => $quotation->isPaid(),
+                'payment' => [
+                    'date' => $payment?->date->format('d F Y'),
+                    'method' => $payment?->payment_method_display_text,
+                ],
+            ],
+            'modal_props' => [
+                'payment_methods' => Options::forEnum(PaymentMethodEnum::class),
+                'client_bank_accounts' => BankAccount::clientAccount()->get(['id', 'label']),
+            ],
+        ]);
     }
 
-    public function sendEmail(CaseFile $case_file) 
+    public function emailQuotation(CaseFile $case_file)
     {
+        try { 
+            DB::transaction(function() use ($case_file) {
+                $quotation = $case_file->quotation;
+                $client = $case_file->client;
+
+                $quotation->sent_at = now();
+                $quotation->save();    
+
+                $pdf = $this->generatePdf($case_file);
+
+                Mail::to($client->email)
+                    ->send(new SendQuotation($quotation, $pdf, $client->name));
+            });
+        } catch (\Exception $e) {
+            dd($e);
+            return back()->with('errorMessage', 'Failed to send the quotation');
+        }
+
+        return back()->with('successMessage', 'The quotation is emailed to the client.');
+    }
+
+    public function markSent(CaseFile $case_file)
+    {
+        try { 
+            DB::transaction(function() use ($case_file) {
+                $quotation = $case_file->quotation;
+
+                $quotation->sent_at = now();
+                $quotation->save();    
+            });
+        } catch (\Exception $e) {
+            dd($e);
+            return back()->with('errorMessage', 'Failed to mark sent the quotation. Please try again.');
+        }
+
+        return back()->with('successMessage', 'The quotation is marked sent.');
+    }
+
+    public function downloadPdf(CaseFile $case_file)
+    {
+        $pdf = $this->generatePdf($case_file);
+
+        return response()->stream(function () use ($pdf) {
+            echo $pdf;
+        }, 200, [
+            'Content-Type' => 'application/pdf',
+            'Content-Disposition' => 'inline; filename=quotation.pdf',
+        ]);
+    }
+
+    private function generatePdf(CaseFile $caseFile)
+    {
+        $quotation = $caseFile->quotation;
 
         $data = [
-            'workdescriptions' => $case_file->workDescriptions()->get()->toArray(),
-            'deposit_amount' =>  $case_file->quotation()->pluck('deposit_amount')->toArray()[0],
+            'case_file' => [ 
+                'number' => $caseFile->file_number,
+                'matter' => $caseFile->matter,
+                'company' => $caseFile->company->only('name', 'address'),
+                'client' => $caseFile->client->only('name', 'address'),
+            ],
+            'date' => today()->format('d/m/Y'),
+            'items' => $quotation->workDescriptions,
+            'subtotal' => $quotation->subtotal->formatTo('en_MY'),
+            'tax' => $quotation->tax_amount->formatTo('en_MY'),
+            'total' => $quotation->total->formatTo('en_MY'),
+            'deposit_amount' =>  $quotation->deposit_amount->formatTo('en-MY'),
+            'bank_account' => $quotation->bankAccount,
         ];
-        
-        $pdf = PDF::loadView('templatesquotation', $data);
 
-        $email = [
-            'client_email' => 'client@example.com',
-            'subject' => 'Quotation: Matter',
-            'body' => 'Please find the attached quotation.',
-        ];
+        $html = view('templates.quotation', $data)->render();
 
-        Mail::send('emails.quotation', $email, function ($message) use ($email, $pdf) {
-            $message->to($email["client_email"], $email["client_email"])
-                ->subject($email["subject"])
-                ->attachData($pdf->output(), "quotation.pdf");
-        });
+        $footer = '<div class="text-gray-500 text-xs p-2 border-t">This invoice is generated electronically and does not require a physical signature.<div class="text-center mt-4 font-bold">Generated by Legal Ace &copy; 2023</div></div>';
 
-        echo "email send successfully !!";
+        return Browsershot::html($html)
+                ->margins(18, 18, 18, 18)
+                ->format('A4')
+                ->showBackground()
+                ->pdf();
     }
 }

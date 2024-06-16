@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Casts\Money;
 use Exception;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -13,13 +14,14 @@ class WorkDescription extends Model
     protected $table = 'work_descriptions';
     protected $primaryKey= 'id';
     protected $fillable = [
+        'company_id',
         'description',
         'fee',
         'quotation_id',
     ];
-    protected $hidden = [
-        'created_at',
-        'updated_at',
+    
+    protected $casts = [
+        'fee' => Money::class . ':fee,MYR,0',
     ];
 
     public function quotation() {

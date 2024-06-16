@@ -7,9 +7,12 @@ use App\Enums\DisbursementItemFundTypeEnum;
 use App\Enums\DisbursementItemStatusEnum;
 use App\Models\CaseFile;
 use App\Models\CaseFile\Invoices\Invoice;
+use App\Models\User;
 use App\Traits\HasCompanyScope;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class DisbursementItem extends Model
 {
@@ -28,6 +31,7 @@ class DisbursementItem extends Model
         'fund_type',
         'case_file_id',
         'record_type_id',
+        'created_by_user_id',
     ];
 
     protected $casts = [
@@ -54,7 +58,12 @@ class DisbursementItem extends Model
         9 => 'Denied',
     ];
 
-    public const RECEIPT_PATH = 'case-files/disbursement-items/receipts';
+    public const RECEIPT_PATH = 'case-files/disbursement-items/receipts/';
+
+    public function getFormattedDateAttribute()
+    {
+        return Carbon::parse($this->date)->format('d/m/Y');
+    }
 
     public function caseFile() 
     {
@@ -69,6 +78,11 @@ class DisbursementItem extends Model
     public function invoice()
     {
         return $this->belongsTo(Invoice::class, 'invoice_id', 'id');
+    }
+
+    public function createdBy() : BelongsTo
+    {
+        return $this->belongsTo(User::class, 'created_by_user_id', 'id');
     }
 
     public function scopeOrderByDate($query) 
@@ -91,8 +105,23 @@ class DisbursementItem extends Model
         $query->where('status', '=', DisbursementItemStatusEnum::Recorded->value);
     }
 
+    public function scopePaidByLawyer($query)
+    {
+        $query->where('fund_type', '=', DisbursementItemFundTypeEnum::PaidByLawyer->value)
+            ->where('status', '=', DisbursementItemStatusEnum::PaidByClient->value);   
+    }
+
+    public function scopeFromInvoiceCreatedByCurrentUser($query)
+    {
+        $query->whereHas('caseFile', function ($query) {
+            $query->where('created_by_user_id', '=', auth()->id());
+        });
+    }
+
     public function isDeletable() : bool 
     {
-        return $this->status->value == DisbursementItemStatusEnum::Recorded->value;
+        return $this->status == DisbursementItemStatusEnum::Recorded;
     }
+
+
 }

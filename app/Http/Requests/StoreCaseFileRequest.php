@@ -20,6 +20,19 @@ class StoreCaseFileRequest extends FormRequest
     }
 
     /**
+     * Prepare the data for validation.
+     *
+     * @return void
+     */
+    protected function prepareForValidation()
+    {
+        $this->merge([
+            'company_id' => auth()->user()->company_id,
+            'created_by_user_id' => auth()->id(),
+        ]);
+    }
+
+    /**
      * Get the validation rules that apply to the request.
      *
      * @return array<string, mixed>
@@ -32,17 +45,9 @@ class StoreCaseFileRequest extends FormRequest
             'file_number' => [
                 'required', 
                 'String', 
-                Rule::unique('case_files')->where(fn ($query) => $query->whereIn('created_by', User::where('company_id', Auth::user()->company_id)->get('id') ))
+                Rule::unique('case_files')->where(fn ($query) => $query->whereIn('created_by_user_id', User::where('company_id', Auth::user()->company_id)->get('id') ))
             ],
             'client_id' => ['required', 'exists:clients,id'],
         ];
-    }
-
-    public function validated($key = null, $default = null)
-    {
-        return array_merge(parent::validated(), [
-            'no_conflict_checked' => true,
-            'created_by' => Auth::id(),
-        ]);
     }
 }

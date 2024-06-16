@@ -1,0 +1,123 @@
+.dashboard{
+    position: relative;
+    left: 250px;
+    background-color: #f1f1f1;
+    min-height: 100vh;
+    width: calc(100% - 250px);
+    padding: 10px 14px;
+    transition: var(--tran-05);
+}
+	
+nav.close ~ .dashboard{
+    left: 73px;
+    width: calc(100% - 73px);
+}
+.dashboard .top{
+    position: fixed;
+    top: 0;
+    left: 250px;
+    display: flex;
+    width: calc(100% - 250px);
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 14px;
+    /* background-color: #3C3D5B; */
+    transition: var(--tran-05);
+    z-index: 10;
+    border-bottom: 1px solid rgb(15, 23, 42, 0.1);
+    @apply bg-white;
+}
+nav.close ~ .dashboard .top{
+    left: 73px;
+    width: calc(100% - 73px);
+}
+
+.dashboard .top .auth-nav{
+    white-space: nowrap;
+    overflow: hidden;
+    @apply flex flex-col items-start pl-3;
+}
+
+.dashboard .top .auth-name{
+    @apply text-gray-700 font-semibold text-sm truncate text-start w-28;
+}
+
+.dashboard .top .auth-role{
+    font-size: 10px;
+    @apply text-gray-500 text-xs font-medium;
+}
+
+.dashboard .dash-content{
+    padding-top: 50px;
+}
+.dash-content .title{
+    display: flex;
+    align-items: center;
+    margin: 60px 0 30px 0;
+}
+
+.sidebar-toggle-button {
+    @apply h-6 w-6 fill-gray-400 cursor-pointer;
+}
+
+.company-name {
+    @apply ml-7 text-gray-500 text-sm font-medium;
+}
+
+.notifiation-toggle-button {
+    color: #3C3D5B;
+    @apply relative align-middle rounded-md;
+}
+
+.notifiation-toggle-button:focus {
+    @apply outline-none;
+}
+
+.notification-badge {
+    border-color: #3C3D5B;
+    @apply absolute flex justify-center items-center -top-1 -right-2 w-5 h-5 transform translate-x-1 -translate-y-1 bg-red-600 rounded-full text-xs text-white;
+}
+
+@media (max-width: 1000px) {
+    nav ~ .dashboard{
+        left: 73px;
+        width: calc(100% - 73px);
+    }
+    nav.close ~ .dashboard{
+        left: 250px;
+        width: calc(100% - 250px);
+    }
+    nav ~ .dashboard .top{
+        left: 73px;
+        width: calc(100% - 73px);
+    }
+    nav.close ~ .dashboard .top{
+        left: 250px;
+        width: calc(100% - 250px);
+    }
+}
+
+@media (max-width: 400px) {
+    nav ~ .dashboard{
+        left: 0;
+        width: 100%;
+    }
+    nav.close ~ .dashboard{
+        left: 73px;
+        width: calc(100% - 73px);
+    }
+    nav ~ .dashboard .top{
+        left: 0;
+        width: 100%;
+    }
+    nav.close ~ .dashboard .top{
+        left: 0;
+        width: 100%;
+    }
+}
+
+.footer {
+    margin-left:  -15px; 
+    background-color: #6C6C8D;
+    @apply absolute bottom-0 mt-40 px-6 py-4 w-full text-xs text-purple-100 text-right;
+}

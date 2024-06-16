@@ -3,14 +3,11 @@
 
     <page-heading :page_title="page_title" :breadcrumbs="breadcrumbs"/>
     
-    <div class="max-w-3xl bg-white rounded-md shadow overflow-hidden">
+    <div class="max-w-3xl bg-white rounded-md border border-gray-300 overflow-hidden">
         <form @submit.prevent="store">
             <div class="flex flex-wrap p-8 py-12">
-                <div class="flex justify-between w-full">
+                <div class="flex w-full">
                     <text-input v-model="form.receipt_number" :error="form.errors.receipt_number" class="pb-8 lg:pr-6 w-full lg:w-1/2" label="Receipt Number" required/>
-                    <div class="text-2xl font-medium leading-6 text-gray-500">
-                        Receipt
-                    </div>
                 </div>
 
                 <div class="flex flex-wrap w-full mt-6 border-b border-gray-200 text-sm">
@@ -41,7 +38,7 @@
                             <div class="font-medium text-gray-900 mb-2">
                                 {{ invoice.company.name }}
                             </div>
-                            <div>
+                            <div class="whitespace-pre-wrap">
                                 {{ invoice.company.address }}
                             </div>
                         </div>  
@@ -54,7 +51,7 @@
                             <div class="font-medium text-gray-900 mb-2">
                                 {{ invoice.client.name }}
                             </div>
-                            <div>
+                            <div class="whitespace-pre-wrap">
                                 {{ invoice.client.address }}
                             </div>
                         </div>  
@@ -102,22 +99,17 @@
                     </tfoot>
                 </table>
 
-                <div class="w-full mt-2 mb-6 border-t border-gray-400 pt-2 text-sm text-gray-800">
+                <div class="w-full mt-2 mb-6 border-t pt-2 text-sm text-gray-800">
                     <span class="text-red-500">*</span>Paid through {{ invoice.payment.method }} on {{ invoice.payment.date }}
                 </div>
 
                 <textarea-input v-model="form.notes" :error="form.errors.notes" rows="4" class="w-full" label="Notes"/>
             </div>
-            <div class="flex items-center justify-end px-8 py-4 bg-gray-50 border-t border-gray-100">
-                <Link 
-                    :href="`/lawyer/case-files/${this.case_file.id}/invoices`"
-                    as="button"  
-                    class="mr-2 text-gray-500 focus:outline-none hover:text-blue-700 hover:underline focus:z-10 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center"
-                    :disabled="form.processing"
-                    >
+            <div class="flex flex-row-reverse items-center justify-start space-x-2 space-x-reverse px-8 py-4 bg-gray-50 border-t border-gray-100">
+                <loading-button :loading="form.processing" class="btn-primary" type="submit">Create Receipt</loading-button>
+                <Link :href="`/lawyer/case-files/${this.case_file.id}/invoices`" as="button" class="btn-cancel" :disabled="form.processing">
                     Cancel
                 </Link>
-                <loading-button :loading="form.processing" class="btn-primary" type="submit">Create Receipt</loading-button>
             </div>
         </form>
     </div>
@@ -147,8 +139,8 @@ export default {
         return {
             page_title: 'Create Receipt',
             breadcrumbs: [
-                { link: '/lawyer', label: 'Dashboard'},
-                { link: '/lawyer/case-files/', label: 'Case Files'},
+                { link: '/lawyer/dashboard', label: 'Lawyer'},
+                { link: '/lawyer/case-files/', label: 'My Cases'},
                 { link: `/lawyer/case-files/${this.case_file.id}`, label: this.case_file.file_number},
                 { link: `/lawyer/case-files/${this.case_file.id}/invoices`, label: 'Invoices'},
                 { link: `/lawyer/case-files/${this.case_file.id}/invoices/${this.invoice.id}`, label: this.invoice.number},

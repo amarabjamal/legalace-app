@@ -1,26 +1,18 @@
 <template>
-    <transition
-        enter-from-class="translate-x-full opacity-0"
-        enter-active-class="duration-500"
-        leave-active-class="duration-500"
-        leave-to-class="translate-x-full opacity-0"
-        appear
-    >
-        <div v-if="show" :class="containerClass">
-            <div class="shrink-0">
-                <component :is="iconComponent" :class="iconClass"/>
-            </div>
-            <div class="flex-1 space-y-1">
-                <h2 :class="titleClass">{{ title }}</h2>
-                <div :class="contentClass"><slot /></div>
-            </div>
-            <div class="shrink-0">
-                <button @click="dismissToast" :class="buttonClass">
-                    <x-icon class="w-6 h-6"/>
-                </button>
-            </div>
+    <div v-if="show" :class="containerClass">
+        <div class="shrink-0">
+            <component :is="iconComponent" :class="iconClass"/>
         </div>
-    </transition>
+        <div class="flex-1 space-y-1">
+            <h2 :class="titleClass">{{ title }}</h2>
+            <div :class="contentClass"><slot /></div>
+        </div>
+        <div class="shrink-0">
+            <button @click="dismissToast" :class="buttonClass">
+                <x-icon class="w-6 h-6"/>
+            </button>
+        </div>
+    </div>
 </template>
 
 <script>
@@ -46,20 +38,15 @@ export default {
         title: String,
         show: Boolean,
     },
-    data() {
-        return {
-            showToast: this.show,
-        }
-    },
     computed: {
         containerClass() {
-            return cva("flex p-4 rounded-lg space-x-3 ring-black/[.05] shadow-lg", {
+            return cva("flex p-4 rounded-lg space-x-3 ring-black/[.05] shadow-lg border", {
                 variants: {
                     intent: {
-                        info:"bg-blue-100",
-                        success:"bg-green-100",
-                        warning:"bg-orange-100",
-                        danger:"bg-red-100",
+                        info:"bg-blue-100 border-blue-700",
+                        success:"bg-green-100 border-green-700",
+                        warning:"bg-orange-100 border-orange-700",
+                        danger:"bg-red-100 border-red-700",
                     }
                 }
             }) ({
@@ -137,6 +124,9 @@ export default {
         dismissToast() {
             this.$emit('dismiss-toast');
         },
+    },
+    mounted() {
+        setTimeout(this.dismissToast, 8000);
     },
 }
 </script>

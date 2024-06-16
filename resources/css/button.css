@@ -1,10 +1,28 @@
 .btn-primary {
-  @apply px-6 py-2 rounded-sm bg-blue-500 shadow text-white fill-white text-sm leading-4 font-medium whitespace-nowrap hover:bg-blue-600 focus:bg-blue-600 !important;
+  background-color: #A6A85E !important;
+  @apply px-6 py-2 rounded-sm shadow text-white fill-white text-sm leading-4 font-medium whitespace-nowrap focus:bg-blue-600 !important;
+}
+
+.btn-primary:hover, .btn-primary:focus {
+  background-color: #8c8e47 !important;
+}
+
+.btn-primary:disabled {
+  @apply bg-gray-300 text-gray-400 !important;
 }
 
 .btn-secondary {
   @apply px-6 py-2 rounded-sm bg-white shadow-sm text-gray-900 fill-gray-900 text-sm leading-4 font-light whitespace-nowrap ring-1 ring-inset ring-gray-300 hover:bg-gray-50;
 }
+
+.btn-danger {
+  @apply px-6 py-2 rounded-sm shadow bg-red-600 text-white fill-white text-sm leading-4 font-medium whitespace-nowrap hover:bg-red-500 focus:bg-red-500 !important;
+}
+
+.btn-cancel {
+  @apply text-gray-500 focus:outline-none hover:text-blue-700 hover:underline focus:z-10 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center;
+}
+
   
 .btn-spinner,
 .btn-spinner:after {

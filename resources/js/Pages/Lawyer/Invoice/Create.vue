@@ -22,9 +22,7 @@
                                 <div class="font-medium text-gray-900 mb-2">
                                     {{ invoice.company.name }}
                                 </div>
-                                <div>
-                                    {{ invoice.company.address }}
-                                </div>
+                                <div class="whitespace-pre-wrap">{{ invoice.company.address }}</div>
                             </div>  
                         </div>
                         <div class="flex flex-col flex-wrap w-full lg:w-1/2">
@@ -35,9 +33,7 @@
                                 <div class="font-medium text-gray-900 mb-2">
                                     {{ invoice.client.name }}
                                 </div>
-                                <div>
-                                    {{ invoice.client.address }}
-                                </div>
+                                <div class="whitespace-pre-wrap">{{ invoice.client.address }}</div>
                             </div>  
                         </div>
                     </div>
@@ -102,15 +98,10 @@
                     <textarea-input v-model="form.notes" :error="form.errors.notes" rows="4" class="w-full" label="Notes"/>
                 </div>
                 <div class="flex items-center justify-end px-8 py-4 bg-gray-50 border-t border-gray-100">
-                    <Link 
-                        :href="`/lawyer/case-files/${this.case_file.id}/invoices`"
-                        as="button"  
-                        class="mr-2 text-gray-500 focus:outline-none hover:text-blue-700 hover:underline focus:z-10 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center"
-                        :disabled="form.processing"
-                        >
+                    <loading-button :loading="form.processing" class="btn-primary" type="submit">Create Invoice</loading-button>
+                    <Link :href="`/lawyer/case-files/${this.case_file.id}/invoices`" as="button" class="btn-cancel" :disabled="form.processing">
                         Cancel
                     </Link>
-                    <loading-button :loading="form.processing" class="btn-primary" type="submit">Create Invoice</loading-button>
                 </div>
             </form>
         </div>
@@ -152,8 +143,8 @@ export default {
         return {
             page_title: 'Create Invoice',
             breadcrumbs: [
-                { link: '/lawyer', label: 'Dashboard'},
-                { link: '/lawyer/case-files/', label: 'Case Files'},
+                { link: '/lawyer/dashboard', label: 'Lawyer'},
+                { link: '/lawyer/case-files/', label: 'My Cases'},
                 { link: `/lawyer/case-files/${this.case_file.id}`, label: this.case_file.file_number},
                 { link: `/lawyer/case-files/${this.case_file.id}/invoices`, label: 'Invoices'},
                 { link: null, label: 'Create'},
@@ -189,7 +180,6 @@ export default {
         },
         removeItem(index) {
             this.added_items.splice(index, 1);
-            // this.form.items_id.splice(index, 1);
         }
     },
     watch: {

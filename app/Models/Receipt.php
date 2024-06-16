@@ -6,6 +6,7 @@ use App\Traits\HasCompanyScope;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use PhpParser\Node\Expr\Cast\String_;
 
 class Receipt extends Model
 {
@@ -20,11 +21,26 @@ class Receipt extends Model
         'notes',
         'is_sent',
         'created_by_user_id',
+        'sent_at'
     ];
+
+    protected $dates = [
+        'sent_at',
+    ];
+
+    public function getFormattedDateAttribute(): String 
+    {
+        return $this->sent_at ? $this->sent_at->format('d F Y, h:i A'): 'N/A';
+    }
 
     public function payment() 
     {
         return $this->belongsTo(InvoicePayment::class, 'invoice_payment_id', 'id');
+    }
+
+    public function createdBy() 
+    {
+        return $this->belongsTo(User::class, 'created_by_user_id', 'id');
     }
 
     public function getClientAttribute()

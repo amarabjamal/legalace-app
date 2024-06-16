@@ -40,11 +40,11 @@
               {{ invoice.due_at }}
             </td>
             <td class="border-t px-6 py-4 whitespace-nowrap ">
-              <span class="p-1.5 text-xs font-medium uppercase tracking-wider text-gray-800 bg-gray-200 rounded-lg bg-opacity-50">
+              <span :class="statusClass(invoice.status_value)">
                 {{ invoice.status }}
               </span>
             </td>
-            <td class="border-t px-6 py-4 whitespace-nowrap text-right">
+            <td class="border-t px-6 py-4 whitespace-nowrap text-right tabular-nums">
               {{ invoice.total }}
             </td>
             <td class="border-t px-6 py-4 whitespace-nowrap ">
@@ -57,7 +57,7 @@
             </td>
           </tr>
           <tr>
-            <td v-if="invoices.data.length === 0" class="px-6 py-4 border-t text-center text-slate-500 bg-slate-100" colspan="100%">No invoices found.</td>
+            <td v-if="invoices.data.length === 0" class="px-6 py-4 border-t text-center text-slate-500 bg-slate-100" colspan="100%">No records found.</td>
           </tr>
         </tbody>
       </table>
@@ -76,6 +76,7 @@ import Pagination from '../../../Shared/Pagination';
 import throttle from 'lodash/throttle';
 import pickBy from 'lodash/pickBy'
 import mapValues from 'lodash/mapValues';
+import { cva } from 'class-variance-authority';
 
 export default {
     components: {
@@ -96,8 +97,8 @@ export default {
         },
         page_title: 'Invoices',
         breadcrumbs: [
-            { link: '/lawyer', label: 'Dashboard'},
-            { link: '/lawyer/case-files/', label: 'Case Files'},
+            { link: '/lawyer/dashboard', label: 'Lawyer'},
+            { link: '/lawyer/case-files/', label: 'My Cases'},
             { link: `/lawyer/case-files/${this.case_file.id}`, label: this.case_file.file_number},
             { link: null, label: 'Invoices'},
         ],
@@ -115,6 +116,23 @@ export default {
         reset() {
           this.form = mapValues(this.form, () => null);
         },
+        statusClass(status) {
+            return cva("p-1.5 text-xs font-medium uppercase tracking-wider rounded-sm bg-opacity-50", {
+                variants: {
+                    status: {
+                        1: "text-blue-500 bg-blue-100", //Draft
+                        2: "text-cyan-500 bg-cyan-100", //Open
+                        3: "text-teal-500 bg-teal-100", //Sent
+                        4: "text-green-500 bg-green-100", //Paid
+                        5: "text-red-500 bg-red-100", //Overdue
+                        6: "text-gray-500 bg-gray-100", //Void
+                        7: "text-rose-500 bg-rose-100", //Uncollactable
+                    }
+                }
+            }) ({
+                status: status,
+            })
+        }
     },
 }
 

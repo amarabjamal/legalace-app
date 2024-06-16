@@ -14,6 +14,7 @@ class DisbursementItemType extends Model
     protected $table = 'disbursement_item_types';
     protected $primaryKey= 'id';
     protected $fillable = [
+        'company_id',
         'name',
         'description',
         'enabled',

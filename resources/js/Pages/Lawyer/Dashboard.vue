@@ -87,6 +87,7 @@ export default {
         return {
             page_title: 'Dashboard',
             breadcrumbs: [
+                { link: '/lawyer/dashboard', label: 'Lawyer'},
                 { link: null, label: 'Dashboard'},
             ],
         }

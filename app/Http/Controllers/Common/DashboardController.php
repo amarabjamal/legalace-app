@@ -3,79 +3,32 @@
 namespace App\Http\Controllers\Common;
 
 use App\Http\Controllers\Controller;
-use App\Models\Company;
 use App\Models\User;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
 
 class DashboardController extends Controller
 {
-    public function index()
+    public function redirectToDashboard() 
     {
-        $user = Auth::user();
-        $userRoles = User::findOrFail($user->id)->userRoles;
-        $roles = array();
+        $user = auth()->user();
 
-        foreach($userRoles as $userRole) {
-            array_push($roles, $userRole->role->slug);
-        }
-
-        $company = $user->company;
-        $companyName = $user->company->name;
-
-        if($roles !== null) {
-            if(in_array("admin", $roles)){
-                return Inertia::render('Admin/Dashboard', [
-                    'total_users' => User::all()->count(),
-                    'isCompanyProfileConfigured' => $company != null ? true : false,
-                    'role' => $roles
-                ]);
-            }
-            else if(in_array("lawyer", $roles)){
-                return Inertia::render('Lawyer/Dashboard', [
-                    'user' => $user,
-                    'company' => $companyName,
-                    'role' => $roles
-                ]);
-            }
-        } else {
-            return redirect()->route('login')->withErrors([
-                'invalid_role' => 'The user is not assigned a role',
-            ]);
+        if($user->hasRole('admin')) {
+            return $this->indexAdmin();
+        } else if($user->hasRole('lawyer')) {
+            return $this->indexLawyer();
         }
     }
 
-    public function showAdminDashboard() {
-        $user = Auth::user();
-        $userRoles = User::findOrFail($user->id)->userRoles;
-        $roles = array();
-
-        foreach($userRoles as $userRole) {
-            array_push($roles, $userRole->role->slug);
-        }
-
+    public function indexAdmin() 
+    {
         return Inertia::render('Admin/Dashboard', [
             'total_users' => User::all()->count(),
-            'role' => $roles
         ]);
     }
 
-    public function showLawyerDashboard() {
-        $user = Auth::user();
-        $userRoles = User::findOrFail($user->id)->userRoles;
-        $roles = array();
+    public function indexLawyer() 
+    {
 
-        foreach($userRoles as $userRole) {
-            array_push($roles, $userRole->role->slug);
-        }
-
-        $companyName = $user->company->name;
-
-        return Inertia::render('Lawyer/Dashboard', [
-            'user' => $user,
-            'company' => $companyName,
-            'role' => $roles
-        ]);
+        return Inertia::render('Lawyer/Dashboard');
     }
 }

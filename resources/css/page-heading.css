@@ -1,0 +1,21 @@
+.page-title {
+    color: #3C3D5B;
+    @apply text-2xl font-bold sm:truncate sm:tracking-tight;
+}
+
+.page-subtitle {
+    @apply mt-2 text-sm text-gray-500;
+}
+
+.breadcrumb-link {
+    color: #50527A;
+    @apply text-sm font-normal;
+}
+
+.breadcrumb-link:hover {
+    color: #7678a0;
+}
+
+.last-breadcrumb-link {
+    @apply text-sm font-normal text-gray-400;
+}

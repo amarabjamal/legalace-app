@@ -104,23 +104,14 @@
                     <div class="">
                         <button class="text-red-600 hover:underline" tabindex="-1" type="button" @click="destroy">Delete Invoice</button>
                     </div>
-                    <div class="flex items-center justify-center">
-                        <Link 
-                            :href="`/lawyer/case-files/${case_file.id}/invoices/${invoice.id}`"
-                            as="button"  
-                            class="mr-2 text-gray-500 focus:outline-none hover:text-blue-700 hover:underline focus:z-10 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center"
-                            :disabled="form.processing"
-                            >
+                    <div class="flex flex-row-reverse items-center justify-center">
+                        <loading-button :loading="form.processing" :disabled="!form.isDirty" class="btn-primary" type="submit">Update Invoice</loading-button>
+                        <Link :href="`/lawyer/case-files/${case_file.id}/invoices/${invoice.id}`" as="button" class="btn-cancel" :disabled="form.processing">
                             Cancel
                         </Link>
-                        <loading-button :loading="form.processing" class="btn-primary" type="submit">Update Invoice</loading-button>
                     </div>
                 </div>
             </form>
-        </div>
-        
-        <div class="hidden w-full max-w-3xl h-fit xl:w-1/3 bg-gray-100 ring-gray-900 rounded-md shadow overflow-hidden mt-5 xl:mt-0 xl:ml-5 p-8">
-            Total RM 9,999.99
         </div>
     </div>
 
@@ -154,8 +145,8 @@ export default {
         return {
             page_title: 'Edit Invoice',
             breadcrumbs: [
-                { link: '/lawyer', label: 'Dashboard'},
-                { link: '/lawyer/case-files/', label: 'Case Files'},
+                { link: '/lawyer/dashboard', label: 'Lawyer'},
+                { link: '/lawyer/case-files/', label: 'My Cases'},
                 { link: `/lawyer/case-files/${this.case_file.id}`, label: this.case_file.file_number},
                 { link: `/lawyer/case-files/${this.case_file.id}/invoices`, label: 'Invoices'},
                 { link: `/lawyer/case-files/${this.case_file.id}/invoices/${this.invoice.id}`, label: this.invoice.number},
@@ -176,9 +167,10 @@ export default {
         update() {
             if(this.form.isDirty) {
                 this.form.put(`/lawyer/case-files/${this.case_file.id}/invoices/${this.invoice.id}`);
+            } else {
+                alert('There is no changes to be saved');
             }
 
-            alert('There is no changes to be saved');
         },
         destroy() {
           if(confirm('Are you sure you want to delete this invoice?')) {

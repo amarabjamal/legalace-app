@@ -1,7 +1,9 @@
 <template>
-    <nav id="sidebar" :class="`${!isSidebarOpen ? 'close' : ''}`">
+    <nav id="sidebar" :class="`${!expendSidebar ? 'close' : ''}`">
         <div class="menu-items">
             <ul class="nav-links">
+                <li class="logo-container"><div class="logo"></div></li>
+                
                 <li v-for="(navigation, index) in navigations" :key="index">
                     <div>
                         <Link :href="navigation.href">
@@ -29,16 +31,16 @@ import IconSidebar from '../../../Shared/IconSidebar';
 
 export default {
     props: {
-        isSidebarOpen: Boolean,
+        expendSidebar: Boolean,
     },
     data() {
         return {
             navigations: [
-                {href: '/admin', label: 'Dashboard', icon:'home-smile-line', isActive: this.$page.url.startsWith('/lawyer')},
-                {href: '/admin/company', label: 'Company Profile', icon:'donut-chart-line', isActive: this.$page.url.startsWith('/admin/company')},
+                {href: '/admin/dashboard', label: 'Dashboard', icon:'home-smile-line', isActive: this.$page.url.startsWith('/lawyer')},
+                {href: '/admin/company', label: 'Company', icon:'donut-chart-line', isActive: this.$page.url.startsWith('/admin/company')},
                 {href: '/admin/users', label: 'Employees', icon:'group-line', isActive: this.$page.url.startsWith('/admin/users')},
                 {href: '/admin/bank-accounts', label: 'Bank Accounts', icon:'bank-card-line', isActive: this.$page.url.startsWith('/admin/bank-accounts')},
-                {href: '/admin/voucherapprovals', label: 'Voucher Requests', icon:'inbox-line', isActive: this.$page.url.startsWith('/admin/voucherapprovals')},
+                {href: '/admin/voucher-requests', label: 'Voucher Requests', icon:'inbox-line', isActive: this.$page.url.startsWith('/admin/voucher-requests')},
             ],
         }
     },

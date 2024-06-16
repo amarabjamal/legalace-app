@@ -90,6 +90,13 @@ import {
 } from '@headlessui/vue'
 
 export default {
+    components: {
+        TransitionRoot,
+        TransitionChild,
+        Dialog,
+        DialogPanel,
+        DialogTitle,
+    },
     props: {
         isOpen: Boolean,
         items: Array,

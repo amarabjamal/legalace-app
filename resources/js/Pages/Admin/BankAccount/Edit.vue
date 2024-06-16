@@ -3,173 +3,99 @@
 
     <page-heading :page_title="page_title" :breadcrumbs="breadcrumbs"/>
 
-    <div class="max-w-3xl px-6 py-8 mb-8 bg-white rounded-lg shadow-md dark:bg-gray-800">
-        <form @submit.prevent="submit">
-            <div class="mb-6">
-                <label for="account_name" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
-                    Account Name
-                </label>
-                <input 
-                    v-model="form.account_name"
-                    type="text" 
-                    id="account_name" 
-                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:outline-none focus:border-purple-400 focus:shadow-outline-purple block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
-                    placeholder="" 
-                    required
-                />
-                <p v-if="form.errors.account_name" v-text="form.errors.account_name" class="mt-2 text-sm text-red-600"></p>
+    <div class="max-w-3xl bg-white rounded-md border border-gray-300 overflow-hidden">
+        <form @submit.prevent="update">
+            <div class="p-8 space-y-12">
+                <div class="border-b border-gray-900/10 pb-12">
+                    <h2 class="text-base font-semibold leading-7 text-gray-900">Account Information</h2>
+                    <p class="mt-1 text-sm leading-6 text-gray-600">The account information will be used in the quotation, and other records that you issue.</p>
+
+                    <div class="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 md:grid-cols-2">
+                        <text-input v-model="form.label" :error="form.errors.label" label="Label" required/>
+                        <select-input v-model="form.bank_account_type_id" :error="form.errors.bank_account_type_id" label="Account Type" required>
+                            <option disabled value="">Please select the account type</option>
+                            <option value="1">Client Account</option>
+                            <option value="2">Firm Account</option>
+                        </select-input>
+                        <text-input v-model="form.account_name" :error="form.errors.account_name" label="Account Name" required/>
+                        <text-input v-model="form.account_number" :error="form.errors.account_number" label="Account Number" required/>
+                        <text-input v-model="form.swift_code" :error="form.errors.swift_code" label="SWIFT Code" required/>
+                        <money-input v-model.lazy="form.opening_balance" :error="form.errors.opening_balance" label="Opening Balance" require/>
+                    </div>
+                </div>
+
+                <div>
+                    <h2 class="text-base font-semibold leading-7 text-gray-900">Bank Information</h2>
+                    <p class="mt-1 text-sm leading-6 text-gray-600">The details about your bank.</p>
+
+                    <div class="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 md:grid-cols-2">
+                        <text-input v-model="form.bank_name" :error="form.errors.bank_name" label="Bank Name" required/>
+                        <textarea-input v-model="form.bank_address" :error="form.errors.bank_address" label="Bank Address" rows="4" class="col-span-1 md:col-span-2" required/>
+                    </div>
+                </div>
             </div>
 
-            <div class="mb-6">
-                <label for="bank_name" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
-                    Bank Name
-                </label>
-                <input 
-                    v-model="form.bank_name"
-                    type="text" 
-                    id="bank_name" 
-                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:outline-none focus:border-purple-400 focus:shadow-outline-purple block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
-                    placeholder="" 
-                    required
-                />
-                <p v-if="form.errors.bank_name" v-text="form.errors.bank_name" class="mt-2 text-sm text-red-600"></p>
+            <div class="flex flex-row-reverse space-x-2 space-x-reverse  items-center justify-start px-8 py-4 bg-gray-50 border-t border-gray-100">
+                <loading-button :loading="form.processing" :disabled="!form.isDirty" class="btn-primary" type="submit">Update Bank Account</loading-button>
+                <Link :href="`/admin/bank-accounts/${bankAccount.id}`" as="button" class="btn-cancel" :disabled="form.processing">
+                    Cancel
+                </Link>
             </div>
-
-            <div class="mb-6">
-                <label for="account_number" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
-                    Account Number
-                </label>
-                <input 
-                    v-model="form.account_number"
-                    type="text" 
-                    id="account_number" 
-                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:outline-none focus:border-purple-400 focus:shadow-outline-purple block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
-                    placeholder="" 
-                    required
-                />
-                <p v-if="form.errors.account_number" v-text="form.errors.account_number" class="mt-2 text-sm text-red-600"></p>
-            </div>
-
-            <div class="mb-6">
-                <label for="bank_address" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
-                    Bank Address
-                </label>
-                <input 
-                    v-model="form.bank_address"
-                    type="text" 
-                    id="bank_address" 
-                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:outline-none focus:border-purple-400 focus:shadow-outline-purple block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
-                    placeholder="" 
-                    required
-                />
-                <p v-if="form.errors.bank_address" v-text="form.errors.bank_address" class="mt-2 text-sm text-red-600"></p>
-            </div>
-
-            <div class="mb-6">
-                <label for="swift_code" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
-                    SWIFT Code
-                </label>
-                <input 
-                    v-model="form.swift_code"
-                    type="text" 
-                    id="swift_code" 
-                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:outline-none focus:border-purple-400 focus:shadow-outline-purple block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
-                    placeholder="" 
-                    required
-                />
-                <p v-if="form.errors.swift_code" v-text="form.errors.swift_code" class="mt-2 text-sm text-red-600"></p>
-            </div>
-
-            <div class="mb-6">
-                <label for="bank_account_type_id" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
-                    Account Type
-                </label>
-                <select 
-                    v-model="form.bank_account_type_id"
-                    id="bank_account_type_id" 
-                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:outline-none focus:border-purple-400 focus:shadow-outline-purple block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                    required
-                >
-                    <option value="1">Client Account</option>
-                    <option value="2">Firm Account</option>
-                </select>
-                <p v-if="form.errors.bank_account_type_id" v-text="form.errors.bank_account_type_id" class="mt-2 text-sm text-red-600"></p>
-            </div>
-
-            <div class="mb-6">
-                <label for="label" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
-                    Label
-                </label>
-                <input 
-                    v-model="form.label"
-                    type="text" 
-                    id="label" 
-                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:outline-none focus:border-purple-400 focus:shadow-outline-purple block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
-                    placeholder="" 
-                    required
-                />
-                <p v-if="form.errors.label" v-text="form.errors.label" class="mt-2 text-sm text-red-600"></p>
-            </div>
-
-            <button 
-                type="submit" 
-                class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center"
-                :disabled="form.processing"
-                >
-                Submit
-            </button>
-
-            <Link 
-                href="/admin/bank-accounts"
-                as="button"  
-                class="ml-2 text-gray-900 focus:outline-none bg-white border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-200 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center"
-                :disabled="form.processing"
-                >
-                Cancel
-            </Link>
         </form>
     </div>
 </template>
 
 <script>
 import Layout from "../Shared/Layout";
-import { useForm } from "@inertiajs/inertia-vue3";
+import TextInput from '../../../Shared/TextInput';
+import TextareaInput from '../../../Shared/TextareaInput';
+import SelectInput from '../../../Shared/SelectInput';
+import MoneyInput from "../../../Shared/MoneyInput";
+import LoadingButton from '../../../Shared/LoadingButton';
+import { unmaskMoneyToNumeric } from "../../../Stores/Utils";
 
 export default { 
-    setup (props) {
-        let form = useForm({
-            label: props.bankAccount.label,
-            account_name: props.bankAccount.account_name,
-            bank_name: props.bankAccount.bank_name,
-            account_number: props.bankAccount.account_number,
-            bank_address: props.bankAccount.bank_address,
-            swift_code: props.bankAccount.swift_code,
-            bank_account_type_id: props.bankAccount.bank_account_type_id,
-        });
-
-        let submit = () => {
-            form.put(`/admin/bank-accounts/${props.bankAccount.id}`);
-        };
-
-        return { form, submit };
+    components: { 
+        TextInput,
+        TextareaInput,
+        SelectInput,
+        MoneyInput,
+        LoadingButton,
     },
+    layout: Layout,
     props: {
         bankAccount: Object,
         accountType: Object,
     },
-    components: { 
-
-    },
-    layout: Layout,
     data() {
         return {
             page_title: this.bankAccount.label,
             breadcrumbs: [
-                { link: '/admin', label: 'Dashboard'},
+                { link: '/admin/dashboard', label: 'Admin'},
                 { link: '/admin/bank-accounts', label: 'Bank Accounts'},
                 { link: null, label: this.bankAccount.label},
                 { link: null, label: 'Edit'},
             ],
+            form: this.$inertia.form({
+                label: this.bankAccount.label,
+                account_name: this.bankAccount.account_name,
+                bank_name: this.bankAccount.bank_name,
+                account_number: this.bankAccount.account_number,
+                opening_balance: this.bankAccount.opening_balance.amount,
+                bank_address: this.bankAccount.bank_address,
+                swift_code: this.bankAccount.swift_code,
+                bank_account_type_id: this.bankAccount.bank_account_type_id,
+            }),
+        }
+    },
+    methods: {
+        update() {
+            if(this.form.isDirty) {
+                this.form.opening_balance = unmaskMoneyToNumeric(this.form.opening_balance);
+                this.form.put(`/admin/bank-accounts/${this.bankAccount.id}`);
+            } else {
+                alert('No changes to be saved.');
+            }
         }
     },
 };

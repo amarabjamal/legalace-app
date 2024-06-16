@@ -4,7 +4,7 @@
     <page-heading :page_title="page_title" :breadcrumbs="breadcrumbs"/>
 
     <div class="flex items-center justify-between mb-6">
-        <search-filter v-model="form.search" class="mr-4 w-full max-w-md"  @reset="reset"></search-filter>
+        <search-filter v-model="form.search" placeholder="Search employee" class="mr-4 w-full max-w-md"  @reset="reset"></search-filter>
         <Link class="btn-primary" :href="`/admin/users/create`">
             <span>Create</span>
             <span class="hidden md:inline">&nbsp;Employee</span>
@@ -44,8 +44,11 @@
                     {{ user.employee_id }}
                 </td>
                 <td class="table-body-data">
-                    <span class="px-2 py-1 font-semibold leading-tight text-green-700 bg-green-100 rounded-full dark:bg-green-700 dark:text-green-100">
+                    <span v-if="user.enabled" class="p-1.5 text-xs font-medium uppercase tracking-wider rounded-sm bg-opacity-50 text-green-800 bg-green-200">
                         Enabled
+                    </span>
+                    <span v-else class="p-1.5 text-xs font-medium uppercase tracking-wider rounded-sm bg-opacity-50 text-red-800 bg-red-200">
+                        Disabled
                     </span>
                 </td>
                 <td class="table-body-data">
@@ -58,6 +61,9 @@
                     </div>
                 </td>
             </tr>
+            <tr v-if="users.data.length === 0">
+                    <td class="px-6 py-4 border-t text-center text-slate-500 bg-slate-100" colspan="100%">No records found.</td>
+                </tr>
         </tbody>
         </table>
     </div>
@@ -93,7 +99,7 @@ export default {
             },
             page_title: 'Employees',
             breadcrumbs: [
-                { link: '/admin', label: 'Dashboard'},
+                { link: '/admin/dashboard', label: 'Admin'},
                 { link: null, label: 'Employees'},
             ],
         }

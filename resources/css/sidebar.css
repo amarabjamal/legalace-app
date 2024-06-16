@@ -7,16 +7,16 @@ nav#sidebar{
     padding: 10px 14px;
     border-right: 1px solid var(--border-color);
     transition: var(--tran-05);
-    background-color: rgb(249 250 251 / 1);
+    background-color: #3C3D5B;
+    box-shadow: inset -7px 0 10px -7px rgba(59, 59, 59, 0.4);
 }
 nav#sidebar.close{
     width: 73px;
+    box-shadow: none;
 }
 
 nav#sidebar .menu-items{
-    --margin-top: 120px;
-    margin-top: var(--margin-top);
-    height: calc(100% - 50px - var(--margin-top));
+    height: calc(100% - 5px);
     display: flex;
     flex-direction: column;
     justify-content: space-between;
@@ -24,6 +24,25 @@ nav#sidebar .menu-items{
 .menu-items li{
     list-style: none;
     margin-bottom: 0.75rem;
+}
+
+.menu-items .logo-container {
+    transition: all ease .075s;
+    @apply w-full h-16 mb-2.5 border-transparent border-2;
+}
+
+.menu-items .logo {
+    background-image: url('../../public/images/app/logo.png');
+    @apply  w-full h-full bg-contain bg-no-repeat bg-center;
+}
+
+nav#sidebar.close .menu-items .logo-container {
+    @apply w-10 h-10 p-1 border-2 border-gray-200 bg-gray-200 rounded-3xl mb-8;
+}
+
+nav#sidebar.close .menu-items .logo {
+    background-image: url('../../public/images/app/logo-min.png');
+    @apply  w-full h-full bg-contain bg-no-repeat bg-left;
 }
 
 .menu-items li a{
@@ -39,32 +58,12 @@ nav#sidebar .menu-items{
     column-gap: 0.75rem;
 }
 
-.menu-items .bottom-container li a{
-    display: flex;
-    align-items: center;
-    width: 100%;
-    height: 2.5rem;
-    border-radius: 0.5rem;
-    cursor: pointer;
-    text-decoration: none;
-    position: relative;
-    @apply bg-blue-400 shadow;
-}
-
 nav#sidebar.close .menu-items li a {
     background-color: transparent;
 }
 
-nav#sidebar.close .menu-items .bottom-container li a {
-    @apply shadow-none
-}
-
-nav#sidebar.close .menu-items .bottom-container li a svg {
-    @apply fill-gray-400;
-}
-
 nav#sidebar.close .menu-items li a:hover svg {
-    @apply fill-gray-600;
+    @apply fill-white;
     transition: none;
 }
 
@@ -73,39 +72,11 @@ nav#sidebar.close .menu-items li a:hover svg {
     vertical-align: middle;
     width: 1.50rem;
     height: 1.50rem;
-    @apply fill-gray-400
-}
-
-.menu-items .bottom-container li a svg{
-    flex-shrink: 0;
-    vertical-align: middle;
-    fill: white;
-    width: 1.60rem;
-    height: 1.60rem;
+    @apply fill-gray-300;
 }
 
 .menu-items li a .link-name{
-    font-size: 0.875rem;
-    font-weight: 600;
-    text-transform: capitalize;
-    @apply text-gray-400;
-    line-height: 1.5rem;
-    transition: 0.1s ease-in;
-    overflow-x: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    width: 100%;
-}
-
-.menu-items .bottom-container li a .link-name{
-    font-size: 14px;
-    font-weight: 600;
-    letter-spacing: 0.025em;
-    text-transform: uppercase;
-    color: white;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
+    @apply text-gray-400 capitalize truncate font-medium text-sm w-full;
 }
 
 nav#sidebar.close li a .link-name{
@@ -116,21 +87,51 @@ nav#sidebar.close li a .link-name{
 }
 
 .nav-links li a:hover {
-    background-color: var(--color-primary);
-    transition: 0.15s ease;
+    background-color: #50527A;
 }
 
 .nav-links li a:hover svg {
-    fill: rgb(229 231 235 / 1);
+    fill: white;
 }
 
 .nav-links li a:hover .link-name{
-    color: rgb(229 231 235 / 1);
+    @apply text-white;
 }
 
+/* Bottom Container Styles */
+
 .menu-items .bottom-container{
-    padding-top: 20px;
-    border-top: 1px solid var(--border-color);
+    padding-top: 10px;
+    /* @apply border-t border-gray-600; */
+}
+
+.menu-items .bottom-container li a{
+    display: flex;
+    align-items: center;
+    width: 100%;
+    height: 2.5rem;
+    border-radius: 0.5rem;
+    cursor: pointer;
+    text-decoration: none;
+    position: relative;
+    background-color: #1d1d2f;
+}
+
+nav#sidebar.close .menu-items .bottom-container li a {
+    @apply shadow-none
+}
+
+.menu-items .bottom-container li a svg{
+    flex-shrink: 0;
+    vertical-align: middle;
+    width: 1.60rem;
+    height: 1.60rem;
+    @apply fill-gray-200;
+}
+
+.menu-items .bottom-container li a .link-name{
+    letter-spacing: 0.025em;
+    @apply font-medium truncate text-gray-200 uppercase text-sm;
 }
 
 @media (max-width: 1000px) {
