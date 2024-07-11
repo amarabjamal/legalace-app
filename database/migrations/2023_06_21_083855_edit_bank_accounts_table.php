@@ -19,7 +19,7 @@ return new class extends Migration
                 $table->decimal('opening_balance', 13, 4, true)->default(0.0000);
             });
             //Rename created by to created by user id
-            $table->renameColumn('created_by', 'created_by_user_id');
+            // $table->renameColumn('created_by', 'created_by_user_id');
         });
     }
 
