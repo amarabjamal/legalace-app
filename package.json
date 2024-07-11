@@ -2,7 +2,8 @@
     "private": true,
     "scripts": {
         "dev": "vite",
-        "build": "vite build"
+        "build": "vite build",
+        "watch": "mix watch"
     },
     "devDependencies": {
         "@types/lodash": "^4.14.182",
