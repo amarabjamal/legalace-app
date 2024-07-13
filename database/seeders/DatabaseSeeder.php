@@ -81,7 +81,8 @@ class DatabaseSeeder extends Seeder
                 'swift_code' => 'MBBEMYKLXXX',
                 'bank_account_type_id' => 1,
                 'label' => 'Client Account 1',
-                'created_by' => 1,
+                // 'created_by' => 1,
+                'created_by_user_id' => 1,
                 'company_id' => 1,
             ],
             [
@@ -92,7 +93,8 @@ class DatabaseSeeder extends Seeder
                 'swift_code' => 'MBBEMYKLXXX',
                 'bank_account_type_id' => 2,
                 'label' => 'Client Account 2',
-                'created_by' => 1,
+                // 'created_by' => 1,
+                'created_by_user_id' => 1,
                 'company_id' => 1,
             ],
         ];
