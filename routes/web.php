@@ -98,6 +98,10 @@ Route::group(['middleware' => 'auth'], function() {
         
         Route::resource('case-files', CaseFileController::class);
         
+        Route::resource('firm-accounts', FirmAccountController::class);
+        
+        Route::resource('client-accounts', ClientAccountController::class);
+        
         Route::post('claim-vouchers/{claim_voucher}/submit', [ClaimVoucherController::class, 'submitClaimVoucher']);
         Route::resource('claim-vouchers', ClaimVoucherController::class);
 

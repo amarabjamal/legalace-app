@@ -18,7 +18,7 @@ class FirmAccount extends Model
         'debit',
         'credit',
         'balance',
-        'company_id',
+        // 'company_id',
         'bank_account_id',
         'created_at',
         'updated_at',
@@ -33,8 +33,12 @@ class FirmAccount extends Model
         return $this->belongsTo(User::class, 'created_by', 'id');
     }
 
-    public function company() {
-        return $this->belongsTo(Company::class, 'company_id', 'id');
+    // public function company() {
+    //     return $this->belongsTo(Company::class, 'company_id', 'id');
+    // }
+
+    public function bankAccount() {
+        return $this->belongsTo(BankAccount::class, 'bank_account_id', 'id');
     }
 
     
