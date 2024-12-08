@@ -7,10 +7,10 @@
     <div v-for="acc in firmAccountList.data" :key="acc.id"
     class="grid gap-6 mb-8 md:grid-cols-3 mt-4">
 
-        <div class="min-w-0 p-4 bg-white  shadow-xs dark:bg-gray-800 border border-gray-300 rounded-md">
+        <div v-on:click="navigateToDetails(acc.id)" class="min-w-0 p-4 bg-white  shadow-xs dark:bg-gray-800 border border-gray-300 rounded-md">
             <!-- <div v-for="bankAccount in bankAccounts" class="min-w-0 p-4 bg-white  shadow-xs dark:bg-gray-800"> -->
             <h4 class="mb-4 font-semibold text-gray-600 dark:text-gray-300">
-                <!-- {{ bankAccount.account_name }} -->Firm Account 1
+                {{ acc.account_name }}
             </h4>
             <p class="text-gray-600 dark:text-gray-400">
             <table class="border-separate border-spacing-2 dark:text-gray-400">
@@ -76,23 +76,8 @@ import { ref, watch } from "vue";
 
 
 export default {
-    setup(props) {
-        let searchAccount = ref(props.filters.search);
-
-        watch(searchAccount, throttle(value => {
-            Inertia.get('/firm-account', { search: value }, {
-                preserveState: true,
-                replace: true,
-            });
-        }, 500));
-
-        return { searchAccount };
-    },
     data() {
         return {
-            form: {
-                search: this.filters.search,
-            },
             page_title: 'Firm Accounts',
             breadcrumbs: [
                 { link: '/lawyer/dashboard', label: 'Lawyer' },
@@ -101,22 +86,13 @@ export default {
         }
     },
     props: {
-        firmAccounts: Object,
         firmAccountList: Object,
-        filters: Object,
-        acc: Object,
-        // bankAccounts: Object,
-        bank_accounts: Object,
-        filters: Object,
     },
-    // components: { Head, Pagination, ref },
     components: { SearchFilter, Icon, Pagination, ref },
     layout: Layout,
     methods: {
-        deleteAcc(acc) {
-            if (confirm('Are you sure you want to delete this client?')) {
-                Inertia.delete(`/firm-account/${acc.id}`);
-            }
+        navigateToDetails(accountId) {
+            window.location.href = `/lawyer/firm-accounts/${accountId}/detail`;
         }
     },
 };

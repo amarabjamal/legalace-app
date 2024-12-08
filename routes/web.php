@@ -99,6 +99,8 @@ Route::group(['middleware' => 'auth'], function () {
 
         Route::resource('case-files', CaseFileController::class);
 
+        Route::get('firm-accounts/{account_number}/detail', [FirmAccountController::class, 'detail']);
+        Route::get('firm-accounts/{account_number}/{transaction_type}/detail', [FirmAccountController::class, 'detailFilter']);
         Route::resource('firm-accounts', FirmAccountController::class);
 
         Route::resource('client-accounts', ClientAccountController::class);

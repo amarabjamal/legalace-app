@@ -14,46 +14,8 @@ use Illuminate\Support\Facades\Request as FacadesRequest;
 
 class FirmAccountController extends Controller
 {
-    // protected $bank_account;
-    // public function __construct(BankAccount $bank_account)
-    // {
-    //     $this->bank_account = $bank_account;
-    // }
-
     public function index(Request $request)
     {
-        $firmAccounts = FirmAccount::query()
-            ->when($request->input('search'), function ($query, $search) {
-                $query->where('name', 'like', "%{$search}%");
-            })
-            ->paginate(10)
-            ->withQueryString()
-            ->through(fn($acc) => [
-                'id' => $acc->id,
-                'date' => $acc->date,
-                'description' => $acc->description,
-                'transaction_type' => $acc->transaction_type,
-                'debit' => $acc->debit,
-                'credit' => $acc->credit,
-                'balance' => $acc->balance,
-            ]);
-        $filters = $request->only(['search']);
-
-        $acc = DB::table('firm_account')->sum('balance');
-
-        $bankAccounts = BankAccount::filter(FacadesRequest::only('search'))
-            ->paginate(25)
-            ->withQueryString()
-            ->through(fn($bank_account) => [
-                'id' => $bank_account->id,
-                'label' => $bank_account->label,
-                'bank_name' => $bank_account->bank_name,
-                'account_name' => $bank_account->account_name,
-                'account_number' => $bank_account->account_number,
-                'swift_code' => $bank_account->swift_code,
-                'account_type' => $bank_account->bankAccountType->name,
-            ]);
-
         $accList = DB::table('firm_account');
 
         $firmAccountList = FirmAccountList::query()
@@ -72,13 +34,7 @@ class FirmAccountController extends Controller
 
 
         return Inertia::render('Lawyer/FirmAccount/Index', [
-            'firmAccounts' => $firmAccounts,
             'firmAccountList' => $firmAccountList,
-            'filters' => $filters,
-            'acc' => $acc,
-            // 'bankAccounts' => $bank_accounts,
-            'filters' => FacadesRequest::all('search'),
-            'bank_accounts' => $bankAccounts,
         ]);
     }
 
@@ -102,6 +58,101 @@ class FirmAccountController extends Controller
         ]);
 
         return redirect()->route('firm-account.index')->with('message', 'Successfully added new transaction.');
+    }
+
+    public function detail(Request $request, $acc_number)
+    {
+        $filters = FacadesRequest::all(['search']);
+        $accList = DB::table('firm_account');
+
+        $bankAccount = FirmAccountList::query()
+            ->where('id', 'like', "%{$acc_number}%")
+            ->paginate(10)
+            ->withQueryString()
+            ->through(fn($accList) => [
+                'id' => $accList->id,
+                'label' => $accList->label,
+                'account_name' => $accList->account_name,
+                'bank_name' => $accList->bank_name,
+                'account_number' => $accList->account_number,
+                'opening_balance' => $accList->opening_balance,
+                'swift_code' => $accList->swift_code,
+            ]);
+
+        $firmAccounts = FirmAccount::query()
+            ->where('bank_account_id', 'like', "%{$acc_number}%")
+            ->paginate(10)
+            ->withQueryString()
+            ->through(fn($acc) => [
+                'id' => $acc->id,
+                'date' => $acc->date,
+                'description' => $acc->description,
+                'transaction_type' => $acc->transaction_type,
+                'debit' => $acc->debit,
+                'credit' => $acc->credit,
+                'balance' => $acc->balance,
+            ]);
+
+
+        $acc = DB::table('firm_account')->sum('balance');
+
+        return Inertia::render('Lawyer/FirmAccount/Details', [
+            'firmAccounts' => $firmAccounts,
+            'acc' => $acc,
+            'filters' => FacadesRequest::all('search'),
+            'bank_accounts' => $bankAccount,
+        ]);
+    }
+
+    public function detailFilter(Request $request, $acc_number, $t_type)
+    {
+        $filters = FacadesRequest::all(['search']);
+        $accList = DB::table('firm_account');
+        $filter_type = 0;
+        if ($t_type == 0) {
+            $filter_type = "funds out";
+        } else {
+            $filter_type = "funds in";
+        }
+
+        $bankAccount = FirmAccountList::query()
+            ->where('id', 'like', "%{$acc_number}%")
+            ->paginate(10)
+            ->withQueryString()
+            ->through(fn($accList) => [
+                'id' => $accList->id,
+                'label' => $accList->label,
+                'account_name' => $accList->account_name,
+                'bank_name' => $accList->bank_name,
+                'account_number' => $accList->account_number,
+                'opening_balance' => $accList->opening_balance,
+                'swift_code' => $accList->swift_code,
+            ]);
+
+        $firmAccounts = FirmAccount::query()
+            ->where('bank_account_id', 'like', "%{$acc_number}%")
+            ->where('transaction_type', 'like', "funds out")
+            ->paginate(10)
+            ->withQueryString()
+            ->through(fn($acc) => [
+                'id' => $acc->id,
+                'date' => $acc->date,
+                'description' => $acc->description,
+                'transaction_type' => $acc->transaction_type,
+                'debit' => $acc->debit,
+                'credit' => $acc->credit,
+                'balance' => $acc->balance,
+            ]);
+
+
+        $acc = DB::table('firm_account')->sum('balance');
+
+        return Inertia::render('Lawyer/FirmAccount/Details', [
+            'firmAccounts' => $firmAccounts,
+            'acc' => $acc,
+            'filters' => FacadesRequest::all('search'),
+            'bank_accounts' => $bankAccount,
+        ]);
     }
 
     public function edit(FirmAccount $firmAccount) {}
