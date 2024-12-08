@@ -80,6 +80,9 @@ class FirmAccountController extends Controller
             ]);
 
         $firmAccounts = FirmAccount::query()
+            ->when($request->input('search'), function ($query, $search) {
+                $query->where('transaction_type', 'like', "%{$search}%");
+            })
             ->where('bank_account_id', 'like', "%{$acc_number}%")
             ->paginate(10)
             ->withQueryString()
@@ -99,6 +102,7 @@ class FirmAccountController extends Controller
         return Inertia::render('Lawyer/FirmAccount/Details', [
             'firmAccounts' => $firmAccounts,
             'acc' => $acc,
+            'acc_id' => $acc_number,
             'filters' => FacadesRequest::all('search'),
             'bank_accounts' => $bankAccount,
         ]);
@@ -131,7 +135,7 @@ class FirmAccountController extends Controller
 
         $firmAccounts = FirmAccount::query()
             ->where('bank_account_id', 'like', "%{$acc_number}%")
-            ->where('transaction_type', 'like', "funds out")
+            ->where('transaction_type', 'like', "%{$filter_type}%")
             ->paginate(10)
             ->withQueryString()
             ->through(fn($acc) => [
@@ -150,6 +154,7 @@ class FirmAccountController extends Controller
         return Inertia::render('Lawyer/FirmAccount/Details', [
             'firmAccounts' => $firmAccounts,
             'acc' => $acc,
+            'acc_id' => $acc_number,
             'filters' => FacadesRequest::all('search'),
             'bank_accounts' => $bankAccount,
         ]);

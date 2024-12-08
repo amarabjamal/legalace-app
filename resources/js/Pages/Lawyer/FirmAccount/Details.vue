@@ -175,7 +175,8 @@ export default {
         let searchAccount = ref(props.filters.search);
 
         watch(searchAccount, throttle(value => {
-            Inertia.get('/firm-account/1/detail', { search: value }, {
+            
+            Inertia.get('/lawyer/firm-account', { search: value }, {
                 preserveState: true,
                 replace: true,
             });
@@ -199,6 +200,7 @@ export default {
         firmAccounts: Object,
         filters: Object,
         acc: Object,
+        acc_id: String,
         bank_accounts: Object,
         filters: Object,
     },
@@ -210,6 +212,12 @@ export default {
             if (confirm('Are you sure you want to delete this client?')) {
                 Inertia.delete(`/firm-account/${acc.id}`);
             }
+        },
+        filterList(type) {
+            Inertia.get(`/lawyer/firm-accounts/${this.acc_id}/${type}/detail/`, { search: type }, {
+                preserveState: true,
+                replace: true,
+            });
         }
     },
 };
