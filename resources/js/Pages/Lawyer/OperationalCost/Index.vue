@@ -3,14 +3,11 @@
 
     <div class="flex flex-col flex-1">
         <main class="h-full pb-16 overflow-y-auto mx-3 my-4">
-            
             <div class="container px-6 mx-auto grid">
-                <h2
-                class="my-6 text-2xl font-semibold text-gray-700 dark:text-gray-200"
-                >
-                Manage Operational Cost
+                <h2 class="my-6 text-2xl font-semibold">
+                    Operational Cost/Bills
                 </h2>
-          <!-- <div class="flex justify-between items-end mb-3">
+                <!-- <div class="flex justify-between items-end mb-3">
             <div class="relative">
                 <div class="flex absolute inset-y-0 left-0 items-center pl-3 pointer-events-none">
                     <svg class="w-5 h-5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
@@ -29,7 +26,7 @@
                 New client
             </Link>
         </div> -->
-        <!-- <div class="flex items-center mb-4">
+                <!-- <div class="flex items-center mb-4">
             <h4 class="text-lg font-semibold text-gray-600 dark:text-gray-300">
                 Client Accounts
             </h4>
@@ -41,7 +38,7 @@
             </Link>
         </div> -->
 
-        <!-- <div class="grid gap-6 mb-8 md:grid-cols-2">
+                <!-- <div class="grid gap-6 mb-8 md:grid-cols-2">
                 <div class="min-w-0 p-4 bg-white  shadow-xs dark:bg-gray-800">
                     <div v-for="bankAccount in bankAccounts" class="min-w-0 p-4 bg-white  shadow-xs dark:bg-gray-800">
                         <h4 class="mb-4 font-semibold text-gray-600 dark:text-gray-300">
@@ -115,32 +112,30 @@
                 </div> -->
 
                 <div class="flex items-center mb-4">
-                    <h4 class="text-lg font-semibold text-gray-600 dark:text-gray-300">
+                    <!-- <h4 class="text-lg font-semibold text-gray-600 dark:text-gray-300">
                         Operational cost lists
-                    </h4>
+                    </h4> -->
 
                     <Link href="/operational-cost/create">
-                        <button class="px-4 py-2 ml-3 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-blue-800 border border-transparent rounded-lg active:bg-blue-900 hover:bg-blue-900 focus:outline-none focus:shadow-outline-blue">
-                            Add new cost
+                        <button
+                            class="px-4 py-2 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-blue-800 border border-transparent rounded-lg active:bg-blue-900 hover:bg-blue-900 focus:outline-none focus:shadow-outline-blue"
+                        >
+                            Add Recurring Expense
                         </button>
                     </Link>
                 </div>
                 <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
                     <table class="w-full text-sm text-left text-gray-500">
-                        <thead class="text-xs text-gray-700 uppercase bg-gray-50">
+                        <thead
+                            class="text-xs text-gray-700 uppercase bg-gray-50"
+                        >
                             <tr>
+                                <th scope="col" class="px-6 py-3">DATE</th>
                                 <th scope="col" class="px-6 py-3">
-                                    details
+                                    DESCRIPTION
                                 </th>
-                                <th scope="col" class="px-6 py-3">
-                                    amount
-                                </th>
-                                <th scope="col" class="px-6 py-3">
-                                    Recurring state
-                                </th>
-                                <th scope="col" class="px-6 py-3">
-                                    Recurring period
-                                </th>
+                                <th scope="col" class="px-6 py-3">ACCOUNT</th>
+                                <th scope="col" class="px-6 py-3">AMOUNT</th>
                                 <th scope="col" class="px-6 py-3">
                                     Payment state
                                 </th>
@@ -148,44 +143,74 @@
                                     Balance
                                 </th> -->
                                 <th scope="col" class="px-6 py-3">
+                                    ACTION
                                     <span class="sr-only">Edit</span>
                                 </th>
                             </tr>
                         </thead>
                         <tbody>
-                            <tr 
+                            <tr
                                 v-for="cost in operationalCosts.data"
                                 :key="cost.id"
                                 class="bg-white border-b"
                             >
-                                <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
+                                <th
+                                    scope="row"
+                                    class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap"
+                                >
                                     {{ cost.details }}
                                 </th>
-                                <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
+                                <th
+                                    scope="row"
+                                    class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap"
+                                >
                                     {{ cost.amount }}
                                 </th>
-                                <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
+                                <th
+                                    scope="row"
+                                    class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap"
+                                >
                                     {{ cost.is_recurring }}
                                 </th>
-                                <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
+                                <th
+                                    scope="row"
+                                    class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap"
+                                >
                                     {{ cost.recurring_period }}
                                 </th>
-                                <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
+                                <th
+                                    scope="row"
+                                    class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap"
+                                >
                                     {{ cost.is_paid }}
                                 </th>
                                 <!-- <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
                                     {{ cost.balance }}
                                 </th> -->
                                 <td class="px-6 py-4 text-right">
-                                    <Link :href="`/account-reporting/${ cost.id }/edit`" class="font-medium text-blue-600 hover:underline">Edit</Link>
-                                    <Link @click="deleteAcc(cost)" as="button" class="ml-3 font-medium text-red-600 hover:underline">Delete</Link>
+                                    <Link
+                                        :href="`/account-reporting/${cost.id}/edit`"
+                                        class="font-medium text-blue-600 hover:underline"
+                                        >Edit</Link
+                                    >
+                                    <Link
+                                        @click="deleteAcc(cost)"
+                                        as="button"
+                                        class="ml-3 font-medium text-red-600 hover:underline"
+                                        >Delete</Link
+                                    >
                                 </td>
                             </tr>
                         </tbody>
                     </table>
                 </div>
                 <!-- Paginator -->
-            <Pagination :links="operationalCosts.links" :total="operationalCosts.total" :from="operationalCosts.from" :to="operationalCosts.to"/>
+                <Pagination
+                    :links="operationalCosts.links"
+                    :total="operationalCosts.total"
+                    :from="operationalCosts.from"
+                    :to="operationalCosts.to"
+                />
             </div>
         </main>
     </div>
@@ -196,35 +221,41 @@ import { Head } from "@inertiajs/inertia-vue3";
 import Layout from "../Shared/Layout";
 import Pagination from "../../../Shared/Pagination.vue";
 import { Inertia } from "@inertiajs/inertia";
-import throttle from 'lodash/throttle';
+import throttle from "lodash/throttle";
 import { ref, watch } from "vue";
 
-
-export default { 
+export default {
     setup(props) {
         let searchClients = ref(props.filters.search);
 
-        watch(searchClients, throttle(value => {
-            Inertia.get('/operational-cost', { search: value }, {
-                preserveState: true,
-                replace: true,
-            });
-        }, 500));
+        watch(
+            searchClients,
+            throttle((value) => {
+                Inertia.get(
+                    "/operational-cost",
+                    { search: value },
+                    {
+                        preserveState: true,
+                        replace: true,
+                    },
+                );
+            }, 500),
+        );
 
         return { searchClients };
     },
-    props: { 
+    props: {
         operationalCosts: Object,
-        filters: Object
-     },
+        filters: Object,
+    },
     components: { Head, Pagination, ref },
     layout: Layout,
     methods: {
         deleteAcc(acc) {
-            if (confirm('Are you sure you want to delete this cost?')) {
-                Inertia.delete(`/operational-cost/${ acc.id }`);
+            if (confirm("Are you sure you want to delete this cost?")) {
+                Inertia.delete(`/operational-cost/${acc.id}`);
             }
-        }
+        },
     },
 };
 </script>
