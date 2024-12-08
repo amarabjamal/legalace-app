@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use App\Models\FirmAccount;
+use App\Models\FirmAccountList;
 use App\Models\BankAccount;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -40,19 +41,6 @@ class FirmAccountController extends Controller
 
         $acc = DB::table('firm_account')->sum('balance');
 
-        // $bankAccount = $this->bankAccount->all();
-        // $bankAccounts = BankAccount::all()->map(function ($bank_account) {
-        //     return [
-        //         'id' => $bank_account->id,
-        //         'label' => $bank_account->label,
-        //         'bank_name' => $bank_account->bank_name,
-        //         'account_name' => $bank_account->account_name,
-        //         'account_number' => $bank_account->account_number,
-        //         'swift_code' => $bank_account->swift_code,
-        //         'account_type' => $bank_account->bankAccountType->name,
-        //     ];
-        // });
-
         $bankAccounts = BankAccount::filter(FacadesRequest::only('search'))
             ->paginate(25)
             ->withQueryString()
@@ -66,8 +54,26 @@ class FirmAccountController extends Controller
                 'account_type' => $bank_account->bankAccountType->name,
             ]);
 
+        $accList = DB::table('firm_account');
+
+        $firmAccountList = FirmAccountList::query()
+            ->where('bank_account_type_id', 'like', '2')
+            ->paginate(10)
+            ->withQueryString()
+            ->through(fn($accList) => [
+                'id' => $accList->id,
+                'label' => $accList->label,
+                'account_name' => $accList->account_name,
+                'bank_name' => $accList->bank_name,
+                'account_number' => $accList->account_number,
+                'opening_balance' => $accList->opening_balance,
+                'swift_code' => $accList->swift_code,
+            ]);
+
+
         return Inertia::render('Lawyer/FirmAccount/Index', [
             'firmAccounts' => $firmAccounts,
+            'firmAccountList' => $firmAccountList,
             'filters' => $filters,
             'acc' => $acc,
             // 'bankAccounts' => $bank_accounts,
