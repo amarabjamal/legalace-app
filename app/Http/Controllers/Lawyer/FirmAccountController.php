@@ -83,7 +83,7 @@ class FirmAccountController extends Controller
                         'description' => $request->description,
                         'transaction_type' => $request->transaction_type,
                         'document_number' => $request->document_number,
-                        'upload' => $filePath,
+                        'upload' => "",
                         'debit' => $request->amount,
                         'credit' => 0,
                         'payment_method' => $request->payment_method,
@@ -97,7 +97,7 @@ class FirmAccountController extends Controller
                         'description' => $request->description,
                         'transaction_type' => $request->transaction_type,
                         'document_number' => $request->document_number,
-                        'upload' => $filePath,
+                        'upload' => "",
                         'debit' => 0,
                         'credit' => $request->amount,
                         'payment_method' => $request->payment_method,
@@ -384,11 +384,15 @@ class FirmAccountController extends Controller
         ]);
     }
 
-    public function destroy(FirmAccount $firmAccount)
+    public function destroy($id)
     {
+        $firmAccount = FirmAccount::findOrFail($id);
+
+        $bank_account_id = $firmAccount->bank_account_id;
+
         $firmAccount->delete();
 
-        return redirect()->route('firm-account.index')->with('message', 'Successfully deleted the account.');
+        return redirect()->route('lawyer.firm-accounts.show', ['firm_account' => $bank_account_id])->with('message', 'Successfully deleted the account.');
     }
 
     public function totalBalance()

@@ -249,7 +249,7 @@ export default {
     methods: {
         deleteAcc(acc) {
             if (confirm('Are you sure you want to delete this client?')) {
-                Inertia.delete(`/firm-account/${acc.id}`);
+                Inertia.delete(`/lawyer/firm-accounts/${acc.id}`);
             }
         },
         filterList(type) {
