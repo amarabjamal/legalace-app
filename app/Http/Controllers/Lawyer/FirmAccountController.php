@@ -38,26 +38,54 @@ class FirmAccountController extends Controller
         ]);
     }
 
-    public function create()
+    public function show(Request $request)
     {
-        return Inertia::render('Lawyer/FirmAccount/Create');
+        $accList = DB::table('firm_account');
+
+        $firmAccountList = FirmAccountList::query()
+            ->where('bank_account_type_id', 'like', '2')
+            ->paginate(10)
+            ->withQueryString()
+            ->through(fn($accList) => [
+                'id' => $accList->id,
+                'label' => $accList->label,
+                'account_name' => $accList->account_name,
+                'bank_name' => $accList->bank_name,
+                'account_number' => $accList->account_number,
+                'opening_balance' => $accList->opening_balance,
+                'swift_code' => $accList->swift_code,
+            ]);
+
+
+        return Inertia::render('Lawyer/FirmAccount/Index', [
+            'firmAccountList' => $firmAccountList,
+        ]);
+    }
+
+    public function create($acc_number)
+    {
+        return Inertia::render('Lawyer/FirmAccount/Create', [
+            'acc_number' => $acc_number,
+        ]);
     }
 
     public function store(Request $request)
     {
-        $debit = $request->debit;
-        $credit = $request->credit;
         FirmAccount::create([
+            'date' => $request->date,
+            'bank_account_id' => $request->bank_account_id,
             'description' => $request->description,
             'transaction_type' => $request->transaction_type,
-            'debit' => $request->debit,
-            'credit' => $request->credit,
-            'balance' => $debit - $credit,
-            'bank_account_id' => $request->bank_account_id,
+            'document_number' => $request->document_number,
+            'upload' => $request->upload,
+            'debit' => $request->amount,
+            'credit' => 0,
+            'payment_method' => $request->payment_method,
+            'reference' => $request->reference,
             'created_by' => Auth::id(),
         ]);
 
-        return redirect()->route('firm-account.index')->with('message', 'Successfully added new transaction.');
+        return redirect()->route('lawyer.firm-accounts.show', ['firm_account' => 2])->with('message', 'Successfully added new transaction.');
     }
 
     public function detail(Request $request, $acc_number)

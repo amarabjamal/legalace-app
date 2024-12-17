@@ -101,6 +101,7 @@ Route::group(['middleware' => 'auth'], function () {
 
         Route::get('firm-accounts/{account_number}/detail', [FirmAccountController::class, 'detail']);
         Route::get('firm-accounts/{account_number}/{transaction_type}/detail', [FirmAccountController::class, 'detailFilter']);
+        Route::get('firm-accounts/{account_number}/create', [FirmAccountController::class, 'create']);
         Route::resource('firm-accounts', FirmAccountController::class);
 
         Route::resource('client-accounts', ClientAccountController::class);

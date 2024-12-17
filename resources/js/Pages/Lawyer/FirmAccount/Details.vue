@@ -115,7 +115,7 @@
         <button class="btn-primary" v-on:click="filterList(1)">
             Funds In
         </button>
-        <Link class="btn-primary" :href="`/lawyer/firm-accounts/create`">
+        <Link class="btn-primary" :href="`/lawyer/firm-accounts/${this.acc_id}/create`">
         <span>Create</span>
         <span class="hidden md:inline">&nbsp;Transaction</span>
         </Link>
