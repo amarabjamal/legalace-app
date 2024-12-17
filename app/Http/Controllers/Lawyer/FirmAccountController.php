@@ -80,9 +80,6 @@ class FirmAccountController extends Controller
             ]);
 
         $firmAccounts = FirmAccount::query()
-            ->when($request->input('search'), function ($query, $search) {
-                $query->where('transaction_type', 'like', "%{$search}%");
-            })
             ->where('bank_account_id', 'like', "%{$acc_number}%")
             ->paginate(10)
             ->withQueryString()
@@ -99,12 +96,21 @@ class FirmAccountController extends Controller
 
         $acc = DB::table('firm_account')->sum('balance');
 
+        $funds_in = DB::table('firm_account')
+            ->where('transaction_type', 'like', 'funds in')
+            ->sum('balance');
+        $funds_out = DB::table('firm_account')
+            ->where('transaction_type', 'like', 'funds out')
+            ->sum('balance');
+
         return Inertia::render('Lawyer/FirmAccount/Details', [
             'firmAccounts' => $firmAccounts,
             'acc' => $acc,
             'acc_id' => $acc_number,
             'filters' => FacadesRequest::all('search'),
             'bank_accounts' => $bankAccount,
+            'funds_in' => $funds_in,
+            'funds_out' => $funds_out,
         ]);
     }
 
@@ -150,6 +156,12 @@ class FirmAccountController extends Controller
 
 
         $acc = DB::table('firm_account')->sum('balance');
+        $funds_in = DB::table('firm_account')
+            ->where('transaction_type', 'like', 'funds in')
+            ->sum('balance');
+        $funds_out = DB::table('firm_account')
+            ->where('transaction_type', 'like', 'funds out')
+            ->sum('balance');
 
         return Inertia::render('Lawyer/FirmAccount/Details', [
             'firmAccounts' => $firmAccounts,
@@ -157,6 +169,8 @@ class FirmAccountController extends Controller
             'acc_id' => $acc_number,
             'filters' => FacadesRequest::all('search'),
             'bank_accounts' => $bankAccount,
+            'funds_in' => $funds_in,
+            'funds_out' => $funds_out,
         ]);
     }
 

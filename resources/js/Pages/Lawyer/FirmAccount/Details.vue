@@ -62,6 +62,40 @@
             </div>
             </p>
         </div>
+
+        <div v-for="bank_account in bank_accounts.data" :key="bank_account.id"
+            class="min-w-0 bg-white border border-gray-300 rounded-md overflow-hidden ease-in-out duration-300 hover:shadow-md hover:scale-105 hover:-translate-y-5">
+            <div class="px-4 mb-2 border-b bg-gray-50 flex justify-between items-center">
+                <h4 class="py-2 text-sm uppercase font-semibold text-gray-500 w-1/2 truncate">This Month
+                </h4>
+                <!-- <span :class="accountTypeClass(bank_account.account_type)">{{ bank_account.account_type }}</span> -->
+            </div>
+            <p class="text-gray-600 p-2 text-sm">
+            <table class="border-separate border-spacing-2">
+                <tr>
+                    <td width="120px">
+                        Funds in
+                    </td>
+                    <td class="font-bold">
+                        <span class="font-bold">{{ funds_in }}</span>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        Funds out
+                    </td>
+                    <td class="font-bold">
+                        {{ funds_out }}
+                    </td>
+                </tr>    
+            </table>
+            <div class="flex space-x-2 justify-end p-2 pr-4">
+                <!-- <Link :href="`/admin/bank-accounts/${ bank_account.id }`">View</Link>
+                    <Link :href="`/admin/bank-accounts/${ bank_account.id }/edit`">Edit</Link>
+                    <Link @click="deleteBankAccount(bank_account)" as="button" class="font-medium text-red-600 hover:underline">Delete</Link> -->
+            </div>
+            </p>
+        </div>
     </div>
 
     <div class="grid gap-6 mb-8 md:grid-cols-3 mt-4">
@@ -73,17 +107,18 @@
     </div>
 
     <div class="flex items-center justify-between mb-6">
-        <search-filter v-model="form.search" class="mr-4 w-full max-w-md" @reset="reset"></search-filter>
-        <Link class="btn-primary" :href="`/lawyer/firm-accounts/create`">
-        <span>Create</span>
-        <span class="hidden md:inline">&nbsp;Transaction</span>
-        </Link>
+        <search-filter v-model="form.search" class="mr-4 w-full max-w-md" @reset="reset"></search-filter>   
+        <div>Filter By:</div>     
         <button class="btn-primary" v-on:click="filterList(0)">
             Funds Out
         </button>
         <button class="btn-primary" v-on:click="filterList(1)">
             Funds In
         </button>
+        <Link class="btn-primary" :href="`/lawyer/firm-accounts/create`">
+        <span>Create</span>
+        <span class="hidden md:inline">&nbsp;Transaction</span>
+        </Link>
     </div>
 
     <div class="flex items-center mb-4">
@@ -203,6 +238,8 @@ export default {
         acc_id: String,
         bank_accounts: Object,
         filters: Object,
+        funds_in: Object,
+        funds_out: Object,
     },
     // components: { Head, Pagination, ref },
     components: { SearchFilter, Icon, Pagination, ref },
