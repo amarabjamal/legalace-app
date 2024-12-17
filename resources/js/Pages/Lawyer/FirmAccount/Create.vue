@@ -48,11 +48,12 @@
                             label="Document number"
                             required
                         />
-                        <text-input
+                        <file-input
                             v-model="form.upload"
-                            :error="form.errors.upload"
+                            :errors="form.errors.upload"
+                            class="pb-8 pr-6 w-full lg:w-1/2"
                             label="Upload Document"
-                            required
+                            accept=".jpg,.png,.pdf,.doc,.docx"
                         />
                         <text-input
                             v-model="form.amount"
@@ -115,6 +116,7 @@ import TextInput from "../../../Shared/TextInput";
 import SelectInput from "../../../Shared/SelectInput";
 import DateInput from "../../../Shared/DateInput";
 import LoadingButton from "../../../Shared/LoadingButton";
+import FileInput from "../../../Shared/FileInput";
 import { Switch } from "@headlessui/vue";
 import { Head } from "@inertiajs/inertia-vue3";
 import { useForm } from "@inertiajs/inertia-vue3";
@@ -125,6 +127,7 @@ export default {
         SelectInput,
         DateInput,
         LoadingButton,
+        FileInput,
         Switch,
         Head,
     },
@@ -147,7 +150,7 @@ export default {
                 description: "",
                 transaction_type: "",
                 document_number: "",
-                upload: "",
+                upload: null,
                 amount: "",
                 payment_method: "",
                 reference: "",

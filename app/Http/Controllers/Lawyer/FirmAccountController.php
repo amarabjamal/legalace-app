@@ -71,21 +71,40 @@ class FirmAccountController extends Controller
 
     public function store(Request $request)
     {
-        FirmAccount::create([
-            'date' => $request->date,
-            'bank_account_id' => $request->bank_account_id,
-            'description' => $request->description,
-            'transaction_type' => $request->transaction_type,
-            'document_number' => $request->document_number,
-            'upload' => $request->upload,
-            'debit' => $request->amount,
-            'credit' => 0,
-            'payment_method' => $request->payment_method,
-            'reference' => $request->reference,
-            'created_by' => Auth::id(),
-        ]);
+        $filePath = null;
 
-        return redirect()->route('lawyer.firm-accounts.show', ['firm_account' => 2])->with('message', 'Successfully added new transaction.');
+        try {
+            if (!$request->hasFile('upload')) {
+                throw new FileNotFoundException('File not found.');
+            } else {
+                $fileName = uniqid('TRANSACTION_') . '_' . date('Ymd') . '_' . time() . '.' . $request->file('upload')->extension();
+                $filePath = $request->file('upload')->storeAs(FirmAccount::UPLOAD_PATH, $fileName);
+
+                $request->merge(['upload_filename' => $fileName]);
+
+                FirmAccount::create([
+                    'date' => $request->date,
+                    'bank_account_id' => $request->bank_account_id,
+                    'description' => $request->description,
+                    'transaction_type' => $request->transaction_type,
+                    'document_number' => $request->document_number,
+                    'upload' => $filePath,
+                    'debit' => $request->amount,
+                    'credit' => 0,
+                    'payment_method' => $request->payment_method,
+                    'reference' => $request->reference,
+                    'created_by' => Auth::id(),
+                ]);
+
+                return redirect()->route('lawyer.firm-accounts.show', ['firm_account' => 2])->with('message', 'Successfully added new transaction.');
+            }
+        } catch (\Exception $e) {
+            if (Storage::exists($filePath)) {
+                Storage::delete($filePath);
+            }
+
+            return back()->with('errorMessage', 'Failed to update invoice payment.' . $e->getMessage());
+        }
     }
 
     public function detail(Request $request, $acc_number)
