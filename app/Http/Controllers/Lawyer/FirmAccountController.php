@@ -244,6 +244,19 @@ class FirmAccountController extends Controller
         ]);
     }
 
+    public function view(Request $request, $acc_number, $selected_item)
+    {
+
+        $firmAccounts = FirmAccount::query()
+            ->where('id', 'like', "%{$selected_item}%")
+            ->first();;
+
+        return Inertia::render('Lawyer/FirmAccount/View', [
+            'firmAccounts' => $firmAccounts,
+            'acc_id' => $selected_item,
+        ]);
+    }
+
     public function edit(FirmAccount $firmAccount) {}
 
     public function update(Request $request, FirmAccount $firmAccount) {}
