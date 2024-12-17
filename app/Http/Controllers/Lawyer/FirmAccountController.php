@@ -82,19 +82,35 @@ class FirmAccountController extends Controller
 
                 $request->merge(['upload_filename' => $fileName]);
 
-                FirmAccount::create([
-                    'date' => $request->date,
-                    'bank_account_id' => $request->bank_account_id,
-                    'description' => $request->description,
-                    'transaction_type' => $request->transaction_type,
-                    'document_number' => $request->document_number,
-                    'upload' => $filePath,
-                    'debit' => $request->amount,
-                    'credit' => 0,
-                    'payment_method' => $request->payment_method,
-                    'reference' => $request->reference,
-                    'created_by' => Auth::id(),
-                ]);
+                if (str_contains("funds in", $request->transaction_type)) {
+                    FirmAccount::create([
+                        'date' => $request->date,
+                        'bank_account_id' => $request->bank_account_id,
+                        'description' => $request->description,
+                        'transaction_type' => $request->transaction_type,
+                        'document_number' => $request->document_number,
+                        'upload' => $filePath,
+                        'debit' => $request->amount,
+                        'credit' => 0,
+                        'payment_method' => $request->payment_method,
+                        'reference' => $request->reference,
+                        'created_by' => Auth::id(),
+                    ]);
+                } else {
+                    FirmAccount::create([
+                        'date' => $request->date,
+                        'bank_account_id' => $request->bank_account_id,
+                        'description' => $request->description,
+                        'transaction_type' => $request->transaction_type,
+                        'document_number' => $request->document_number,
+                        'upload' => $filePath,
+                        'debit' => 0,
+                        'credit' => $request->amount,
+                        'payment_method' => $request->payment_method,
+                        'reference' => $request->reference,
+                        'created_by' => Auth::id(),
+                    ]);
+                }
 
                 return redirect()->route('lawyer.firm-accounts.show', ['firm_account' => 2])->with('message', 'Successfully added new transaction.');
             }
@@ -124,6 +140,7 @@ class FirmAccountController extends Controller
                 'account_number' => $accList->account_number,
                 'opening_balance' => $accList->opening_balance,
                 'swift_code' => $accList->swift_code,
+                'payment_method' => $accList->payment_menthod,
             ]);
 
         $firmAccounts = FirmAccount::query()
@@ -135,6 +152,8 @@ class FirmAccountController extends Controller
                 'date' => $acc->date,
                 'description' => $acc->description,
                 'transaction_type' => $acc->transaction_type,
+                'payment_method' => $acc->payment_method,
+                'document_no' => $acc->document_no,
                 'debit' => $acc->debit,
                 'credit' => $acc->credit,
                 'balance' => $acc->balance,
@@ -144,11 +163,13 @@ class FirmAccountController extends Controller
         $acc = DB::table('firm_account')->sum('balance');
 
         $funds_in = DB::table('firm_account')
+            ->where('bank_account_id', 'like', "%{$acc_number}")
             ->where('transaction_type', 'like', 'funds in')
-            ->sum('balance');
+            ->sum('debit');
         $funds_out = DB::table('firm_account')
+            ->where('bank_account_id', 'like', "%{$acc_number}")
             ->where('transaction_type', 'like', 'funds out')
-            ->sum('balance');
+            ->sum('credit');
 
         return Inertia::render('Lawyer/FirmAccount/Details', [
             'firmAccounts' => $firmAccounts,
@@ -196,6 +217,8 @@ class FirmAccountController extends Controller
                 'date' => $acc->date,
                 'description' => $acc->description,
                 'transaction_type' => $acc->transaction_type,
+                'payment_method' => $acc->payment_method,
+                'document_no' => $acc->document_no,
                 'debit' => $acc->debit,
                 'credit' => $acc->credit,
                 'balance' => $acc->balance,

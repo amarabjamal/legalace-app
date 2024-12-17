@@ -146,16 +146,16 @@
                         Transaction type
                     </th>
                     <th scope="col" class="px-6 py-3">
-                        Debit(Funds in)
+                        Payment Type
                     </th>
                     <th scope="col" class="px-6 py-3">
-                        Credit(Funds out)
+                        Amount
                     </th>
                     <th scope="col" class="px-6 py-3">
-                        Balance(MYR)
+                        Document No
                     </th>
                     <th scope="col" class="px-6 py-3">
-                        <span class="sr-only">Edit</span>
+                        Action
                     </th>
                 </tr>
             </thead>
@@ -171,15 +171,15 @@
                         {{ acc.transaction_type }}
                     </th>
                     <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
-                        {{ acc.debit }}
+                        {{ acc.payment_method }}
                     </th>
                     <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
-                        {{ acc.credit }}
+                        {{ acc.transaction_type == "funds in" ? acc.debit : acc.credit }}
                     </th>
                     <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
                         {{ acc.balance }}
                     </th>
-                    <td class="px-6 py-4 text-right">
+                    <td class="px-6 py-4 text-left">
                         <Link :href="`/firm-account/${acc.id}/edit`"
                             class="font-medium text-blue-600 hover:underline">Edit</Link>
                         <Link @click="deleteAcc(acc)" as="button" class="ml-3 font-medium text-red-600 hover:underline">
