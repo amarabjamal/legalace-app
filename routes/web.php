@@ -99,6 +99,7 @@ Route::group(['middleware' => 'auth'], function () {
 
         Route::resource('case-files', CaseFileController::class);
 
+        // FIRM ACCOUNTS
         Route::get('firm-accounts/{account_number}/detail', [FirmAccountController::class, 'detail']);
         Route::get('firm-accounts/update', [FirmAccountController::class, 'update']);
         Route::get('firm-accounts/{account_number}/{transaction_type}/detail', [FirmAccountController::class, 'detailFilter']);
@@ -107,6 +108,13 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('firm-accounts/{account_number}/{selected_item}/edit', [FirmAccountController::class, 'edit']);
         Route::resource('firm-accounts', FirmAccountController::class);
 
+        // CLIENT ACCOUNTS
+        Route::get('client-accounts/{account_number}/detail', [ClientAccountController::class, 'detail']);
+        Route::get('client-accounts/update', [ClientAccountController::class, 'update']);
+        Route::get('client-accounts/{account_number}/{transaction_type}/detail', [ClientAccountController::class, 'detailFilter']);
+        Route::get('client-accounts/{account_number}/create', [ClientAccountController::class, 'create']);
+        Route::get('client-accounts/{account_number}/{selected_item}/view', [ClientAccountController::class, 'view']);
+        Route::get('client-accounts/{account_number}/{selected_item}/edit', [ClientAccountController::class, 'edit']);
         Route::resource('client-accounts', ClientAccountController::class);
 
         Route::post('claim-vouchers/{claim_voucher}/submit', [ClaimVoucherController::class, 'submitClaimVoucher']);
