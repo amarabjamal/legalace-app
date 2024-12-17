@@ -182,7 +182,7 @@
                     <td class="px-6 py-4 text-left">
                         <Link :href="`/lawyer/firm-accounts/${acc_id}/${acc.id}/view`"
                             class="font-medium text-blue-600 hover:underline">View</Link>
-                        <Link :href="`/firm-accounts/${acc.id}/edit`"
+                        <Link :href="`/lawyer/firm-accounts/${acc_id}/${acc.id}/edit`"
                             class="ml-3 font-medium text-blue-600 hover:underline">Edit</Link>
                         <Link @click="deleteAcc(acc)" as="button" class="ml-3 font-medium text-red-600 hover:underline">
                         Delete</Link>

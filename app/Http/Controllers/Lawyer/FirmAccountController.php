@@ -11,6 +11,7 @@ use App\Models\BankAccount;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Request as FacadesRequest;
+use Illuminate\Support\Facades\Storage;
 
 class FirmAccountController extends Controller
 {
@@ -75,7 +76,37 @@ class FirmAccountController extends Controller
 
         try {
             if (!$request->hasFile('upload')) {
-                throw new FileNotFoundException('File not found.');
+                if (str_contains("funds in", $request->transaction_type)) {
+                    FirmAccount::create([
+                        'date' => $request->date,
+                        'bank_account_id' => $request->bank_account_id,
+                        'description' => $request->description,
+                        'transaction_type' => $request->transaction_type,
+                        'document_number' => $request->document_number,
+                        'upload' => $filePath,
+                        'debit' => $request->amount,
+                        'credit' => 0,
+                        'payment_method' => $request->payment_method,
+                        'reference' => $request->reference,
+                        'created_by' => Auth::id(),
+                    ]);
+                } else {
+                    FirmAccount::create([
+                        'date' => $request->date,
+                        'bank_account_id' => $request->bank_account_id,
+                        'description' => $request->description,
+                        'transaction_type' => $request->transaction_type,
+                        'document_number' => $request->document_number,
+                        'upload' => $filePath,
+                        'debit' => 0,
+                        'credit' => $request->amount,
+                        'payment_method' => $request->payment_method,
+                        'reference' => $request->reference,
+                        'created_by' => Auth::id(),
+                    ]);
+                }
+
+                return redirect()->route('lawyer.firm-accounts.show', ['firm_account' => $request->bank_account_id])->with('message', 'Successfully added new transaction.');
             } else {
                 $fileName = uniqid('TRANSACTION_') . '_' . date('Ymd') . '_' . time() . '.' . $request->file('upload')->extension();
                 $filePath = $request->file('upload')->storeAs(FirmAccount::UPLOAD_PATH, $fileName);
@@ -112,7 +143,91 @@ class FirmAccountController extends Controller
                     ]);
                 }
 
-                return redirect()->route('lawyer.firm-accounts.show', ['firm_account' => 2])->with('message', 'Successfully added new transaction.');
+                return redirect()->route('lawyer.firm-accounts.show', ['firm_account' => $request->bank_account_id])->with('message', 'Successfully added new transaction.');
+            }
+        } catch (\Exception $e) {
+            if (Storage::exists($filePath)) {
+                Storage::delete($filePath);
+            }
+
+            return back()->with('errorMessage', 'Failed to update invoice payment.' . $e->getMessage());
+        }
+    }
+
+    public function update(Request $request)
+    {
+        $filePath = null;
+
+        try {
+            $firmAccount = FirmAccount::findOrFail($request->bank_account_id); // Find the record by ID
+            if (!$request->hasFile('upload')) {
+                if (str_contains("funds in", $request->transaction_type)) {
+                    $firmAccount->update([
+                        'date' => $request->date,
+                        'description' => $request->description,
+                        'transaction_type' => $request->transaction_type,
+                        'document_number' => $request->document_number,
+                        'debit' => $request->amount,
+                        'credit' => 0,
+                        'payment_method' => $request->payment_method,
+                        'reference' => $request->reference,
+                        'created_by' => Auth::id(),
+                    ]);
+                } else {
+                    $firmAccount->update([
+                        'date' => $request->date,
+                        'description' => $request->description,
+                        'transaction_type' => $request->transaction_type,
+                        'document_number' => $request->document_number,
+                        'debit' => 0,
+                        'credit' => $request->amount,
+                        'payment_method' => $request->payment_method,
+                        'reference' => $request->reference,
+                        'created_by' => Auth::id(),
+                    ]);
+                }
+                return redirect()->route('lawyer.firm-accounts.show', ['firm_account' => $request->bank_account_id])->with('message', 'Successfully update the transaction.');
+            } else {
+                $fileName = uniqid('TRANSACTION_') . '_' . date('Ymd') . '_' . time() . '.' . $request->file('upload')->extension();
+                $filePath = null;
+
+                if (Storage::exists(FirmAccount::UPLOAD_PATH . $fileName)) {
+                    // DO NOTHING
+                } else {
+                    $filePath = $request->file('upload')->storeAs(FirmAccount::UPLOAD_PATH, $fileName);
+                }
+
+                $request->merge(['upload_filename' => $fileName]);
+
+                if (str_contains("funds in", $request->transaction_type)) {
+                    $firmAccount->update([
+                        'date' => $request->date,
+                        'description' => $request->description,
+                        'transaction_type' => $request->transaction_type,
+                        'document_number' => $request->document_number,
+                        'upload' => $filePath,
+                        'debit' => $request->amount,
+                        'credit' => 0,
+                        'payment_method' => $request->payment_method,
+                        'reference' => $request->reference,
+                        'created_by' => Auth::id(),
+                    ]);
+                } else {
+                    $firmAccount->update([
+                        'date' => $request->date,
+                        'description' => $request->description,
+                        'transaction_type' => $request->transaction_type,
+                        'document_number' => $request->document_number,
+                        'upload' => $filePath,
+                        'debit' => 0,
+                        'credit' => $request->amount,
+                        'payment_method' => $request->payment_method,
+                        'reference' => $request->reference,
+                        'created_by' => Auth::id(),
+                    ]);
+                }
+
+                return redirect()->route('lawyer.firm-accounts.show', ['firm_account' => $request->bank_account_id])->with('message', 'Successfully update the transaction.');
             }
         } catch (\Exception $e) {
             if (Storage::exists($filePath)) {
@@ -257,9 +372,17 @@ class FirmAccountController extends Controller
         ]);
     }
 
-    public function edit(FirmAccount $firmAccount) {}
+    public function edit(Request $request, $acc_number, $selected_item)
+    {
+        $firmAccounts = FirmAccount::query()
+            ->where('id', 'like', "%{$selected_item}%")
+            ->first();;
 
-    public function update(Request $request, FirmAccount $firmAccount) {}
+        return Inertia::render('Lawyer/FirmAccount/Edit', [
+            'firmAccounts' => $firmAccounts,
+            'acc_id' => $selected_item,
+        ]);
+    }
 
     public function destroy(FirmAccount $firmAccount)
     {
