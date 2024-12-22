@@ -15,7 +15,9 @@ return new class extends Migration
     {
         Schema::create('operational_costs', function (Blueprint $table) {
             $table->id();
+            $table->string('date');
             $table->string('details');
+            $table->string('payment_method');
             $table->double('amount');
             $table->boolean('is_recurring');
             $table->string('recurring_period');

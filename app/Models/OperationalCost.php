@@ -8,8 +8,13 @@ use Illuminate\Database\Eloquent\Model;
 class OperationalCost extends Model
 {
     use HasFactory;
+    protected $table = 'operational_costs';
+    protected $primaryKey = 'id';
     protected $fillable = [
+        'id',
+        'date',
         'details',
+        'payment_method',
         'amount',
         'is_recurring',
         'recurring_period',

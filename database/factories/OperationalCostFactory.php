@@ -17,7 +17,9 @@ class OperationalCostFactory extends Factory
     public function definition()
     {
         return [
-            'details' => fake()->date,
+            'date' => "",
+            'details' => "",
+            'payment_method' => "",
             'amount' => fake()->numerify('##'),
             'is_recurring' => true,
             'recurring_period' => fake()->name(),

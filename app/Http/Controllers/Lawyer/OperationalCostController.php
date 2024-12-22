@@ -54,8 +54,10 @@ class OperationalCostController extends Controller
                 $request->merge(['upload_filename' => $fileName]);
 
                 OperationalCost::create([
+                    'date' => $request->date,
                     'details' => $request->description,
                     'amount' => $request->amount,
+                    'payment_method' => $request->payment_method,
                     'is_recurring' => $request->is_recurring,
                     'recurring_period' => $request->frequency,
                     'is_paid' => 1,
@@ -75,13 +77,44 @@ class OperationalCostController extends Controller
         }
     }
 
-    public function edit(OperationalCost $operationalCost) {}
-
-    public function update(Request $request, OperationalCost $operationalCost) {}
-
-    public function destroy(OperationalCost $operationalCost)
+    public function edit($id)
     {
+        $costs_item = OperationalCost::query()
+            ->where('id', 'like', "%{$id}%")
+            ->first();
+        return Inertia::render('Lawyer/OperationalCost/Edit', [
+            'costs_item' => $costs_item
+        ]);
+    }
+
+    public function update(Request $request)
+    {
+        $item = OperationalCost::findOrFail($request->id); // Find the record by ID
+        $item->update([
+            'date' => $request->date,
+            'details' => $request->description,
+            'amount' => $request->amount,
+            'payment_method' => $request->payment_method,
+            'is_recurring' => $request->is_recurring,
+            'recurring_period' => $request->frequency,
+            'is_paid' => 1,
+            'bank_account_id' => $request->account,
+            'company_id' => $request->account,
+            'first_payment_date' => $request->first_payment_date,
+            'no_of_payment' => $request->no_of_payment,
+            'document_number' => $request->document_number,
+            'created_by' => Auth::id(),
+        ]);
+
+        return redirect()->route('lawyer.operational-cost.index')->with('message', 'Successfully update operational cost.');
+    }
+
+    public function destroy($id)
+    {
+        $operationalCost = FirmAccount::findOrFail($id);
+
         $operationalCost->delete();
+
 
         return redirect()->route('operational-cost.index')->with('message', 'Successfully deleted the cost.');
     }

@@ -82,7 +82,7 @@
                                 </th> -->
                                 <td class="px-6 py-4 text-right">
                                     <Link
-                                        :href="`/account-reporting/${cost.id}/edit`"
+                                        :href="`/lawyer/operational-cost/${cost.id}/edit`"
                                         class="font-medium text-blue-600 hover:underline"
                                         >Edit</Link
                                     >
