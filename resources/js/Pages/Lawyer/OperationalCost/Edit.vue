@@ -1,12 +1,12 @@
 <template>
-    <Head title="Add new operational cost" />
+    <Head title="Edit operational cost" />
 
     <page-heading :breadcrumbs="breadcrumbs" />
 
     <div
         class="max-w-3xl bg-white rounded-md border border-gray-300 overflow-hidden"
     >
-        <form @submit.prevent="store">
+        <form @submit.prevent="update">
             <div class="p-8 space-y-12">
                 <div class="border-b border-gray-900/10 pb-12">
                     <h2 class="text-base font-semibold leading-7 text-gray-900">
@@ -57,6 +57,7 @@
                             class="pb-8 pr-6 w-full lg:w-1/2"
                             label="Upload Document"
                             accept=".jpg,.png,.pdf,.doc,.docx"
+                            disabled
                         />
 
                         <text-input
@@ -148,7 +149,7 @@
                     :disabled="!form.isDirty"
                     class="btn-primary"
                     type="submit"
-                    >Create</loading-button
+                    >Update</loading-button
                 >
                 <Link
                     :href="`/lawyer/operational-cost/`"
@@ -176,7 +177,7 @@ import { Switch } from "@headlessui/vue";
 
 export default {
     props: {
-        firmAccounts: Object,
+        costs_item: Object,
     },
     components: {
         Head,
@@ -192,28 +193,28 @@ export default {
         return {
             breadcrumbs: [
                 { link: "/lawyer/operational-cost", label: "Operational Cost" },
-                { link: null, label: "Create" },
+                { link: null, label: "Edit" },
             ],
             form: this.$inertia.form({
-                date: "",
-                description: "",
-                account: "",
-                is_recurring: "",
-                document_number: "",
-                upload: null,
-                amount: "",
-                payment_method: "",
-                is_recurring: "",
-                first_payment_date: "",
-                frequency: "",
-                no_of_payment: "",
+                id: this.costs_item.id,
+                date: this.costs_item.date,
+                description: this.costs_item.details,
+                account: this.costs_item.bank_account_id,
+                is_recurring: this.costs_item.is_recurring,
+                document_number: this.costs_item.document_number,
+                upload: this.costs_item.upload,
+                amount: this.costs_item.amount,
+                payment_method: this.costs_item.payment_method,
+                first_payment_date: this.costs_item.first_payment_date,
+                frequency: this.costs_item.recurring_period,
+                no_of_payment: this.costs_item.no_of_payment,
             }),
         };
     },
     methods: {
-        store() {
+        update() {
             if (this.form.isDirty) {
-                this.form.post(`/lawyer/operational-cost`);
+                this.form.put("/lawyer/operational-cost/update");
             } else {
                 alert("You need to fill in the form first.");
             }

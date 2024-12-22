@@ -1,7 +1,7 @@
 <template>
-    <Head title="Add new operational cost" />
+    <Head title="Add new transaction" />
 
-    <page-heading :breadcrumbs="breadcrumbs" />
+    <page-heading :page_title="page_title" :breadcrumbs="breadcrumbs" />
 
     <div
         class="max-w-3xl bg-white rounded-md border border-gray-300 overflow-hidden"
@@ -10,11 +10,9 @@
             <div class="p-8 space-y-12">
                 <div class="border-b border-gray-900/10 pb-12">
                     <h2 class="text-base font-semibold leading-7 text-gray-900">
-                        Operational Cost
+                        Transaction Detail
                     </h2>
-                    <p class="mt-1 text-sm leading-6 text-gray-600">
-                        The operational cost.
-                    </p>
+                    <!-- <p class="mt-1 text-sm leading-6 text-gray-600">The personal information of the employee.</p> -->
 
                     <div
                         class="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 md:grid-cols-2"
@@ -33,22 +31,21 @@
                             required
                         />
                         <select-input
-                            v-model="form.account"
-                            :error="form.errors.account"
-                            label="Account Type"
+                            v-model="form.transaction_type"
+                            :error="form.errors.transaction_type"
+                            label="Transaction Type"
                             required
                         >
                             <option disabled value="">
-                                Please select account type
+                                Please select transaction type
                             </option>
-                            <option value="1">Client</option>
-                            <option value="2">Firm</option>
+                            <option value="funds in">Funds In</option>
+                            <option value="funds out">Funds Out</option>
                         </select-input>
-
                         <text-input
                             v-model="form.document_number"
                             :error="form.errors.document_number"
-                            label="Document Number"
+                            label="Document number"
                             required
                         />
                         <file-input
@@ -58,10 +55,9 @@
                             label="Upload Document"
                             accept=".jpg,.png,.pdf,.doc,.docx"
                         />
-
                         <text-input
                             v-model="form.amount"
-                            :error="form.errors.company_name"
+                            :error="form.errors.amount"
                             label="Amount"
                             required
                         />
@@ -81,61 +77,12 @@
                             <option value="cash">Cash</option>
                             <option value="cheque">Cheque</option>
                         </select-input>
-                        <select-input
-                            v-model="form.is_recurring"
-                            :error="form.errors.is_recurring"
-                            label="Recurring Transaction"
-                            required
-                        >
-                            <option disabled value="">
-                                Please select recurring transaction
-                            </option>
-                            <option value="1">Yes</option>
-                            <option value="0">no</option>
-                        </select-input>
-
-                        <date-input
-                            v-model="form.first_payment_date"
-                            :error="form.errors.first_payment_date"
-                            label="First Payment Date"
+                        <text-input
+                            v-model="form.reference"
+                            :error="form.errors.reference"
+                            label="Reference"
                             required
                         />
-
-                        <select-input
-                            v-model="form.frequency"
-                            :error="form.errors.frequency"
-                            label="Frequency"
-                            required
-                        >
-                            <option disabled value="">
-                                Please select frequency
-                            </option>
-                            <option value="single">Single</option>
-                            <option value="weekly">Weekly</option>
-                            <option value="2weeks">Every 2 Weeks</option>
-                            <option value="month">Every Month</option>
-                            <option value="quarter">Every Quarter</option>
-                            <option value="halfYearly">Half Yearly</option>
-                            <option value="yearly">Yearly</option>
-                        </select-input>
-
-                        <select-input
-                            v-model="form.no_of_payment"
-                            :error="form.errors.no_of_payment"
-                            label="No. of payment"
-                            required
-                        >
-                            <option disabled value="">
-                                Please select frequency
-                            </option>
-                            <option value="unlimited">Unlimited</option>
-                            <option value="2">2</option>
-                            <option value="3">3</option>
-                            <option value="4">4</option>
-                            <option value="5">5</option>
-                            <option value="6">6</option>
-                            <option value="7">7</option>
-                        </select-input>
                     </div>
                 </div>
             </div>
@@ -148,10 +95,10 @@
                     :disabled="!form.isDirty"
                     class="btn-primary"
                     type="submit"
-                    >Create</loading-button
+                    >Submit</loading-button
                 >
                 <Link
-                    :href="`/lawyer/operational-cost/`"
+                    :href="`/admin/users/`"
                     as="button"
                     class="btn-cancel"
                     :disabled="form.processing"
@@ -164,56 +111,56 @@
 </template>
 
 <script>
-import { Head } from "@inertiajs/inertia-vue3";
 import Layout from "../Shared/Layout";
-import { useForm } from "@inertiajs/inertia-vue3";
 import TextInput from "../../../Shared/TextInput";
 import SelectInput from "../../../Shared/SelectInput";
 import DateInput from "../../../Shared/DateInput";
 import LoadingButton from "../../../Shared/LoadingButton";
 import FileInput from "../../../Shared/FileInput";
 import { Switch } from "@headlessui/vue";
+import { Head } from "@inertiajs/inertia-vue3";
+import { useForm } from "@inertiajs/inertia-vue3";
 
 export default {
-    props: {
-        firmAccounts: Object,
-    },
     components: {
-        Head,
         TextInput,
         SelectInput,
         DateInput,
         LoadingButton,
         FileInput,
         Switch,
+        Head,
     },
     layout: Layout,
+    props: {
+        clientAccounts: Object,
+        acc_number: Object,
+    },
     data() {
         return {
+            page_title: "Add new transaction",
             breadcrumbs: [
-                { link: "/lawyer/operational-cost", label: "Operational Cost" },
+                { link: "/lawyer/dashboard", label: "Lawyer" },
+                { link: "/lawyer/client-accounts", label: "Client Account" },
                 { link: null, label: "Create" },
             ],
             form: this.$inertia.form({
                 date: "",
+                bank_account_id: this.acc_number,
                 description: "",
-                account: "",
-                is_recurring: "",
+                transaction_type: "",
                 document_number: "",
                 upload: null,
                 amount: "",
                 payment_method: "",
-                is_recurring: "",
-                first_payment_date: "",
-                frequency: "",
-                no_of_payment: "",
+                reference: "",
             }),
         };
     },
     methods: {
         store() {
             if (this.form.isDirty) {
-                this.form.post(`/lawyer/operational-cost`);
+                this.form.post("/lawyer/client-accounts");
             } else {
                 alert("You need to fill in the form first.");
             }

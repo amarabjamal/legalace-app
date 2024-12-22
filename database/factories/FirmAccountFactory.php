@@ -17,14 +17,20 @@ class FirmAccountFactory extends Factory
     public function definition()
     {
         return [
-            'date'=>fake()->date,
-            'description'=>"",
-            'transaction_type'=>"funds in",
-            'debit'=>fake()->numerify('###'),
-            'credit'=>fake()->numerify('###'),
-            'balance'=>fake()->numerify('####'),
+            'date' => fake()->date,
+            'description' => "",
+            'transaction_type' => "funds in",
+            'document_number' => "",
+            'upload' => "",
+            // 'debit' => fake()->numerify('###'),
+            'debit' => 0,
+            'credit' => 0,
+            'balance' => 0,
+            'payment_method' => "",
             // 'company_id'=>1,
-            'bank_account_id'=>1,
+            'bank_account_id' => 1,
+            'reference' => "",
+            'created_by' => "",
         ];
     }
 }

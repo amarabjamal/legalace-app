@@ -12,14 +12,19 @@ class FirmAccount extends Model
     protected $primaryKey = 'id';
 
     protected $fillable = [
+        'id',
         'date',
         'description',
         'transaction_type',
+        'payment_method',
+        'document_number',
+        'upload',
         'debit',
         'credit',
         'balance',
-        // 'company_id',
         'bank_account_id',
+        'reference',
+        'created_by',
         'created_at',
         'updated_at',
     ];
@@ -29,7 +34,10 @@ class FirmAccount extends Model
         'updated_at'
     ];
 
-    public function createdBy() {
+    public const UPLOAD_PATH = 'files/case-files/document-upload/';
+
+    public function createdBy()
+    {
         return $this->belongsTo(User::class, 'created_by', 'id');
     }
 
@@ -37,9 +45,8 @@ class FirmAccount extends Model
     //     return $this->belongsTo(Company::class, 'company_id', 'id');
     // }
 
-    public function bankAccount() {
+    public function bankAccount()
+    {
         return $this->belongsTo(BankAccount::class, 'bank_account_id', 'id');
     }
-
-    
 }

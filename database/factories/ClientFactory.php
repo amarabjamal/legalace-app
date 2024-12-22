@@ -17,12 +17,17 @@ class ClientFactory extends Factory
     public function definition()
     {
         return [
-            'name'=>fake()->name(),
-            'id_type_id'=>1,
-            'id_number'=>fake()->numerify('######-##-####'),
-            'email'=>fake()->safeEmail(),
-            'phone_number'=> '',
+            'name' => fake()->name(),
+            'email' => "",
+            'id_type_id' => 1,
+            'id_number' => fake()->numerify('######-##-####'),
+            'email' => fake()->safeEmail(),
+            'phone_number' => '',
             'address' => '',
+            'company_name' => "",
+            'company_address' => "",
+            'outstanding_balance' => "",
+            'linked_client_account' => "",
             'created_by' => 1,
         ];
     }

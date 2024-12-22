@@ -1,192 +1,170 @@
 <template>
     <Head title="Add new transaction" />
-    
-    <div class="flex flex-col flex-1">
-        <main class="h-full pb-16 overflow-y-auto mx-3 my-4">
-            <div class="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
-                <form @submit.prevent="submit">
-                    <div class="mb-6">
-                        <label 
-                            for="name" 
-                            class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300"
-                            >
-                            Description
-                        </label>
-                        <input 
+
+    <page-heading :page_title="page_title" :breadcrumbs="breadcrumbs" />
+
+    <div
+        class="max-w-3xl bg-white rounded-md border border-gray-300 overflow-hidden"
+    >
+        <form @submit.prevent="store">
+            <div class="p-8 space-y-12">
+                <div class="border-b border-gray-900/10 pb-12">
+                    <h2 class="text-base font-semibold leading-7 text-gray-900">
+                        Transaction Detail
+                    </h2>
+                    <!-- <p class="mt-1 text-sm leading-6 text-gray-600">The personal information of the employee.</p> -->
+
+                    <div
+                        class="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 md:grid-cols-2"
+                    >
+                        <date-input
+                            v-model="form.date"
+                            :error="form.errors.date"
+                            label="Date"
+                            required
+                        />
+                        <text-input
                             v-model="form.description"
-                            type="text" 
-                            id="name" 
-                            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-1/2 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
-                            placeholder="" 
+                            type="description"
+                            :error="form.errors.description"
+                            label="Description"
                             required
                         />
-                        <p v-if="form.errors.description" v-text="form.errors.description" class="mt-2 text-sm text-red-600 dark:text-red-500"></p>
-                    </div>
-
-                    <div class="mb-6">
-                        <label 
-                            for="transaction_type" 
-                            class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300"
-                            >
-                            Transaction Type
-                        </label>
-                        <!-- <input 
-                            v-model="form.id_types_id"
-                            type="text" 
-                            id="name" 
-                            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-1/2 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
-                            placeholder="" 
+                        <select-input
+                            v-model="form.transaction_type"
+                            :error="form.errors.transaction_type"
+                            label="Transaction Type"
                             required
-                        /> -->
-                        <select  id="transaction_type" name="transaction_type" autocomplete="transaction-type" v-model="form.transaction_type" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-1/2 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-                                <option>Online banking</option>
-                                <option>Cash</option>
-                                <option>Cheque</option>
-                            </select>
-                        <p v-if="form.errors.transaction_type" v-text="form.errors.transaction_type" class="mt-2 text-sm text-red-600 dark:text-red-500"></p>
-                    </div>
-                    <div class="mb-6">
-                        <label 
-                            for="name" 
-                            class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300"
-                            >
-                            Debit
-                        </label>
-                        <input 
-                            v-model="form.debit"
-                            type="text" 
-                            id="debit" 
-                            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-1/4 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
-                            placeholder="" 
-                            required
-                        />
-                        <p v-if="form.errors.debit" v-text="form.errors.debit" class="mt-2 text-sm text-red-600 dark:text-red-500"></p>
-                    </div>
-                    <div class="mb-6">
-                        <label 
-                            for="credit" 
-                            class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300"
-                            >
-                            Credit
-                        </label>
-                        <input 
-                            v-model="form.credit"
-                            type="text" 
-                            id="credit" 
-                            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-1/4 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
-                            placeholder="" 
-                            required
-                        />
-                        <p v-if="form.errors.credit" v-text="form.errors.credit" class="mt-2 text-sm text-red-600 dark:text-red-500"></p>
-                    </div>
-                    <div class="mb-6">
-                        <label 
-                            for="bank_account_id" 
-                            class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300"
-                            >
-                            Bank Account
-                        </label>
-                        <input 
-                            v-model="form.bank_account_id" 
-                            type="text" 
-                            id="" bank_account_id
-                            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-1/4 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
-                            placeholder="" 
-                            required
-                        />
-                        <p v-if="form.errors.bank_account_id" v-text="form.errors.bank_account_id" class="mt-2 text-sm text-red-600 dark:text-red-500"></p>
-                    </div>
-
-                    <!-- <div class="mb-6">
-                        <label 
-                            for="email" 
-                            class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300"
-                            >
-                            Email Address
-                        </label>
-                        <input 
-                            v-model="form.email"
-                            type="email" 
-                            id="email" 
-                            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
-                            placeholder="" 
-                            required
-                        />
-                        <p v-if="form.errors.email" v-text="form.errors.email" class="mt-2 text-sm text-red-600 dark:text-red-500"></p>
-                    </div> -->
-
-                    <!-- <div class="mb-6">
-                        <label 
-                            for="phone_number" 
-                            class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300"
-                            >
-                            Contact Number
-                        </label>
-                        <input 
-                            v-model="form.phone_number"
-                            type="text" 
-                            id="phone_number" 
-                            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
-                            required  
-                        />
-                        <p v-if="form.errors.phone_number" v-text="form.errors.phone_number" class="mt-2 text-sm text-red-600 dark:text-red-500"></p>
-                    </div> -->
-
-                    <!-- <div class="mb-6">
-                        <label 
-                            for="address" 
-                            class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300"
-                            >
-                            Address
-                        </label>
-                        <input 
-                            v-model="form.address"
-                            type="text" 
-                            id="address" 
-                            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
-                            required  
-                        />
-                        <p v-if="form.errors.address" v-text="form.errors.address" class="mt-2 text-sm text-red-600 dark:text-red-500"></p>
-                    </div> -->
-
-                    <button 
-                        type="submit" 
-                        class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-                        :disabled="form.processing"
                         >
-                        Submit
-                    </button>
-                </form>
+                            <option disabled value="">
+                                Please select transaction type
+                            </option>
+                            <option value="funds in">Funds In</option>
+                            <option value="funds out">Funds Out</option>
+                        </select-input>
+                        <text-input
+                            v-model="form.document_number"
+                            :error="form.errors.document_number"
+                            label="Document number"
+                            required
+                        />
+                        <file-input
+                            v-model="form.upload"
+                            :errors="form.errors.upload"
+                            class="pb-8 pr-6 w-full lg:w-1/2"
+                            label="Upload Document"
+                            accept=".jpg,.png,.pdf,.doc,.docx"
+                        />
+                        <text-input
+                            v-model="form.amount"
+                            :error="form.errors.amount"
+                            label="Amount"
+                            required
+                        />
+                        <select-input
+                            v-model="form.payment_method"
+                            :error="form.errors.payment_method"
+                            label="Payment Menthod"
+                            required
+                        >
+                            <option disabled value="">
+                                Please payment method
+                            </option>
+                            <option value="bank_remittance">
+                                Bank Remittance
+                            </option>
+                            <option value="bank_transfer">Bank Transfer</option>
+                            <option value="cash">Cash</option>
+                            <option value="cheque">Cheque</option>
+                        </select-input>
+                        <text-input
+                            v-model="form.reference"
+                            :error="form.errors.reference"
+                            label="Reference"
+                            required
+                        />
+                    </div>
+                </div>
             </div>
-        </main>  
+
+            <div
+                class="flex flex-row-reverse space-x-2 space-x-reverse items-center justify-start px-8 py-4 bg-gray-50 border-t border-gray-100"
+            >
+                <loading-button
+                    :loading="form.processing"
+                    :disabled="!form.isDirty"
+                    class="btn-primary"
+                    type="submit"
+                    >Submit</loading-button
+                >
+                <Link
+                    :href="`/admin/users/`"
+                    as="button"
+                    class="btn-cancel"
+                    :disabled="form.processing"
+                >
+                    Cancel
+                </Link>
+            </div>
+        </form>
     </div>
 </template>
 
 <script>
-import { Head } from "@inertiajs/inertia-vue3";
 import Layout from "../Shared/Layout";
+import TextInput from "../../../Shared/TextInput";
+import SelectInput from "../../../Shared/SelectInput";
+import DateInput from "../../../Shared/DateInput";
+import LoadingButton from "../../../Shared/LoadingButton";
+import FileInput from "../../../Shared/FileInput";
+import { Switch } from "@headlessui/vue";
+import { Head } from "@inertiajs/inertia-vue3";
 import { useForm } from "@inertiajs/inertia-vue3";
 
 export default {
-    setup () {
-        let form = useForm({
-            description: '',
-            transaction_type: '',
-            debit:'',
-            credit: '',
-            bank_account_id: '',
-        });
-
-        let submit = () => {
-            form.post('/firm-account');
-        };
-
-        return { form, submit };
+    components: {
+        TextInput,
+        SelectInput,
+        DateInput,
+        LoadingButton,
+        FileInput,
+        Switch,
+        Head,
     },
-    props: { 
-        firmAccounts: Object,
-     },
-    components: { Head },
     layout: Layout,
+    props: {
+        firmAccounts: Object,
+        acc_number: Object,
+    },
+    data() {
+        return {
+            page_title: "Add new transaction",
+            breadcrumbs: [
+                { link: "/lawyer/dashboard", label: "Lawyer" },
+                { link: "/lawyer/firm-accounts", label: "Firm Account" },
+                { link: null, label: "Create" },
+            ],
+            form: this.$inertia.form({
+                date: "",
+                bank_account_id: this.acc_number,
+                description: "",
+                transaction_type: "",
+                document_number: "",
+                upload: null,
+                amount: "",
+                payment_method: "",
+                reference: "",
+            }),
+        };
+    },
+    methods: {
+        store() {
+            if (this.form.isDirty) {
+                this.form.post("/lawyer/firm-accounts");
+            } else {
+                alert("You need to fill in the form first.");
+            }
+        },
+    },
 };
 </script>

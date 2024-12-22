@@ -16,13 +16,18 @@ return new class extends Migration
         Schema::create('clients', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->foreignId('id_type_id')->constrained("id_types","id");
+            $table->string('email');
+            $table->foreignId('id_type_id')->constrained("id_types", "id");
             $table->string('id_number', 1000);
             $table->string('email')->unique();
             $table->string('phone_number');
             $table->string('address', 1000);
+            $table->string('company_name');
+            $table->string('company_address');
+            $table->string('outstanding_balance');
+            $table->string('linked_client_account');
             $table->timestamps();
-            $table->foreignId('created_by')->constrained("users","id");
+            $table->foreignId('created_by')->constrained("users", "id");
         });
     }
 

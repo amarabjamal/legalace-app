@@ -21,7 +21,7 @@ class OperationalCostController extends Controller
             ->withQueryString()
             ->through(fn($cost) => [
                 'id' => $cost->id,
-                'details'=>$cost->details,
+                'details' => $cost->details,
                 'amount' => $cost->amount,
                 'is_recurring' => $cost->is_recurring,
                 'recurring_period' => $cost->recurring_period,
@@ -29,10 +29,10 @@ class OperationalCostController extends Controller
             ]);
         $filters = $request->only(['search']);
 
-        return Inertia::render('Lawyer/OperationalCost/Index',[
-            'operationalCosts'=> $operationalCost,
+        return Inertia::render('Lawyer/OperationalCost/Index', [
+            'operationalCosts' => $operationalCost,
             'filters' => $filters,
-            
+
         ]);
     }
 
@@ -43,32 +43,78 @@ class OperationalCostController extends Controller
 
     public function store(Request $request)
     {
-        OperationalCost::create([
-            'details'=>$request->details,
+
+        $filePath = null;
+
+        try {
+            if ($request->hasFile('upload')) {
+                $fileName = uniqid('OPERATIONAL_COST') . '_' . date('Ymd') . '_' . time() . '.' . $request->file('upload')->extension();
+                $filePath = $request->file('upload')->storeAs(OperationalCost::UPLOAD_PATH, $fileName);
+
+                $request->merge(['upload_filename' => $fileName]);
+
+                OperationalCost::create([
+                    'date' => $request->date,
+                    'details' => $request->description,
+                    'amount' => $request->amount,
+                    'payment_method' => $request->payment_method,
+                    'is_recurring' => $request->is_recurring,
+                    'recurring_period' => $request->frequency,
+                    'is_paid' => 1,
+                    'bank_account_id' => $request->account,
+                    'company_id' => $request->account,
+                    'first_payment_date' => $request->first_payment_date,
+                    'no_of_payment' => $request->no_of_payment,
+                    'upload' => $filePath,
+                    'document_number' => $request->document_number,
+                    'created_by' => Auth::id(),
+                ]);
+
+                return redirect()->route('lawyer.operational-cost.index')->with('message', 'Successfully added new operational cost.');
+            }
+        } catch (\Exception $e) {
+            return back()->with('errorMessage', 'Failed to update operational cost.' . $e->getMessage());
+        }
+    }
+
+    public function edit($id)
+    {
+        $costs_item = OperationalCost::query()
+            ->where('id', 'like', "%{$id}%")
+            ->first();
+        return Inertia::render('Lawyer/OperationalCost/Edit', [
+            'costs_item' => $costs_item
+        ]);
+    }
+
+    public function update(Request $request)
+    {
+        $item = OperationalCost::findOrFail($request->id); // Find the record by ID
+        $item->update([
+            'date' => $request->date,
+            'details' => $request->description,
             'amount' => $request->amount,
+            'payment_method' => $request->payment_method,
             'is_recurring' => $request->is_recurring,
-            'recurring_period' => $request->recurring_period,
-            'is_paid' => $request->is_paid,
-            'bank_account_id'=>$request->bank_account_id,
-            'created_by'=>Auth::id(),
+            'recurring_period' => $request->frequency,
+            'is_paid' => 1,
+            'bank_account_id' => $request->account,
+            'company_id' => $request->account,
+            'first_payment_date' => $request->first_payment_date,
+            'no_of_payment' => $request->no_of_payment,
+            'document_number' => $request->document_number,
+            'created_by' => Auth::id(),
         ]);
 
-        return redirect()->route('operational-cost.index')->with('message', 'Successfully added new operational cost.');
+        return redirect()->route('lawyer.operational-cost.index')->with('message', 'Successfully update operational cost.');
     }
 
-    public function edit(OperationalCost $operationalCost)
+    public function destroy($id)
     {
-        
-    }
+        $operationalCost = FirmAccount::findOrFail($id);
 
-    public function update(Request $request, OperationalCost $operationalCost)
-    {
-        
-    }
+        $operationalCost->delete();
 
-    public function destroy(OperationalCost $operationalCost)
-    {
-        $operationalCost->delete();   
 
         return redirect()->route('operational-cost.index')->with('message', 'Successfully deleted the cost.');
     }
