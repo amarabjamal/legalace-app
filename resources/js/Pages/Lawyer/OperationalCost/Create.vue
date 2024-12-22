@@ -1,146 +1,165 @@
 <template>
     <Head title="Add new operational cost" />
-    
-    <div class="flex flex-col flex-1">
-        <main class="h-full pb-16 overflow-y-auto mx-3 my-4">
-            <div class="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
-                <form @submit.prevent="submit">
-                    <div class="mb-6">
-                        <label 
-                            for="name" 
-                            class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300"
-                            >
-                            Details
-                        </label>
-                        <input 
-                            v-model="form.details"
-                            type="text" 
-                            id="name" 
-                            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-1/2 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
-                            placeholder="" 
-                            required
-                        />
-                        <p v-if="form.errors.details" v-text="form.errors.details" class="mt-2 text-sm text-red-600 dark:text-red-500"></p>
-                    </div>
 
-                    <!-- <div class="mb-6">
-                        <label 
-                            for="transaction_type" 
-                            class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300"
-                            >
-                            Transaction Type
-                        </label>
-                        <input 
-                            v-model="form.id_types_id"
-                            type="text" 
-                            id="name" 
-                            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-1/2 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
-                            placeholder="" 
-                            required
-                        />
-                        <select  id="transaction_type" name="transaction_type" autocomplete="transaction-type" v-model="form.transaction_type" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-1/2 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-                                <option>Online banking</option>
-                                <option>Cash</option>
-                                <option>Cheque</option>
-                            </select>
-                        <p v-if="form.errors.transaction_type" v-text="form.errors.transaction_type" class="mt-2 text-sm text-red-600 dark:text-red-500"></p>
-                    </div> -->
-                    <div class="mb-6">
-                        <label 
-                            for="name" 
-                            class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300"
-                            >
-                            Amount (RM)
-                        </label>
-                        <input 
-                            v-model="form.amount"
-                            type="text" 
-                            id="debit" 
-                            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-1/4 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
-                            placeholder="" 
-                            required
-                        />
-                        <p v-if="form.errors.amount" v-text="form.errors.amount" class="mt-2 text-sm text-red-600 dark:text-red-500"></p>
-                    </div>
-                    <div class="mb-6">
-                        <label 
-                            for="credit" 
-                            class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300"
-                            >
-                            Recurring state
-                        </label>
-                        <input 
-                            v-model="form.is_recurring"
-                            type="text" 
-                            id="credit" 
-                            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-1/4 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
-                            placeholder="" 
-                            required
-                        />
-                        <p v-if="form.errors.is_recurring" v-text="form.errors.is_recurring" class="mt-2 text-sm text-red-600 dark:text-red-500"></p>
-                    </div>
-                    <div class="mb-6">
-                        <label 
-                            for="credit" 
-                            class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300"
-                            >
-                            Recurring period
-                        </label>
-                        <input 
-                            v-model="form.recurring_period"
-                            type="text" 
-                            id="credit" 
-                            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-1/4 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
-                            placeholder="" 
-                            required
-                        />
-                        <p v-if="form.errors.recurring_period" v-text="form.errors.recurring_period" class="mt-2 text-sm text-red-600 dark:text-red-500"></p>
-                    </div>
-                    <div class="mb-6">
-                        <label 
-                            for="credit" 
-                            class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300"
-                            >
-                            Payment state
-                        </label>
-                        <input 
-                            v-model="form.is_paid"
-                            type="text" 
-                            id="credit" 
-                            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-1/4 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
-                            placeholder="" 
-                            required
-                        />
-                        <p v-if="form.errors.is_paid" v-text="form.errors.is_paid" class="mt-2 text-sm text-red-600 dark:text-red-500"></p>
-                    </div>
-                    <div class="mb-6">
-                        <label 
-                            for="bank_account_id" 
-                            class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300"
-                            >
-                            Bank Account
-                        </label>
-                        <input 
-                            v-model="form.bank_account_id" 
-                            type="text" 
-                            id="" bank_account_id
-                            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-1/4 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
-                            placeholder="" 
-                            required
-                        />
-                        <p v-if="form.errors.bank_account_id" v-text="form.errors.bank_account_id" class="mt-2 text-sm text-red-600 dark:text-red-500"></p>
-                    </div>
+    <page-heading :breadcrumbs="breadcrumbs" />
 
-                    <button 
-                        type="submit" 
-                        class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-                        :disabled="form.processing"
+    <div
+        class="max-w-3xl bg-white rounded-md border border-gray-300 overflow-hidden"
+    >
+        <form @submit.prevent="store">
+            <div class="p-8 space-y-12">
+                <div class="border-b border-gray-900/10 pb-12">
+                    <h2 class="text-base font-semibold leading-7 text-gray-900">
+                        Operational Cost
+                    </h2>
+                    <p class="mt-1 text-sm leading-6 text-gray-600">
+                        The operational cost.
+                    </p>
+
+                    <div
+                        class="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 md:grid-cols-2"
+                    >
+                        <date-input
+                            v-model="form.date"
+                            :error="form.errors.date"
+                            label="Date"
+                            required
+                        />
+                        <text-input
+                            v-model="form.description"
+                            type="description"
+                            :error="form.errors.description"
+                            label="Description"
+                            required
+                        />
+                        <select-input
+                            v-model="form.account"
+                            :error="form.errors.account"
+                            label="Account Type"
+                            required
                         >
-                        Submit
-                    </button>
-                </form>
+                            <option disabled value="">
+                                Please select account type
+                            </option>
+                            <option value="1">Client</option>
+                            <option value="2">Firm</option>
+                        </select-input>
+
+                        <text-input
+                            v-model="form.document_number"
+                            :error="form.errors.document_number"
+                            label="Document Number"
+                            required
+                        />
+                        <file-input
+                            v-model="form.upload"
+                            :errors="form.errors.upload"
+                            class="pb-8 pr-6 w-full lg:w-1/2"
+                            label="Upload Document"
+                            accept=".jpg,.png,.pdf,.doc,.docx"
+                        />
+
+                        <text-input
+                            v-model="form.amount"
+                            :error="form.errors.company_name"
+                            label="Amount"
+                            required
+                        />
+                        <select-input
+                            v-model="form.payment_method"
+                            :error="form.errors.payment_method"
+                            label="Payment Menthod"
+                            required
+                        >
+                            <option disabled value="">
+                                Please payment method
+                            </option>
+                            <option value="bank_remittance">
+                                Bank Remittance
+                            </option>
+                            <option value="bank_transfer">Bank Transfer</option>
+                            <option value="cash">Cash</option>
+                            <option value="cheque">Cheque</option>
+                        </select-input>
+                        <select-input
+                            v-model="form.is_recurring"
+                            :error="form.errors.is_recurring"
+                            label="Recurring Transaction"
+                            required
+                        >
+                            <option disabled value="">
+                                Please select recurring transaction
+                            </option>
+                            <option value="1">Yes</option>
+                            <option value="0">no</option>
+                        </select-input>
+
+                        <date-input
+                            v-model="form.first_payment_date"
+                            :error="form.errors.first_payment_date"
+                            label="First Payment Date"
+                            required
+                        />
+
+                        <select-input
+                            v-model="form.frequency"
+                            :error="form.errors.frequency"
+                            label="Frequency"
+                            required
+                        >
+                            <option disabled value="">
+                                Please select frequency
+                            </option>
+                            <option value="single">Single</option>
+                            <option value="weekly">Weekly</option>
+                            <option value="2weeks">Every 2 Weeks</option>
+                            <option value="month">Every Month</option>
+                            <option value="quarter">Every Quarter</option>
+                            <option value="halfYearly">Half Yearly</option>
+                            <option value="yearly">Yearly</option>
+                        </select-input>
+
+                        <select-input
+                            v-model="form.no_of_payment"
+                            :error="form.errors.no_of_payment"
+                            label="No. of payment"
+                            required
+                        >
+                            <option disabled value="">
+                                Please select frequency
+                            </option>
+                            <option value="unlimited">Unlimited</option>
+                            <option value="2">2</option>
+                            <option value="3">3</option>
+                            <option value="4">4</option>
+                            <option value="5">5</option>
+                            <option value="6">6</option>
+                            <option value="7">7</option>
+                        </select-input>
+                    </div>
+                </div>
             </div>
-        </main>  
+
+            <div
+                class="flex flex-row-reverse space-x-2 space-x-reverse items-center justify-start px-8 py-4 bg-gray-50 border-t border-gray-100"
+            >
+                <loading-button
+                    :loading="form.processing"
+                    :disabled="!form.isDirty"
+                    class="btn-primary"
+                    type="submit"
+                    >Create</loading-button
+                >
+                <Link
+                    :href="`/lawyer/operational-cost/`"
+                    as="button"
+                    class="btn-cancel"
+                    :disabled="form.processing"
+                >
+                    Cancel
+                </Link>
+            </div>
+        </form>
     </div>
 </template>
 
@@ -148,28 +167,57 @@
 import { Head } from "@inertiajs/inertia-vue3";
 import Layout from "../Shared/Layout";
 import { useForm } from "@inertiajs/inertia-vue3";
+import TextInput from "../../../Shared/TextInput";
+import SelectInput from "../../../Shared/SelectInput";
+import DateInput from "../../../Shared/DateInput";
+import LoadingButton from "../../../Shared/LoadingButton";
+import FileInput from "../../../Shared/FileInput";
+import { Switch } from "@headlessui/vue";
 
 export default {
-    setup () {
-        let form = useForm({
-            details: '',
-            amount: '',
-            is_recurring: false,
-            recurring_period: '',
-            is_paid: true,
-            bank_account_id: 1,
-        });
-
-        let submit = () => {
-            form.post('/operational-cost');
-        };
-
-        return { form, submit };
-    },
-    props: { 
+    props: {
         firmAccounts: Object,
-     },
-    components: { Head },
+    },
+    components: {
+        Head,
+        TextInput,
+        SelectInput,
+        DateInput,
+        LoadingButton,
+        FileInput,
+        Switch,
+    },
     layout: Layout,
+    data() {
+        return {
+            breadcrumbs: [
+                { link: "/lawyer/operational-cost", label: "Operational Cost" },
+                { link: null, label: "Create" },
+            ],
+            form: this.$inertia.form({
+                date: "",
+                description: "",
+                account: "",
+                is_recurring: "",
+                document_number: "",
+                upload: null,
+                amount: "",
+                payment_method: "",
+                is_recurring: "",
+                first_payment_date: "",
+                frequency: "",
+                no_of_payment: "",
+            }),
+        };
+    },
+    methods: {
+        store() {
+            if (this.form.isDirty) {
+                this.form.post(`/lawyer/operational-cost`);
+            } else {
+                alert("You need to fill in the form first.");
+            }
+        },
+    },
 };
 </script>

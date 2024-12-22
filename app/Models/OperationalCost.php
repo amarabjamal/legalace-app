@@ -14,8 +14,12 @@ class OperationalCost extends Model
         'is_recurring',
         'recurring_period',
         'is_paid',
-        'company_id',
+        'company_id', //
         'bank_account_id',
+        'upload', //
+        'first_payment_date', //
+        'no_of_payment', //
+        'document_number', //
         'created_at',
         'updated_at',
     ];
@@ -25,13 +29,9 @@ class OperationalCost extends Model
         'updated_at'
     ];
 
-    public function recordAmount(){
-        
-    }
-    public function getUpcomingRecurring(){
+    public const UPLOAD_PATH = 'files/case-files/document-upload/operational-cost/';
 
-    }
-    public function getCost(string $startDate, string $endDate){
-
-    }
+    public function recordAmount() {}
+    public function getUpcomingRecurring() {}
+    public function getCost(string $startDate, string $endDate) {}
 }

@@ -21,6 +21,11 @@ return new class extends Migration
             $table->string('recurring_period');
             $table->boolean('is_paid');
             $table->foreignId('bank_account_id')->constrained('bank_accounts', 'id');
+            $table->string('company_id');
+            $table->string('first_payment_date');
+            $table->string('no_of_payment');
+            $table->string('upload');
+            $table->string('document_number');
             $table->timestamps();
         });
     }

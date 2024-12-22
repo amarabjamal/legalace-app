@@ -120,7 +120,12 @@ Route::group(['middleware' => 'auth'], function () {
 
         Route::post('claim-vouchers/{claim_voucher}/submit', [ClaimVoucherController::class, 'submitClaimVoucher']);
         Route::resource('claim-vouchers', ClaimVoucherController::class);
+
+        // OPERATIONAL COST
+        // Route::get('operational-cost/create', [OperationalCostController::class, 'create']);
         Route::resource('operational-cost', OperationalCostController::class);
+
+
         Route::resource('accounting-management', AccountingManagementController::class);
 
         Route::scopeBindings()->prefix('/case-files/{case_file}')->group(function () {

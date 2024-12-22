@@ -17,12 +17,17 @@ class OperationalCostFactory extends Factory
     public function definition()
     {
         return [
-            'details'=>fake()->date,
-            'amount'=>fake()->numerify('##'),
-            'is_recurring'=>true,
-            'recurring_period'=>fake()->name(),
-            'is_paid'=>true,
-            'bank_account_id'=>1,
+            'details' => fake()->date,
+            'amount' => fake()->numerify('##'),
+            'is_recurring' => true,
+            'recurring_period' => fake()->name(),
+            'is_paid' => true,
+            'bank_account_id' => 1,
+            'company_id' => "",
+            'upload' => "",
+            'first_payment_date' => "",
+            'no_of_payment' => "",
+            'document_number' => "",
         ];
     }
 }
