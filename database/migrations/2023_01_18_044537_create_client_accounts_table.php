@@ -18,11 +18,16 @@ return new class extends Migration
             $table->string('date');
             $table->string('description');
             $table->string('transaction_type');
+            $table->string('document_number');
+            $table->string('upload');
             $table->double('debit');
             $table->double('credit');
             $table->double('balance');
+            $table->string('payment_method');
             $table->foreignId('company_id')->constrained('companies', 'id');
             $table->foreignId('bank_account_id')->constrained('bank_accounts', 'id');
+            $table->string('reference');
+            $table->string('created_by');
             $table->timestamps();
         });
     }
