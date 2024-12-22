@@ -94,7 +94,8 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('/notifications', [UserNotificationController::class, 'indexLawyer'])->name('notifications');
         Route::post('/disbursement-item-type', DisbursementItemTypeController::class);
 
-
+        Route::get('client/update', [ClientController::class, 'update']);
+        Route::get('client/{client_id}/edit', [ClientController::class, 'edit']);
         Route::resource('client', ClientController::class);
 
         Route::resource('case-files', CaseFileController::class);

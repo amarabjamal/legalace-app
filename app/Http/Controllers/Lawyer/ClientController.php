@@ -49,44 +49,49 @@ class ClientController extends Controller
             'company_address' => $request->company_address,
             'address' => $request->company_address,
             'outstanding_balance' => $request->outstanding_balance,
+            'linked_client_account' => $request->linked_client_account,
             'created_by' => Auth::id(),
         ]);
 
         return redirect()->route('lawyer.client.index')->with('message', 'Successfully added new client.');
     }
 
-    public function edit(Client $client)
+    public function edit($client_id)
     {
+        $clientProfile = Client::query()
+            ->where('id', 'like', "%{$client_id}%")
+            ->first();
         return Inertia::render('Lawyer/Client/Edit', [
-            'client' => $client
+            'client' => $clientProfile
         ]);
     }
 
-    public function update(Request $request, Client $client)
+    public function update(Request $request)
     {
-        $email = Client::where([
-            ['email', '=', $request->email],
-            ['id', '!=', $client->id],
-        ])->first();
-        $errors = array();
+        $client = Client::findOrFail($request->id);
 
         $client->update([
             'name' => $request->name,
-            'id_types_id' => $request->id_types_id,
-            'id_num' => $request->id_num,
             'email' => $request->email,
+            'id_type_id' => $request->id_type_id,
+            'id_number' => $request->id_number,
             'phone_number' => $request->phone_number,
-            'address' => $request->address,
+            'company_name' => $request->company_name,
+            'company_address' => $request->company_address,
+            'address' => $request->company_address,
+            'outstanding_balance' => $request->outstanding_balance,
+            'linked_client_account' => $request->linked_client_account,
         ]);
 
-        return redirect()->route('clients.index')->with('message', 'Successfully updated the client.');
+        return redirect()->route('lawyer.client.index')->with('message', 'Successfully updated the client.');
     }
 
-    public function destroy(Client $client)
+    public function destroy($client_id)
     {
-        //Add conditional checking before delete
+        $client = Client::findOrFail($client_id);
+
         $client->delete();
 
-        return redirect()->route('clients.index')->with('message', 'Successfully deleted the client.');
+        return redirect()->route('lawyer.client.index')->with('message', 'Successfully deleted the client.');
     }
 }

@@ -164,6 +164,7 @@ export default {
                 company_name: "",
                 company_address: "",
                 outstanding_balance: "",
+                linked_client_account: "",
             }),
         };
     },

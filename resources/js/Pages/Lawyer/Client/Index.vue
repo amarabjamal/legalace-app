@@ -51,7 +51,7 @@ lawyer/client
                     </td>
                     <td class="table-body-data text-right">
                         <Link
-                            :href="`/clients/${user.id}/edit`"
+                            :href="`/lawyer/client/${user.id}/edit`"
                             class="font-medium text-blue-600 hover:underline"
                             >Edit</Link
                         >
@@ -142,7 +142,7 @@ export default {
     methods: {
         deleteUser(client) {
             if (confirm("Are you sure you want to delete this client?")) {
-                Inertia.delete(`/clients/${client.id}`);
+                Inertia.delete(`/lawyer/client/${client.id}`);
             }
         },
         reset() {

@@ -13,7 +13,7 @@
                         Personal Information
                     </h2>
                     <p class="mt-1 text-sm leading-6 text-gray-600">
-                        The personal information of the clients.
+                        The personal information of the client.
                     </p>
 
                     <div
@@ -38,10 +38,16 @@
                             label="Phone Number"
                             required
                         />
-                        <date-input
-                            v-model="form.birthdate"
-                            :error="form.errors.birthdate"
-                            label="Birthdate"
+                        <text-input
+                            v-model="form.company_name"
+                            :error="form.errors.company_name"
+                            label="Company Name"
+                            required
+                        />
+                        <text-input
+                            v-model="form.company_address"
+                            :error="form.errors.company_name"
+                            label="Company Address"
                             required
                         />
                     </div>
@@ -67,138 +73,32 @@
                             <option disabled value="">
                                 Please select identification type
                             </option>
-                            <option
-                                v-for="id_type in idTypes"
-                                :value="id_type.id"
-                            >
-                                {{ id_type.name }}
-                            </option>
+                            <option value="1">IC</option>
+                            <option value="2">Passport</option>
                         </select-input>
                         <text-input
                             v-model="form.id_number"
                             :error="form.errors.id_number"
-                            label="Identification Number"
+                            label="ID Number"
                             required
                         />
+                        <select-input
+                            v-model="form.linked_client_account"
+                            :error="form.errors.id_type_id"
+                            label="Linked Client Account"
+                            required
+                        >
+                            <option disabled value="">
+                                Linked Client Account
+                            </option>
+                            <option value="ic">Client 1</option>
+                            <option value="ic">Client 2</option>
+                        </select-input>
                         <text-input
-                            v-model="form.clients_id"
-                            :error="form.errors.clients_id"
-                            label="Clients ID"
+                            v-model="form.outstanding_balance"
+                            :error="form.errors.outstanding_balance"
+                            label="Outstanding Balance"
                             required
-                        />
-                    </div>
-                </div>
-
-                <div class="border-b border-gray-900/10 pb-12">
-                    <h2 class="text-base font-semibold leading-7 text-gray-900">
-                        Assign Role
-                    </h2>
-                    <p class="mt-1 text-sm leading-6 text-gray-600">
-                        The role will determine the clients's permissions.
-                    </p>
-
-                    <div
-                        class="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 md:grid-cols-2"
-                    >
-                        <div class="md:col-span-2">
-                            <label for="role" class="form-label">Roles</label>
-
-                            <ul class="grid w-1/2 gap-2 md:grid-cols-2">
-                                <li>
-                                    <input
-                                        v-model="form.isAdmin"
-                                        type="checkbox"
-                                        id="is_admin"
-                                        value="admin"
-                                        class="hidden peer"
-                                    />
-                                    <label
-                                        for="is_admin"
-                                        class="inline-flex items-center justify-between w-40 p-3 text-gray-300 bg-white border-2 border-gray-200 rounded-lg cursor-pointer peer-checked:border-blue-600 hover:text-gray-600 peer-checked:text-gray-600 hover:bg-gray-50"
-                                    >
-                                        <div
-                                            class="block w-full text-sm text-center font-semibold"
-                                        >
-                                            Administrator
-                                        </div>
-                                    </label>
-                                </li>
-                                <li>
-                                    <input
-                                        v-model="form.isLawyer"
-                                        type="checkbox"
-                                        id="is_lawyer"
-                                        value="lawyer"
-                                        class="hidden peer"
-                                    />
-                                    <label
-                                        for="is_lawyer"
-                                        class="inline-flex items-center justify-between w-40 p-3 text-gray-300 bg-white border-2 border-gray-200 rounded-lg cursor-pointer peer-checked:border-blue-600 hover:text-gray-600 peer-checked:text-gray-600 hover:bg-gray-50"
-                                    >
-                                        <div
-                                            class="block w-full text-sm text-center font-semibold"
-                                        >
-                                            Lawyer
-                                        </div>
-                                    </label>
-                                </li>
-                            </ul>
-
-                            <p
-                                v-if="form.errors.role"
-                                v-text="form.errors.role"
-                                class="mt-2 text-sm text-red-600"
-                            ></p>
-                        </div>
-                    </div>
-                </div>
-
-                <div>
-                    <h2 class="text-base font-semibold leading-7 text-gray-900">
-                        Danger Zone
-                    </h2>
-                    <p class="mt-1 text-sm leading-6 text-gray-600">
-                        Turn on the access toggle to allow the clients to access
-                        their account.
-                    </p>
-
-                    <div
-                        class="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 md:grid-cols-2"
-                    >
-                        <div>
-                            <label for="is_active" class="form-label"
-                                >Enabled</label
-                            >
-                            <Switch
-                                v-model="form.is_active"
-                                :class="
-                                    form.is_active
-                                        ? 'bg-green-400'
-                                        : 'bg-gray-200'
-                                "
-                                class="relative inline-flex h-[38px] w-[74px] shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75"
-                            >
-                                <span class="sr-only">Enabled</span>
-                                <span
-                                    aria-hidden="true"
-                                    :class="
-                                        form.is_active
-                                            ? 'translate-x-9'
-                                            : 'translate-x-0'
-                                    "
-                                    class="pointer-events-none inline-block h-[34px] w-[34px] transform rounded-full bg-white shadow-lg ring-0 transition duration-200 ease-in-out"
-                                />
-                            </Switch>
-                            <p
-                                v-if="form.errors.is_active"
-                                v-text="form.errors.is_active"
-                                class="mt-2 text-sm text-red-600"
-                            ></p>
-                        </div>
-                        <date-input
-                            v-model="form.access_expiry_date"
-                            :error="form.errors.access_expiry_date"
-                            label="Access Expiry Date"
                         />
                     </div>
                 </div>
@@ -245,33 +145,32 @@ export default {
     },
     layout: Layout,
     props: {
-        user: Object,
+        client: Object,
         idTypes: Object,
     },
     data() {
         return {
-            page_title: this.user.name,
+            page_title: this.client.name,
             breadcrumbs: [
                 { link: "/lawyer/dashboard", label: "Lawyer" },
                 { link: "/lawyer/client", label: "Client" },
-                { link: null, label: this.user.name },
+                { link: null, label: this.client.name },
                 { link: null, label: "Edit" },
             ],
             form: this.$inertia.form({
-                id: this.user.id,
-                name: this.user.name,
-                email: this.user.email,
-                id_type_id: this.user.id_type_id,
-                id_number: this.user.id_number,
-                clients_id: this.user.clients_id,
-                isAdmin: this.user.isAdmin,
-                isLawyer: this.user.isLawyer,
-                phone_number: this.user.phone_number,
-                birthdate: this.user.birthdate.substring(0, 10),
-                is_active: this.user.is_active,
+                id: this.client.id,
+                name: this.client.name,
+                email: this.client.email,
+                id_number: this.client.id_number,
+                id_type_id: this.client.id_type_id,
+                phone_number: this.client.phone_number,
+                linked_client_account: this.client.linked_client_account,
+                company_name: this.client.company_name,
+                company_address: this.client.company_address,
+                outstanding_balance: this.client.outstanding_balance,
                 access_expiry_date:
-                    this.user.access_expiry_date != null
-                        ? this.user.access_expiry_date.substring(0, 10)
+                    this.client.access_expiry_date != null
+                        ? this.client.access_expiry_date.substring(0, 10)
                         : "",
             }),
         };
@@ -279,7 +178,7 @@ export default {
     methods: {
         update() {
             if (this.form.isDirty) {
-                this.form.put(`/lawyer/client/${this.user.id}`);
+                this.form.put(`/lawyer/client/update`);
             } else {
                 alert("No changes to be saved");
             }
