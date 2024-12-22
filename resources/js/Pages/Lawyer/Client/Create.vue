@@ -3,193 +3,178 @@
 
     <page-heading :page_title="page_title" :breadcrumbs="breadcrumbs" />
 
-    <div class="bg-white rounded-md shadow overflow-x-auto">
-        <div class="flex flex-col flex-1">
-            <main class="h-full pb-16 overflow-y-auto mx-3 my-4">
-                <div class="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
-                    <form @submit.prevent="submit">
-                        <div class="mb-6">
-                            <label for="name" class="block mb-2 text-sm">
-                                Name
-                            </label>
-                            <input
-                                v-model="form.name"
-                                type="text"
-                                id="name"
-                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-1/2 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                                placeholder=""
-                                required
-                            />
-                            <p
-                                v-if="form.errors.name"
-                                v-text="form.errors.name"
-                                class="mt-2 text-sm text-red-600 dark:text-red-500"
-                            ></p>
-                        </div>
+    <div
+        class="max-w-3xl bg-white rounded-md border border-gray-300 overflow-hidden"
+    >
+        <form @submit.prevent="store">
+            <div class="p-8 space-y-12">
+                <div class="border-b border-gray-900/10 pb-12">
+                    <h2 class="text-base font-semibold leading-7 text-gray-900">
+                        Personal Information
+                    </h2>
+                    <p class="mt-1 text-sm leading-6 text-gray-600">
+                        The personal information of the client.
+                    </p>
 
-                        <div class="mb-6">
-                            <label for="name" class="block mb-2 text-sm">
-                                Identification Type
-                            </label>
-                            <!-- <input 
-                            v-model="form.id_types_id"
-                            type="text" 
-                            id="name" 
-                            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-1/2 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
-                            placeholder="" 
+                    <div
+                        class="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 md:grid-cols-2"
+                    >
+                        <text-input
+                            v-model="form.name"
+                            :error="form.errors.name"
+                            label="Name"
                             required
-                        /> -->
-                            <select
-                                id="id_type"
-                                name="identification_type"
-                                autocomplete="identification-type"
-                                v-model="form.id_types_id"
-                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-1/2 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                            >
-                                <option>1</option>
-                                <option>2</option>
-                            </select>
-                            <p
-                                v-if="form.errors.id_types_id"
-                                v-text="form.errors.id_types_id"
-                                class="mt-2 text-sm text-red-600 dark:text-red-500"
-                            ></p>
-                        </div>
-                        <div class="mb-6">
-                            <label
-                                for="name"
-                                class="block mb-2 text-sm font-medium"
-                            >
-                                Identification Number
-                            </label>
-                            <input
-                                v-model="form.id_num"
-                                type="text"
-                                id="name"
-                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-1/2 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                                placeholder=""
-                                required
-                            />
-                            <p
-                                v-if="form.errors.id_num"
-                                v-text="form.errors.id_num"
-                                class="mt-2 text-sm text-red-600 dark:text-red-500"
-                            ></p>
-                        </div>
-
-                        <div class="mb-6">
-                            <label
-                                for="email"
-                                class="block mb-2 text-sm font-medium"
-                            >
-                                Email Address
-                            </label>
-                            <input
-                                v-model="form.email"
-                                type="email"
-                                id="email"
-                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                                placeholder=""
-                                required
-                            />
-                            <p
-                                v-if="form.errors.email"
-                                v-text="form.errors.email"
-                                class="mt-2 text-sm text-red-600 dark:text-red-500"
-                            ></p>
-                        </div>
-
-                        <div class="mb-6">
-                            <label
-                                for="phone_number"
-                                class="block mb-2 text-sm font-medium"
-                            >
-                                Contact Number
-                            </label>
-                            <input
-                                v-model="form.phone_number"
-                                type="text"
-                                id="phone_number"
-                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                                required
-                            />
-                            <p
-                                v-if="form.errors.phone_number"
-                                v-text="form.errors.phone_number"
-                                class="mt-2 text-sm text-red-600 dark:text-red-500"
-                            ></p>
-                        </div>
-
-                        <div class="mb-6">
-                            <label
-                                for="address"
-                                class="block mb-2 text-sm font-medium"
-                            >
-                                Address
-                            </label>
-                            <input
-                                v-model="form.address"
-                                type="text"
-                                id="address"
-                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                                required
-                            />
-                            <p
-                                v-if="form.errors.address"
-                                v-text="form.errors.address"
-                                class="mt-2 text-sm text-red-600 dark:text-red-500"
-                            ></p>
-                        </div>
-
-                        <button
-                            type="submit"
-                            class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-                            :disabled="form.processing"
-                        >
-                            Submit
-                        </button>
-                    </form>
+                        />
+                        <text-input
+                            v-model="form.email"
+                            type="email"
+                            :error="form.errors.email"
+                            label="Email"
+                            required
+                        />
+                        <text-input
+                            v-model="form.phone_number"
+                            :error="form.errors.phone_number"
+                            label="Phone Number"
+                            required
+                        />
+                        <text-input
+                            v-model="form.company_name"
+                            :error="form.errors.company_name"
+                            label="Company Name"
+                            required
+                        />
+                        <text-input
+                            v-model="form.company_address"
+                            :error="form.errors.company_name"
+                            label="Company Address"
+                            required
+                        />
+                    </div>
                 </div>
-            </main>
-        </div>
+
+                <div class="border-b border-gray-900/10 pb-12">
+                    <h2 class="text-base font-semibold leading-7 text-gray-900">
+                        Identity Details
+                    </h2>
+                    <p class="mt-1 text-sm leading-6 text-gray-600">
+                        This information is only visible to admin.
+                    </p>
+
+                    <div
+                        class="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 md:grid-cols-2"
+                    >
+                        <select-input
+                            v-model="form.id_type_id"
+                            :error="form.errors.id_type_id"
+                            label="Identification Type"
+                            required
+                        >
+                            <option disabled value="">
+                                Please select identification type
+                            </option>
+                            <option value="1">IC</option>
+                            <option value="2">Passport</option>
+                        </select-input>
+                        <text-input
+                            v-model="form.id_number"
+                            :error="form.errors.id_number"
+                            label="ID Number"
+                            required
+                        />
+                        <select-input
+                            v-model="form.linked_client_account"
+                            :error="form.errors.id_type_id"
+                            label="Linked Client Account"
+                            required
+                        >
+                            <option disabled value="">
+                                Linked Client Account
+                            </option>
+                            <option value="ic">Client 1</option>
+                            <option value="ic">Client 2</option>
+                        </select-input>
+                        <text-input
+                            v-model="form.outstanding_balance"
+                            :error="form.errors.outstanding_balance"
+                            label="Outstanding Balance"
+                            required
+                        />
+                    </div>
+                </div>
+            </div>
+
+            <div
+                class="flex flex-row-reverse space-x-2 space-x-reverse items-center justify-start px-8 py-4 bg-gray-50 border-t border-gray-100"
+            >
+                <loading-button
+                    :loading="form.processing"
+                    :disabled="!form.isDirty"
+                    class="btn-primary"
+                    type="submit"
+                    >Create Clients</loading-button
+                >
+                <Link
+                    :href="`/lawyer/client/`"
+                    as="button"
+                    class="btn-cancel"
+                    :disabled="form.processing"
+                >
+                    Cancel
+                </Link>
+            </div>
+        </form>
     </div>
 </template>
 
 <script>
-import { Head } from "@inertiajs/inertia-vue3";
 import Layout from "../Shared/Layout";
-import { useForm } from "@inertiajs/inertia-vue3";
+import TextInput from "../../../Shared/TextInput";
+import SelectInput from "../../../Shared/SelectInput";
+import DateInput from "../../../Shared/DateInput";
+import LoadingButton from "../../../Shared/LoadingButton";
+import { Switch } from "@headlessui/vue";
 
 export default {
-    setup() {
-        let form = useForm({
-            name: "",
-            id_types_id: "",
-            id_num: "",
-            email: "",
-            phone_number: "",
-            address: "",
-        });
-
-        let submit = () => {
-            form.post("/clients");
-        };
-
-        return { form, submit };
+    components: {
+        TextInput,
+        SelectInput,
+        DateInput,
+        LoadingButton,
+        Switch,
     },
-    props: {
-        clients: Object,
-    },
-    components: { Head },
     layout: Layout,
+    props: {
+        id_types: Object,
+    },
     data() {
         return {
-            page_title: "Create Clients",
+            page_title: "Create Client",
             breadcrumbs: [
                 { link: "/lawyer/dashboard", label: "Lawyer" },
-                { link: null, label: "Clients" },
+                { link: "/lawyer/client", label: "Client" },
+                { link: null, label: "Create" },
             ],
+            form: this.$inertia.form({
+                name: "",
+                email: "",
+                id_type_id: "",
+                id_number: "",
+                phone_number: "",
+                company_name: "",
+                company_address: "",
+                outstanding_balance: "",
+            }),
         };
+    },
+    methods: {
+        store() {
+            if (this.form.isDirty) {
+                this.form.post(`/lawyer/client`);
+            } else {
+                alert("You need to fill in the form first.");
+            }
+        },
     },
 };
 </script>

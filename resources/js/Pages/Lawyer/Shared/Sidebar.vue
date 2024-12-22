@@ -55,10 +55,10 @@ export default {
                     isActive: this.$page.url.startsWith("/lawyer"),
                 },
                 {
-                    href: "/lawyer/clients",
+                    href: "/lawyer/client",
                     label: "Client Profiles",
                     icon: "group-line",
-                    isActive: this.$page.url.startsWith("/lawyer/clients"),
+                    isActive: this.$page.url.startsWith("/lawyer/client"),
                 },
                 {
                     href: "/lawyer/case-files",

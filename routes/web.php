@@ -95,7 +95,7 @@ Route::group(['middleware' => 'auth'], function () {
         Route::post('/disbursement-item-type', DisbursementItemTypeController::class);
 
 
-        Route::resource('clients', ClientController::class);
+        Route::resource('client', ClientController::class);
 
         Route::resource('case-files', CaseFileController::class);
 

@@ -1,3 +1,4 @@
+lawyer/client
 <template>
     <Head :title="page_title" />
 
@@ -9,7 +10,7 @@
             class="mr-4 w-full max-w-md"
             @reset="reset"
         ></search-filter>
-        <Link class="btn-primary" :href="`/lawyer/clients/create`">
+        <Link class="btn-primary" :href="`/lawyer/client/create`">
             <span>Create</span>
             <span class="hidden md:inline">&nbsp;Client</span>
         </Link>
@@ -132,7 +133,7 @@ export default {
         form: {
             deep: true,
             handler: throttle(function () {
-                this.$inertia.get(`/lawyer/clients`, pickBy(this.form), {
+                this.$inertia.get(`/lawyer/client`, pickBy(this.form), {
                     preserveState: true,
                 });
             }, 150),
