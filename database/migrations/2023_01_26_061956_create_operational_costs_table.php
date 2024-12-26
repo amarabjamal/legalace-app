@@ -20,14 +20,15 @@ return new class extends Migration
             $table->string('payment_method');
             $table->double('amount');
             $table->boolean('is_recurring');
-            $table->string('recurring_period');
+            $table->string('recurring_period')->nullable();
             $table->boolean('is_paid');
             $table->foreignId('bank_account_id')->constrained('bank_accounts', 'id');
             $table->string('company_id');
-            $table->string('first_payment_date');
-            $table->string('no_of_payment');
-            $table->string('upload');
+            $table->string('first_payment_date')->nullable();
+            $table->string('no_of_payment')->nullable();
+            $table->string('upload')->nullable();
             $table->string('document_number');
+            $table->string('transaction_id');
             $table->timestamps();
         });
     }

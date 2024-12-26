@@ -98,7 +98,6 @@
                             v-model="form.outstanding_balance"
                             :error="form.errors.outstanding_balance"
                             label="Outstanding Balance"
-                            required
                         />
                     </div>
                 </div>

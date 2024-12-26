@@ -13,7 +13,7 @@
                         <button
                             class="px-4 py-2 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-blue-800 border border-transparent rounded-lg active:bg-blue-900 hover:bg-blue-900 focus:outline-none focus:shadow-outline-blue"
                         >
-                            Add Recurring Expense
+                            Add Expense
                         </button>
                     </Link>
                 </div>
@@ -29,9 +29,6 @@
                                 </th>
                                 <th scope="col" class="px-6 py-3">ACCOUNT</th>
                                 <th scope="col" class="px-6 py-3">AMOUNT</th>
-                                <th scope="col" class="px-6 py-3">
-                                    Payment state
-                                </th>
                                 <!-- <th scope="col" class="px-6 py-3">
                                     Balance
                                 </th> -->
@@ -51,36 +48,30 @@
                                     scope="row"
                                     class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap"
                                 >
+                                    {{ cost.date }}
+                                </th>
+                                <th
+                                    scope="row"
+                                    class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap"
+                                >
                                     {{ cost.details }}
                                 </th>
                                 <th
                                     scope="row"
                                     class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap"
                                 >
-                                    {{ cost.amount }}
+                                    {{ cost.label }}
                                 </th>
                                 <th
                                     scope="row"
                                     class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap"
                                 >
-                                    {{ cost.is_recurring }}
-                                </th>
-                                <th
-                                    scope="row"
-                                    class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap"
-                                >
-                                    {{ cost.recurring_period }}
-                                </th>
-                                <th
-                                    scope="row"
-                                    class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap"
-                                >
-                                    {{ cost.is_paid }}
+                                    {{ parseFloat(cost.amount).toFixed(2) }}
                                 </th>
                                 <!-- <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
                                     {{ cost.balance }}
                                 </th> -->
-                                <td class="px-6 py-4 text-right">
+                                <td class="px-6 py-4 text-left">
                                     <Link
                                         :href="`/lawyer/operational-cost/${cost.id}/edit`"
                                         class="font-medium text-blue-600 hover:underline"

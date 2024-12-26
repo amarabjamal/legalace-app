@@ -25,6 +25,7 @@ class OperationalCost extends Model
         'first_payment_date', //
         'no_of_payment', //
         'document_number', //
+        'transaction_id', //
         'created_at',
         'updated_at',
     ];

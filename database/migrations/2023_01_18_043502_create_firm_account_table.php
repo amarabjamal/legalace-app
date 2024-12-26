@@ -19,13 +19,14 @@ return new class extends Migration
             $table->string('description');
             $table->string('transaction_type');
             $table->string('document_number');
-            $table->string('upload');
+            $table->string('upload')->nullable();
             $table->double('debit');
             $table->double('credit');
             $table->double('balance')->nullable();
             $table->string('payment_method');
             $table->foreignId('bank_account_id')->constrained('bank_accounts', 'id')->nullable();
-            $table->string('reference');
+            $table->string('remarks')->nullable();
+            $table->string('transaction_id')->nullable();
             $table->string('created_by');
             $table->timestamps();
         });

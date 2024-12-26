@@ -23,13 +23,6 @@
                             label="Date"
                             required
                         />
-                        <text-input
-                            v-model="form.description"
-                            type="description"
-                            :error="form.errors.description"
-                            label="Description"
-                            required
-                        />
                         <select-input
                             v-model="form.transaction_type"
                             :error="form.errors.transaction_type"
@@ -42,6 +35,47 @@
                             <option value="funds in">Funds In</option>
                             <option value="funds out">Funds Out</option>
                         </select-input>
+                        <div v-if="form.transaction_type == 'funds in'">
+                            <select-input
+                                v-model="form.description"
+                                :error="form.errors.description"
+                                label="Description"
+                                required
+                            >
+                                <option disabled value="">
+                                    Select Description
+                                </option>
+                                <option value="payment_received">
+                                    Payment Received
+                                </option>
+                                <option value="financing">Financing</option>
+                                <option value="investing">Investing</option>
+                                <option value="other">Other</option>
+                            </select-input>
+                        </div>
+                        <div v-if="form.transaction_type == 'funds out'">
+                            <select-input
+                                v-model="form.description"
+                                :error="form.errors.description"
+                                label="Description"
+                                required
+                            >
+                                <option disabled value="">
+                                    Select Description
+                                </option>
+                                <option value="operating_expense">
+                                    Operating expense
+                                </option>
+                                <option value="investing_loss">
+                                    Investing loss
+                                </option>
+                                <option value="asset_acquisition">
+                                    Asset acquisition
+                                </option>
+                                <option value="other">Other</option>
+                            </select-input>
+                        </div>
+
                         <text-input
                             v-model="form.document_number"
                             :error="form.errors.document_number"
@@ -64,7 +98,7 @@
                         <select-input
                             v-model="form.payment_method"
                             :error="form.errors.payment_method"
-                            label="Payment Menthod"
+                            label="Payment Method"
                             required
                         >
                             <option disabled value="">
@@ -78,9 +112,9 @@
                             <option value="cheque">Cheque</option>
                         </select-input>
                         <text-input
-                            v-model="form.reference"
-                            :error="form.errors.reference"
-                            label="Reference"
+                            v-model="form.remarks"
+                            :error="form.errors.remarks"
+                            label="Remarks"
                             required
                         />
                     </div>
@@ -153,7 +187,7 @@ export default {
                 upload: null,
                 amount: "",
                 payment_method: "",
-                reference: "",
+                remarks: "",
             }),
         };
     },

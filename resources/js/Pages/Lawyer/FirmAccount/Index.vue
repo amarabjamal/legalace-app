@@ -7,7 +7,7 @@
     <div v-for="acc in firmAccountList.data" :key="acc.id"
     class="grid gap-6 mb-8 md:grid-cols-3 mt-4">
 
-        <div v-on:click="navigateToDetails(acc.id)" class="min-w-0 p-4 bg-white  shadow-xs dark:bg-gray-800 border border-gray-300 rounded-md">
+        <div v-on:click="navigateToDetails(acc.id)" class="min-w-0 p-4 bg-white  shadow-xs dark:bg-gray-800 border border-gray-300 rounded-md hover:cursor-pointer ease-in-out duration-300 hover:shadow-md hover:scale-105 hover:-translate-y-5">
             <!-- <div v-for="bankAccount in bankAccounts" class="min-w-0 p-4 bg-white  shadow-xs dark:bg-gray-800"> -->
             <h4 class="mb-4 font-semibold text-gray-600 dark:text-gray-300">
                 {{ acc.account_name }}
@@ -48,7 +48,7 @@
                 </tr>
                 <tr>
                     <td>
-                        RM {{ acc.opening_balance }}
+                        RM {{ parseFloat(acc.opening_balance).toFixed(2) }}
                     </td>
                     <td class="font-bold">
                         <!-- {{ bankAccount.account_type.name }} -->
