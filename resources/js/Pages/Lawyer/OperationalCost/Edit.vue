@@ -34,16 +34,21 @@
                             <option disabled value="">
                                 Select Description
                             </option>
-                            <option value="operating_expense">
-                                Operating expense
+                            <option value="insurance">Insurance</option>
+                            <option value="photocopy">Photocopy</option>
+                            <option value="rental">Rental</option>
+                            <option value="electric">Electric</option>
+                            <option value="membership_bar_council">
+                                Membership Bar Council
                             </option>
-                            <option value="investing_loss">
-                                Investing loss
+                            <option value="audit_fee">Audit Fee</option>
+                            <option value="partner_salary">
+                                Partner Salary
                             </option>
-                            <option value="asset_acquisition">
-                                Asset acquisition
+                            <option value="subscripton_fee">
+                                Subscription Fee
                             </option>
-                            <option value="other">Other</option>
+                            <option value="other">others</option>
                         </select-input>
                         <select-input
                             v-model="form.account"
@@ -82,7 +87,7 @@
                         <select-input
                             v-model="form.payment_method"
                             :error="form.errors.payment_method"
-                            label="Payment Menthod"
+                            label="Payment Method"
                             required
                         >
                             <option disabled value="">
