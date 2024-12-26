@@ -38,7 +38,11 @@
                     </td>
                     <td class="border-t px-6 py-4 whitespace-nowrap"></td>
                     <td class="border-t px-6 py-4 whitespace-nowrap text-right">
-                        <button class="btn btn-primary">Generate</button>
+                        <Link
+                            class="btn-primary"
+                            :href="`/lawyer/accounting-management/cash`"
+                            >Generate</Link
+                        >
                     </td>
                 </tr>
                 <tr
@@ -49,7 +53,11 @@
                     </td>
                     <td class="border-t px-6 py-4 whitespace-nowrap"></td>
                     <td class="border-t px-6 py-4 whitespace-nowrap text-right">
-                        <button class="btn btn-primary">Generate</button>
+                        <Link
+                            class="btn-primary"
+                            :href="`/lawyer/accounting-management/profit`"
+                            >Generate</Link
+                        >
                     </td>
                 </tr>
                 <!-- <tr v-if="claim_vouchers.data.length === 0" >

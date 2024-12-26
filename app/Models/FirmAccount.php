@@ -13,6 +13,8 @@ class FirmAccount extends Model
 
     protected $fillable = [
         'id',
+        'label',
+        'bank_account_id',
         'date',
         'description',
         'transaction_type',
