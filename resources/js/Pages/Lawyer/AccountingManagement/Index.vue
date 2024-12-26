@@ -16,41 +16,6 @@
             </thead>
             <tbody>
                 <tr
-                    v-for="claim_voucher in claim_vouchers.data"
-                    :key="claim_voucher.id"
-                    class="text-sm text-gray-700 hover:bg-gray-100 focus-within:bg-gray-100"
-                >
-                    <td class="border-t px-6 py-4 whitespace-nowrap">
-                        {{ claim_voucher.ticket_number }}
-                    </td>
-                    <td class="border-t px-6 py-4 whitespace-nowrap">
-                        {{ claim_voucher.submission_date }}
-                    </td>
-                    <td class="border-t px-6 py-4 whitespace-nowrap text-right">
-                        {{ claim_voucher.amount }}
-                    </td>
-                    <td class="border-t px-6 py-4 whitespace-nowrap">
-                        <span :class="statusClass(claim_voucher.status)">
-                            {{ claim_voucher.status }}
-                        </span>
-                    </td>
-                    <td class="border-t px-6 py-4 whitespace-nowrap">
-                        {{ claim_voucher.approver.name }}
-                    </td>
-                    <td class="border-t px-6 py-4 whitespace-nowrap">
-                        <Link
-                            class="flex items-center px-2"
-                            :href="`/lawyer/claim-vouchers/${claim_voucher.id}`"
-                            tabindex="-1"
-                        >
-                            <icon
-                                name="cheveron-right"
-                                class="block w-5 h-5 fill-gray-400"
-                            />
-                        </Link>
-                    </td>
-                </tr>
-                <tr
                     class="text-sm text-gray-700 hover:bg-gray-100 focus-within:bg-gray-100"
                 >
                     <td class="border-t px-6 py-4 whitespace-nowrap">
@@ -58,7 +23,11 @@
                     </td>
                     <td class="border-t px-6 py-4 whitespace-nowrap"></td>
                     <td class="border-t px-6 py-4 whitespace-nowrap text-right">
-                        <button class="btn btn-primary">Generate</button>
+                        <Link
+                            class="btn-primary"
+                            :href="`/lawyer/accounting-management/balance`"
+                            >Generate</Link
+                        >
                     </td>
                 </tr>
                 <tr

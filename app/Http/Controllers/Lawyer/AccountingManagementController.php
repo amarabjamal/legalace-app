@@ -10,9 +10,11 @@ use App\Jobs\CalculateclaimVoucherTotal;
 use App\Models\CaseFile\DisbursementItem\DisbursementItem;
 use App\Models\ClaimVoucher;
 use App\Models\User;
+use App\Models\FirmAccount;
 use App\Notifications\SubmitClaimVoucherNotification;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Request;
+use Inertia\Inertia;
 
 class AccountingManagementController extends Controller
 {
@@ -126,5 +128,74 @@ class AccountingManagementController extends Controller
         }
 
         return back()->with('successMessage', 'The claim voucher has been submitted to ' . $claim_voucher->approver->name . '.');
+    }
+
+    public function balance_sheet()
+    {
+
+        $cashDebit = FirmAccount::query()
+            ->where('payment_method', 'like', 'cash')
+            ->sum('debit');
+        $cashCredit = FirmAccount::query()
+            ->where('payment_method', 'like', 'cash')
+            ->sum('credit');
+
+        $cash = $cashDebit - $cashCredit;
+
+        $bankDebit = FirmAccount::query()
+            ->where('payment_method', 'like', 'bank')
+            ->sum('debit');
+
+        $bankCredit = FirmAccount::query()
+            ->where('payment_method', 'like', 'bank')
+            ->sum('credit');
+
+        $bank = $bankDebit - $bankCredit;
+
+        $acc_receivable = FirmAccount::query()
+            ->where('transaction_type', 'like', 'funds in')
+            ->where('payment_method', 'like', 'credit_card')
+            ->sum('debit');
+
+        $acc_receivable = FirmAccount::query()
+            ->where('transaction_type', 'like', 'funds in')
+            ->where('payment_method', 'like', 'credit_card')
+            ->sum('debit');
+
+        $total_curr_asset = $cash + $bank + $acc_receivable;
+
+        $acc_payable = FirmAccount::query()
+            ->where('transaction_type', 'like', 'funds out')
+            ->where('payment_method', 'like', 'credit_card')
+            ->sum('credit');
+
+        $acc_payable = FirmAccount::query()
+            ->where('transaction_type', 'like', 'funds out')
+            ->where('payment_method', 'like', 'credit_card')
+            ->sum('credit');
+
+        $equities = FirmAccount::query()
+            ->where('description', 'like', 'financing')
+            ->where('transaction_type', 'like', 'funds in')
+            ->sum('debit');
+
+        $total_liabities_and_equities = $acc_payable + $equities;
+
+
+
+        return Inertia::render(
+            'Lawyer/AccountingManagement/Balance',
+            [
+                'cash' => $cash,
+                'bank' => $bank,
+                'acc_receivable' => $acc_receivable,
+                'total_curr_asset' => $total_curr_asset,
+                'acc_payable' => $acc_payable,
+                'total_curr_liabilities' => $acc_payable,
+                'equities' => $equities,
+                'total_equities' => $equities,
+                'total_liabities_and_equities' => $total_liabities_and_equities,
+            ]
+        );
     }
 }

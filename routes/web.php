@@ -128,7 +128,8 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('operational-cost/{id}/edit', [OperationalCostController::class, 'edit']);
         Route::resource('operational-cost', OperationalCostController::class);
 
-
+        // BALANCE SHEET
+        Route::get('accounting-management/balance', [AccountingManagementController::class, 'balance_sheet']);
         Route::resource('accounting-management', AccountingManagementController::class);
 
         Route::scopeBindings()->prefix('/case-files/{case_file}')->group(function () {
