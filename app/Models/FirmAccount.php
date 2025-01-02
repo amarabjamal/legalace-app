@@ -30,6 +30,7 @@ class FirmAccount extends Model
         'created_by',
         'created_at',
         'updated_at',
+        'total',
     ];
 
     protected $hidden = [
