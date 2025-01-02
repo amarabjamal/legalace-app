@@ -10,7 +10,6 @@
             <div class="px-4 mb-2 border-b bg-gray-50 flex justify-between items-center">
                 <h4 class="py-2 text-sm uppercase font-semibold text-gray-500 w-1/2 truncate">{{ bank_account.label }}
                 </h4>
-                <!-- <span :class="accountTypeClass(bank_account.account_type)">{{ bank_account.account_type }}</span> -->
             </div>
             <p class="text-gray-600 p-2 text-sm">
             <table class="border-separate border-spacing-2">
@@ -46,14 +45,14 @@
                         {{ bank_account.swift_code }}
                     </td>
                 </tr>
-                <!-- <tr>
+                <tr>
                     <td>
                         Account Type
                     </td>
                     <td class="font-bold">
                         {{ bank_account.account_type }}
                     </td>
-                </tr> -->
+                </tr>
             </table>
             <div class="flex space-x-2 justify-end p-2 pr-4">
                 <!-- <Link :href="`/admin/bank-accounts/${ bank_account.id }`">View</Link>
@@ -123,7 +122,7 @@
 
     <div class="flex items-center mb-4">
         <h4 class="text-lg font-semibold">
-            Transaction lists
+            Transcation lists
         </h4>
 
         <!-- <Link href="/firm-account/create">
@@ -177,8 +176,7 @@
                         {{ acc.transaction_type == "funds in" ? acc.debit : acc.credit }}
                     </th>
                     <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
-                        <!-- {{ acc.balance }} -->
-                        {{ acc.document_number }}
+                        {{ acc.balance }}
                     </th>
                     <td class="px-6 py-4 text-left">
                         <Link :href="`/lawyer/firm-accounts/${acc_id}/${acc.id}/view`"
