@@ -123,7 +123,7 @@
 
     <div class="flex items-center mb-4">
         <h4 class="text-lg font-semibold">
-            Transcation lists
+            Transaction lists
         </h4>
 
         <!-- <Link href="/firm-account/create">
