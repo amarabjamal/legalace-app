@@ -3,13 +3,12 @@
 namespace App\Models;
 
 use App\Casts\Money;
-use App\Traits\HasCompanyScope;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class BankAccount extends Model
+class BankAccounts extends Model
 {
-    use HasFactory, HasCompanyScope;
+    use HasFactory;
 
     protected $table = 'bank_accounts';
     protected $primaryKey = 'id';
