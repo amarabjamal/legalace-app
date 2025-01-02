@@ -25,13 +25,31 @@
                             label="Date"
                             required
                         />
-                        <text-input
+                        <select-input
                             v-model="form.description"
-                            type="description"
                             :error="form.errors.description"
                             label="Description"
                             required
-                        />
+                        >
+                            <option disabled value="">
+                                Select Description
+                            </option>
+                            <option value="insurance">Insurance</option>
+                            <option value="photocopy">Photocopy</option>
+                            <option value="rental">Rental</option>
+                            <option value="electric">Electric</option>
+                            <option value="membership_bar_council">
+                                Membership Bar Council
+                            </option>
+                            <option value="audit_fee">Audit Fee</option>
+                            <option value="employee_salary">
+                                Employee Salary
+                            </option>
+                            <option value="subscripton_fee">
+                                Subscription Fee
+                            </option>
+                            <option value="other">others</option>
+                        </select-input>
                         <select-input
                             v-model="form.account"
                             :error="form.errors.account"
@@ -94,48 +112,51 @@
                             <option value="0">no</option>
                         </select-input>
 
-                        <date-input
-                            v-model="form.first_payment_date"
-                            :error="form.errors.first_payment_date"
-                            label="First Payment Date"
-                            required
-                        />
+                        <div v-if="form.is_recurring == 1">
+                            <date-input
+                                v-model="form.first_payment_date"
+                                :error="form.errors.first_payment_date"
+                                label="First Payment Date"
+                            />
+                        </div>
 
-                        <select-input
-                            v-model="form.frequency"
-                            :error="form.errors.frequency"
-                            label="Frequency"
-                            required
-                        >
-                            <option disabled value="">
-                                Please select frequency
-                            </option>
-                            <option value="single">Single</option>
-                            <option value="weekly">Weekly</option>
-                            <option value="2weeks">Every 2 Weeks</option>
-                            <option value="month">Every Month</option>
-                            <option value="quarter">Every Quarter</option>
-                            <option value="halfYearly">Half Yearly</option>
-                            <option value="yearly">Yearly</option>
-                        </select-input>
+                        <div v-if="form.is_recurring == 1">
+                            <select-input
+                                v-model="form.frequency"
+                                :error="form.errors.frequency"
+                                label="Frequency"
+                            >
+                                <option disabled value="">
+                                    Please select frequency
+                                </option>
+                                <option value="single">Single</option>
+                                <option value="weekly">Weekly</option>
+                                <option value="2weeks">Every 2 Weeks</option>
+                                <option value="month">Every Month</option>
+                                <option value="quarter">Every Quarter</option>
+                                <option value="halfYearly">Half Yearly</option>
+                                <option value="yearly">Yearly</option>
+                            </select-input>
+                        </div>
 
-                        <select-input
-                            v-model="form.no_of_payment"
-                            :error="form.errors.no_of_payment"
-                            label="No. of payment"
-                            required
-                        >
-                            <option disabled value="">
-                                Please select frequency
-                            </option>
-                            <option value="unlimited">Unlimited</option>
-                            <option value="2">2</option>
-                            <option value="3">3</option>
-                            <option value="4">4</option>
-                            <option value="5">5</option>
-                            <option value="6">6</option>
-                            <option value="7">7</option>
-                        </select-input>
+                        <div v-if="form.is_recurring == 1">
+                            <select-input
+                                v-model="form.no_of_payment"
+                                :error="form.errors.no_of_payment"
+                                label="No. of payment"
+                            >
+                                <option disabled value="">
+                                    Please select frequency
+                                </option>
+                                <option value="unlimited">Unlimited</option>
+                                <option value="2">2</option>
+                                <option value="3">3</option>
+                                <option value="4">4</option>
+                                <option value="5">5</option>
+                                <option value="6">6</option>
+                                <option value="7">7</option>
+                            </select-input>
+                        </div>
                     </div>
                 </div>
             </div>

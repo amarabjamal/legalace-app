@@ -23,9 +23,7 @@ lawyer/client
                     <th scope="col" class="table-head-column">Name</th>
                     <th scope="col" class="table-head-column">Email</th>
                     <th scope="col" class="table-head-column">Account</th>
-                    <th scope="col" class="table-head-column">
-                        Outstanding balance
-                    </th>
+                    <th scope="col" class="table-head-column">Company Name</th>
                     <th scope="col" class="table-head-column">
                         <span class="sr-only">Actions</span>
                     </th>
@@ -47,7 +45,8 @@ lawyer/client
                         {{ user.account }}
                     </td>
                     <td scope="row" class="table-body-data">
-                        {{ user.outstanding_balance }}
+                        {{ user.company_name }}
+                        <!-- {{ user.name }} -->
                     </td>
                     <td class="table-body-data text-right">
                         <Link

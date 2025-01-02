@@ -4,60 +4,70 @@
 
     <page-heading :page_title="page_title" :breadcrumbs="breadcrumbs" />
 
-    <div v-for="acc in clientAccountList.data" :key="acc.id"
-    class="grid gap-6 mb-8 md:grid-cols-3 mt-4">
+    <div v-for="acc in clientAccountList.data" :key="acc.id" class="grid gap-6 mb-8 md:grid-cols-3 mt-4">
 
-        <div v-on:click="navigateToDetails(acc.id)" class="min-w-0 p-4 bg-white  shadow-xs dark:bg-gray-800 border border-gray-300 rounded-md">
-            <!-- <div v-for="bankAccount in bankAccounts" class="min-w-0 p-4 bg-white  shadow-xs dark:bg-gray-800"> -->
-            <h4 class="mb-4 font-semibold text-gray-600 dark:text-gray-300">
-                {{ acc.account_name }}
-            </h4>
-            <p class="text-gray-600 dark:text-gray-400">
-            <table class="border-separate border-spacing-2 dark:text-gray-400">
+        <div v-on:click="navigateToDetails(acc.id)"
+            class="min-w-0 bg-white border border-gray-300 rounded-md overflow-hidden ease-in-out duration-300 hover:shadow-md hover:scale-105 hover:-translate-y-5">
+            <div class="px-4 mb-2 border-b bg-gray-50 flex justify-between items-center">
+                <h4 class="py-2 text-sm uppercase font-semibold text-gray-500 w-1/2 truncate">
+                    {{ acc.account_name }}
+                </h4>
+            </div>
+
+            <p class="text-gray-600 p-2 text-sm">
+            <table class="border-separate border-spacing-2">
                 <tr>
+                    <td width="120px">
+                        Bank Name
+                    </td>
                     <td width="150px">
                         {{ acc.bank_name }}
                     </td>
                     <td class="font-bold">
-                        <!-- <span class="font-bold">{{ bankAccount.bank_name }}</span> -->
                     </td>
                 </tr>
                 <tr>
+                    <td>
+                        Account Name
+                    </td>
                     <td>
                         {{ acc.account_name }}
                     </td>
                     <td class="font-bold">
-                        <!-- {{ bankAccount.account_number }} -->
                     </td>
                 </tr>
                 <tr>
+                    <td>
+                        Account Number
+                    </td>
                     <td>
                         {{ acc.account_number }}
                     </td>
                     <td class="font-bold">
-                        <!-- {{ bankAccount.bank_address }} -->
                     </td>
                 </tr>
                 <tr>
+                    <td>
+                        SWIFT Code
+                    </td>
                     <td>
                         {{ acc.swift_code }}
                     </td>
                     <td class="font-bold">
-                        <!-- {{ bankAccount.swift_code }} -->
                     </td>
                 </tr>
                 <tr>
                     <td>
+                        Opening Balance
+                    </td>
+                    <td>
                         RM {{ acc.opening_balance }}
                     </td>
                     <td class="font-bold">
-                        <!-- {{ bankAccount.account_type.name }} -->
                     </td>
                 </tr>
             </table>
             <div class="flex justify-end mt-3 p-2 pr-4">
-                <!-- <Link :href="`/bank-accounts/${ bankAccount.id }/edit`">Edit</Link>
-                                <Link @click="deleteBankAccount(bankAccount)" as="button" class="ml-3 font-medium text-red-600 hover:underline">Delete</Link> -->
             </div>
             </p>
         </div>

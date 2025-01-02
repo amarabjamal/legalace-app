@@ -13,6 +13,8 @@ class FirmAccount extends Model
 
     protected $fillable = [
         'id',
+        'label',
+        'bank_account_id',
         'date',
         'description',
         'transaction_type',
@@ -24,9 +26,11 @@ class FirmAccount extends Model
         'balance',
         'bank_account_id',
         'reference',
+        'transaction_id',
         'created_by',
         'created_at',
         'updated_at',
+        'total',
     ];
 
     protected $hidden = [

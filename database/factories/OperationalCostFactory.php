@@ -30,6 +30,7 @@ class OperationalCostFactory extends Factory
             'first_payment_date' => "",
             'no_of_payment' => "",
             'document_number' => "",
+            'transaction_id' => "",
         ];
     }
 }

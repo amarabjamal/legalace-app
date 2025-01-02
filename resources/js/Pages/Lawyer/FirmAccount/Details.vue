@@ -10,7 +10,6 @@
             <div class="px-4 mb-2 border-b bg-gray-50 flex justify-between items-center">
                 <h4 class="py-2 text-sm uppercase font-semibold text-gray-500 w-1/2 truncate">{{ bank_account.label }}
                 </h4>
-                <!-- <span :class="accountTypeClass(bank_account.account_type)">{{ bank_account.account_type }}</span> -->
             </div>
             <p class="text-gray-600 p-2 text-sm">
             <table class="border-separate border-spacing-2">

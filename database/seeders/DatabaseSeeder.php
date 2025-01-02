@@ -24,11 +24,11 @@ class DatabaseSeeder extends Seeder
     {
         $id_types = [
             [
-                'name' =>'Malaysian Identification Card',
+                'name' => 'Malaysian Identification Card',
                 'slug' => 'myic'
             ],
             [
-                'name' =>'Passport',
+                'name' => 'Passport',
                 'slug' => 'passport'
             ],
         ];
@@ -107,10 +107,10 @@ class DatabaseSeeder extends Seeder
 
         DB::table('bank_accounts')->insert($bankAccounts);
 
-        Client::factory(10)->create();
-        FirmAccount::factory(10)->create();
-        ClientAccount::factory(10)->create();
-        AccountReporting::factory(10)->create();
-        OperationalCost::factory(10)->create();
+        // Client::factory(10)->create();
+        // FirmAccount::factory(10)->create();
+        // ClientAccount::factory(10)->create();
+        // AccountReporting::factory(10)->create();
+        // OperationalCost::factory(10)->create();
     }
 }

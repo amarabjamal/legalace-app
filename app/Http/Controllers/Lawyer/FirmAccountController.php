@@ -87,7 +87,7 @@ class FirmAccountController extends Controller
                         'debit' => $request->amount,
                         'credit' => 0,
                         'payment_method' => $request->payment_method,
-                        'reference' => $request->reference,
+                        'remarks' => $request->remarks,
                         'created_by' => Auth::id(),
                     ]);
                 } else {
@@ -101,7 +101,7 @@ class FirmAccountController extends Controller
                         'debit' => 0,
                         'credit' => $request->amount,
                         'payment_method' => $request->payment_method,
-                        'reference' => $request->reference,
+                        'remarks' => $request->remarks,
                         'created_by' => Auth::id(),
                     ]);
                 }
@@ -124,7 +124,7 @@ class FirmAccountController extends Controller
                         'debit' => $request->amount,
                         'credit' => 0,
                         'payment_method' => $request->payment_method,
-                        'reference' => $request->reference,
+                        'remarks' => $request->remarks,
                         'created_by' => Auth::id(),
                     ]);
                 } else {
@@ -138,7 +138,7 @@ class FirmAccountController extends Controller
                         'debit' => 0,
                         'credit' => $request->amount,
                         'payment_method' => $request->payment_method,
-                        'reference' => $request->reference,
+                        'remarks' => $request->remarks,
                         'created_by' => Auth::id(),
                     ]);
                 }
@@ -170,7 +170,7 @@ class FirmAccountController extends Controller
                         'debit' => $request->amount,
                         'credit' => 0,
                         'payment_method' => $request->payment_method,
-                        'reference' => $request->reference,
+                        'remarks' => $request->remarks,
                         'created_by' => Auth::id(),
                     ]);
                 } else {
@@ -182,7 +182,7 @@ class FirmAccountController extends Controller
                         'debit' => 0,
                         'credit' => $request->amount,
                         'payment_method' => $request->payment_method,
-                        'reference' => $request->reference,
+                        'remarks' => $request->remarks,
                         'created_by' => Auth::id(),
                     ]);
                 }
@@ -209,7 +209,7 @@ class FirmAccountController extends Controller
                         'debit' => $request->amount,
                         'credit' => 0,
                         'payment_method' => $request->payment_method,
-                        'reference' => $request->reference,
+                        'remarks' => $request->remarks,
                         'created_by' => Auth::id(),
                     ]);
                 } else {
@@ -222,7 +222,7 @@ class FirmAccountController extends Controller
                         'debit' => 0,
                         'credit' => $request->amount,
                         'payment_method' => $request->payment_method,
-                        'reference' => $request->reference,
+                        'remarks' => $request->remarks,
                         'created_by' => Auth::id(),
                     ]);
                 }

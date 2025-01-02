@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Lawyer;
 
 use App\Http\Controllers\Controller;
 use App\Models\OperationalCost;
+use App\Models\FirmAccount;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Illuminate\Support\Facades\Auth;
@@ -14,9 +15,11 @@ class OperationalCostController extends Controller
     public function index(Request $request)
     {
         $operationalCost = OperationalCost::query()
+            ->rightJoin('bank_accounts', 'operational_costs.bank_account_id', '=', 'bank_accounts.id')
             ->when($request->input('search'), function ($query, $search) {
                 $query->where('name', 'like', "%{$search}%");
             })
+            ->whereNotNull('operational_costs.id')
             ->paginate(10)
             ->withQueryString()
             ->through(fn($cost) => [
@@ -26,6 +29,8 @@ class OperationalCostController extends Controller
                 'is_recurring' => $cost->is_recurring,
                 'recurring_period' => $cost->recurring_period,
                 'is_paid' => $cost->is_paid,
+                'label' => $cost->label,
+                'date' => $cost->date,
             ]);
         $filters = $request->only(['search']);
 
@@ -47,31 +52,51 @@ class OperationalCostController extends Controller
         $filePath = null;
 
         try {
+            $fileName = null;
+
             if ($request->hasFile('upload')) {
                 $fileName = uniqid('OPERATIONAL_COST') . '_' . date('Ymd') . '_' . time() . '.' . $request->file('upload')->extension();
                 $filePath = $request->file('upload')->storeAs(OperationalCost::UPLOAD_PATH, $fileName);
 
                 $request->merge(['upload_filename' => $fileName]);
-
-                OperationalCost::create([
-                    'date' => $request->date,
-                    'details' => $request->description,
-                    'amount' => $request->amount,
-                    'payment_method' => $request->payment_method,
-                    'is_recurring' => $request->is_recurring,
-                    'recurring_period' => $request->frequency,
-                    'is_paid' => 1,
-                    'bank_account_id' => $request->account,
-                    'company_id' => $request->account,
-                    'first_payment_date' => $request->first_payment_date,
-                    'no_of_payment' => $request->no_of_payment,
-                    'upload' => $filePath,
-                    'document_number' => $request->document_number,
-                    'created_by' => Auth::id(),
-                ]);
-
-                return redirect()->route('lawyer.operational-cost.index')->with('message', 'Successfully added new operational cost.');
             }
+
+            $uniqueId = date('YmdHis') . uniqid();
+
+            OperationalCost::create([
+                'date' => $request->date,
+                'details' => $request->description,
+                'amount' => $request->amount,
+                'payment_method' => $request->payment_method,
+                'is_recurring' => $request->is_recurring,
+                'recurring_period' => $request->frequency,
+                'is_paid' => 1,
+                'bank_account_id' => $request->account,
+                'company_id' => $request->account,
+                'first_payment_date' => $request->first_payment_date,
+                'no_of_payment' => $request->no_of_payment,
+                'upload' => $filePath,
+                'document_number' => $request->document_number,
+                'transaction_id' => $uniqueId,
+                'created_by' => Auth::id(),
+            ]);
+
+            FirmAccount::create([
+                'date' => $request->date,
+                'bank_account_id' => $request->account,
+                'description' => $request->description,
+                'transaction_type' => "funds out",
+                'transaction_id' => $uniqueId,
+                'document_number' => $request->document_number,
+                'upload' => $filePath,
+                'debit' => 0,
+                'credit' => $request->amount,
+                'payment_method' => $request->payment_method,
+                'remarks' => "",
+                'created_by' => Auth::id(),
+            ]);
+
+            return redirect()->route('lawyer.operational-cost.index')->with('message', 'Successfully added new operational cost.');
         } catch (\Exception $e) {
             return back()->with('errorMessage', 'Failed to update operational cost.' . $e->getMessage());
         }

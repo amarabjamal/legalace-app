@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use App\Models\Client;
+use App\Models\BankAccounts;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Request as FacadesRequest;
 
@@ -33,7 +34,12 @@ class ClientController extends Controller
 
     public function create()
     {
-        return Inertia::render('Lawyer/Client/Create');
+        $clients = BankAccounts::where('bank_account_type_id', 1)->get();
+
+
+        return Inertia::render('Lawyer/Client/Create', [
+            'clients' => $clients
+        ]);
     }
 
     public function store(Request $request)
