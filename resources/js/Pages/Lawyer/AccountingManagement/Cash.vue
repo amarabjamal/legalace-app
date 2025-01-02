@@ -154,7 +154,7 @@
                         Ending Cash balance
                     </td>
                     <td class="border-t px-6 py-4 whitespace-nowrap text-right">
-                        {{ formatToTwoDecimal(total_curr_liabilities) }}
+                        {{ formatToTwoDecimal(endingCashBalance) }}
                     </td>
                 </tr>
             </tbody>
@@ -171,12 +171,13 @@ export default {
         InvestingCash: String,
         InvestingBank: String,
         InvestingTotal: String,
-        operatinCash: String,
-        operatinBank: String,
-        operatinTotal: String,
-        financinCash: String,
-        financinBank: String,
-        financinTotal: String,
+        operatingCash: String,
+        operatingBank: String,
+        operatingTotal: String,
+        financingCash: String,
+        financingBank: String,
+        financingTotal: String,
+        endingCashBalance: String,
     },
     data() {
         return {

@@ -243,6 +243,8 @@ class AccountingManagementController extends Controller
 
         $financingTotal = $financingCash + $financingBank;
 
+        $endingCashBalance = $InvestingTotal + $operatingTotal + $financingTotal;
+
 
 
         return Inertia::render(
@@ -257,6 +259,7 @@ class AccountingManagementController extends Controller
                 'financingCash' => $financingCash,
                 'financingBank' => $financingBank,
                 'financingTotal' => $financingTotal,
+                'endingCashBalance' => $endingCashBalance
             ]
         );
     }
