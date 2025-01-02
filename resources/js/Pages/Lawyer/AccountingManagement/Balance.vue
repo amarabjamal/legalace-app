@@ -36,7 +36,7 @@
                         Cash
                     </td>
                     <td class="border-t px-6 py-4 whitespace-nowrap text-right">
-                        {{ cash }}
+                        {{ formatToTwoDecimal(cash) }}
                     </td>
                 </tr>
                 <tr
@@ -46,7 +46,7 @@
                         Bank
                     </td>
                     <td class="border-t px-6 py-4 whitespace-nowrap text-right">
-                        {{ bank }}
+                        {{ formatToTwoDecimal(bank) }}
                     </td>
                 </tr>
                 <tr
@@ -56,7 +56,7 @@
                         Account receivable
                     </td>
                     <td class="border-t px-6 py-4 whitespace-nowrap text-right">
-                        {{ acc_receivable }}
+                        {{ formatToTwoDecimal(acc_receivable) }}
                     </td>
                 </tr>
                 <tr
@@ -66,7 +66,7 @@
                         Total For Current Asset
                     </td>
                     <td class="border-t px-6 py-4 whitespace-nowrap text-right">
-                        {{ total_curr_asset }}
+                        {{ formatToTwoDecimal(total_curr_asset) }}
                     </td>
                 </tr>
 
@@ -88,7 +88,7 @@
                         Account Payable
                     </td>
                     <td class="border-t px-6 py-4 whitespace-nowrap text-right">
-                        {{ acc_payable }}
+                        {{ formatToTwoDecimal(acc_payable) }}
                     </td>
                 </tr>
                 <tr
@@ -109,7 +109,7 @@
                         Total For Current Liabilities
                     </td>
                     <td class="border-t px-6 py-4 whitespace-nowrap text-right">
-                        {{ total_curr_liabilities }}
+                        {{ formatToTwoDecimal(total_curr_liabilities) }}
                     </td>
                 </tr>
 
@@ -131,7 +131,7 @@
                         Owner's Contribution
                     </td>
                     <td class="border-t px-6 py-4 whitespace-nowrap text-right">
-                        {{ equities }}
+                        {{ formatToTwoDecimal(equities) }}
                     </td>
                 </tr>
 
@@ -142,7 +142,7 @@
                         Total For Equities
                     </td>
                     <td class="border-t px-6 py-4 whitespace-nowrap text-right">
-                        {{ total_equities }}
+                        {{ formatToTwoDecimal(total_equities) }}
                     </td>
                 </tr>
 
@@ -153,7 +153,7 @@
                         Total For Liabilities and Equities
                     </td>
                     <td class="border-t px-6 py-4 whitespace-nowrap text-right">
-                        {{ total_liabities_and_equities }}
+                        {{ formatToTwoDecimal(total_liabities_and_equities) }}
                     </td>
                 </tr>
             </tbody>
@@ -199,6 +199,10 @@ export default {
             window.print();
             document.body.innerHTML = originalContent;
             window.location.reload(); // Ensures everything returns to normal
+        },
+
+        formatToTwoDecimal(num) {
+            return num.toFixed(2); // Formats the number to 2 decimal places
         },
     },
 };

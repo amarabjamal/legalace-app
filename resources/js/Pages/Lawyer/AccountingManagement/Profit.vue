@@ -37,7 +37,7 @@
                         {{ item.label }}
                     </td>
                     <td class="border-t px-6 py-4 whitespace-nowrap text-right">
-                        {{ item.debit }}
+                        {{ formatToTwoDecimal(item.debit) }}
                     </td>
                 </tr>
                 <tr
@@ -47,7 +47,7 @@
                         Total for Operating Income
                     </td>
                     <td class="border-t px-6 py-4 whitespace-nowrap text-right">
-                        {{ totalOperatingIncome }}
+                        {{ formatToTwoDecimal(totalOperatingIncome) }}
                     </td>
                 </tr>
                 <tr
@@ -68,7 +68,7 @@
                         {{ item.details }}
                     </td>
                     <td class="border-t px-6 py-4 whitespace-nowrap text-right">
-                        {{ item.amount }}
+                        {{ formatToTwoDecimal(item.amount) }}
                     </td>
                 </tr>
                 <tr
@@ -78,7 +78,7 @@
                         Employee's Salary
                     </td>
                     <td class="border-t px-6 py-4 whitespace-nowrap text-right">
-                        {{ totalEmployeeSalary }}
+                        {{ formatToTwoDecimal(totalEmployeeSalary) }}
                     </td>
                 </tr>
                 <tr
@@ -88,7 +88,7 @@
                         Total for Operating Expense
                     </td>
                     <td class="border-t px-6 py-4 whitespace-nowrap text-right">
-                        {{ totalOperatingExpense }}
+                        {{ formatToTwoDecimal(totalOperatingExpense) }}
                     </td>
                 </tr>
                 <tr
@@ -108,7 +108,7 @@
                         Total for Non-operating Income
                     </td>
                     <td class="border-t px-6 py-4 whitespace-nowrap text-right">
-                        {{ totalNonOperatingIncome }}
+                        {{ formatToTwoDecimal(totalNonOperatingIncome) }}
                     </td>
                 </tr>
                 <tr
@@ -128,7 +128,7 @@
                         Total for Non-operating Expense
                     </td>
                     <td class="border-t px-6 py-4 whitespace-nowrap text-right">
-                        {{ totalNonOperatingExpense }}
+                        {{ formatToTwoDecimal(totalNonOperatingExpense) }}
                     </td>
                 </tr>
                 <tr
@@ -138,7 +138,7 @@
                         Net Profit/Loss
                     </td>
                     <td class="border-t px-6 py-4 whitespace-nowrap text-right">
-                        {{ netProfit }}
+                        {{ formatToTwoDecimal(netProfit) }}
                     </td>
                 </tr>
             </tbody>
@@ -183,6 +183,9 @@ export default {
             window.print();
             document.body.innerHTML = originalContent;
             window.location.reload(); // Ensures everything returns to normal
+        },
+        formatToTwoDecimal(num) {
+            return num.toFixed(2); // Formats the number to 2 decimal places
         },
     },
 };

@@ -38,7 +38,7 @@
                         Cash
                     </td>
                     <td class="border-t px-6 py-4 whitespace-nowrap text-right">
-                        {{ operatingCash }}
+                        {{ formatToTwoDecimal(operatingCash) }}
                     </td>
                 </tr>
                 <tr
@@ -48,7 +48,7 @@
                         Bank
                     </td>
                     <td class="border-t px-6 py-4 whitespace-nowrap text-right">
-                        {{ operatingBank }}
+                        {{ formatToTwoDecimal(operatingBank) }}
                     </td>
                 </tr>
                 <tr
@@ -58,7 +58,7 @@
                         Total cash from Operating activities
                     </td>
                     <td class="border-t px-6 py-4 whitespace-nowrap text-right">
-                        {{ operatingTotal }}
+                        {{ formatToTwoDecimal(operatingTotal) }}
                     </td>
                 </tr>
 
@@ -81,7 +81,7 @@
                         Cash
                     </td>
                     <td class="border-t px-6 py-4 whitespace-nowrap text-right">
-                        {{ InvestingCash }}
+                        {{ formatToTwoDecimal(InvestingCash) }}
                     </td>
                 </tr>
                 <tr
@@ -91,7 +91,7 @@
                         Bank
                     </td>
                     <td class="border-t px-6 py-4 whitespace-nowrap text-right">
-                        {{ InvestingBank }}
+                        {{ formatToTwoDecimal(InvestingBank) }}
                     </td>
                 </tr>
                 <tr
@@ -101,7 +101,7 @@
                         Total cash from Investing activities
                     </td>
                     <td class="border-t px-6 py-4 whitespace-nowrap text-right">
-                        {{ InvestingTotal }}
+                        {{ formatToTwoDecimal(InvestingTotal) }}
                     </td>
                 </tr>
 
@@ -113,7 +113,7 @@
                         Cash flow from Financing activities
                     </td>
                     <td class="border-t px-6 py-4 whitespace-nowrap text-right">
-                        {{ acc_payable }}
+                        {{ formatToTwoDecimal(acc_payable) }}
                     </td>
                 </tr>
                 <tr
@@ -123,7 +123,7 @@
                         Cash
                     </td>
                     <td class="border-t px-6 py-4 whitespace-nowrap text-right">
-                        {{ financingCash }}
+                        {{ formatToTwoDecimal(financingCash) }}
                     </td>
                 </tr>
                 <tr
@@ -133,7 +133,7 @@
                         Bank
                     </td>
                     <td class="border-t px-6 py-4 whitespace-nowrap text-right">
-                        {{ financingBank }}
+                        {{ formatToTwoDecimal(financingBank) }}
                     </td>
                 </tr>
                 <tr
@@ -143,7 +143,7 @@
                         Total cash from Financing activities
                     </td>
                     <td class="border-t px-6 py-4 whitespace-nowrap text-right">
-                        {{ financingTotal }}
+                        {{ formatToTwoDecimal(financingTotal) }}
                     </td>
                 </tr>
 
@@ -154,7 +154,7 @@
                         Ending Cash balance
                     </td>
                     <td class="border-t px-6 py-4 whitespace-nowrap text-right">
-                        {{ total_curr_liabilities }}
+                        {{ formatToTwoDecimal(total_curr_liabilities) }}
                     </td>
                 </tr>
             </tbody>
@@ -200,6 +200,9 @@ export default {
             window.print();
             document.body.innerHTML = originalContent;
             window.location.reload(); // Ensures everything returns to normal
+        },
+        formatToTwoDecimal(num) {
+            return num.toFixed(2); // Formats the number to 2 decimal places
         },
     },
 };
