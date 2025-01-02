@@ -201,8 +201,13 @@ export default {
             document.body.innerHTML = originalContent;
             window.location.reload(); // Ensures everything returns to normal
         },
+
         formatToTwoDecimal(num) {
-            return num.toFixed(2); // Formats the number to 2 decimal places
+            if (num == null) {
+                return "0.00";
+            } else {
+                return num.toFixed(2); // Formats the number to 2 decimal places
+            }
         },
     },
 };

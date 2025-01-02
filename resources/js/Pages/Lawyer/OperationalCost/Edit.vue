@@ -42,8 +42,8 @@
                                 Membership Bar Council
                             </option>
                             <option value="audit_fee">Audit Fee</option>
-                            <option value="partner_salary">
-                                Partner Salary
+                            <option value="employee_salary">
+                                Employee Salary
                             </option>
                             <option value="subscripton_fee">
                                 Subscription Fee
@@ -87,7 +87,7 @@
                         <select-input
                             v-model="form.payment_method"
                             :error="form.errors.payment_method"
-                            label="Payment Method"
+                            label="Payment Menthod"
                             required
                         >
                             <option disabled value="">
