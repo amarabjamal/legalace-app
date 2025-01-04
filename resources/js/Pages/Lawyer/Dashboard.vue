@@ -185,7 +185,9 @@ export default {
                 },
             },
             pieChartData: {
-                labels: this.topExpense.map((item) => item.description),
+                labels: this.topExpense.map((item) =>
+                    this.formatString(item.description),
+                ),
                 datasets: [
                     {
                         backgroundColor: [
@@ -209,6 +211,14 @@ export default {
                 },
             },
         };
+    },
+    methods: {
+        formatString(str) {
+            return str
+                .split("_") // Split by underscores
+                .map((word) => word.charAt(0).toUpperCase() + word.slice(1)) // Capitalize the first letter of each word
+                .join(" "); // Join the words with spaces
+        },
     },
 };
 </script>

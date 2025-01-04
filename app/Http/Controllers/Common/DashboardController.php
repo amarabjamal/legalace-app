@@ -59,6 +59,7 @@ class DashboardController extends Controller
 
         $caseFile = FirmAccount::query()
             ->whereNotNull('upload')
+            ->where('upload', '!=', '')
             ->get();
 
 

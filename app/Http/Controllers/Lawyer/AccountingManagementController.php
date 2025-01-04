@@ -131,143 +131,8 @@ class AccountingManagementController extends Controller
         return back()->with('successMessage', 'The claim voucher has been submitted to ' . $claim_voucher->approver->name . '.');
     }
 
-    public function balance_sheet()
+    public function profitAndLoss()
     {
-
-        $cashDebit = FirmAccount::query()
-            ->where('payment_method', 'like', 'cash')
-            ->sum('debit');
-        $cashCredit = FirmAccount::query()
-            ->where('payment_method', 'like', 'cash')
-            ->sum('credit');
-
-        $cash = $cashDebit - $cashCredit;
-
-        $bankDebit = FirmAccount::query()
-            ->where('payment_method', 'like', 'bank')
-            ->sum('debit');
-
-        $bankCredit = FirmAccount::query()
-            ->where('payment_method', 'like', 'bank')
-            ->sum('credit');
-
-        $bank = $bankDebit - $bankCredit;
-
-        $acc_receivable = FirmAccount::query()
-            ->where('transaction_type', 'like', 'funds in')
-            ->where('payment_method', 'like', 'credit_card')
-            ->sum('debit');
-
-        $acc_receivable = FirmAccount::query()
-            ->where('transaction_type', 'like', 'funds in')
-            ->where('payment_method', 'like', 'credit_card')
-            ->sum('debit');
-
-        $total_curr_asset = $cash + $bank + $acc_receivable;
-
-        $acc_payable = FirmAccount::query()
-            ->where('transaction_type', 'like', 'funds out')
-            ->where('payment_method', 'like', 'credit_card')
-            ->sum('credit');
-
-        $acc_payable = FirmAccount::query()
-            ->where('transaction_type', 'like', 'funds out')
-            ->where('payment_method', 'like', 'credit_card')
-            ->sum('credit');
-
-        $equities = FirmAccount::query()
-            ->where('description', 'like', 'financing')
-            ->where('transaction_type', 'like', 'funds in')
-            ->sum('debit');
-
-        $total_liabities_and_equities = $acc_payable + $equities;
-
-
-
-        return Inertia::render(
-            'Lawyer/AccountingManagement/Balance',
-            [
-                'cash' => $cash,
-                'bank' => $bank,
-                'acc_receivable' => $acc_receivable,
-                'total_curr_asset' => $total_curr_asset,
-                'acc_payable' => $acc_payable,
-                'total_curr_liabilities' => $acc_payable,
-                'equities' => $equities,
-                'total_equities' => $equities,
-                'total_liabities_and_equities' => $total_liabities_and_equities,
-            ]
-        );
-    }
-
-    public function cash_flow()
-    {
-        ///
-        $InvestingCash = FirmAccount::query()
-            ->where('description', 'like', 'investing')
-            ->where('payment_method', 'like', 'cash')
-            ->sum('debit');
-
-        $InvestingBank = FirmAccount::query()
-            ->where('description', 'like', 'investing')
-            ->where('payment_method', 'like', 'bank_transfer')
-            ->sum('debit');
-
-        $InvestingTotal = $InvestingCash + $InvestingBank;
-
-        ///
-        $operatingCash = FirmAccount::query()
-            ->where('description', '!=', 'investing')
-            ->where('description', '!=', 'financing')
-            ->where('payment_method', 'like', 'cash')
-            ->sum('credit');
-
-        $operatingBank = FirmAccount::query()
-            ->where('description', '!=', 'investing')
-            ->where('description', '!=', 'financing')
-            ->where('payment_method', 'like', 'bank_transfer')
-            ->sum('credit');
-
-        $operatingTotal = $operatingCash + $operatingBank;
-
-        ///
-        $financingCash = FirmAccount::query()
-            ->where('description', 'like', 'financing')
-            ->where('payment_method', 'like', 'cash')
-            ->sum('debit');
-
-        $financingBank = FirmAccount::query()
-            ->where('description', 'like', 'financing')
-            ->where('payment_method', 'like', 'bank_transfer')
-            ->sum('debit');
-
-        $financingTotal = $financingCash + $financingBank;
-
-        $endingCashBalance = $InvestingTotal + $operatingTotal + $financingTotal;
-
-
-
-        return Inertia::render(
-            'Lawyer/AccountingManagement/Cash',
-            [
-                'InvestingCash' => $InvestingCash,
-                'InvestingBank' => $InvestingBank,
-                'InvestingTotal' => $InvestingTotal,
-                'operatingCash' => $operatingCash,
-                'operatingBank' => $operatingBank,
-                'operatingTotal' => $operatingTotal,
-                'financingCash' => $financingCash,
-                'financingBank' => $financingBank,
-                'financingTotal' => $financingTotal,
-                'endingCashBalance' => $endingCashBalance
-            ]
-        );
-    }
-
-
-    public function profit_and_loss()
-    {
-
         $totalOperatingIncome = FirmAccount::query()
             ->where('description', 'like', 'payment_received')
             ->where('transaction_type', 'like', 'funds in')
@@ -319,19 +184,169 @@ class AccountingManagementController extends Controller
 
         $netProfit = ($totalOperatingIncome + $totalNonOperatingIncome) - ($totalOperatingExpense - $totalNonOperatingExpense);
 
+        return  [
+            'totalOperatingIncome' => $totalOperatingIncome,
+            'listGroupOperatingIncome' => $listGroupOperatingIncome,
+            'totalEmployeeSalary' => $totalEmployeeSalary,
+            'listOperatingExpense' => $ListOperatingExpense,
+            'totalOperatingExpense' => $totalOperatingExpense,
+            'totalNonOperatingIncome' => $totalNonOperatingIncome,
+            'totalNonOperatingExpense' => $totalNonOperatingExpense,
+            'netProfit' => $netProfit,
+        ];
+    }
+
+    public function balance_sheet()
+    {
+
+        $cashDebit = FirmAccount::query()
+            ->where('payment_method', 'like', 'cash')
+            ->sum('debit');
+        $cashCredit = FirmAccount::query()
+            ->where('payment_method', 'like', 'cash')
+            ->sum('credit');
+
+        $cash = $cashDebit - $cashCredit;
+
+        $bankDebit = FirmAccount::query()
+            ->where('payment_method', 'like', 'bank')
+            ->sum('debit');
+
+        $bankCredit = FirmAccount::query()
+            ->where('payment_method', 'like', 'bank')
+            ->sum('credit');
+
+        $bank = $bankDebit - $bankCredit;
+
+        $acc_receivable = FirmAccount::query()
+            ->where('transaction_type', 'like', 'funds in')
+            ->where('payment_method', 'like', 'credit_card')
+            ->sum('debit');
+
+        $acc_receivable = FirmAccount::query()
+            ->where('transaction_type', 'like', 'funds in')
+            ->where('payment_method', 'like', 'credit_card')
+            ->sum('debit');
+
+        $total_curr_asset = $cash + $bank + $acc_receivable;
+
+        $acc_payable = FirmAccount::query()
+            ->where('transaction_type', 'like', 'funds out')
+            ->where('payment_method', 'like', 'credit_card')
+            ->sum('credit');
+
+        $acc_payable = FirmAccount::query()
+            ->where('transaction_type', 'like', 'funds out')
+            ->where('payment_method', 'like', 'credit_card')
+            ->sum('credit');
+
+        $equities = FirmAccount::query()
+            ->where('description', 'like', 'financing')
+            ->where('transaction_type', 'like', 'funds in')
+            ->sum('debit');
+
+        $assetAcquisition = FirmAccount::query()
+            ->where('description', 'like', 'asset_acquisition')
+            ->where('transaction_type', 'like', 'funds out')
+            ->sum('credit');
+
+        $total_liabities_and_equities = $acc_payable + $equities;
+
+        $profit_and_loss = self::profitAndLoss();
 
         return Inertia::render(
-            'Lawyer/AccountingManagement/Profit',
+            'Lawyer/AccountingManagement/Balance',
             [
-                'totalOperatingIncome' => $totalOperatingIncome,
-                'listGroupOperatingIncome' => $listGroupOperatingIncome,
-                'totalEmployeeSalary' => $totalEmployeeSalary,
-                'listOperatingExpense' => $ListOperatingExpense,
-                'totalOperatingExpense' => $totalOperatingExpense,
-                'totalNonOperatingIncome' => $totalNonOperatingIncome,
-                'totalNonOperatingExpense' => $totalNonOperatingExpense,
-                'netProfit' => $netProfit,
+                'cash' => $cash,
+                'bank' => $bank,
+                'acc_receivable' => $acc_receivable,
+                'total_curr_asset' => $total_curr_asset,
+                'acc_payable' => $acc_payable,
+                'total_curr_liabilities' => $acc_payable,
+                'equities' => $equities,
+                'total_equities' => $equities,
+                'total_liabities_and_equities' => $total_liabities_and_equities,
+                'assetAcquisition' => $assetAcquisition,
+                'profit_and_loss' => $profit_and_loss,
             ]
+        );
+    }
+
+    public function cash_flow()
+    {
+        ///
+        $InvestingCash = FirmAccount::query()
+            ->where('description', 'like', 'investing')
+            ->where('payment_method', 'like', 'cash')
+            ->sum('debit');
+
+        $InvestingBank = FirmAccount::query()
+            ->where('description', 'like', 'investing')
+            ->where('payment_method', 'like', 'bank_transfer')
+            ->sum('debit');
+
+        $assetAcquisition = FirmAccount::query()
+            ->where('description', 'like', 'asset_acquisition')
+            ->sum('credit');
+
+        $InvestingTotal = $InvestingCash + $InvestingBank - $assetAcquisition;
+
+        ///
+        $operatingCash = FirmAccount::query()
+            ->where('description', '!=', 'investing')
+            ->where('description', '!=', 'financing')
+            ->where('payment_method', 'like', 'cash')
+            ->sum('credit');
+
+        $operatingBank = FirmAccount::query()
+            ->where('description', '!=', 'investing')
+            ->where('description', '!=', 'financing')
+            ->where('payment_method', 'like', 'bank_transfer')
+            ->sum('credit');
+
+        $operatingTotal = $operatingCash + $operatingBank;
+
+        ///
+        $financingCash = FirmAccount::query()
+            ->where('description', 'like', 'financing')
+            ->where('payment_method', 'like', 'cash')
+            ->sum('debit');
+
+        $financingBank = FirmAccount::query()
+            ->where('description', 'like', 'financing')
+            ->where('payment_method', 'like', 'bank_transfer')
+            ->sum('debit');
+
+        $financingTotal = $financingCash + $financingBank;
+
+        $endingCashBalance = $InvestingTotal + $operatingTotal + $financingTotal;
+
+
+
+        return Inertia::render(
+            'Lawyer/AccountingManagement/Cash',
+            [
+                'InvestingCash' => $InvestingCash,
+                'InvestingBank' => $InvestingBank,
+                'assetAcquisition' => $assetAcquisition,
+                'InvestingTotal' => $InvestingTotal,
+                'operatingCash' => $operatingCash,
+                'operatingBank' => $operatingBank,
+                'operatingTotal' => $operatingTotal,
+                'financingCash' => $financingCash,
+                'financingBank' => $financingBank,
+                'financingTotal' => $financingTotal,
+                'endingCashBalance' => $endingCashBalance
+            ]
+        );
+    }
+
+
+    public function profit_and_loss()
+    {
+        return Inertia::render(
+            'Lawyer/AccountingManagement/Profit',
+            self::profitAndLoss()
         );
     }
 }

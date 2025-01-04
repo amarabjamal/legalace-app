@@ -70,6 +70,28 @@
                     </td>
                 </tr>
 
+                <!-- Other Asset -->
+                <tr
+                    class="text-sm text-gray-700 hover:bg-gray-100 focus-within:bg-gray-100"
+                >
+                    <td class="border-t px-6 py-4 whitespace-nowrap">
+                        Other Asset
+                    </td>
+                    <td class="border-t px-6 py-4 whitespace-nowrap text-right">
+                        -
+                    </td>
+                </tr>
+                <tr
+                    class="text-sm text-gray-700 hover:bg-gray-100 focus-within:bg-gray-100"
+                >
+                    <td class="border-t px-6 py-4 whitespace-nowrap pl-10">
+                        Total For Other Asset
+                    </td>
+                    <td class="border-t px-6 py-4 whitespace-nowrap text-right">
+                        {{ formatToTwoDecimal(assetAcquisition) }}
+                    </td>
+                </tr>
+
                 <!-- LIABILITIES -->
                 <tr
                     class="text-sm text-gray-700 hover:bg-gray-100 focus-within:bg-gray-100"
@@ -134,6 +156,16 @@
                         {{ formatToTwoDecimal(equities) }}
                     </td>
                 </tr>
+                <tr
+                    class="text-sm text-gray-700 hover:bg-gray-100 focus-within:bg-gray-100"
+                >
+                    <td class="border-t px-6 py-4 whitespace-nowrap pl-10">
+                        Current Year Earnings
+                    </td>
+                    <td class="border-t px-6 py-4 whitespace-nowrap text-right">
+                        {{ formatToTwoDecimal(profit_and_loss["netProfit"]) }}
+                    </td>
+                </tr>
 
                 <tr
                     class="text-sm text-gray-700 hover:bg-gray-100 focus-within:bg-gray-100"
@@ -174,8 +206,10 @@ export default {
         acc_payable: String,
         total_curr_liabilities: String,
         equities: String,
+        profit_and_loss: String,
         total_equities: String,
         total_liabities_and_equities: String,
+        assetAcquisition: String,
     },
     data() {
         return {
