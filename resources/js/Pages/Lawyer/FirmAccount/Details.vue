@@ -47,10 +47,10 @@
                 </tr>
                 <tr>
                     <td>
-                        Account Type
+                        Balance
                     </td>
                     <td class="font-bold">
-                        {{ bank_account.account_type }}
+                        {{ bank_account.opening_balance }}
                     </td>
                 </tr>
             </table>
@@ -170,7 +170,7 @@
                         {{ acc.transaction_type }}
                     </th>
                     <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
-                        {{ acc.payment_method }}
+                        {{ formatString(acc.payment_method) }}
                     </th>
                     <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
                         {{ acc.transaction_type == "funds in" ? acc.debit : acc.credit }}
@@ -196,9 +196,9 @@
 </template>
 
 <script>
+import Layout from "../Shared/Layout";
 import { Head } from "@inertiajs/inertia-vue3";
 import SearchFilter from '../../../Shared/SearchFilter';
-import Layout from "../Shared/Layout";
 import Pagination from "../../../Shared/Pagination.vue";
 import Icon from '../../../Shared/Icon';
 import { Inertia } from "@inertiajs/inertia";
@@ -256,6 +256,12 @@ export default {
                 preserveState: true,
                 replace: true,
             });
+        },
+        formatString(str) {
+            return str
+                .split('_') // Split by underscores
+                .map(word => word.charAt(0).toUpperCase() + word.slice(1)) // Capitalize the first letter of each word
+                .join(' '); // Join the words with spaces
         }
     },
 };

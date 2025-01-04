@@ -80,6 +80,7 @@
                             v-model="form.id_number"
                             :error="form.errors.id_number"
                             label="ID Number"
+                            :maxlength="12"
                             required
                         />
                         <select-input

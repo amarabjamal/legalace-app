@@ -88,17 +88,19 @@
                             class="pb-8 pr-6 w-full lg:w-1/2"
                             label="Upload Document"
                             accept=".jpg,.png,.pdf,.doc,.docx"
+                            required
                         />
                         <text-input
-                            v-model="form.amount"
+                            v-model.lazy="form.amount"
                             :error="form.errors.amount"
+                            :type="'number'"
                             label="Amount"
                             required
                         />
                         <select-input
                             v-model="form.payment_method"
                             :error="form.errors.payment_method"
-                            label="Payment Method"
+                            label="Payment Menthod"
                             required
                         >
                             <option disabled value="">
@@ -132,7 +134,7 @@
                     >Submit</loading-button
                 >
                 <Link
-                    :href="`/admin/users/`"
+                    v-on:click="goBack()"
                     as="button"
                     class="btn-cancel"
                     :disabled="form.processing"
@@ -147,6 +149,7 @@
 <script>
 import Layout from "../Shared/Layout";
 import TextInput from "../../../Shared/TextInput";
+import MoneyInput from "../../../Shared/MoneyInput";
 import SelectInput from "../../../Shared/SelectInput";
 import DateInput from "../../../Shared/DateInput";
 import LoadingButton from "../../../Shared/LoadingButton";
@@ -158,6 +161,7 @@ import { useForm } from "@inertiajs/inertia-vue3";
 export default {
     components: {
         TextInput,
+        MoneyInput,
         SelectInput,
         DateInput,
         LoadingButton,
@@ -198,6 +202,9 @@ export default {
             } else {
                 alert("You need to fill in the form first.");
             }
+        },
+        goBack() {
+            window.history.go(-1);
         },
     },
 };

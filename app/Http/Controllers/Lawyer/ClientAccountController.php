@@ -42,6 +42,10 @@ class ClientAccountController extends Controller
 
     public function show(Request $request)
     {
+        if ($request->client_account != null) {
+            return self::detail($request, $request->client_account);
+        }
+
         $accList = DB::table(self::DB_NAME);
 
         $clientAccountList = ClientAccountList::query()
@@ -106,8 +110,6 @@ class ClientAccountController extends Controller
                         'created_by' => Auth::id(),
                     ]);
                 }
-
-                return redirect()->route('lawyer.client-accounts.show', ['client_account' => $request->bank_account_id])->with('message', 'Successfully added new transaction.');
             } else {
                 $fileName = uniqid('TRANSACTION_') . '_' . date('Ymd') . '_' . time() . '.' . $request->file('upload')->extension();
                 $filePath = $request->file('upload')->storeAs(ClientAccount::UPLOAD_PATH, $fileName);
@@ -143,9 +145,8 @@ class ClientAccountController extends Controller
                         'created_by' => Auth::id(),
                     ]);
                 }
-
-                return redirect()->route('lawyer.client-accounts.show', ['client_account' => $request->bank_account_id])->with('message', 'Successfully added new transaction.');
             }
+            return redirect()->route('lawyer.client-accounts.show', ['client_account' => $request->bank_account_id])->with('successMessage', 'Successfully added new transaction.');
         } catch (\Exception $e) {
             if (Storage::exists($filePath)) {
                 Storage::delete($filePath);
@@ -187,7 +188,7 @@ class ClientAccountController extends Controller
                         'created_by' => Auth::id(),
                     ]);
                 }
-                return redirect()->route('lawyer.client-accounts.show', ['client_account' => $request->bank_account_id])->with('message', 'Successfully update the transaction.');
+                return redirect()->route('lawyer.client-accounts.show', ['client_account' => $request->bank_account_id])->with('successMessage', 'Successfully update the transaction.');
             } else {
                 $fileName = uniqid('TRANSACTION_') . '_' . date('Ymd') . '_' . time() . '.' . $request->file('upload')->extension();
                 $filePath = null;
@@ -228,7 +229,7 @@ class ClientAccountController extends Controller
                     ]);
                 }
 
-                return redirect()->route('lawyer.client-accounts.show', ['client_account' => $request->bank_account_id])->with('message', 'Successfully update the transaction.');
+                return redirect()->route('lawyer.client-accounts.show', ['client_account' => $request->bank_account_id])->with('successMessage', 'Successfully update the transaction.');
             }
         } catch (\Exception $e) {
             if (Storage::exists($filePath)) {
@@ -393,7 +394,7 @@ class ClientAccountController extends Controller
 
         $clientAccount->delete();
 
-        return redirect()->route('lawyer.client-accounts.show', ['client_account' => $bank_account_id])->with('message', 'Successfully deleted the account.');
+        return redirect()->route('lawyer.client-accounts.show', ['client_account' => $bank_account_id])->with('successMessage', 'Successfully deleted the account.');
     }
 
     public function totalBalance()

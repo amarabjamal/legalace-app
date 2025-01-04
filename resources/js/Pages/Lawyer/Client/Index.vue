@@ -42,11 +42,12 @@ lawyer/client
                         {{ user.email }}
                     </td>
                     <td scope="row" class="table-body-data">
-                        {{ user.account }}
+                        <!-- {{ user.phone_number }} -->
+                        {{ user.company_address }}
                     </td>
                     <td scope="row" class="table-body-data">
                         {{ user.company_name }}
-                        <!-- {{ user.name }} -->
+                        {{ user.name }}
                     </td>
                     <td class="table-body-data text-right">
                         <Link
