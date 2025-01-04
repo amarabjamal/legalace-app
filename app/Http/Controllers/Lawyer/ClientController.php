@@ -17,14 +17,14 @@ class ClientController extends Controller
         $filters = FacadesRequest::all(['search']);
         $clients = Client::filter(FacadesRequest::only('search'))
             ->paginate(25)
-            ->withQueryString()
-            ->through(fn($user) => [
-                'id' => $user->id,
-                'name' => $user->name,
-                'email' => $user->email,
-                'phone_num' => $user->phone_num,
-                'id_num' => $user->id_num
-            ]);
+            ->withQueryString();
+        // ->through(fn($user) => [
+        //     'id' => $user->id,
+        //     'name' => $user->name,
+        //     'email' => $user->email,
+        //     'phone_num' => $user->phone_num,
+        //     'id_num' => $user->id_num
+        // ]);
 
         return Inertia::render('Lawyer/Client/Index', [
             'filters' => $filters,

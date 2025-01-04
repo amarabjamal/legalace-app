@@ -91,6 +91,20 @@
                         {{ formatToTwoDecimal(assetAcquisition) }}
                     </td>
                 </tr>
+                <tr
+                    class="text-sm text-gray-700 hover:bg-gray-100 focus-within:bg-gray-100"
+                >
+                    <td class="border-t px-6 py-4 whitespace-nowrap pl-10">
+                        Total For All Asset
+                    </td>
+                    <td class="border-t px-6 py-4 whitespace-nowrap text-right">
+                        {{
+                            formatToTwoDecimal(
+                                assetAcquisition + total_curr_asset,
+                            )
+                        }}
+                    </td>
+                </tr>
 
                 <!-- LIABILITIES -->
                 <tr

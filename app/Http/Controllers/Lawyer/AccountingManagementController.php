@@ -250,9 +250,12 @@ class AccountingManagementController extends Controller
             ->where('transaction_type', 'like', 'funds out')
             ->sum('credit');
 
-        $total_liabities_and_equities = $acc_payable + $equities;
-
         $profit_and_loss = self::profitAndLoss();
+        $netProfit = $profit_and_loss['netProfit'];
+
+        $total_liabities_and_equities = $acc_payable + $equities +  $assetAcquisition + $netProfit;
+
+
 
         return Inertia::render(
             'Lawyer/AccountingManagement/Balance',

@@ -7,6 +7,7 @@ use App\Models\User;
 use Inertia\Inertia;
 use App\Models\FirmAccount;
 use App\Models\BankAccounts;
+use App\Models\CaseFiles;
 use Illuminate\Support\Facades\DB;
 
 class DashboardController extends Controller
@@ -57,9 +58,7 @@ class DashboardController extends Controller
             ->orderByDesc('total') // Optional: Sort by highest total_debit
             ->get();
 
-        $caseFile = FirmAccount::query()
-            ->whereNotNull('upload')
-            ->where('upload', '!=', '')
+        $caseFile = CaseFiles::query()
             ->get();
 
 

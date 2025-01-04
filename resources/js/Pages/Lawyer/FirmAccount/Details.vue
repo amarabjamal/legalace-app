@@ -196,9 +196,9 @@
 </template>
 
 <script>
+import Layout from "../Shared/Layout";
 import { Head } from "@inertiajs/inertia-vue3";
 import SearchFilter from '../../../Shared/SearchFilter';
-import Layout from "../Shared/Layout";
 import Pagination from "../../../Shared/Pagination.vue";
 import Icon from '../../../Shared/Icon';
 import { Inertia } from "@inertiajs/inertia";

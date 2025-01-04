@@ -41,6 +41,10 @@ class FirmAccountController extends Controller
 
     public function show(Request $request)
     {
+        if ($request->firm_account != null) {
+            return self::detail($request, $request->firm_account);
+        }
+
         $accList = DB::table('firm_account');
 
         $firmAccountList = FirmAccountList::query()
@@ -105,8 +109,6 @@ class FirmAccountController extends Controller
                         'created_by' => Auth::id(),
                     ]);
                 }
-
-                return redirect()->route('lawyer.firm-accounts.show', ['firm_account' => $request->bank_account_id])->with('message', 'Successfully added new transaction.');
             } else {
                 $fileName = uniqid('TRANSACTION_') . '_' . date('Ymd') . '_' . time() . '.' . $request->file('upload')->extension();
                 $filePath = $request->file('upload')->storeAs(FirmAccount::UPLOAD_PATH, $fileName);
@@ -142,9 +144,8 @@ class FirmAccountController extends Controller
                         'created_by' => Auth::id(),
                     ]);
                 }
-
-                return redirect()->route('lawyer.firm-accounts.show', ['firm_account' => $request->bank_account_id])->with('message', 'Successfully added new transaction.');
             }
+            return redirect()->route('lawyer.firm-accounts.show', ['firm_account' => $request->bank_account_id])->with('successMessage', 'Successfully added new transaction.');
         } catch (\Exception $e) {
             if (Storage::exists($filePath)) {
                 Storage::delete($filePath);
@@ -186,7 +187,6 @@ class FirmAccountController extends Controller
                         'created_by' => Auth::id(),
                     ]);
                 }
-                return redirect()->route('lawyer.firm-accounts.show', ['firm_account' => $request->bank_account_id])->with('message', 'Successfully update the transaction.');
             } else {
                 $fileName = uniqid('TRANSACTION_') . '_' . date('Ymd') . '_' . time() . '.' . $request->file('upload')->extension();
                 $filePath = null;
@@ -226,9 +226,8 @@ class FirmAccountController extends Controller
                         'created_by' => Auth::id(),
                     ]);
                 }
-
-                return redirect()->route('lawyer.firm-accounts.show', ['firm_account' => $request->bank_account_id])->with('message', 'Successfully update the transaction.');
             }
+            return redirect()->route('lawyer.firm-accounts.show', ['firm_account' => $request->bank_account_id])->with('successMessage', 'Successfully update the transaction.');
         } catch (\Exception $e) {
             if (Storage::exists($filePath)) {
                 Storage::delete($filePath);
@@ -392,7 +391,7 @@ class FirmAccountController extends Controller
 
         $firmAccount->delete();
 
-        return redirect()->route('lawyer.firm-accounts.show', ['firm_account' => $bank_account_id])->with('message', 'Successfully deleted the account.');
+        return redirect()->route('lawyer.firm-accounts.show', ['firm_account' => $bank_account_id])->with('successMessage', 'Successfully deleted the account.');
     }
 
     public function totalBalance()

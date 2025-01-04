@@ -64,7 +64,7 @@
                         <select-input
                             v-model="form.payment_method"
                             :error="form.errors.payment_method"
-                            label="Payment Method"
+                            label="Payment Menthod"
                             required
                         >
                             <option disabled value="">
@@ -98,7 +98,7 @@
                     >Submit</loading-button
                 >
                 <Link
-                    :href="`/admin/users/`"
+                    v-on:click="goBack()"
                     as="button"
                     class="btn-cancel"
                     :disabled="form.processing"
@@ -164,6 +164,9 @@ export default {
             } else {
                 alert("You need to fill in the form first.");
             }
+        },
+        goBack() {
+            window.history.go(-1);
         },
     },
 };

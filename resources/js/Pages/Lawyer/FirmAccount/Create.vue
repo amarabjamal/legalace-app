@@ -88,10 +88,12 @@
                             class="pb-8 pr-6 w-full lg:w-1/2"
                             label="Upload Document"
                             accept=".jpg,.png,.pdf,.doc,.docx"
+                            required
                         />
-                        <money-input
+                        <text-input
                             v-model.lazy="form.amount"
                             :error="form.errors.amount"
+                            :type="'number'"
                             label="Amount"
                             required
                         />
@@ -132,7 +134,7 @@
                     >Submit</loading-button
                 >
                 <Link
-                    :href="`/admin/users/`"
+                    v-on:click="goBack()"
                     as="button"
                     class="btn-cancel"
                     :disabled="form.processing"
@@ -200,6 +202,9 @@ export default {
             } else {
                 alert("You need to fill in the form first.");
             }
+        },
+        goBack() {
+            window.history.go(-1);
         },
     },
 };

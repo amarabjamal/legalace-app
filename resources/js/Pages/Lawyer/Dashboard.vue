@@ -71,7 +71,7 @@
                         >
                             <tr>
                                 <th scope="col" class="px-6 py-3">No</th>
-                                <th scope="col" class="px-6 py-3">File</th>
+                                <th scope="col" class="px-6 py-3">Matter</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -84,13 +84,13 @@
                                     scope="row"
                                     class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap"
                                 >
-                                    {{ index }}
+                                    {{ index + 1 }}
                                 </th>
                                 <th
                                     scope="row"
                                     class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap"
                                 >
-                                    {{ item.upload }}
+                                    {{ item.matter }}
                                 </th>
                             </tr>
                         </tbody>
