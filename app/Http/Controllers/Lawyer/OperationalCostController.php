@@ -14,11 +14,12 @@ class OperationalCostController extends Controller
 {
     public function index(Request $request)
     {
-        $operationalCost = OperationalCost::query()
+        $non_recurring = OperationalCost::query()
             ->rightJoin('bank_accounts', 'operational_costs.bank_account_id', '=', 'bank_accounts.id')
             ->when($request->input('search'), function ($query, $search) {
                 $query->where('name', 'like', "%{$search}%");
             })
+            ->where('is_recurring', 'like', "0")
             ->whereNotNull('operational_costs.id')
             ->paginate(10)
             ->withQueryString()
@@ -32,10 +33,32 @@ class OperationalCostController extends Controller
                 'label' => $cost->label,
                 'date' => $cost->date,
             ]);
+
+        $recurring = OperationalCost::query()
+            ->rightJoin('bank_accounts', 'operational_costs.bank_account_id', '=', 'bank_accounts.id')
+            ->when($request->input('search'), function ($query, $search) {
+                $query->where('name', 'like', "%{$search}%");
+            })
+            ->where('is_recurring', 'like', "1")
+            ->whereNotNull('operational_costs.id')
+            ->paginate(10)
+            ->withQueryString()
+            ->through(fn($cost) => [
+                'id' => $cost->id,
+                'details' => $cost->details,
+                'amount' => $cost->amount,
+                'is_recurring' => $cost->is_recurring,
+                'recurring_period' => $cost->recurring_period,
+                'is_paid' => $cost->is_paid,
+                'label' => $cost->label,
+                'date' => $cost->date,
+            ]);
+
         $filters = $request->only(['search']);
 
         return Inertia::render('Lawyer/OperationalCost/Index', [
-            'operationalCosts' => $operationalCost,
+            'non_recurring' => $non_recurring,
+            'recurring' => $recurring,
             'filters' => $filters,
 
         ]);

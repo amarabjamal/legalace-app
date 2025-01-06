@@ -8,6 +8,8 @@
                     Operational Cost/Bills
                 </h2>
 
+                <h4 class="my-6 text-2xl font-semibold">Recurring</h4>
+
                 <div class="flex items-center mb-4">
                     <Link href="/lawyer/operational-cost/create">
                         <button
@@ -40,7 +42,7 @@
                         </thead>
                         <tbody>
                             <tr
-                                v-for="cost in operationalCosts.data"
+                                v-for="cost in recurring.data"
                                 :key="cost.id"
                                 class="bg-white border-b"
                             >
@@ -66,7 +68,7 @@
                                     scope="row"
                                     class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap"
                                 >
-                                    {{ parseFloat(cost.amount).toFixed(2) }}
+                                    {{ cost.amount }}
                                 </th>
                                 <!-- <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
                                     {{ cost.balance }}
@@ -90,10 +92,102 @@
                 </div>
                 <!-- Paginator -->
                 <Pagination
-                    :links="operationalCosts.links"
-                    :total="operationalCosts.total"
-                    :from="operationalCosts.from"
-                    :to="operationalCosts.to"
+                    :links="recurring.links"
+                    :total="recurring.total"
+                    :from="recurring.from"
+                    :to="recurring.to"
+                />
+            </div>
+
+            <div class="container px-6 mx-auto grid">
+                <h4 class="my-6 text-2xl font-semibold">Non-Recurring</h4>
+
+                <div class="flex items-center mb-4">
+                    <Link href="/lawyer/operational-cost/create">
+                        <button
+                            class="px-4 py-2 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-blue-800 border border-transparent rounded-lg active:bg-blue-900 hover:bg-blue-900 focus:outline-none focus:shadow-outline-blue"
+                        >
+                            Add Expense
+                        </button>
+                    </Link>
+                </div>
+                <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
+                    <table class="w-full text-sm text-left text-gray-500">
+                        <thead
+                            class="text-xs text-gray-700 uppercase bg-gray-50"
+                        >
+                            <tr>
+                                <th scope="col" class="px-6 py-3">DATE</th>
+                                <th scope="col" class="px-6 py-3">
+                                    DESCRIPTION
+                                </th>
+                                <th scope="col" class="px-6 py-3">ACCOUNT</th>
+                                <th scope="col" class="px-6 py-3">AMOUNT</th>
+                                <!-- <th scope="col" class="px-6 py-3">
+                                    Balance
+                                </th> -->
+                                <th scope="col" class="px-6 py-3">
+                                    ACTION
+                                    <span class="sr-only">Edit</span>
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr
+                                v-for="cost in non_recurring.data"
+                                :key="cost.id"
+                                class="bg-white border-b"
+                            >
+                                <th
+                                    scope="row"
+                                    class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap"
+                                >
+                                    {{ cost.date }}
+                                </th>
+                                <th
+                                    scope="row"
+                                    class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap"
+                                >
+                                    {{ cost.details }}
+                                </th>
+                                <th
+                                    scope="row"
+                                    class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap"
+                                >
+                                    {{ cost.label }}
+                                </th>
+                                <th
+                                    scope="row"
+                                    class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap"
+                                >
+                                    {{ cost.amount }}
+                                </th>
+                                <!-- <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
+                                    {{ cost.balance }}
+                                </th> -->
+                                <td class="px-6 py-4 text-left">
+                                    <Link
+                                        :href="`/lawyer/operational-cost/${cost.id}/edit`"
+                                        class="font-medium text-blue-600 hover:underline"
+                                        >Edit</Link
+                                    >
+                                    <Link
+                                        @click="deleteAcc(cost)"
+                                        as="button"
+                                        class="ml-3 font-medium text-red-600 hover:underline"
+                                        >Delete</Link
+                                    >
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <!-- Paginator -->
+                <Pagination
+                    :links="non_recurring.links"
+                    :total="non_recurring.total"
+                    :from="non_recurring.from"
+                    :to="non_recurring.to"
                 />
             </div>
         </main>
@@ -129,7 +223,8 @@ export default {
         return { searchClients };
     },
     props: {
-        operationalCosts: Object,
+        recurring: Object,
+        non_recurring: Object,
         filters: Object,
     },
     components: { Head, Pagination, ref },
