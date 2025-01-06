@@ -6,7 +6,7 @@
 
     <div class="grid gap-6 mb-8 md:grid-cols-3 mt-4">
         <div v-for="bank_account in bank_accounts.data" :key="bank_account.id"
-            class="min-w-0 bg-white border border-gray-300 rounded-md overflow-hidden ease-in-out duration-300 hover:shadow-md hover:scale-105 hover:-translate-y-5">
+            class="min-w-0 bg-white border border-gray-300 rounded-md overflow-hidden ease-in-out duration-300 hover:shadow-md hover:scale-105 hover:-translate-y-5" :style="{ background: acc.transaction_type == 'funds in' ? '#cbd7c7' : '#e8b5b5' }">
             <div class="px-4 mb-2 border-b bg-gray-50 flex justify-between items-center">
                 <h4 class="py-2 text-sm uppercase font-semibold text-gray-500 w-1/2 truncate">{{ bank_account.label }}
                 </h4>

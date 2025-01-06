@@ -209,11 +209,11 @@ class AccountingManagementController extends Controller
         $cash = $cashDebit - $cashCredit;
 
         $bankDebit = FirmAccount::query()
-            ->where('payment_method', 'like', 'bank')
+            ->where('payment_method', 'like', 'bank_transfer')
             ->sum('debit');
 
         $bankCredit = FirmAccount::query()
-            ->where('payment_method', 'like', 'bank')
+            ->where('payment_method', 'like', 'bank_transfer')
             ->sum('credit');
 
         $bank = $bankDebit - $bankCredit;
@@ -253,7 +253,9 @@ class AccountingManagementController extends Controller
         $profit_and_loss = self::profitAndLoss();
         $netProfit = $profit_and_loss['netProfit'];
 
-        $total_liabities_and_equities = $acc_payable + $equities +  $assetAcquisition + $netProfit;
+        $total_equities = $equities + $netProfit;
+
+        $total_liabities_and_equities = $acc_payable + $equities + $netProfit;
 
 
 
@@ -267,7 +269,7 @@ class AccountingManagementController extends Controller
                 'acc_payable' => $acc_payable,
                 'total_curr_liabilities' => $acc_payable,
                 'equities' => $equities,
-                'total_equities' => $equities,
+                'total_equities' => $total_equities,
                 'total_liabities_and_equities' => $total_liabities_and_equities,
                 'assetAcquisition' => $assetAcquisition,
                 'profit_and_loss' => $profit_and_loss,
@@ -307,7 +309,7 @@ class AccountingManagementController extends Controller
             ->where('payment_method', 'like', 'bank_transfer')
             ->sum('credit');
 
-        $operatingTotal = $operatingCash + $operatingBank;
+        // $operatingTotal = $operatingCash + $operatingBank;
 
         ///
         $financingCash = FirmAccount::query()
@@ -322,7 +324,13 @@ class AccountingManagementController extends Controller
 
         $financingTotal = $financingCash + $financingBank;
 
-        $endingCashBalance = $InvestingTotal + $operatingTotal + $financingTotal;
+        $profit_and_loss = self::profitAndLoss();
+        $netProfit = $profit_and_loss['netProfit'];
+
+        $operatingTotal = $netProfit;
+
+        // $endingCashBalance = $InvestingTotal + $operatingTotal + $financingTotal;
+        $endingCashBalance = $netProfit + $InvestingTotal + $financingTotal;
 
 
 
@@ -339,6 +347,7 @@ class AccountingManagementController extends Controller
                 'financingCash' => $financingCash,
                 'financingBank' => $financingBank,
                 'financingTotal' => $financingTotal,
+                'netProfit' => $netProfit,
                 'endingCashBalance' => $endingCashBalance
             ]
         );

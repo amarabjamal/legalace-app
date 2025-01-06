@@ -65,13 +65,13 @@
                     class="text-sm text-gray-700 hover:bg-gray-100 focus-within:bg-gray-100"
                 >
                     <td class="border-t px-6 py-4 whitespace-nowrap pl-10">
-                        {{ item.details }}
+                        {{ formatString(item.details) }}
                     </td>
                     <td class="border-t px-6 py-4 whitespace-nowrap text-right">
                         {{ formatToTwoDecimal(item.amount) }}
                     </td>
                 </tr>
-                <tr
+                <!-- <tr
                     class="text-sm text-gray-700 hover:bg-gray-100 focus-within:bg-gray-100"
                 >
                     <td class="border-t px-6 py-4 whitespace-nowrap pl-10">
@@ -80,7 +80,7 @@
                     <td class="border-t px-6 py-4 whitespace-nowrap text-right">
                         {{ formatToTwoDecimal(totalEmployeeSalary) }}
                     </td>
-                </tr>
+                </tr> -->
                 <tr
                     class="text-sm text-gray-700 hover:bg-gray-100 focus-within:bg-gray-100"
                 >
@@ -163,13 +163,13 @@ export default {
     },
     data() {
         return {
-            page_title: "Balance Sheet",
+            page_title: "Profit and Loss statement",
             breadcrumbs: [
                 {
                     link: "/lawyer/accounting-management",
                     label: "Accounting Management",
                 },
-                { link: null, label: "Balance Sheet" },
+                { link: null, label: "Profit and Loss" },
             ],
         };
     },
@@ -186,6 +186,12 @@ export default {
         },
         formatToTwoDecimal(num) {
             return num.toFixed(2); // Formats the number to 2 decimal places
+        },
+        formatString(str) {
+            return str
+                .split("_") // Split by underscores
+                .map((word) => word.charAt(0).toUpperCase() + word.slice(1)) // Capitalize the first letter of each word
+                .join(" "); // Join the words with spaces
         },
     },
 };

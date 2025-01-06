@@ -77,7 +77,7 @@ export default {
                 {
                     href: "/lawyer/client-accounts",
                     label: "Client Accounts",
-                    icon: "booklet-line",
+                    icon: "increase-decrease-line",
                     isActive: this.$page.url.startsWith(
                         "/lawyer/client-accounts",
                     ),
@@ -93,7 +93,7 @@ export default {
                 {
                     href: "/lawyer/operational-cost",
                     label: "Operational Cost",
-                    icon: "ticket-line",
+                    icon: "operational-cost",
                     isActive: this.$page.url.startsWith(
                         "/lawyer/operational-cost",
                     ),
@@ -101,7 +101,7 @@ export default {
                 {
                     href: "/lawyer/accounting-management",
                     label: "Accounting Management",
-                    icon: "ticket-line",
+                    icon: "booklet-line",
                     isActive: this.$page.url.startsWith(
                         "/lawyer/accounting-management",
                     ),

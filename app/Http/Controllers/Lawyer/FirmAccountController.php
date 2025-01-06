@@ -267,7 +267,7 @@ class FirmAccountController extends Controller
                 'description' => $acc->description,
                 'transaction_type' => $acc->transaction_type,
                 'payment_method' => $acc->payment_method,
-                'document_no' => $acc->document_no,
+                'document_no' => $acc->document_number,
                 'debit' => $acc->debit,
                 'credit' => $acc->credit,
                 'balance' => $acc->balance,

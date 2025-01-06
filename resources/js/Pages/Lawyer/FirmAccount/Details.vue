@@ -159,12 +159,12 @@
                 </tr>
             </thead>
             <tbody>
-                <tr v-for="acc in firmAccounts.data" :key="acc.id" class="bg-white border-b">
+                <tr v-for="acc in firmAccounts.data" :key="acc.id" class="bg-white border-b" :style="{ background: acc.transaction_type == 'funds in' ? '#cbd7c7' : '#e8b5b5' }">
                     <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
                         {{ acc.date }}
                     </th>
                     <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
-                        {{ acc.description }}
+                        {{ formatString(acc.description) }}
                     </th>
                     <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
                         {{ acc.transaction_type }}
@@ -176,7 +176,7 @@
                         {{ acc.transaction_type == "funds in" ? acc.debit : acc.credit }}
                     </th>
                     <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
-                        {{ acc.balance }}
+                        {{ acc.document_no }}
                     </th>
                     <td class="px-6 py-4 text-left">
                         <Link :href="`/lawyer/firm-accounts/${acc_id}/${acc.id}/view`"

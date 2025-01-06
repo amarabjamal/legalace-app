@@ -100,18 +100,17 @@
                         <select-input
                             v-model="form.payment_method"
                             :error="form.errors.payment_method"
-                            label="Payment Menthod"
+                            label="Payment Method"
                             required
                         >
                             <option disabled value="">
                                 Please payment method
                             </option>
-                            <option value="bank_remittance">
-                                Bank Remittance
-                            </option>
+
                             <option value="bank_transfer">Bank Transfer</option>
                             <option value="cash">Cash</option>
                             <option value="cheque">Cheque</option>
+                            <option value="credit_card">Credit Card</option>
                         </select-input>
                         <text-input
                             v-model="form.remarks"

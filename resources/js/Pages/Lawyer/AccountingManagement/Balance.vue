@@ -60,7 +60,7 @@
                     </td>
                 </tr>
                 <tr
-                    class="text-sm text-gray-700 hover:bg-gray-100 focus-within:bg-gray-100"
+                    class="text-sm text-gray-700 hover:bg-gray-100 focus-within:bg-gray-100 bg-slate-100 font-bold"
                 >
                     <td class="border-t px-6 py-4 whitespace-nowrap">
                         Total For Current Asset
@@ -82,7 +82,7 @@
                     </td>
                 </tr>
                 <tr
-                    class="text-sm text-gray-700 hover:bg-gray-100 focus-within:bg-gray-100"
+                    class="text-sm text-gray-700 hover:bg-gray-100 focus-within:bg-gray-100 bg-slate-100 font-bold"
                 >
                     <td class="border-t px-6 py-4 whitespace-nowrap pl-10">
                         Total For Other Asset
@@ -92,7 +92,7 @@
                     </td>
                 </tr>
                 <tr
-                    class="text-sm text-gray-700 hover:bg-gray-100 focus-within:bg-gray-100"
+                    class="text-sm text-gray-700 hover:bg-gray-100 focus-within:bg-gray-100 bg-slate-100 font-bold"
                 >
                     <td class="border-t px-6 py-4 whitespace-nowrap pl-10">
                         Total For All Asset
@@ -139,7 +139,7 @@
                 </tr>
 
                 <tr
-                    class="text-sm text-gray-700 hover:bg-gray-100 focus-within:bg-gray-100"
+                    class="text-sm text-gray-700 hover:bg-gray-100 focus-within:bg-gray-100 bg-slate-100 font-bold"
                 >
                     <td class="border-t px-6 py-4 whitespace-nowrap">
                         Total For Current Liabilities
@@ -182,7 +182,7 @@
                 </tr>
 
                 <tr
-                    class="text-sm text-gray-700 hover:bg-gray-100 focus-within:bg-gray-100"
+                    class="text-sm text-gray-700 hover:bg-gray-100 focus-within:bg-gray-100 bg-slate-100 font-bold"
                 >
                     <td class="border-t px-6 py-4 whitespace-nowrap">
                         Total For Equities
@@ -193,7 +193,7 @@
                 </tr>
 
                 <tr
-                    class="text-sm text-gray-700 hover:bg-gray-100 focus-within:bg-gray-100"
+                    class="text-sm text-gray-700 hover:bg-gray-100 focus-within:bg-gray-100 bg-slate-200 font-bold"
                 >
                     <td class="border-t px-6 py-4 whitespace-nowrap">
                         Total For Liabilities and Equities
