@@ -15,6 +15,7 @@ class OperationalCostController extends Controller
     public function index(Request $request)
     {
         $non_recurring = OperationalCost::query()
+            ->select('operational_costs.*', 'bank_accounts.account_name', 'bank_accounts.bank_name', 'bank_accounts.label')
             ->rightJoin('bank_accounts', 'operational_costs.bank_account_id', '=', 'bank_accounts.id')
             ->when($request->input('search'), function ($query, $search) {
                 $query->where('name', 'like', "%{$search}%");
@@ -22,19 +23,10 @@ class OperationalCostController extends Controller
             ->where('is_recurring', 'like', "0")
             ->whereNotNull('operational_costs.id')
             ->paginate(10)
-            ->withQueryString()
-            ->through(fn($cost) => [
-                'id' => $cost->id,
-                'details' => $cost->details,
-                'amount' => $cost->amount,
-                'is_recurring' => $cost->is_recurring,
-                'recurring_period' => $cost->recurring_period,
-                'is_paid' => $cost->is_paid,
-                'label' => $cost->label,
-                'date' => $cost->date,
-            ]);
+            ->withQueryString();
 
         $recurring = OperationalCost::query()
+            ->select('operational_costs.*', 'bank_accounts.account_name', 'bank_accounts.label')
             ->rightJoin('bank_accounts', 'operational_costs.bank_account_id', '=', 'bank_accounts.id')
             ->when($request->input('search'), function ($query, $search) {
                 $query->where('name', 'like', "%{$search}%");
@@ -91,7 +83,8 @@ class OperationalCostController extends Controller
                 'details' => $request->description,
                 'amount' => $request->amount,
                 'payment_method' => $request->payment_method,
-                'is_recurring' => $request->is_recurring,
+                // 'is_recurring' => $request->is_recurring,
+                'is_recurring' => 0,
                 'recurring_period' => $request->frequency,
                 'is_paid' => 1,
                 'bank_account_id' => $request->account,
@@ -121,7 +114,7 @@ class OperationalCostController extends Controller
 
             return redirect()->route('lawyer.operational-cost.index')->with('message', 'Successfully added new operational cost.');
         } catch (\Exception $e) {
-            return back()->with('errorMessage', 'Failed to update operational cost.' . $e->getMessage());
+            return back()->with('errorMessage', 'Failed to add operational cost.' . $e->getMessage());
         }
     }
 
@@ -159,11 +152,11 @@ class OperationalCostController extends Controller
 
     public function destroy($id)
     {
-        $operationalCost = FirmAccount::findOrFail($id);
+        $operationalCost = OperationalCost::findOrFail($id);
 
         $operationalCost->delete();
 
 
-        return redirect()->route('operational-cost.index')->with('message', 'Successfully deleted the cost.');
+        return redirect()->route('lawyer.operational-cost.index')->with('message', 'Successfully deleted the cost.');
     }
 }

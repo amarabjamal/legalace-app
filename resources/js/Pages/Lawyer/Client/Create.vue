@@ -89,22 +89,23 @@
                             label="Linked Client Account"
                             required
                         >
-                            <option disabled value="">
+                            <!-- <option disabled value="">
                                 Linked Client Account
-                            </option>
+                            </option> -->
                             <option
                                 v-for="client in clients"
-                                :value="client.id"
+                                :value="client.account_name"
                             >
+                                <!-- {{ client.account_name }} -->
                                 {{ client.label }}
                             </option>
                         </select-input>
-                        <text-input
+                        <!-- <text-input
                             v-model="form.outstanding_balance"
                             :error="form.errors.outstanding_balance"
                             label="Outstanding Balance"
                             required
-                        />
+                        /> -->
                     </div>
                 </div>
             </div>

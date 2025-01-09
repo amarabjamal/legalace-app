@@ -161,7 +161,7 @@ class ClientAccountController extends Controller
         $filePath = null;
 
         try {
-            $clientAccount = ClientAccount::findOrFail($request->bank_account_id); // Find the record by ID
+            $clientAccount = ClientAccount::findOrFail($request->id); // Find the record by ID
             if (!$request->hasFile('upload')) {
                 if (str_contains("funds in", $request->transaction_type)) {
                     $clientAccount->update([
@@ -270,7 +270,7 @@ class ClientAccountController extends Controller
                 'description' => $acc->description,
                 'transaction_type' => $acc->transaction_type,
                 'payment_method' => $acc->payment_method,
-                'document_no' => $acc->document_no,
+                'document_no' => $acc->document_number,
                 'debit' => $acc->debit,
                 'credit' => $acc->credit,
                 'balance' => $acc->balance,
@@ -335,7 +335,7 @@ class ClientAccountController extends Controller
                 'description' => $acc->description,
                 'transaction_type' => $acc->transaction_type,
                 'payment_method' => $acc->payment_method,
-                'document_no' => $acc->document_no,
+                'document_no' => $acc->document_number,
                 'debit' => $acc->debit,
                 'credit' => $acc->credit,
                 'balance' => $acc->balance,

@@ -15,26 +15,34 @@ class ClientAccount extends Model
         'date',
         'description',
         'transaction_type',
+        'payment_method',
         'debit',
         'credit',
         'balance',
         'created_by',
         'company_id',
         'bank_account_id',
+        'document_number',
+        'upload',
+        'reference',
         'created_at',
         'updated_at',
     ];
+
+    public const UPLOAD_PATH = 'files/case-files/document-upload/';
 
     protected $hidden = [
         'created_at',
         'updated_at'
     ];
 
-    public function createdBy() {
+    public function createdBy()
+    {
         return $this->belongsTo(User::class, 'created_by', 'id');
     }
 
-    public function company() {
+    public function company()
+    {
         return $this->belongsTo(Company::class, 'company_id', 'id');
     }
 }

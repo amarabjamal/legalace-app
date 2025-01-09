@@ -25,7 +25,7 @@ class FirmAccount extends Model
         'credit',
         'balance',
         'bank_account_id',
-        'reference',
+        'remarks',
         'transaction_id',
         'created_by',
         'created_at',

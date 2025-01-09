@@ -6,7 +6,7 @@
 
     <div class="grid gap-6 mb-8 md:grid-cols-3 mt-4">
         <div v-for="bank_account in bank_accounts.data" :key="bank_account.id"
-            class="min-w-0 bg-white border border-gray-300 rounded-md overflow-hidden ease-in-out duration-300 hover:shadow-md hover:scale-105 hover:-translate-y-5" :style="{ background: acc.transaction_type == 'funds in' ? '#cbd7c7' : '#e8b5b5' }">
+            class="min-w-0 bg-white border border-gray-300 rounded-md overflow-hidden ease-in-out duration-300 hover:shadow-md hover:scale-105 hover:-translate-y-5" >
             <div class="px-4 mb-2 border-b bg-gray-50 flex justify-between items-center">
                 <h4 class="py-2 text-sm uppercase font-semibold text-gray-500 w-1/2 truncate">{{ bank_account.label }}
                 </h4>
@@ -46,14 +46,14 @@
                         {{ bank_account.swift_code }}
                     </td>
                 </tr>
-                <tr>
+                <!-- <tr>
                     <td>
                         Balance
                     </td>
                     <td class="font-bold">
                         {{ bank_account.opening_balance }}
                     </td>
-                </tr>
+                </tr> -->
             </table>
             <div class="flex space-x-2 justify-end p-2 pr-4">
                 <!-- <Link :href="`/admin/bank-accounts/${ bank_account.id }`">View</Link>
@@ -160,7 +160,7 @@
                 </tr>
             </thead>
             <tbody>
-                <tr v-for="acc in clientAccounts.data" :key="acc.id" class="bg-white border-b">
+                <tr v-for="acc in clientAccounts.data" :key="acc.id" class="bg-white border-b" :style="{ background: acc.transaction_type == 'funds in' ? '#cbd7c7' : '#e8b5b5' }">
                     <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
                         {{ acc.date }}
                     </th>
@@ -174,10 +174,10 @@
                         {{ formatString(acc.payment_method) }}
                     </th>
                     <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
-                        {{ acc.transaction_type == "funds in" ? acc.debit : acc.credit }}
+                        {{ formatToTwoDecimal(acc.transaction_type == "funds in" ? acc.debit : acc.credit) }}
                     </th>
                     <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
-                        {{ acc.balance }}
+                        {{ acc.document_no }}
                     </th>
                     <td class="px-6 py-4 text-left">
                         <Link :href="`/lawyer/client-accounts/${acc_id}/${acc.id}/view`"
@@ -248,7 +248,7 @@ export default {
     layout: Layout,
     methods: {
         deleteAcc(acc) {
-            if (conclient('Are you sure you want to delete this client?')) {
+            if (confirm('Are you sure you want to delete this client?')) {
                 Inertia.delete(`/lawyer/client-accounts/${acc.id}`);
             }
         },
@@ -263,7 +263,14 @@ export default {
                 .split('_') // Split by underscores
                 .map(word => word.charAt(0).toUpperCase() + word.slice(1)) // Capitalize the first letter of each word
                 .join(' '); // Join the words with spaces
-        }
+        },
+        formatToTwoDecimal(num) {
+            if (num == null) {
+                return "0.00";
+            } else {
+                return num.toFixed(2); // Formats the number to 2 decimal places
+            }
+        },
     },
 };
 </script>

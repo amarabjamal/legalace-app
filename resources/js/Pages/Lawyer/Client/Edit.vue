@@ -91,8 +91,12 @@
                             <option disabled value="">
                                 Linked Client Account
                             </option>
-                            <option value="ic">Client 1</option>
-                            <option value="ic">Client 2</option>
+                            <option
+                                v-for="client in clients"
+                                :value="client.id"
+                            >
+                                {{ client.label }}
+                            </option>
                         </select-input>
                         <text-input
                             v-model="form.outstanding_balance"

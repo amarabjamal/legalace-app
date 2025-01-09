@@ -24,7 +24,7 @@ return new class extends Migration
             $table->double('credit');
             $table->double('balance')->nullable();
             $table->string('payment_method');
-            $table->foreignId('company_id')->constrained('companies', 'id');
+            $table->foreignId('company_id')->nullable();
             $table->foreignId('bank_account_id')->constrained('bank_accounts', 'id');
             $table->string('reference')->nullable();
             $table->string('created_by');

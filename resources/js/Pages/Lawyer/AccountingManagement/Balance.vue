@@ -82,6 +82,16 @@
                     </td>
                 </tr>
                 <tr
+                    class="text-sm text-gray-700 hover:bg-gray-100 focus-within:bg-gray-100"
+                >
+                    <td class="border-t px-6 py-4 whitespace-nowrap pl-10">
+                        Asset Acquisition
+                    </td>
+                    <td class="border-t px-6 py-4 whitespace-nowrap text-right">
+                        {{ formatToTwoDecimal(assetAcquisition) }}
+                    </td>
+                </tr>
+                <tr
                     class="text-sm text-gray-700 hover:bg-gray-100 focus-within:bg-gray-100 bg-slate-100 font-bold"
                 >
                     <td class="border-t px-6 py-4 whitespace-nowrap pl-10">

@@ -93,13 +93,14 @@
                         <text-input
                             v-model="form.amount"
                             :error="form.errors.amount"
+                            :type="'float'"
                             label="Amount"
                             required
                         />
                         <select-input
                             v-model="form.payment_method"
                             :error="form.errors.payment_method"
-                            label="Payment Menthod"
+                            label="Payment Method"
                             required
                         >
                             <option disabled value="">
@@ -180,8 +181,9 @@ export default {
                 { link: null, label: "Edit" },
             ],
             form: this.$inertia.form({
+                id: this.firmAccounts.id,
                 date: this.firmAccounts.date,
-                bank_account_id: this.acc_id,
+                bank_account_id: this.firmAccounts.bank_account_id,
                 description: this.firmAccounts.description,
                 transaction_type: this.firmAccounts.transaction_type,
                 document_number: this.firmAccounts.document_number,

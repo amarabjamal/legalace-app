@@ -97,6 +97,7 @@ Route::group(['middleware' => 'auth'], function () {
         // Client Profiles
         Route::get('client/update', [ClientController::class, 'update']);
         Route::get('client/{client_id}/edit', [ClientController::class, 'edit']);
+        Route::get('client/{client_id}/view', [ClientController::class, 'view']);
         Route::resource('client', ClientController::class);
 
         Route::resource('case-files', CaseFileController::class);

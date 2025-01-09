@@ -67,11 +67,11 @@ export default {
                     isActive: this.$page.url.startsWith("/lawyer/case-files"),
                 },
                 {
-                    href: "/lawyer/firm-accounts",
-                    label: "Firm Accounts",
-                    icon: "increase-decrease-line",
+                    href: "/lawyer/claim-vouchers",
+                    label: "Claim Vouchers",
+                    icon: "ticket-line",
                     isActive: this.$page.url.startsWith(
-                        "/lawyer/firm-accounts",
+                        "/lawyer/claim-vouchers",
                     ),
                 },
                 {
@@ -83,17 +83,17 @@ export default {
                     ),
                 },
                 {
-                    href: "/lawyer/claim-vouchers",
-                    label: "Claim Vouchers",
-                    icon: "ticket-line",
+                    href: "/lawyer/firm-accounts",
+                    label: "Firm Accounts",
+                    icon: "increase-decrease-line",
                     isActive: this.$page.url.startsWith(
-                        "/lawyer/claim-vouchers",
+                        "/lawyer/firm-accounts",
                     ),
                 },
                 {
                     href: "/lawyer/operational-cost",
                     label: "Operational Cost",
-                    icon: "operational-cost",
+                    icon: "operational-cash-v2",
                     isActive: this.$page.url.startsWith(
                         "/lawyer/operational-cost",
                     ),

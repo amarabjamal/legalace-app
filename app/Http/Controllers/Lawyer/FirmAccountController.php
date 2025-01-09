@@ -160,7 +160,7 @@ class FirmAccountController extends Controller
         $filePath = null;
 
         try {
-            $firmAccount = FirmAccount::findOrFail($request->bank_account_id); // Find the record by ID
+            $firmAccount = FirmAccount::findOrFail($request->id); // Find the record by ID
             if (!$request->hasFile('upload')) {
                 if (str_contains("funds in", $request->transaction_type)) {
                     $firmAccount->update([
@@ -332,7 +332,7 @@ class FirmAccountController extends Controller
                 'description' => $acc->description,
                 'transaction_type' => $acc->transaction_type,
                 'payment_method' => $acc->payment_method,
-                'document_no' => $acc->document_no,
+                'document_no' => $acc->document_number,
                 'debit' => $acc->debit,
                 'credit' => $acc->credit,
                 'balance' => $acc->balance,

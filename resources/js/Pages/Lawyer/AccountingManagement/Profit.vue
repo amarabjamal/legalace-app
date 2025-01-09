@@ -41,7 +41,7 @@
                     </td>
                 </tr>
                 <tr
-                    class="text-sm text-gray-700 hover:bg-gray-100 focus-within:bg-gray-100"
+                    class="text-sm text-gray-700 hover:bg-gray-100 focus-within:bg-gray-100 bg-slate-100 font-bold"
                 >
                     <td class="border-t px-6 py-4 whitespace-nowrap pl-10">
                         Total for Operating Income
@@ -82,7 +82,7 @@
                     </td>
                 </tr> -->
                 <tr
-                    class="text-sm text-gray-700 hover:bg-gray-100 focus-within:bg-gray-100"
+                    class="text-sm text-gray-700 hover:bg-gray-100 focus-within:bg-gray-100 bg-slate-100 font-bold"
                 >
                     <td class="border-t px-6 py-4 whitespace-nowrap pl-10">
                         Total for Operating Expense
@@ -102,7 +102,7 @@
                     </td>
                 </tr>
                 <tr
-                    class="text-sm text-gray-700 hover:bg-gray-100 focus-within:bg-gray-100"
+                    class="text-sm text-gray-700 hover:bg-gray-100 focus-within:bg-gray-100 bg-slate-100 font-bold"
                 >
                     <td class="border-t px-6 py-4 whitespace-nowrap pl-10">
                         Total for Non-operating Income
@@ -122,7 +122,7 @@
                     </td>
                 </tr>
                 <tr
-                    class="text-sm text-gray-700 hover:bg-gray-100 focus-within:bg-gray-100"
+                    class="text-sm text-gray-700 hover:bg-gray-100 focus-within:bg-gray-100 bg-slate-100 font-bold"
                 >
                     <td class="border-t px-6 py-4 whitespace-nowrap pl-10">
                         Total for Non-operating Expense
@@ -132,7 +132,7 @@
                     </td>
                 </tr>
                 <tr
-                    class="text-sm text-gray-700 hover:bg-gray-100 focus-within:bg-gray-100"
+                    class="text-sm text-gray-700 hover:bg-gray-100 focus-within:bg-gray-100 bg-slate-200 font-bold"
                 >
                     <td class="border-t px-6 py-4 whitespace-nowrap">
                         Net Profit/Loss

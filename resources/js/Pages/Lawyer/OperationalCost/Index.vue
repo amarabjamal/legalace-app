@@ -8,7 +8,7 @@
                     Operational Cost/Bills
                 </h2>
 
-                <h4 class="my-6 text-2xl font-semibold">Recurring</h4>
+                <!-- <h4 class="my-6 text-2xl font-semibold">Recurring</h4>
 
                 <div class="flex items-center mb-4">
                     <Link href="/lawyer/operational-cost/create">
@@ -31,9 +31,9 @@
                                 </th>
                                 <th scope="col" class="px-6 py-3">ACCOUNT</th>
                                 <th scope="col" class="px-6 py-3">AMOUNT</th>
-                                <!-- <th scope="col" class="px-6 py-3">
+                                <th scope="col" class="px-6 py-3">
                                     Balance
-                                </th> -->
+                                </th>
                                 <th scope="col" class="px-6 py-3">
                                     ACTION
                                     <span class="sr-only">Edit</span>
@@ -70,9 +70,9 @@
                                 >
                                     {{ cost.amount }}
                                 </th>
-                                <!-- <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
+                                <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
                                     {{ cost.balance }}
-                                </th> -->
+                                </th>
                                 <td class="px-6 py-4 text-left">
                                     <Link
                                         :href="`/lawyer/operational-cost/${cost.id}/edit`"
@@ -90,17 +90,17 @@
                         </tbody>
                     </table>
                 </div>
-                <!-- Paginator -->
+                Paginator
                 <Pagination
                     :links="recurring.links"
                     :total="recurring.total"
                     :from="recurring.from"
                     :to="recurring.to"
-                />
+                /> -->
             </div>
 
             <div class="container px-6 mx-auto grid">
-                <h4 class="my-6 text-2xl font-semibold">Non-Recurring</h4>
+                <!-- <h4 class="my-6 text-2xl font-semibold">Non-Recurring</h4> -->
 
                 <div class="flex items-center mb-4">
                     <Link href="/lawyer/operational-cost/create">
@@ -160,7 +160,7 @@
                                     scope="row"
                                     class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap"
                                 >
-                                    {{ cost.amount }}
+                                    {{ formatToTwoDecimal(cost.amount) }}
                                 </th>
                                 <!-- <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
                                     {{ cost.balance }}
@@ -232,7 +232,14 @@ export default {
     methods: {
         deleteAcc(acc) {
             if (confirm("Are you sure you want to delete this cost?")) {
-                Inertia.delete(`/operational-cost/${acc.id}`);
+                Inertia.delete(`/lawyer/operational-cost/${acc.id}`);
+            }
+        },
+        formatToTwoDecimal(num) {
+            if (num == null) {
+                return "0.00";
+            } else {
+                return num.toFixed(2); // Formats the number to 2 decimal places
             }
         },
     },

@@ -45,14 +45,14 @@
                         {{ bank_account.swift_code }}
                     </td>
                 </tr>
-                <tr>
+                <!-- <tr>
                     <td>
                         Balance
                     </td>
                     <td class="font-bold">
                         {{ bank_account.opening_balance }}
                     </td>
-                </tr>
+                </tr> -->
             </table>
             <div class="flex space-x-2 justify-end p-2 pr-4">
                 <!-- <Link :href="`/admin/bank-accounts/${ bank_account.id }`">View</Link>
@@ -173,7 +173,7 @@
                         {{ formatString(acc.payment_method) }}
                     </th>
                     <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
-                        {{ acc.transaction_type == "funds in" ? acc.debit : acc.credit }}
+                        {{ formatToTwoDecimal(acc.transaction_type == "funds in" ? acc.debit : acc.credit) }}
                     </th>
                     <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
                         {{ acc.document_no }}
@@ -262,7 +262,14 @@ export default {
                 .split('_') // Split by underscores
                 .map(word => word.charAt(0).toUpperCase() + word.slice(1)) // Capitalize the first letter of each word
                 .join(' '); // Join the words with spaces
-        }
+        },
+        formatToTwoDecimal(num) {
+            if (num == null) {
+                return "0.00";
+            } else {
+                return num.toFixed(2); // Formats the number to 2 decimal places
+            }
+        },
     },
 };
 </script>

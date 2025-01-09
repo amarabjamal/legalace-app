@@ -56,7 +56,7 @@
                     <td class="font-bold">
                     </td>
                 </tr>
-                <tr>
+                <!-- <tr>
                     <td>
                         Opening Balance
                     </td>
@@ -65,7 +65,7 @@
                     </td>
                     <td class="font-bold">
                     </td>
-                </tr>
+                </tr> -->
             </table>
             <div class="flex justify-end mt-3 p-2 pr-4">
             </div>

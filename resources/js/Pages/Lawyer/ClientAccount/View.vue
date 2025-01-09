@@ -95,6 +95,7 @@
             <!-- <Link as="button" :href="`/admin/bank-accounts/${bank_account.id}/edit`" class="btn-primary">
                 Edit
             </Link>  -->
+            <button @click="goBack">Back</button>
         </div>
     </div>
 </template>
@@ -142,6 +143,9 @@ export default {
             } else {
                 alert("You need to fill in the form first.");
             }
+        },
+        goBack() {
+            window.history.go(-1);
         },
     },
 };
