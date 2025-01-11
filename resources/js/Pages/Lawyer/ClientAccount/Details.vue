@@ -5,7 +5,7 @@
     <page-heading :page_title="page_title" :breadcrumbs="breadcrumbs" />
 
     <div class="grid gap-6 mb-8 md:grid-cols-3 mt-4">
-        <div v-for="bank_account in bank_accounts.data" :key="bank_account.id"
+        <div v-for="bank_account in bank_accounts" :key="bank_account.id"
             class="min-w-0 bg-white border border-gray-300 rounded-md overflow-hidden ease-in-out duration-300 hover:shadow-md hover:scale-105 hover:-translate-y-5" >
             <div class="px-4 mb-2 border-b bg-gray-50 flex justify-between items-center">
                 <h4 class="py-2 text-sm uppercase font-semibold text-gray-500 w-1/2 truncate">{{ bank_account.label }}
@@ -46,14 +46,14 @@
                         {{ bank_account.swift_code }}
                     </td>
                 </tr>
-                <!-- <tr>
+                <tr>
                     <td>
                         Balance
                     </td>
                     <td class="font-bold">
-                        {{ bank_account.opening_balance }}
+                        {{ bank_account.opening_balance.amount }}
                     </td>
-                </tr> -->
+                </tr>
             </table>
             <div class="flex space-x-2 justify-end p-2 pr-4">
                 <!-- <Link :href="`/admin/bank-accounts/${ bank_account.id }`">View</Link>
@@ -63,7 +63,7 @@
             </p>
         </div>
 
-        <div v-for="bank_account in bank_accounts.data" :key="bank_account.id"
+        <div v-for="bank_account in bank_accounts" :key="bank_account.id"
             class="min-w-0 bg-white border border-gray-300 rounded-md overflow-hidden ease-in-out duration-300 hover:shadow-md hover:scale-105 hover:-translate-y-5">
             <div class="px-4 mb-2 border-b bg-gray-50 flex justify-between items-center">
                 <h4 class="py-2 text-sm uppercase font-semibold text-gray-500 w-1/2 truncate">This Month
@@ -100,7 +100,7 @@
 
     <div class="grid gap-6 mb-8 md:grid-cols-3 mt-4">
 
-        <div v-if="bank_accounts.data.length === 0"
+        <div v-if="bank_accounts.length === 0"
             class="md:col-span-3 h-24 flex justify-center items-center border border-gray-300 w-full text-center bg-gray-100 text-gray-500 rounded-md">
             <span>No records found.</span>
         </div>

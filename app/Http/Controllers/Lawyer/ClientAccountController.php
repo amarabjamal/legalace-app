@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 use Inertia\Inertia;
 use App\Models\ClientAccount;
 use App\Models\ClientAccountList;
-use App\Models\BankAccount;
+use App\Models\BankAccounts;
 use App\Models\FirmAccount;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -21,19 +21,21 @@ class ClientAccountController extends Controller
     {
         $accList = DB::table(self::DB_NAME);
 
-        $clientAccountList = ClientAccountList::query()
-            ->where('bank_account_type_id', 'like', '1')
-            ->paginate(10)
-            ->withQueryString()
-            ->through(fn($accList) => [
-                'id' => $accList->id,
-                'label' => $accList->label,
-                'account_name' => $accList->account_name,
-                'bank_name' => $accList->bank_name,
-                'account_number' => $accList->account_number,
-                'opening_balance' => $accList->opening_balance,
-                'swift_code' => $accList->swift_code,
-            ]);
+        $clientAccountList = BankAccounts::query()
+            ->rightJoin("client_accounts as b", 'bank_account_type_id', '=', 'b.bank_account_id')
+            ->select(
+                'bank_accounts.id',
+                'label',
+                DB::raw('(IFNULL(SUM(debit), 0) - IFNULL(SUM(credit), 0)) + IFNULL(opening_balance, 0) AS opening_balance'),
+                DB::raw('IFNULL(SUM(debit), 0) AS total_debit'),
+                DB::raw('IFNULL(SUM(credit), 0) AS total_credit'),
+                'account_name',
+                'bank_name',
+                'account_number',
+                'swift_code',
+            )
+            ->groupBy('id', 'label', 'opening_balance', 'account_name', 'bank_name', 'account_number', 'swift_code')
+            ->get();
 
 
         return Inertia::render('Lawyer/ClientAccount/Index', [
@@ -295,20 +297,22 @@ class ClientAccountController extends Controller
         $filters = FacadesRequest::all(['search']);
         $accList = DB::table(self::DB_NAME);
 
-        $bankAccount = ClientAccountList::query()
-            ->where('id', 'like', "%{$acc_number}%")
-            ->paginate(10)
-            ->withQueryString()
-            ->through(fn($accList) => [
-                'id' => $accList->id,
-                'label' => $accList->label,
-                'account_name' => $accList->account_name,
-                'bank_name' => $accList->bank_name,
-                'account_number' => $accList->account_number,
-                'opening_balance' => $accList->opening_balance,
-                'swift_code' => $accList->swift_code,
-                'payment_method' => $accList->payment_menthod,
-            ]);
+        $bankAccount = BankAccounts::query()
+            ->rightJoin("client_accounts as b", 'bank_account_type_id', '=', 'b.bank_account_id')
+            ->select(
+                'bank_accounts.id',
+                'label',
+                DB::raw('(IFNULL(SUM(debit), 0) - IFNULL(SUM(credit), 0)) + IFNULL(opening_balance, 0) AS opening_balance'),
+                DB::raw('IFNULL(SUM(debit), 0) AS total_debit'),
+                DB::raw('IFNULL(SUM(credit), 0) AS total_credit'),
+                'account_name',
+                'bank_name',
+                'account_number',
+                'swift_code',
+            )
+            ->where('bank_accounts.id', 'like', "%{$acc_number}%")
+            ->groupBy('id', 'label', 'opening_balance', 'account_name', 'bank_name', 'account_number', 'swift_code')
+            ->get();
 
         $clientAccounts = ClientAccount::query()
             ->where('bank_account_id', 'like', "%{$acc_number}%")
@@ -360,19 +364,22 @@ class ClientAccountController extends Controller
             $filter_type = "funds in";
         }
 
-        $bankAccount = ClientAccountList::query()
-            ->where('id', 'like', "%{$acc_number}%")
-            ->paginate(10)
-            ->withQueryString()
-            ->through(fn($accList) => [
-                'id' => $accList->id,
-                'label' => $accList->label,
-                'account_name' => $accList->account_name,
-                'bank_name' => $accList->bank_name,
-                'account_number' => $accList->account_number,
-                'opening_balance' => $accList->opening_balance,
-                'swift_code' => $accList->swift_code,
-            ]);
+        $bankAccount = BankAccounts::query()
+            ->rightJoin("client_accounts as b", 'bank_account_type_id', '=', 'b.bank_account_id')
+            ->select(
+                'bank_accounts.id',
+                'label',
+                DB::raw('(IFNULL(SUM(debit), 0) - IFNULL(SUM(credit), 0)) + IFNULL(opening_balance, 0) AS opening_balance'),
+                DB::raw('IFNULL(SUM(debit), 0) AS total_debit'),
+                DB::raw('IFNULL(SUM(credit), 0) AS total_credit'),
+                'account_name',
+                'bank_name',
+                'account_number',
+                'swift_code',
+            )
+            ->where('bank_accounts.id', 'like', "%{$acc_number}%")
+            ->groupBy('id', 'label', 'opening_balance', 'account_name', 'bank_name', 'account_number', 'swift_code')
+            ->get();
 
         $clientAccounts = ClientAccount::query()
             ->where('bank_account_id', 'like', "%{$acc_number}%")
@@ -394,11 +401,13 @@ class ClientAccountController extends Controller
 
         $acc = DB::table(self::DB_NAME)->sum('balance');
         $funds_in = DB::table(self::DB_NAME)
+            ->where('bank_account_id', 'like', "%{$acc_number}")
             ->where('transaction_type', 'like', 'funds in')
-            ->sum('balance');
+            ->sum('debit');
         $funds_out = DB::table(self::DB_NAME)
+            ->where('bank_account_id', 'like', "%{$acc_number}")
             ->where('transaction_type', 'like', 'funds out')
-            ->sum('balance');
+            ->sum('credit');
 
         return Inertia::render('Lawyer/ClientAccount/Details', [
             'clientAccounts' => $clientAccounts,
