@@ -135,6 +135,7 @@ class AccountingManagementController extends Controller
     {
         $totalOperatingIncome = FirmAccount::query()
             ->where('description', 'like', 'payment_received')
+            // ->where('description', 'like', '%payment%')
             ->where('transaction_type', 'like', 'funds in')
             ->sum('debit');
 
@@ -149,6 +150,7 @@ class AccountingManagementController extends Controller
                 DB::raw('SUM(firm_account.credit) AS credit')
             )
             ->where('description', 'like', 'payment_received')
+            // ->where('description', 'like', '%payment%')
             ->where('firm_account.transaction_type', 'like', 'funds in')
             ->groupBy('firm_account.bank_account_id', 'b.label', 'firm_account.description', 'firm_account.transaction_type')
             ->get();

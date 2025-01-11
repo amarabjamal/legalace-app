@@ -106,7 +106,10 @@
     </div>
 
     <div class="flex items-center justify-between mb-6">
-        <search-filter v-model="form.search" class="mr-4 w-full max-w-md" @reset="reset"></search-filter>   
+        <!-- <search-filter v-model="form.search" class="mr-4 w-full max-w-md" @reset="reset"></search-filter> -->
+        <!-- Spacer to replace search-filter -->
+        <div class="mr-4 w-full max-w-md"></div>
+        
         <div>Filter By:</div>     
         <button class="btn-primary" v-on:click="filterList(0)">
             Funds Out
@@ -167,7 +170,7 @@
                         {{ formatString(acc.description) }}
                     </th>
                     <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
-                        {{ acc.transaction_type }}
+                        {{ formatString(acc.transaction_type) }}
                     </th>
                     <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
                         {{ formatString(acc.payment_method) }}
@@ -177,10 +180,13 @@
                     </th>
                     <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
                         {{ acc.document_no }}
+                        <!-- {{ acc.transaction_id }} -->
                     </th>
                     <td class="px-6 py-4 text-left">
                         <Link :href="`/lawyer/firm-accounts/${acc_id}/${acc.id}/view`"
                             class="font-medium text-blue-600 hover:underline">View</Link>
+                        <!-- <Link  :href="`/lawyer/firm-accounts/${acc_id}/${acc.id}/edit`"
+                            class="ml-3 font-medium text-blue-600 hover:underline">Edit</Link> -->
                         <Link v-if="acc.transaction_id === '' || acc.transaction_id === null" :href="`/lawyer/firm-accounts/${acc_id}/${acc.id}/edit`"
                             class="ml-3 font-medium text-blue-600 hover:underline">Edit</Link>
                         <Link @click="deleteAcc(acc)" as="button" class="ml-3 font-medium text-red-600 hover:underline">

@@ -30,4 +30,17 @@ class FirmAccountList extends Model
     {
         return $this->belongsTo(BankAccount::class, 'bank_account_id', 'id');
     }
+    public function firmAccounts()
+    {
+        return $this->hasMany(FirmAccount::class, 'bank_account_id', 'id');
+    }
+    public function totalDebit()
+    {
+        return $this->firmAccounts()->sum('debit');
+    }
+
+    public function totalCredit()
+    {
+        return $this->firmAccounts()->sum('credit');
+    }
 }

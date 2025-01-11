@@ -165,10 +165,10 @@
                         {{ acc.date }}
                     </th>
                     <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
-                        {{ acc.description }}
+                        {{ formatString(acc.description) }}
                     </th>
                     <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
-                        {{ acc.transaction_type }}
+                        {{ formatString(acc.transaction_type) }}
                     </th>
                     <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
                         {{ formatString(acc.payment_method) }}

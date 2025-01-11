@@ -148,7 +148,7 @@
                                     scope="row"
                                     class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap"
                                 >
-                                    {{ cost.details }}
+                                    {{ formatString(cost.details) }}
                                 </th>
                                 <th
                                     scope="row"
@@ -241,6 +241,12 @@ export default {
             } else {
                 return num.toFixed(2); // Formats the number to 2 decimal places
             }
+        },
+        formatString(str) {
+            return str
+                .split("_") // Split by underscores
+                .map((word) => word.charAt(0).toUpperCase() + word.slice(1)) // Capitalize the first letter of each word
+                .join(" "); // Join the words with spaces
         },
     },
 };

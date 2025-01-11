@@ -149,14 +149,14 @@
                     type="submit"
                     >Update</loading-button
                 >
-                <Button
+                <Link
                     v-on:click="goBack()"
                     as="button"
                     class="btn-cancel"
                     :disabled="form.processing"
                 >
                     Cancel
-                </Button>
+                </Link>
             </div>
         </form>
     </div>

@@ -23,13 +23,22 @@
                             label="Date"
                             required
                         />
-                        <text-input
+                        <!-- <text-input
                             v-model="form.description"
                             type="description"
                             :error="form.errors.description"
                             label="Description"
                             required
-                        />
+                        /> -->
+                        <select-input
+                            v-model="form.description"
+                            :error="form.errors.description"
+                            label="Description"
+                            required
+                        >
+                            <option value="payment_received">Payment</option>
+                            <option value="deposit">Deposit</option>
+                        </select-input>
                         <select-input
                             v-model="form.transaction_type"
                             :error="form.errors.transaction_type"

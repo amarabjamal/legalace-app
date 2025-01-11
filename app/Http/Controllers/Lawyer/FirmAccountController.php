@@ -255,6 +255,7 @@ class FirmAccountController extends Controller
 
         $firmAccounts = FirmAccount::query()
             ->where('bank_account_id', 'like', "%{$acc_number}%")
+            ->orWhere('description', 'like', "%payment%")
             ->paginate(10)
             ->withQueryString()
             ->through(fn($acc) => [
@@ -267,6 +268,7 @@ class FirmAccountController extends Controller
                 'debit' => $acc->debit,
                 'credit' => $acc->credit,
                 'balance' => $acc->balance,
+                'transaction_id' => $acc->transaction_id,
             ]);
 
 

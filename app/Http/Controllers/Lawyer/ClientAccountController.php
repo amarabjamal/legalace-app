@@ -8,6 +8,7 @@ use Inertia\Inertia;
 use App\Models\ClientAccount;
 use App\Models\ClientAccountList;
 use App\Models\BankAccount;
+use App\Models\FirmAccount;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Request as FacadesRequest;
@@ -80,6 +81,8 @@ class ClientAccountController extends Controller
         $filePath = null;
 
         try {
+            $uniqueId = date('YmdHis') . uniqid();
+
             if (!$request->hasFile('upload')) {
                 if (str_contains("funds in", $request->transaction_type)) {
                     ClientAccount::create([
@@ -96,6 +99,7 @@ class ClientAccountController extends Controller
                         'created_by' => Auth::id(),
                     ]);
                 } else {
+
                     ClientAccount::create([
                         'date' => $request->date,
                         'bank_account_id' => $request->bank_account_id,
@@ -107,6 +111,20 @@ class ClientAccountController extends Controller
                         'credit' => $request->amount,
                         'payment_method' => $request->payment_method,
                         'reference' => $request->reference,
+                        'created_by' => Auth::id(),
+                    ]);
+                    FirmAccount::create([
+                        'date' => $request->date,
+                        'bank_account_id' => 2,
+                        'description' => $request->description,
+                        'transaction_type' => 'funds in',
+                        'document_number' => $request->document_number,
+                        'upload' => "",
+                        'debit' => $request->amount,
+                        'credit' => 0,
+                        'payment_method' => $request->payment_method,
+                        'remarks' => $request->reference,
+                        'transaction_id' => $uniqueId,
                         'created_by' => Auth::id(),
                     ]);
                 }
@@ -142,6 +160,20 @@ class ClientAccountController extends Controller
                         'credit' => $request->amount,
                         'payment_method' => $request->payment_method,
                         'reference' => $request->reference,
+                        'created_by' => Auth::id(),
+                    ]);
+                    FirmAccount::create([
+                        'date' => $request->date,
+                        'bank_account_id' => 2,
+                        'description' => $request->description,
+                        'transaction_type' => 'funds in',
+                        'document_number' => $request->document_number,
+                        'upload' => $filePath,
+                        'debit' => $request->amount,
+                        'credit' => 0,
+                        'payment_method' => $request->payment_method,
+                        'remarks' => $request->reference,
+                        'transaction_id' => $uniqueId,
                         'created_by' => Auth::id(),
                     ]);
                 }
@@ -187,6 +219,18 @@ class ClientAccountController extends Controller
                         'reference' => $request->reference,
                         'created_by' => Auth::id(),
                     ]);
+                    $itemInFirm = FirmAccount::query()
+                        ->where('transaction_id', 'like', "{$request->transaction_id}")
+                        ->update([
+                            'date' => $request->date,
+                            'description' => $request->description,
+                            'transaction_type' => "funds in",
+                            'document_number' => $request->document_number,
+                            'debit' => $request->amount,
+                            'credit' => 0,
+                            'payment_method' => $request->payment_method,
+                            'remarks' => $request->reference,
+                        ]);
                 }
                 return redirect()->route('lawyer.client-accounts.show', ['client_account' => $request->bank_account_id])->with('successMessage', 'Successfully update the transaction.');
             } else {
@@ -221,6 +265,18 @@ class ClientAccountController extends Controller
                         'reference' => $request->reference,
                         'created_by' => Auth::id(),
                     ]);
+                    $itemInFirm = FirmAccount::query()
+                        ->where('transaction_id', 'like', "{$request->transaction_id}")
+                        ->update([
+                            'date' => $request->date,
+                            'description' => $request->description,
+                            'transaction_type' => "funds in",
+                            'document_number' => $request->document_number,
+                            'debit' => $request->amount,
+                            'credit' => 0,
+                            'payment_method' => $request->payment_method,
+                            'remarks' => $request->reference,
+                        ]);
                 }
 
                 return redirect()->route('lawyer.client-accounts.show', ['client_account' => $request->bank_account_id])->with('successMessage', 'Successfully update the transaction.');
@@ -385,6 +441,10 @@ class ClientAccountController extends Controller
         $clientAccount = ClientAccount::findOrFail($id);
 
         $bank_account_id = $clientAccount->bank_account_id;
+
+        $itemInFirm = FirmAccount::query()
+            ->where('transaction_id', 'like', "{clientAccount->transaction_id}")
+            ->delete();
 
         $clientAccount->delete();
 
