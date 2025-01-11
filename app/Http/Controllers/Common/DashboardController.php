@@ -3,11 +3,14 @@
 namespace App\Http\Controllers\Common;
 
 use App\Http\Controllers\Controller;
+use App\Models\BankAccount;
 use App\Models\User;
 use Inertia\Inertia;
 use App\Models\FirmAccount;
 use App\Models\BankAccounts;
 use App\Models\CaseFiles;
+use App\Models\ClaimVoucher;
+use App\Models\Client;
 use Illuminate\Support\Facades\DB;
 
 class DashboardController extends Controller
@@ -27,6 +30,9 @@ class DashboardController extends Controller
     {
         return Inertia::render('Admin/Dashboard', [
             'total_users' => User::all()->count(),
+            'total_clients' => Client::all()->count(),
+            'total_vouchers' => ClaimVoucher::all()->count(),
+            'total_accounts' => BankAccount::all()->count(),
         ]);
     }
 

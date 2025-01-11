@@ -50,7 +50,7 @@
                                 </option>
                                 <option value="financing">Financing</option>
                                 <option value="investing">Investing</option>
-                                <option value="other">Other</option>
+                                <!-- <option value="other">Other</option> -->
                             </select-input>
                         </div>
                         <div v-if="form.transaction_type == 'funds out'">
@@ -106,12 +106,10 @@
                             <option disabled value="">
                                 Please payment method
                             </option>
-                            <option value="bank_remittance">
-                                Bank Remittance
-                            </option>
                             <option value="bank_transfer">Bank Transfer</option>
                             <option value="cash">Cash</option>
                             <option value="cheque">Cheque</option>
+                            <option value="credit_card">Credit Card</option>
                         </select-input>
                         <text-input
                             v-model="form.remarks"

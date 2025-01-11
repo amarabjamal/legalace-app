@@ -77,7 +77,7 @@
                         Funds in
                     </td>
                     <td class="font-bold">
-                        <span class="font-bold">{{ funds_in }}</span>
+                        <span class="font-bold">RM {{ formatToTwoDecimal(funds_in) }}</span>
                     </td>
                 </tr>
                 <tr>
@@ -85,7 +85,7 @@
                         Funds out
                     </td>
                     <td class="font-bold">
-                        {{ funds_out }}
+                        RM {{ formatToTwoDecimal(funds_out) }}
                     </td>
                 </tr>    
             </table>

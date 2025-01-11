@@ -6,6 +6,8 @@
     <div class="grid gap-6 mb-8 md:grid-cols-2 xl:grid-cols-2">
         <!-- Card -->
         <div class="card flex items-center p-8 bg-white rounded-lg">
+            <p class="mb-2 text-sm font-medium">Incomes and Expenses</p>
+
             <div class="w-full h-64">
                 <Line
                     id="my-line-chart-id"
@@ -16,10 +18,8 @@
         </div>
         <!-- Card -->
         <div class="card flex items-center p-8 bg-white rounded-lg">
+            <p class="mb-2 text-sm font-medium">Top Expenses</p>
             <div>
-                <!-- <p class="mb-2 text-sm font-medium">
-                Firm Account balance
-            </p> -->
                 <Pie
                     id="my-pie-chart-id"
                     :options="pieChartData"
