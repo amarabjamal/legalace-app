@@ -67,22 +67,6 @@ export default {
                     isActive: this.$page.url.startsWith("/lawyer/case-files"),
                 },
                 {
-                    href: "/lawyer/firm-accounts",
-                    label: "Firm Accounts",
-                    icon: "increase-decrease-line",
-                    isActive: this.$page.url.startsWith(
-                        "/lawyer/firm-accounts",
-                    ),
-                },
-                {
-                    href: "/lawyer/client-accounts",
-                    label: "Client Accounts",
-                    icon: "booklet-line",
-                    isActive: this.$page.url.startsWith(
-                        "/lawyer/client-accounts",
-                    ),
-                },
-                {
                     href: "/lawyer/claim-vouchers",
                     label: "Claim Vouchers",
                     icon: "ticket-line",
@@ -91,9 +75,25 @@ export default {
                     ),
                 },
                 {
+                    href: "/lawyer/client-accounts",
+                    label: "Client Accounts",
+                    icon: "increase-decrease-line",
+                    isActive: this.$page.url.startsWith(
+                        "/lawyer/client-accounts",
+                    ),
+                },
+                {
+                    href: "/lawyer/firm-accounts",
+                    label: "Firm Accounts",
+                    icon: "increase-decrease-line",
+                    isActive: this.$page.url.startsWith(
+                        "/lawyer/firm-accounts",
+                    ),
+                },
+                {
                     href: "/lawyer/operational-cost",
                     label: "Operational Cost",
-                    icon: "ticket-line",
+                    icon: "operational-cash-v2",
                     isActive: this.$page.url.startsWith(
                         "/lawyer/operational-cost",
                     ),
@@ -101,7 +101,7 @@ export default {
                 {
                     href: "/lawyer/accounting-management",
                     label: "Accounting Management",
-                    icon: "ticket-line",
+                    icon: "booklet-line",
                     isActive: this.$page.url.startsWith(
                         "/lawyer/accounting-management",
                     ),

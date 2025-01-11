@@ -45,14 +45,14 @@
                         {{ bank_account.swift_code }}
                     </td>
                 </tr>
-                <tr>
+                <!-- <tr>
                     <td>
                         Balance
                     </td>
                     <td class="font-bold">
                         {{ bank_account.opening_balance }}
                     </td>
-                </tr>
+                </tr> -->
             </table>
             <div class="flex space-x-2 justify-end p-2 pr-4">
                 <!-- <Link :href="`/admin/bank-accounts/${ bank_account.id }`">View</Link>
@@ -76,7 +76,7 @@
                         Funds in
                     </td>
                     <td class="font-bold">
-                        <span class="font-bold">{{ funds_in }}</span>
+                        <span class="font-bold">RM {{ formatToTwoDecimal(funds_in) }}</span>
                     </td>
                 </tr>
                 <tr>
@@ -84,7 +84,7 @@
                         Funds out
                     </td>
                     <td class="font-bold">
-                        {{ funds_out }}
+                        RM {{ formatToTwoDecimal(funds_out) }}
                     </td>
                 </tr>    
             </table>
@@ -159,12 +159,12 @@
                 </tr>
             </thead>
             <tbody>
-                <tr v-for="acc in firmAccounts.data" :key="acc.id" class="bg-white border-b">
+                <tr v-for="acc in firmAccounts.data" :key="acc.id" class="bg-white border-b" :style="{ background: acc.transaction_type == 'funds in' ? '#cbd7c7' : '#e8b5b5' }">
                     <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
                         {{ acc.date }}
                     </th>
                     <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
-                        {{ acc.description }}
+                        {{ formatString(acc.description) }}
                     </th>
                     <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
                         {{ acc.transaction_type }}
@@ -173,15 +173,15 @@
                         {{ formatString(acc.payment_method) }}
                     </th>
                     <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
-                        {{ acc.transaction_type == "funds in" ? acc.debit : acc.credit }}
+                        {{ formatToTwoDecimal(acc.transaction_type == "funds in" ? acc.debit : acc.credit) }}
                     </th>
                     <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
-                        {{ acc.balance }}
+                        {{ acc.document_no }}
                     </th>
                     <td class="px-6 py-4 text-left">
                         <Link :href="`/lawyer/firm-accounts/${acc_id}/${acc.id}/view`"
                             class="font-medium text-blue-600 hover:underline">View</Link>
-                        <Link :href="`/lawyer/firm-accounts/${acc_id}/${acc.id}/edit`"
+                        <Link v-if="acc.transaction_id === '' || acc.transaction_id === null" :href="`/lawyer/firm-accounts/${acc_id}/${acc.id}/edit`"
                             class="ml-3 font-medium text-blue-600 hover:underline">Edit</Link>
                         <Link @click="deleteAcc(acc)" as="button" class="ml-3 font-medium text-red-600 hover:underline">
                         Delete</Link>
@@ -262,7 +262,14 @@ export default {
                 .split('_') // Split by underscores
                 .map(word => word.charAt(0).toUpperCase() + word.slice(1)) // Capitalize the first letter of each word
                 .join(' '); // Join the words with spaces
-        }
+        },
+        formatToTwoDecimal(num) {
+            if (num == null) {
+                return "0.00";
+            } else {
+                return num.toFixed(2); // Formats the number to 2 decimal places
+            }
+        },
     },
 };
 </script>

@@ -48,7 +48,7 @@
                             <option value="subscripton_fee">
                                 Subscription Fee
                             </option>
-                            <option value="other">others</option>
+                            <!-- <option value="other">others</option> -->
                         </select-input>
                         <select-input
                             v-model="form.account"
@@ -76,30 +76,30 @@
                             label="Upload Document"
                             accept=".jpg,.png,.pdf,.doc,.docx"
                         />
-
                         <text-input
                             v-model="form.amount"
                             :error="form.errors.company_name"
+                            :type="'number'"
                             label="Amount"
+                            step="0.01"
+                            min="0"
                             required
                         />
                         <select-input
                             v-model="form.payment_method"
                             :error="form.errors.payment_method"
-                            label="Payment Menthod"
+                            label="Payment Method"
                             required
                         >
                             <option disabled value="">
                                 Please payment method
                             </option>
-                            <option value="bank_remittance">
-                                Bank Remittance
-                            </option>
                             <option value="bank_transfer">Bank Transfer</option>
                             <option value="cash">Cash</option>
                             <option value="cheque">Cheque</option>
+                            <option value="credit_card">Credit Card</option>
                         </select-input>
-                        <select-input
+                        <!-- <select-input
                             v-model="form.is_recurring"
                             :error="form.errors.is_recurring"
                             label="Recurring Transaction"
@@ -109,8 +109,8 @@
                                 Please select recurring transaction
                             </option>
                             <option value="1">Yes</option>
-                            <option value="0">no</option>
-                        </select-input>
+                            <option value="0">No</option>
+                        </select-input> -->
 
                         <div v-if="form.is_recurring == 1">
                             <date-input

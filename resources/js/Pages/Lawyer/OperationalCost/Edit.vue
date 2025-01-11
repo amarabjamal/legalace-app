@@ -77,11 +77,13 @@
                             accept=".jpg,.png,.pdf,.doc,.docx"
                             disabled
                         />
-
                         <text-input
                             v-model="form.amount"
                             :error="form.errors.company_name"
+                            :type="'number'"
                             label="Amount"
+                            step="0.01"
+                            min="0"
                             required
                         />
                         <select-input
@@ -93,12 +95,10 @@
                             <option disabled value="">
                                 Please payment method
                             </option>
-                            <option value="bank_remittance">
-                                Bank Remittance
-                            </option>
                             <option value="bank_transfer">Bank Transfer</option>
                             <option value="cash">Cash</option>
                             <option value="cheque">Cheque</option>
+                            <option value="credit_card">Credit Card</option>
                         </select-input>
                         <select-input
                             v-model="form.is_recurring"
@@ -229,6 +229,7 @@ export default {
                 first_payment_date: this.costs_item.first_payment_date,
                 frequency: this.costs_item.recurring_period,
                 no_of_payment: this.costs_item.no_of_payment,
+                transaction_id: this.costs_item.transaction_id,
             }),
         };
     },

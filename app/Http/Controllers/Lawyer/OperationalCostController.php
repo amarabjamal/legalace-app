@@ -14,11 +14,24 @@ class OperationalCostController extends Controller
 {
     public function index(Request $request)
     {
-        $operationalCost = OperationalCost::query()
+        $non_recurring = OperationalCost::query()
+            ->select('operational_costs.*', 'bank_accounts.account_name', 'bank_accounts.bank_name', 'bank_accounts.label')
             ->rightJoin('bank_accounts', 'operational_costs.bank_account_id', '=', 'bank_accounts.id')
             ->when($request->input('search'), function ($query, $search) {
                 $query->where('name', 'like', "%{$search}%");
             })
+            ->where('is_recurring', 'like', "0")
+            ->whereNotNull('operational_costs.id')
+            ->paginate(10)
+            ->withQueryString();
+
+        $recurring = OperationalCost::query()
+            ->select('operational_costs.*', 'bank_accounts.account_name', 'bank_accounts.label')
+            ->rightJoin('bank_accounts', 'operational_costs.bank_account_id', '=', 'bank_accounts.id')
+            ->when($request->input('search'), function ($query, $search) {
+                $query->where('name', 'like', "%{$search}%");
+            })
+            ->where('is_recurring', 'like', "1")
             ->whereNotNull('operational_costs.id')
             ->paginate(10)
             ->withQueryString()
@@ -32,10 +45,12 @@ class OperationalCostController extends Controller
                 'label' => $cost->label,
                 'date' => $cost->date,
             ]);
+
         $filters = $request->only(['search']);
 
         return Inertia::render('Lawyer/OperationalCost/Index', [
-            'operationalCosts' => $operationalCost,
+            'non_recurring' => $non_recurring,
+            'recurring' => $recurring,
             'filters' => $filters,
 
         ]);
@@ -68,7 +83,8 @@ class OperationalCostController extends Controller
                 'details' => $request->description,
                 'amount' => $request->amount,
                 'payment_method' => $request->payment_method,
-                'is_recurring' => $request->is_recurring,
+                // 'is_recurring' => $request->is_recurring,
+                'is_recurring' => 0,
                 'recurring_period' => $request->frequency,
                 'is_paid' => 1,
                 'bank_account_id' => $request->account,
@@ -98,7 +114,7 @@ class OperationalCostController extends Controller
 
             return redirect()->route('lawyer.operational-cost.index')->with('message', 'Successfully added new operational cost.');
         } catch (\Exception $e) {
-            return back()->with('errorMessage', 'Failed to update operational cost.' . $e->getMessage());
+            return back()->with('errorMessage', 'Failed to add operational cost.' . $e->getMessage());
         }
     }
 
@@ -131,16 +147,31 @@ class OperationalCostController extends Controller
             'created_by' => Auth::id(),
         ]);
 
-        return redirect()->route('lawyer.operational-cost.index')->with('message', 'Successfully update operational cost.');
+        $itemInFirm = FirmAccount::query()
+            ->where('transaction_id', 'like', "{$request->transaction_id}")
+            ->update([
+                'date' => $request->date,
+                'bank_account_id' => $request->account,
+                'description' => $request->description,
+                'transaction_type' => "funds out",
+                'document_number' => $request->document_number,
+                'credit' => $request->amount,
+                'payment_method' => $request->payment_method,
+            ]);
+
+        return redirect()->route('lawyer.operational-cost.index')->with('successMessage', 'Successfully update operational cost.');
     }
 
     public function destroy($id)
     {
-        $operationalCost = FirmAccount::findOrFail($id);
+        $operationalCost = OperationalCost::findOrFail($id);
+
+        $itemInFirm = FirmAccount::query()
+            ->where('transaction_id', 'like', "{operationalCost->transaction_id}")
+            ->delete();
 
         $operationalCost->delete();
 
-
-        return redirect()->route('operational-cost.index')->with('message', 'Successfully deleted the cost.');
+        return redirect()->route('lawyer.operational-cost.index')->with('successMessage', 'Successfully deleted the cost.');
     }
 }

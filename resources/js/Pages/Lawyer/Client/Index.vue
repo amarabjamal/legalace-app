@@ -22,7 +22,9 @@ lawyer/client
                 <tr class="table-head-row">
                     <th scope="col" class="table-head-column">Name</th>
                     <th scope="col" class="table-head-column">Email</th>
-                    <th scope="col" class="table-head-column">Account</th>
+                    <th scope="col" class="table-head-column">
+                        Client Account
+                    </th>
                     <th scope="col" class="table-head-column">Company Name</th>
                     <th scope="col" class="table-head-column">
                         <span class="sr-only">Actions</span>
@@ -42,14 +44,18 @@ lawyer/client
                         {{ user.email }}
                     </td>
                     <td scope="row" class="table-body-data">
-                        <!-- {{ user.phone_number }} -->
-                        {{ user.company_address }}
+                        <!-- {{ user.company_address }}  -->
+                        {{ user.linked_client_account }}
                     </td>
                     <td scope="row" class="table-body-data">
                         {{ user.company_name }}
-                        {{ user.name }}
                     </td>
                     <td class="table-body-data text-right">
+                        <Link
+                            :href="`/lawyer/client/${user.id}/view`"
+                            class="font-medium text-blue-600 hover:underline"
+                            >View
+                        </Link>
                         <Link
                             :href="`/lawyer/client/${user.id}/edit`"
                             class="font-medium text-blue-600 hover:underline"

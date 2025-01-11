@@ -1,5 +1,5 @@
 <template>
-    <Head title="Transaction" />
+    <Head title="Edit Transaction" />
 
     <page-heading :page_title="page_title" :breadcrumbs="breadcrumbs" />
 
@@ -12,7 +12,6 @@
                     <h2 class="text-base font-semibold leading-7 text-gray-900">
                         Transaction Detail
                     </h2>
-                    <!-- <p class="mt-1 text-sm leading-6 text-gray-600">The personal information of the employee.</p> -->
 
                     <div
                         class="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 md:grid-cols-2"
@@ -81,7 +80,24 @@
                             label="Document number"
                             required
                         />
-                        <text-input
+                        <div v-if="this.firmAccounts.upload !== null">
+                            <text-input
+                                v-model="this.firmAccounts.upload"
+                                class="pb-8 pr-6 w-full lg:w-1/2"
+                                value="test"
+                                label="Upload Document"
+                                accept=".jpg,.png,.pdf,.doc,.docx"
+                                disabled
+                            />
+                            <Button
+                                v-on:click="remove()"
+                                as="button"
+                                class="font-medium text-red-600 hover:underline"
+                                >Remove</Button
+                            >
+                        </div>
+                        <file-input
+                            v-else
                             v-model="form.upload"
                             :errors="form.errors.upload"
                             class="pb-8 pr-6 w-full lg:w-1/2"
@@ -93,24 +109,25 @@
                         <text-input
                             v-model="form.amount"
                             :error="form.errors.amount"
+                            :type="'number'"
                             label="Amount"
+                            step="0.01"
+                            min="0"
                             required
                         />
                         <select-input
                             v-model="form.payment_method"
                             :error="form.errors.payment_method"
-                            label="Payment Menthod"
+                            label="Payment Method"
                             required
                         >
                             <option disabled value="">
                                 Please payment method
                             </option>
-                            <option value="bank_remittance">
-                                Bank Remittance
-                            </option>
                             <option value="bank_transfer">Bank Transfer</option>
                             <option value="cash">Cash</option>
                             <option value="cheque">Cheque</option>
+                            <option value="credit_card">Credit Card</option>
                         </select-input>
                         <text-input
                             v-model="form.remarks"
@@ -132,14 +149,14 @@
                     type="submit"
                     >Update</loading-button
                 >
-                <Link
+                <Button
                     v-on:click="goBack()"
                     as="button"
                     class="btn-cancel"
                     :disabled="form.processing"
                 >
                     Cancel
-                </Link>
+                </Button>
             </div>
         </form>
     </div>
@@ -180,31 +197,44 @@ export default {
                 { link: null, label: "Edit" },
             ],
             form: this.$inertia.form({
+                id: this.firmAccounts.id,
                 date: this.firmAccounts.date,
-                bank_account_id: this.acc_id,
+                bank_account_id: this.firmAccounts.bank_account_id,
                 description: this.firmAccounts.description,
                 transaction_type: this.firmAccounts.transaction_type,
                 document_number: this.firmAccounts.document_number,
-                upload: this.firmAccounts.upload,
+                upload: null,
                 amount:
                     this.firmAccounts.transaction_type == "funds in"
                         ? this.firmAccounts.debit
                         : this.firmAccounts.credit,
                 payment_method: this.firmAccounts.payment_method,
                 remarks: this.firmAccounts.remarks,
+                existingDocument: this.firmAccounts.upload,
             }),
         };
     },
     methods: {
         update() {
             if (this.form.isDirty) {
-                this.form.put("/lawyer/firm-accounts/update");
+                if (
+                    this.firmAccounts.upload == null &&
+                    this.form.upload == null
+                ) {
+                    alert("You need to attach the document first.");
+                } else {
+                    console.log(JSON.stringify(this.form));
+                    this.form.post("/lawyer/firm-accounts/update");
+                }
             } else {
                 alert("You need to fill in the form first.");
             }
         },
         goBack() {
             window.history.go(-1);
+        },
+        remove() {
+            this.firmAccounts.upload = null;
         },
     },
 };

@@ -31,7 +31,7 @@
                     </td>
                 </tr>
 
-                <tr
+                <!-- <tr
                     class="text-sm text-gray-700 hover:bg-gray-100 focus-within:bg-gray-100"
                 >
                     <td class="border-t px-6 py-4 whitespace-nowrap pl-10">
@@ -50,9 +50,19 @@
                     <td class="border-t px-6 py-4 whitespace-nowrap text-right">
                         {{ formatToTwoDecimal(operatingBank) }}
                     </td>
-                </tr>
+                </tr> -->
                 <tr
                     class="text-sm text-gray-700 hover:bg-gray-100 focus-within:bg-gray-100"
+                >
+                    <td class="border-t px-6 py-4 whitespace-nowrap pl-10">
+                        Net Profit
+                    </td>
+                    <td class="border-t px-6 py-4 whitespace-nowrap text-right">
+                        {{ formatToTwoDecimal(netProfit) }}
+                    </td>
+                </tr>
+                <tr
+                    class="text-sm text-gray-700 hover:bg-gray-100 focus-within:bg-gray-100 bg-slate-100 font-bold"
                 >
                     <td class="border-t px-6 py-4 whitespace-nowrap">
                         Total cash from Operating activities
@@ -84,7 +94,7 @@
                     </td>
                 </tr>
 
-                <tr
+                <!-- <tr
                     class="text-sm text-gray-700 hover:bg-gray-100 focus-within:bg-gray-100"
                 >
                     <td class="border-t px-6 py-4 whitespace-nowrap pl-10">
@@ -103,9 +113,9 @@
                     <td class="border-t px-6 py-4 whitespace-nowrap text-right">
                         {{ formatToTwoDecimal(InvestingBank) }}
                     </td>
-                </tr>
+                </tr> -->
                 <tr
-                    class="text-sm text-gray-700 hover:bg-gray-100 focus-within:bg-gray-100"
+                    class="text-sm text-gray-700 hover:bg-gray-100 focus-within:bg-gray-100 bg-slate-100 font-bold"
                 >
                     <td class="border-t px-6 py-4 whitespace-nowrap">
                         Total cash from Investing activities
@@ -123,14 +133,15 @@
                         Cash flow from Financing activities
                     </td>
                     <td class="border-t px-6 py-4 whitespace-nowrap text-right">
-                        {{ formatToTwoDecimal(acc_payable) }}
+                        <!-- {{ formatToTwoDecimal(acc_payable) }} -->
+                        -
                     </td>
                 </tr>
                 <tr
                     class="text-sm text-gray-700 hover:bg-gray-100 focus-within:bg-gray-100"
                 >
                     <td class="border-t px-6 py-4 whitespace-nowrap pl-10">
-                        Cash
+                        Owner' Contribution - Cash
                     </td>
                     <td class="border-t px-6 py-4 whitespace-nowrap text-right">
                         {{ formatToTwoDecimal(financingCash) }}
@@ -140,14 +151,14 @@
                     class="text-sm text-gray-700 hover:bg-gray-100 focus-within:bg-gray-100"
                 >
                     <td class="border-t px-6 py-4 whitespace-nowrap pl-10">
-                        Bank
+                        Owner' Contribution - Bank
                     </td>
                     <td class="border-t px-6 py-4 whitespace-nowrap text-right">
                         {{ formatToTwoDecimal(financingBank) }}
                     </td>
                 </tr>
                 <tr
-                    class="text-sm text-gray-700 hover:bg-gray-100 focus-within:bg-gray-100"
+                    class="text-sm text-gray-700 hover:bg-gray-100 focus-within:bg-gray-100 bg-slate-100 font-bold"
                 >
                     <td class="border-t px-6 py-4 whitespace-nowrap">
                         Total cash from Financing activities
@@ -158,7 +169,7 @@
                 </tr>
 
                 <tr
-                    class="text-sm text-gray-700 hover:bg-gray-100 focus-within:bg-gray-100"
+                    class="text-sm text-gray-700 hover:bg-gray-100 focus-within:bg-gray-100 bg-slate-200 font-bold"
                 >
                     <td class="border-t px-6 py-4 whitespace-nowrap">
                         Ending Cash balance
@@ -188,6 +199,7 @@ export default {
         financingCash: String,
         financingBank: String,
         financingTotal: String,
+        netProfit: String,
         endingCashBalance: String,
     },
     data() {
@@ -220,6 +232,52 @@ export default {
             } else {
                 return num.toFixed(2); // Formats the number to 2 decimal places
             }
+        },
+
+        /*************  ✨ Codeium Command ⭐  *************/
+        /**
+         * Prints the content of the element with the id of "printArea" by opening a new window,
+         * extracting the styles applied to the rows or other elements, writing a new document with
+         * the extracted styles and print content, printing the new window, closing the print window
+         * after printing, and restoring the original content.
+         */
+        /******  736df33d-5ca6-45a5-ab5c-c1e3cd8a3d6b  *******/
+        printDiv2() {
+            const divId = "printArea";
+            const printContent = document.getElementById(divId).innerHTML;
+            const originalContent = document.body.innerHTML;
+
+            // Create a style element with the necessary Tailwind CSS classes
+            const style = document.createElement("style");
+            style.innerHTML = `
+        .text-sm { font-size: 0.875rem; line-height: 1.25rem; }
+        .text-gray-700 { color: #374151; }
+        .hover\\:bg-gray-100:hover { background-color: #f3f4f6; }
+        .focus-within\\:bg-gray-100:focus-within { background-color: #f3f4f6; }
+        .bg-slate-100 { background-color: #f1f5f9; }
+        .bg-slate-200 { background-color: #e2e8f0; }
+        .font-bold { font-weight: 700; }
+        .border-t { border-top-width: 1px; }
+        .px-6 { padding-left: 1.5rem; padding-right: 1.5rem; }
+        .py-4 { padding-top: 1rem; padding-bottom: 1rem; }
+        .whitespace-nowrap { white-space: nowrap; }
+        .text-right { text-align: right; }
+    `;
+
+            // Create a new window for printing
+            const printWindow = window.open("", "", "height=600,width=800");
+            printWindow.document.write("<html><head><title>Print</title>");
+            printWindow.document.write("</head><body>");
+            printWindow.document.write(style.outerHTML); // Include the styles
+            printWindow.document.write(printContent); // Include the content
+            printWindow.document.write("</body></html>");
+            printWindow.document.close();
+            printWindow.print();
+            printWindow.close();
+
+            // Restore the original content
+            document.body.innerHTML = originalContent;
+            window.location.reload(); // Ensures everything returns to normal
         },
     },
 };

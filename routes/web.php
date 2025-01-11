@@ -97,13 +97,14 @@ Route::group(['middleware' => 'auth'], function () {
         // Client Profiles
         Route::get('client/update', [ClientController::class, 'update']);
         Route::get('client/{client_id}/edit', [ClientController::class, 'edit']);
+        Route::get('client/{client_id}/view', [ClientController::class, 'view']);
         Route::resource('client', ClientController::class);
 
         Route::resource('case-files', CaseFileController::class);
 
         // FIRM ACCOUNTS
         Route::get('firm-accounts/{account_number}/detail', [FirmAccountController::class, 'detail']);
-        Route::get('firm-accounts/update', [FirmAccountController::class, 'update']);
+        Route::post('firm-accounts/update', [FirmAccountController::class, 'update']);
         Route::get('firm-accounts/{account_number}/{transaction_type}/detail', [FirmAccountController::class, 'detailFilter']);
         Route::get('firm-accounts/{account_number}/create', [FirmAccountController::class, 'create']);
         Route::get('firm-accounts/{account_number}/{selected_item}/view', [FirmAccountController::class, 'view']);

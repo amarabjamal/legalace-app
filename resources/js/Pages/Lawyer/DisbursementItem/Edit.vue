@@ -83,10 +83,9 @@
                                 {{ fund_type.label }}
                             </option>
                         </select-input>
-                        <text-input
+                        <money-input
                             v-model.lazy="form.amount"
                             :error="form.errors.amount"
-                            :type="'number'"
                             label="Amount"
                             required
                         />

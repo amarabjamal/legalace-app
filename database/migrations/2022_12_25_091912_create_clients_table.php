@@ -25,7 +25,7 @@ return new class extends Migration
             $table->string('company_name');
             $table->string('company_address');
             $table->string('outstanding_balance')->nullable();
-            $table->string('linked_client_account');
+            $table->string('linked_client_account')->nullable();
             $table->timestamps();
             $table->foreignId('created_by')->constrained("users", "id");
         });

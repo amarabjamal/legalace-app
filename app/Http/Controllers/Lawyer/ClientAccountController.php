@@ -161,8 +161,8 @@ class ClientAccountController extends Controller
         $filePath = null;
 
         try {
-            $clientAccount = ClientAccount::findOrFail($request->bank_account_id); // Find the record by ID
-            if (!$request->hasFile('upload')) {
+            $clientAccount = ClientAccount::findOrFail($request->id); // Find the record by ID
+            if ($request->existingDocument != null && $request->upload == null) {
                 if (str_contains("funds in", $request->transaction_type)) {
                     $clientAccount->update([
                         'date' => $request->date,
@@ -191,13 +191,7 @@ class ClientAccountController extends Controller
                 return redirect()->route('lawyer.client-accounts.show', ['client_account' => $request->bank_account_id])->with('successMessage', 'Successfully update the transaction.');
             } else {
                 $fileName = uniqid('TRANSACTION_') . '_' . date('Ymd') . '_' . time() . '.' . $request->file('upload')->extension();
-                $filePath = null;
-
-                if (Storage::exists(ClientAccount::UPLOAD_PATH . $fileName)) {
-                    // DO NOTHING
-                } else {
-                    $filePath = $request->file('upload')->storeAs(ClientAccount::UPLOAD_PATH, $fileName);
-                }
+                $filePath = $request->file('upload')->storeAs(ClientAccount::UPLOAD_PATH, $fileName);
 
                 $request->merge(['upload_filename' => $fileName]);
 
@@ -232,7 +226,7 @@ class ClientAccountController extends Controller
                 return redirect()->route('lawyer.client-accounts.show', ['client_account' => $request->bank_account_id])->with('successMessage', 'Successfully update the transaction.');
             }
         } catch (\Exception $e) {
-            if (Storage::exists($filePath)) {
+            if ($filePath != null && Storage::exists($filePath)) {
                 Storage::delete($filePath);
             }
 
@@ -270,7 +264,7 @@ class ClientAccountController extends Controller
                 'description' => $acc->description,
                 'transaction_type' => $acc->transaction_type,
                 'payment_method' => $acc->payment_method,
-                'document_no' => $acc->document_no,
+                'document_no' => $acc->document_number,
                 'debit' => $acc->debit,
                 'credit' => $acc->credit,
                 'balance' => $acc->balance,
@@ -335,7 +329,7 @@ class ClientAccountController extends Controller
                 'description' => $acc->description,
                 'transaction_type' => $acc->transaction_type,
                 'payment_method' => $acc->payment_method,
-                'document_no' => $acc->document_no,
+                'document_no' => $acc->document_number,
                 'debit' => $acc->debit,
                 'credit' => $acc->credit,
                 'balance' => $acc->balance,
