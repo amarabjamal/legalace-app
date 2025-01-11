@@ -161,7 +161,7 @@ class FirmAccountController extends Controller
 
         try {
             $firmAccount = FirmAccount::findOrFail($request->id); // Find the record by ID
-            if (!$request->hasFile('upload')) {
+            if ($request->existingDocument != null && $request->upload == null) {
                 if (str_contains("funds in", $request->transaction_type)) {
                     $firmAccount->update([
                         'date' => $request->date,
@@ -188,14 +188,10 @@ class FirmAccountController extends Controller
                     ]);
                 }
             } else {
-                $fileName = uniqid('TRANSACTION_') . '_' . date('Ymd') . '_' . time() . '.' . $request->file('upload')->extension();
                 $filePath = null;
 
-                if (Storage::exists(FirmAccount::UPLOAD_PATH . $fileName)) {
-                    // DO NOTHING
-                } else {
-                    $filePath = $request->file('upload')->storeAs(FirmAccount::UPLOAD_PATH, $fileName);
-                }
+                $fileName = uniqid('TRANSACTION_') . '_' . date('Ymd') . '_' . time() . '.' . $request->file('upload')->extension();
+                $filePath = $request->file('upload')->storeAs(FirmAccount::UPLOAD_PATH, $fileName);
 
                 $request->merge(['upload_filename' => $fileName]);
 
@@ -229,7 +225,7 @@ class FirmAccountController extends Controller
             }
             return redirect()->route('lawyer.firm-accounts.show', ['firm_account' => $request->bank_account_id])->with('successMessage', 'Successfully update the transaction.');
         } catch (\Exception $e) {
-            if (Storage::exists($filePath)) {
+            if ($filePath != null && Storage::exists($filePath)) {
                 Storage::delete($filePath);
             }
 

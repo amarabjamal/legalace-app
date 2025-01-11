@@ -147,16 +147,31 @@ class OperationalCostController extends Controller
             'created_by' => Auth::id(),
         ]);
 
-        return redirect()->route('lawyer.operational-cost.index')->with('message', 'Successfully update operational cost.');
+        $itemInFirm = FirmAccount::query()
+            ->where('transaction_id', 'like', "{$request->transaction_id}")
+            ->update([
+                'date' => $request->date,
+                'bank_account_id' => $request->account,
+                'description' => $request->description,
+                'transaction_type' => "funds out",
+                'document_number' => $request->document_number,
+                'credit' => $request->amount,
+                'payment_method' => $request->payment_method,
+            ]);
+
+        return redirect()->route('lawyer.operational-cost.index')->with('successMessage', 'Successfully update operational cost.');
     }
 
     public function destroy($id)
     {
         $operationalCost = OperationalCost::findOrFail($id);
 
+        $itemInFirm = FirmAccount::query()
+            ->where('transaction_id', 'like', "{operationalCost->transaction_id}")
+            ->delete();
+
         $operationalCost->delete();
 
-
-        return redirect()->route('lawyer.operational-cost.index')->with('message', 'Successfully deleted the cost.');
+        return redirect()->route('lawyer.operational-cost.index')->with('successMessage', 'Successfully deleted the cost.');
     }
 }

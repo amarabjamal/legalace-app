@@ -93,7 +93,7 @@
                             </option>
                             <option
                                 v-for="client in clients"
-                                :value="client.id"
+                                :value="client.account_name"
                             >
                                 {{ client.label }}
                             </option>
@@ -149,32 +149,32 @@ export default {
     },
     layout: Layout,
     props: {
-        client: Object,
-        idTypes: Object,
+        clientProfile: Object,
+        clients: Object,
     },
     data() {
         return {
-            page_title: this.client.name,
+            page_title: this.clientProfile.name,
             breadcrumbs: [
                 { link: "/lawyer/dashboard", label: "Lawyer" },
                 { link: "/lawyer/client", label: "Client" },
-                { link: null, label: this.client.name },
+                { link: null, label: this.clientProfile.name },
                 { link: null, label: "Edit" },
             ],
             form: this.$inertia.form({
-                id: this.client.id,
-                name: this.client.name,
-                email: this.client.email,
-                id_number: this.client.id_number,
-                id_type_id: this.client.id_type_id,
-                phone_number: this.client.phone_number,
-                linked_client_account: this.client.linked_client_account,
-                company_name: this.client.company_name,
-                company_address: this.client.company_address,
-                outstanding_balance: this.client.outstanding_balance,
+                id: this.clientProfile.id,
+                name: this.clientProfile.name,
+                email: this.clientProfile.email,
+                id_number: this.clientProfile.id_number,
+                id_type_id: this.clientProfile.id_type_id,
+                phone_number: this.clientProfile.phone_number,
+                linked_client_account: this.clientProfile.linked_client_account,
+                company_name: this.clientProfile.company_name,
+                company_address: this.clientProfile.company_address,
+                outstanding_balance: this.clientProfile.outstanding_balance,
                 access_expiry_date:
-                    this.client.access_expiry_date != null
-                        ? this.client.access_expiry_date.substring(0, 10)
+                    this.clientProfile.access_expiry_date != null
+                        ? this.clientProfile.access_expiry_date.substring(0, 10)
                         : "",
             }),
         };

@@ -48,7 +48,24 @@
                             label="Document number"
                             required
                         />
-                        <text-input
+                        <div v-if="this.firmAccounts.upload !== null">
+                            <text-input
+                                v-model="this.firmAccounts.upload"
+                                class="pb-8 pr-6 w-full lg:w-1/2"
+                                value="test"
+                                label="Upload Document"
+                                accept=".jpg,.png,.pdf,.doc,.docx"
+                                disabled
+                            />
+                            <Button
+                                v-on:click="remove()"
+                                as="button"
+                                class="font-medium text-red-600 hover:underline"
+                                >Remove</Button
+                            >
+                        </div>
+                        <file-input
+                            v-else
                             v-model="form.upload"
                             :errors="form.errors.upload"
                             class="pb-8 pr-6 w-full lg:w-1/2"
@@ -60,8 +77,10 @@
                         <text-input
                             v-model="form.amount"
                             :error="form.errors.amount"
-                            :type="'float'"
+                            :type="'number'"
                             label="Amount"
+                            step="0.01"
+                            min="0"
                             required
                         />
                         <select-input
@@ -100,14 +119,14 @@
                     type="submit"
                     >Update</loading-button
                 >
-                <Link
+                <Button
                     v-on:click="goBack()"
                     as="button"
                     class="btn-cancel"
                     :disabled="form.processing"
                 >
                     Cancel
-                </Link>
+                </Button>
             </div>
         </form>
     </div>
@@ -154,26 +173,37 @@ export default {
                 description: this.clientAccounts.description,
                 transaction_type: this.clientAccounts.transaction_type,
                 document_number: this.clientAccounts.document_number,
-                upload: this.clientAccounts.upload,
+                upload: null,
                 amount:
                     this.clientAccounts.transaction_type == "funds in"
                         ? this.clientAccounts.debit
                         : this.clientAccounts.credit,
                 payment_method: this.clientAccounts.payment_method,
                 reference: this.clientAccounts.reference,
+                existingDocument: this.firmAccounts.upload,
             }),
         };
     },
     methods: {
         update() {
             if (this.form.isDirty) {
-                this.form.put("/lawyer/client-accounts/update");
+                if (
+                    this.clientAccounts.upload == null &&
+                    this.form.upload == null
+                ) {
+                    alert("You need to attach the document first.");
+                } else {
+                    this.form.put("/lawyer/client-accounts/update");
+                }
             } else {
                 alert("You need to fill in the form first.");
             }
         },
         goBack() {
             window.history.go(-1);
+        },
+        remove() {
+            this.clientAccounts.upload = null;
         },
     },
 };

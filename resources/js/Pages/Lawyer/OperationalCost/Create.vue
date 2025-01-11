@@ -76,11 +76,13 @@
                             label="Upload Document"
                             accept=".jpg,.png,.pdf,.doc,.docx"
                         />
-
                         <text-input
                             v-model="form.amount"
                             :error="form.errors.company_name"
+                            :type="'number'"
                             label="Amount"
+                            step="0.01"
+                            min="0"
                             required
                         />
                         <select-input

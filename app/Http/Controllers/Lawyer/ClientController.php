@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Inertia\Inertia;
 use App\Models\Client;
 use App\Models\BankAccounts;
+use App\Models\CaseFiles;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Request as FacadesRequest;
 
@@ -79,11 +80,13 @@ class ClientController extends Controller
 
     public function edit($client_id)
     {
+        $clients = BankAccounts::where('bank_account_type_id', 1)->get();
         $clientProfile = Client::query()
             ->where('id', 'like', "%{$client_id}%")
             ->first();
         return Inertia::render('Lawyer/Client/Edit', [
-            'client' => $clientProfile
+            'clientProfile' => $clientProfile,
+            'clients' => $clients
         ]);
     }
 
@@ -104,15 +107,19 @@ class ClientController extends Controller
             'linked_client_account' => $request->linked_client_account,
         ]);
 
-        return redirect()->route('lawyer.client.index')->with('message', 'Successfully updated the client.');
+        return redirect()->route('lawyer.client.index')->with('successMessage', 'Successfully updated the client.');
     }
 
     public function destroy($client_id)
     {
         $client = Client::findOrFail($client_id);
 
-        $client->delete();
-
-        return redirect()->route('lawyer.client.index')->with('message', 'Successfully deleted the client.');
+        $case = CaseFiles::findOrFail($client->id);
+        if ($case == null) {
+            $client->delete();
+            return redirect()->route('lawyer.client.index')->with('successMessage', "Successfully deleted the client. {$case->id}");
+        } else {
+            return redirect()->route('lawyer.client.index')->with('errorMessage', "Client still have case files");
+        }
     }
 }
