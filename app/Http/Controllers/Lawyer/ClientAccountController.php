@@ -113,6 +113,7 @@ class ClientAccountController extends Controller
                         'credit' => $request->amount,
                         'payment_method' => $request->payment_method,
                         'reference' => $request->reference,
+                        'transaction_id' => $uniqueId,
                         'created_by' => Auth::id(),
                     ]);
                     FirmAccount::create([
@@ -162,6 +163,7 @@ class ClientAccountController extends Controller
                         'credit' => $request->amount,
                         'payment_method' => $request->payment_method,
                         'reference' => $request->reference,
+                        'transaction_id' => $uniqueId,
                         'created_by' => Auth::id(),
                     ]);
                     FirmAccount::create([
@@ -298,7 +300,7 @@ class ClientAccountController extends Controller
         $accList = DB::table(self::DB_NAME);
 
         $bankAccount = BankAccounts::query()
-            ->rightJoin("client_accounts as b", 'bank_account_type_id', '=', 'b.bank_account_id')
+            ->rightJoin("client_accounts as b", 'bank_accounts.id', '=', 'b.bank_account_id')
             ->select(
                 'bank_accounts.id',
                 'label',
@@ -333,13 +335,66 @@ class ClientAccountController extends Controller
 
         $acc = DB::table(self::DB_NAME)->sum('balance');
 
+
+        // Get the selected period from the request
+        $selectedPeriod = $request->input('period', 'this_month'); // Default to 'this_month'
+
+        // Calculate the start and end dates based on the selected period
+        $startDate = now();
+        $endDate = now();
+
+        switch ($selectedPeriod) {
+            case 'this_month':
+                $startDate = now()->startOfMonth();
+                $endDate = now()->endOfMonth();
+                break;
+            case 'last_month':
+                $startDate = now()->subMonth()->startOfMonth();
+                $endDate = now()->subMonth()->endOfMonth();
+                break;
+            case 'next_month':
+                $startDate = now()->addMonth()->startOfMonth();
+                $endDate = now()->addMonth()->endOfMonth();
+                break;
+            case 'last_3_months':
+                $startDate = now()->subMonths(3)->startOfMonth();
+                $endDate = now()->subMonth()->endOfMonth();     // End of the previous month
+                break;
+            case 'last_6_months':
+                $startDate = now()->subMonths(6)->startOfMonth();
+                $endDate = now()->subMonth()->endOfMonth();     // End of the previous month
+                break;
+            case 'next_3_months':
+                $startDate = now()->startOfMonth();
+                $endDate = now()->addMonths(3)->endOfMonth();
+                break;
+            case 'next_6_months':
+                $startDate = now()->startOfMonth();
+                $endDate = now()->addMonths(6)->endOfMonth();
+                break;
+            case 'last_year':
+                $startDate = now()->subYear()->startOfYear();
+                $endDate = now()->subYear()->endOfYear();
+                break;
+            case 'next_year':
+                $startDate = now()->addYear()->startOfYear();
+                $endDate = now()->addYear()->endOfYear();
+                break;
+            case 'this_year':
+                $startDate = now()->startOfYear();
+                $endDate = now()->endOfYear();
+                break;
+        }
+
         $funds_in = DB::table(self::DB_NAME)
             ->where('bank_account_id', 'like', "%{$acc_number}")
             ->where('transaction_type', 'like', 'funds in')
+            ->whereBetween('date', [$startDate, $endDate])
             ->sum('debit');
         $funds_out = DB::table(self::DB_NAME)
             ->where('bank_account_id', 'like', "%{$acc_number}")
             ->where('transaction_type', 'like', 'funds out')
+            ->whereBetween('date', [$startDate, $endDate])
             ->sum('credit');
 
         return Inertia::render('Lawyer/ClientAccount/Details', [
@@ -350,6 +405,7 @@ class ClientAccountController extends Controller
             'bank_accounts' => $bankAccount,
             'funds_in' => $funds_in,
             'funds_out' => $funds_out,
+            'selectedPeriod' => $selectedPeriod,
         ]);
     }
 
@@ -451,8 +507,8 @@ class ClientAccountController extends Controller
 
         $bank_account_id = $clientAccount->bank_account_id;
 
-        $itemInFirm = FirmAccount::query()
-            ->where('transaction_id', 'like', "{clientAccount->transaction_id}")
+        FirmAccount::query()
+            ->where('transaction_id', '=', $clientAccount->transaction_id)
             ->delete();
 
         $clientAccount->delete();

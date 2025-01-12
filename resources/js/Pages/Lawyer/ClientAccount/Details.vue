@@ -64,10 +64,22 @@
         </div>
 
         <div v-for="bank_account in bank_accounts" :key="bank_account.id"
-            class="min-w-0 bg-white border border-gray-300 rounded-md overflow-hidden ease-in-out duration-300 hover:shadow-md hover:scale-105 hover:-translate-y-5">
+            class="min-w-0 bg-white border border-gray-300 rounded-md overflow-hidden ease-in-out duration-300 hover:shadow-md">
             <div class="px-4 mb-2 border-b bg-gray-50 flex justify-between items-center">
-                <h4 class="py-2 text-sm uppercase font-semibold text-gray-500 w-1/2 truncate">This Month
+                <h4 class="py-2 text-sm uppercase font-semibold text-gray-500 w-1/2 truncate">Filter statistics:
                 </h4>
+                <select v-model="selectedPeriod" @change="filterByPeriod" class="m-1 px-4 py-2 border rounded-md hover:cursor-pointer">
+                    <option value="this_month">This Month</option>
+                    <option value="this_year">Current Year</option>
+                    <option value="last_month">Last Month</option>
+                    <option value="last_3_months">Last 3 Months</option>
+                    <option value="last_6_months">Last 6 Months</option>
+                    <option value="last_year">Last Year</option>
+                    <option value="next_month">Next Month</option>
+                    <option value="next_3_months">Next 3 Months</option>
+                    <option value="next_6_months">Next 6 Months</option>
+                    <option value="next_year">Next Year</option>
+                </select>
                 <!-- <span :class="accountTypeClass(bank_account.account_type)">{{ bank_account.account_type }}</span> -->
             </div>
             <p class="text-gray-600 p-2 text-sm">
@@ -241,6 +253,7 @@ export default {
             ],
             showDeleteModal: false,
             selectedAcc: null,
+            selectedPeriod: this.selectedPeriod || 'this_month',
         }
     },
     props: {
@@ -252,6 +265,7 @@ export default {
         filters: Object,
         funds_in: Object,
         funds_out: Object,
+        selectedPeriod: String,
     },
     // components: { Head, Pagination, ref },
     components: { SearchFilter, Icon, Pagination, ref, ConfirmationModel },
@@ -287,12 +301,19 @@ export default {
         },
         handleDelete() {
             if (this.selectedAcc) {
-                Inertia.delete(`/lawyer/firm-accounts/${this.selectedAcc.id}`);
+                Inertia.delete(`/lawyer/client-accounts/${this.selectedAcc.id}`);
                 this.showDeleteModal = false;
             }
         },
         cancelDelete() {
             this.showDeleteModal = false;
+        },
+        filterByPeriod() {
+            // Send the selected month value to the backend
+            Inertia.get(`/lawyer/client-accounts/${this.bank_accounts[0].id}/detail`, { period: this.selectedPeriod }, {
+                preserveState: true,
+                replace: true,
+            });
         },
     },
 };

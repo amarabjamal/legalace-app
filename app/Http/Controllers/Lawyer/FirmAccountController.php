@@ -35,7 +35,6 @@ class FirmAccountController extends Controller
             ->groupBy('id', 'label', 'opening_balance', 'account_name', 'bank_name', 'account_number', 'swift_code')
             ->get();
 
-
         return Inertia::render('Lawyer/FirmAccount/Index', [
             'firmAccountList' => $firmAccountList,
         ]);
@@ -278,16 +277,54 @@ class FirmAccountController extends Controller
 
         $acc = DB::table('firm_account')->sum('balance');
 
-        // Get the selected month from the request
-        $selectedMonth = $request->input('month', 'this_month'); // Default to 'this_month'
+        // Get the selected period from the request
+        $selectedPeriod = $request->input('period', 'this_month'); // Default to 'this_month'
 
-        // Calculate the start and end dates based on the selected month
-        if ($selectedMonth === 'this_month') {
-            $startDate = now()->startOfMonth();
-            $endDate = now()->endOfMonth();
-        } else {
-            $startDate = now()->subMonth()->startOfMonth();
-            $endDate = now()->subMonth()->endOfMonth();
+        // Calculate the start and end dates based on the selected period
+        $startDate = now();
+        $endDate = now();
+
+        switch ($selectedPeriod) {
+            case 'this_month':
+                $startDate = now()->startOfMonth();
+                $endDate = now()->endOfMonth();
+                break;
+            case 'last_month':
+                $startDate = now()->subMonth()->startOfMonth();
+                $endDate = now()->subMonth()->endOfMonth();
+                break;
+            case 'next_month':
+                $startDate = now()->addMonth()->startOfMonth();
+                $endDate = now()->addMonth()->endOfMonth();
+                break;
+            case 'last_3_months':
+                $startDate = now()->subMonths(3)->startOfMonth();
+                $endDate = now()->subMonth()->endOfMonth();     // End of the previous month
+                break;
+            case 'last_6_months':
+                $startDate = now()->subMonths(6)->startOfMonth();
+                $endDate = now()->subMonth()->endOfMonth();     // End of the previous month
+                break;
+            case 'next_3_months':
+                $startDate = now()->startOfMonth();
+                $endDate = now()->addMonths(3)->endOfMonth();
+                break;
+            case 'next_6_months':
+                $startDate = now()->startOfMonth();
+                $endDate = now()->addMonths(6)->endOfMonth();
+                break;
+            case 'last_year':
+                $startDate = now()->subYear()->startOfYear();
+                $endDate = now()->subYear()->endOfYear();
+                break;
+            case 'next_year':
+                $startDate = now()->addYear()->startOfYear();
+                $endDate = now()->addYear()->endOfYear();
+                break;
+            case 'this_year':
+                $startDate = now()->startOfYear();
+                $endDate = now()->endOfYear();
+                break;
         }
 
         $funds_in = DB::table('firm_account')
@@ -313,7 +350,7 @@ class FirmAccountController extends Controller
             'bank_accounts' => $bankAccount,
             'funds_in' => $funds_in,
             'funds_out' => $funds_out,
-            'selectedMonth' => $selectedMonth,
+            'selectedPeriod' => $selectedPeriod,
         ]);
     }
 

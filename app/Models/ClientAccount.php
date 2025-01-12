@@ -25,6 +25,7 @@ class ClientAccount extends Model
         'document_number',
         'upload',
         'reference',
+        'transaction_id',
         'created_at',
         'updated_at',
     ];
