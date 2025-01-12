@@ -113,7 +113,7 @@ Route::group(['middleware' => 'auth'], function () {
 
         // CLIENT ACCOUNTS
         Route::get('client-accounts/{account_number}/detail', [ClientAccountController::class, 'detail']);
-        Route::get('client-accounts/update', [ClientAccountController::class, 'update']);
+        Route::post('client-accounts/update', [ClientAccountController::class, 'update']);
         Route::get('client-accounts/{account_number}/{transaction_type}/detail', [ClientAccountController::class, 'detailFilter']);
         Route::get('client-accounts/{account_number}/create', [ClientAccountController::class, 'create']);
         Route::get('client-accounts/{account_number}/{selected_item}/view', [ClientAccountController::class, 'view']);
@@ -125,7 +125,7 @@ Route::group(['middleware' => 'auth'], function () {
 
         // OPERATIONAL COST
         // Route::get('operational-cost/create', [OperationalCostController::class, 'create']);
-        Route::get('operational-cost/update', [OperationalCostController::class, 'update']);
+        Route::post('operational-cost/update', [OperationalCostController::class, 'update']);
         Route::get('operational-cost/{id}/edit', [OperationalCostController::class, 'edit']);
         Route::resource('operational-cost', OperationalCostController::class);
 

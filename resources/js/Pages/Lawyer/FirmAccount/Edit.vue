@@ -80,7 +80,12 @@
                             label="Document number"
                             required
                         />
-                        <div v-if="this.firmAccounts.upload !== null">
+                        <div
+                            v-if="
+                                this.firmAccounts.upload !== null &&
+                                this.firmAccounts.upload !== ''
+                            "
+                        >
                             <text-input
                                 v-model="this.firmAccounts.upload"
                                 class="pb-8 pr-6 w-full lg:w-1/2"

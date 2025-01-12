@@ -130,34 +130,71 @@ class OperationalCostController extends Controller
 
     public function update(Request $request)
     {
-        $item = OperationalCost::findOrFail($request->id); // Find the record by ID
-        $item->update([
-            'date' => $request->date,
-            'details' => $request->description,
-            'amount' => $request->amount,
-            'payment_method' => $request->payment_method,
-            'is_recurring' => $request->is_recurring,
-            'recurring_period' => $request->frequency,
-            'is_paid' => 1,
-            'bank_account_id' => $request->account,
-            'company_id' => $request->account,
-            'first_payment_date' => $request->first_payment_date,
-            'no_of_payment' => $request->no_of_payment,
-            'document_number' => $request->document_number,
-            'created_by' => Auth::id(),
-        ]);
+        $filePath = null;
 
-        $itemInFirm = FirmAccount::query()
-            ->where('transaction_id', 'like', "{$request->transaction_id}")
-            ->update([
+        $item = OperationalCost::findOrFail($request->id); // Find the record by ID
+        if ($request->existingDocument != null && $request->upload == null) {
+            $item->update([
                 'date' => $request->date,
-                'bank_account_id' => $request->account,
-                'description' => $request->description,
-                'transaction_type' => "funds out",
-                'document_number' => $request->document_number,
-                'credit' => $request->amount,
+                'details' => $request->description,
+                'amount' => $request->amount,
                 'payment_method' => $request->payment_method,
+                'is_recurring' => $request->is_recurring,
+                'recurring_period' => $request->frequency,
+                'is_paid' => 1,
+                'bank_account_id' => $request->account,
+                'company_id' => $request->account,
+                'first_payment_date' => $request->first_payment_date,
+                'no_of_payment' => $request->no_of_payment,
+                'document_number' => $request->document_number,
+                'created_by' => Auth::id(),
             ]);
+
+            $itemInFirm = FirmAccount::query()
+                ->where('transaction_id', 'like', "{$request->transaction_id}")
+                ->update([
+                    'date' => $request->date,
+                    'bank_account_id' => $request->account,
+                    'description' => $request->description,
+                    'transaction_type' => "funds out",
+                    'document_number' => $request->document_number,
+                    'credit' => $request->amount,
+                    'payment_method' => $request->payment_method,
+                ]);
+        } else {
+            $fileName = uniqid('OPERATIONAL_COST') . '_' . date('Ymd') . '_' . time() . '.' . $request->file('upload')->extension();
+            $filePath = $request->file('upload')->storeAs(OperationalCost::UPLOAD_PATH, $fileName);
+            $request->merge(['upload_filename' => $fileName]);
+            $item->update([
+                'date' => $request->date,
+                'details' => $request->description,
+                'amount' => $request->amount,
+                'payment_method' => $request->payment_method,
+                'is_recurring' => $request->is_recurring,
+                'recurring_period' => $request->frequency,
+                'upload' => $filePath,
+                'is_paid' => 1,
+                'bank_account_id' => $request->account,
+                'company_id' => $request->account,
+                'first_payment_date' => $request->first_payment_date,
+                'no_of_payment' => $request->no_of_payment,
+                'document_number' => $request->document_number,
+                'created_by' => Auth::id(),
+            ]);
+
+            $itemInFirm = FirmAccount::query()
+                ->where('transaction_id', 'like', "{$request->transaction_id}")
+                ->update([
+                    'date' => $request->date,
+                    'bank_account_id' => $request->account,
+                    'description' => $request->description,
+                    'upload' => $filePath,
+                    'transaction_type' => "funds out",
+                    'document_number' => $request->document_number,
+                    'credit' => $request->amount,
+                    'payment_method' => $request->payment_method,
+                ]);
+        }
 
         return redirect()->route('lawyer.operational-cost.index')->with('successMessage', 'Successfully update operational cost.');
     }

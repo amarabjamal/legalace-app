@@ -69,7 +69,7 @@ class DashboardController extends Controller
 
 
         $firmAccounts = BankAccounts::query()
-            ->rightJoin('firm_account as b', 'bank_account_type_id', '=', 'b.bank_account_id')
+            ->rightJoin('firm_account as b', 'bank_accounts.id', '=', 'b.bank_account_id')
             ->select(
                 'label',
                 DB::raw('(IFNULL(SUM(debit), 0) - IFNULL(SUM(credit), 0)) + IFNULL(opening_balance, 0) AS opening_balance'),
@@ -79,7 +79,7 @@ class DashboardController extends Controller
             ->groupBy('label', 'opening_balance');
 
         $clientAccounts = BankAccounts::query()
-            ->rightJoin('client_accounts as b', 'bank_account_type_id', '=', 'b.bank_account_id')
+            ->rightJoin('client_accounts as b', 'bank_accounts.id', '=', 'b.bank_account_id')
             ->select(
                 'label',
                 DB::raw('(IFNULL(SUM(debit), 0) - IFNULL(SUM(credit), 0)) + IFNULL(opening_balance, 0) AS opening_balance'),

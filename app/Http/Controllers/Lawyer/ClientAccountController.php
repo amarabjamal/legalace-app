@@ -22,7 +22,7 @@ class ClientAccountController extends Controller
         $accList = DB::table(self::DB_NAME);
 
         $clientAccountList = BankAccounts::query()
-            ->rightJoin("client_accounts as b", 'bank_account_type_id', '=', 'b.bank_account_id')
+            ->rightJoin("client_accounts as b", 'bank_accounts.id', '=', 'b.bank_account_id')
             ->select(
                 'bank_accounts.id',
                 'label',

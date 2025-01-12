@@ -48,7 +48,12 @@
                             label="Document number"
                             required
                         />
-                        <div v-if="this.clientAccounts.upload !== null">
+                        <div
+                            v-if="
+                                this.clientAccounts.upload !== null &&
+                                this.clientAccounts.upload !== ''
+                            "
+                        >
                             <text-input
                                 v-model="this.clientAccounts.upload"
                                 class="pb-8 pr-6 w-full lg:w-1/2"
@@ -193,7 +198,7 @@ export default {
                 ) {
                     alert("You need to attach the document first.");
                 } else {
-                    this.form.put("/lawyer/client-accounts/update");
+                    this.form.post("/lawyer/client-accounts/update");
                 }
             } else {
                 alert("You need to fill in the form first.");
