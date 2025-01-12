@@ -160,12 +160,17 @@
                                     scope="row"
                                     class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap"
                                 >
-                                    {{ formatToTwoDecimal(cost.amount) }}
+                                    RM {{ formatToTwoDecimal(cost.amount) }}
                                 </th>
                                 <!-- <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
                                     {{ cost.balance }}
                                 </th> -->
                                 <td class="px-6 py-4 text-left">
+                                    <Link
+                                        :href="`/lawyer/operational-cost/${cost.id}/view`"
+                                        class="font-medium text-blue-600 hover:underline p-1"
+                                        >View
+                                    </Link>
                                     <Link
                                         :href="`/lawyer/operational-cost/${cost.id}/edit`"
                                         class="font-medium text-blue-600 hover:underline"

@@ -122,7 +122,7 @@
                             <option value="cheque">Cheque</option>
                             <option value="credit_card">Credit Card</option>
                         </select-input>
-                        <select-input
+                        <!-- <select-input
                             v-model="form.is_recurring"
                             :error="form.errors.is_recurring"
                             label="Recurring Transaction"
@@ -133,7 +133,7 @@
                             </option>
                             <option value="1">Yes</option>
                             <option value="0">no</option>
-                        </select-input>
+                        </select-input> -->
 
                         <div v-if="form.is_recurring == 1">
                             <date-input

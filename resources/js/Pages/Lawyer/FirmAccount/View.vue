@@ -20,7 +20,7 @@
             >
                 <dt class="text-sm font-medium text-gray-500">Description</dt>
                 <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-                    {{ firmAccounts.description }}
+                    {{ formatString(firmAccounts.description) }}
                 </dd>
             </div>
             <div
@@ -30,7 +30,7 @@
                     Transaction Type
                 </dt>
                 <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-                    {{ firmAccounts.transaction_type }}
+                    {{ formatString(firmAccounts.transaction_type) }}
                 </dd>
             </div>
             <div
@@ -56,7 +56,7 @@
             >
                 <dt class="text-sm font-medium text-gray-500">Funds In</dt>
                 <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-                    {{ firmAccounts.debit }}
+                    RM {{ formatToTwoDecimal(firmAccounts.debit) }}
                 </dd>
             </div>
             <div
@@ -64,7 +64,7 @@
             >
                 <dt class="text-sm font-medium text-gray-500">Funds Out</dt>
                 <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-                    {{ firmAccounts.credit }}
+                    RM {{ formatToTwoDecimal(firmAccounts.credit) }}
                 </dd>
             </div>
             <div
@@ -76,7 +76,7 @@
                 <dd
                     class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2 whitespace-pre-wrap"
                 >
-                    {{ firmAccounts.payment_method }}
+                    {{ formatString(firmAccounts.payment_method) }}
                 </dd>
             </div>
             <div
@@ -84,7 +84,7 @@
             >
                 <dt class="text-sm font-medium text-gray-500">Reference</dt>
                 <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-                    {{ firmAccounts.reference }}
+                    {{ firmAccounts.remarks }}
                 </dd>
             </div>
         </dl>
@@ -95,9 +95,10 @@
             <!-- <Link as="button" :href="`/admin/bank-accounts/${bank_account.id}/edit`" class="btn-primary">
                 Edit
             </Link>  -->
-            <Link v-on:click="goBack()" as="button" class="btn-cancel">
+            <!-- <Link v-on:click="goBack()" as="button" class="btn-cancel">
                 Back
-            </Link>
+            </Link> -->
+            <button @click="goBack">Back</button>
         </div>
     </div>
 </template>
@@ -152,6 +153,19 @@ export default {
         },
         goBack() {
             window.history.go(-1);
+        },
+        formatString(str) {
+            return str
+                .split("_") // Split by underscores
+                .map((word) => word.charAt(0).toUpperCase() + word.slice(1)) // Capitalize the first letter of each word
+                .join(" "); // Join the words with spaces
+        },
+        formatToTwoDecimal(num) {
+            if (num == null) {
+                return "0.00";
+            } else {
+                return num.toFixed(2); // Formats the number to 2 decimal places
+            }
         },
     },
 };

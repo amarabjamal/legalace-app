@@ -125,6 +125,7 @@ Route::group(['middleware' => 'auth'], function () {
 
         // OPERATIONAL COST
         // Route::get('operational-cost/create', [OperationalCostController::class, 'create']);
+        Route::get('operational-cost/{id}/view', [OperationalCostController::class, 'view']);
         Route::post('operational-cost/update', [OperationalCostController::class, 'update']);
         Route::get('operational-cost/{id}/edit', [OperationalCostController::class, 'edit']);
         Route::resource('operational-cost', OperationalCostController::class);

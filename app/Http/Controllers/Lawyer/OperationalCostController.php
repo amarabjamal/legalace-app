@@ -56,6 +56,16 @@ class OperationalCostController extends Controller
         ]);
     }
 
+    public function view($id)
+    {
+        $costs_item = OperationalCost::query()
+            ->where('id', 'like', "%{$id}%")
+            ->first();
+        return Inertia::render('Lawyer/OperationalCost/View', [
+            'costs_item' => $costs_item
+        ]);
+    }
+
     public function create()
     {
         return Inertia::render('Lawyer/OperationalCost/Create');
@@ -203,8 +213,8 @@ class OperationalCostController extends Controller
     {
         $operationalCost = OperationalCost::findOrFail($id);
 
-        $itemInFirm = FirmAccount::query()
-            ->where('transaction_id', 'like', "{operationalCost->transaction_id}")
+        FirmAccount::query()
+            ->where('transaction_id', 'like', '%' . $operationalCost->transaction_id . '%')
             ->delete();
 
         $operationalCost->delete();

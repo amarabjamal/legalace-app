@@ -1,5 +1,5 @@
 <template>
-    <Head title="Transaction" />
+    <Head title="Operational Cost" />
 
     <page-heading :page_title="page_title" :breadcrumbs="breadcrumbs" />
 
@@ -12,25 +12,15 @@
             >
                 <dt class="text-sm font-medium text-gray-500">Date</dt>
                 <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-                    {{ clientAccounts.date }}
+                    {{ costs_item.date }}
                 </dd>
             </div>
             <div
                 class="bg-white border-b px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6"
             >
-                <dt class="text-sm font-medium text-gray-500">Description</dt>
+                <dt class="text-sm font-medium text-gray-500">Details</dt>
                 <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-                    {{ formatString(clientAccounts.description) }}
-                </dd>
-            </div>
-            <div
-                class="bg-white border-b px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6"
-            >
-                <dt class="text-sm font-medium text-gray-500">
-                    Transaction Type
-                </dt>
-                <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-                    {{ formatString(clientAccounts.transaction_type) }}
+                    {{ formatString(costs_item.details) }}
                 </dd>
             </div>
             <div
@@ -40,31 +30,15 @@
                     Document Number
                 </dt>
                 <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-                    {{ clientAccounts.document_number }}
+                    {{ costs_item.document_number }}
                 </dd>
             </div>
             <div
                 class="bg-white border-b px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6"
             >
-                <dt class="text-sm font-medium text-gray-500">Document</dt>
+                <dt class="text-sm font-medium text-gray-500">Amount</dt>
                 <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-                    {{ clientAccounts.upload }}
-                </dd>
-            </div>
-            <div
-                class="bg-white border-b px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6"
-            >
-                <dt class="text-sm font-medium text-gray-500">Funds In</dt>
-                <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-                    RM {{ formatToTwoDecimal(clientAccounts.debit) }}
-                </dd>
-            </div>
-            <div
-                class="bg-white border-b px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6"
-            >
-                <dt class="text-sm font-medium text-gray-500">Funds Out</dt>
-                <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-                    RM {{ formatToTwoDecimal(clientAccounts.credit) }}
+                    RM {{ formatToTwoDecimal(costs_item.amount) }}
                 </dd>
             </div>
             <div
@@ -73,20 +47,28 @@
                 <dt class="text-sm font-medium text-gray-500">
                     Payment Method
                 </dt>
-                <dd
-                    class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2 whitespace-pre-wrap"
-                >
-                    {{ formatString(clientAccounts.payment_method) }}
+                <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+                    {{ formatString(costs_item.payment_method) }}
+                </dd>
+            </div>
+            <!-- <div
+                class="bg-white border-b px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6"
+            >
+                <dt class="text-sm font-medium text-gray-500">Company Name</dt>
+                <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+                    {{ costs_item.company_name }}
                 </dd>
             </div>
             <div
                 class="bg-white border-b px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6"
             >
-                <dt class="text-sm font-medium text-gray-500">Reference</dt>
+                <dt class="text-sm font-medium text-gray-500">
+                    Client Account
+                </dt>
                 <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-                    {{ clientAccounts.reference }}
+                    {{ costs_item.linked_client_account }}
                 </dd>
-            </div>
+            </div> -->
         </dl>
 
         <div
@@ -95,7 +77,9 @@
             <!-- <Link as="button" :href="`/admin/bank-accounts/${bank_account.id}/edit`" class="btn-primary">
                 Edit
             </Link>  -->
-            <button @click="goBack">Back</button>
+            <Link v-on:click="goBack()" as="button" class="btn-cancel">
+                Back
+            </Link>
         </div>
     </div>
 </template>
@@ -123,27 +107,29 @@ export default {
     },
     layout: Layout,
     props: {
-        clientAccounts: Object,
-        acc_id: Object,
+        costs_item: Object,
     },
     data() {
         return {
-            page_title: "Transaction",
+            page_title: "Operational Cost",
             breadcrumbs: [
                 { link: "/lawyer/dashboard", label: "Lawyer" },
-                { link: "/lawyer/client-accounts", label: "Client Account" },
+                {
+                    link: "/lawyer/operational-cost",
+                    label: "Operational Costs",
+                },
                 { link: null, label: "View" },
             ],
         };
     },
     methods: {
-        store() {
-            if (this.form.isDirty) {
-                this.form.post("/lawyer/client-accounts");
-            } else {
-                alert("You need to fill in the form first.");
-            }
-        },
+        // store() {
+        //     if (this.form.isDirty) {
+        //         this.form.post("/lawyer/firm-accounts");
+        //     } else {
+        //         alert("You need to fill in the form first.");
+        //     }
+        // },
         goBack() {
             window.history.go(-1);
         },
