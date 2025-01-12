@@ -20,7 +20,7 @@ class FirmAccountController extends Controller
         $accList = DB::table('firm_account');
 
         $firmAccountList = BankAccounts::query()
-            ->rightJoin('firm_account as b', 'bank_account_type_id', '=', 'b.bank_account_id')
+            ->rightJoin('firm_account as b', 'bank_accounts.id', '=', 'b.bank_account_id')
             ->select(
                 'bank_accounts.id',
                 'label',
@@ -278,13 +278,31 @@ class FirmAccountController extends Controller
 
         $acc = DB::table('firm_account')->sum('balance');
 
+        // Get the selected month from the request
+        $selectedMonth = $request->input('month', 'this_month'); // Default to 'this_month'
+
+        // Calculate the start and end dates based on the selected month
+        if ($selectedMonth === 'this_month') {
+            $startDate = now()->startOfMonth();
+            $endDate = now()->endOfMonth();
+        } else {
+            $startDate = now()->subMonth()->startOfMonth();
+            $endDate = now()->subMonth()->endOfMonth();
+        }
+
         $funds_in = DB::table('firm_account')
             ->where('bank_account_id', 'like', "%{$acc_number}")
             ->where('transaction_type', 'like', 'funds in')
+            ->whereBetween('date', [$startDate, $endDate])
+            // ->whereMonth('date', now()->month) // Filter by current month
+            // ->whereYear('date', now()->year)   // Filter by current year
             ->sum('debit');
         $funds_out = DB::table('firm_account')
             ->where('bank_account_id', 'like', "%{$acc_number}")
             ->where('transaction_type', 'like', 'funds out')
+            ->whereBetween('date', [$startDate, $endDate])
+            // ->whereMonth('date', now()->month) // Filter by current month
+            // ->whereYear('date', now()->year)   // Filter by current year
             ->sum('credit');
 
         return Inertia::render('Lawyer/FirmAccount/Details', [
@@ -295,6 +313,7 @@ class FirmAccountController extends Controller
             'bank_accounts' => $bankAccount,
             'funds_in' => $funds_in,
             'funds_out' => $funds_out,
+            'selectedMonth' => $selectedMonth,
         ]);
     }
 

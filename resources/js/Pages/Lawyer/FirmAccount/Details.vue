@@ -67,6 +67,10 @@
             <div class="px-4 mb-2 border-b bg-gray-50 flex justify-between items-center">
                 <h4 class="py-2 text-sm uppercase font-semibold text-gray-500 w-1/2 truncate">This Month
                 </h4>
+                <select v-model="selectedMonth" @change="filterByMonth" class="px-4 py-2 border rounded-md">
+                    <option value="this_month">This Month</option>
+                    <option value="last_month">Last Month</option>
+                </select>
                 <!-- <span :class="accountTypeClass(bank_account.account_type)">{{ bank_account.account_type }}</span> -->
             </div>
             <p class="text-gray-600 p-2 text-sm">
@@ -189,8 +193,8 @@
                             class="ml-3 font-medium text-blue-600 hover:underline">Edit</Link> -->
                         <Link v-if="acc.transaction_id === '' || acc.transaction_id === null" :href="`/lawyer/firm-accounts/${acc_id}/${acc.id}/edit`"
                             class="ml-3 font-medium text-blue-600 hover:underline">Edit</Link>
-                        <Link @click="deleteAcc(acc)" as="button" class="ml-3 font-medium text-red-600 hover:underline">
-                        Delete</Link>
+                        <button @click="showDeleteConfirmation(acc)" as="button" class="ml-3 font-medium text-red-600 hover:underline">
+                        Delete</button>
                     </td>
                 </tr>
             </tbody>
@@ -199,6 +203,10 @@
     <!-- Paginator -->
     <Pagination :links="firmAccounts.links" :total="firmAccounts.total" :from="firmAccounts.from"
         :to="firmAccounts.to" />
+
+    <!-- Modal Component -->
+    <ConfirmationModel :showModal="showDeleteModal" @confirm="handleDelete" @cancel="cancelDelete" />
+
 </template>
 
 <script>
@@ -210,6 +218,7 @@ import Icon from '../../../Shared/Icon';
 import { Inertia } from "@inertiajs/inertia";
 import throttle from 'lodash/throttle';
 import { ref, watch } from "vue";
+import ConfirmationModel from "../../../Shared/ConfirmationModel.vue";
 
 
 export default {
@@ -231,12 +240,21 @@ export default {
             form: {
                 search: this.filters.search,
             },
-            page_title: 'Firm Accounts',
+            page_title: 'Firm Account',
+            page_subtitle: 'Manage your Firm Account',
             breadcrumbs: [
                 { link: '/lawyer/dashboard', label: 'Lawyer' },
-                { link: null, label: 'Firm Accounts' },
+                { link: '/lawyer/firm-accounts', label: 'Firm Account' },
+                ...this.bank_accounts.map(account => ({
+                link: `/lawyer/firm-accounts/${account.id}/detail`,
+                label: account.label,
+                })),
             ],
+            showDeleteModal: false,
+            selectedAcc: null,
+            selectedMonth: this.selectedMonth || 'this_month',
         }
+
     },
     props: {
         firmAccounts: Object,
@@ -247,9 +265,13 @@ export default {
         filters: Object,
         funds_in: Object,
         funds_out: Object,
+        selectedMonth: String,
+    },
+    mounted() {
+        console.log("Bank Accounts in mounted:", this.bank_accounts);
     },
     // components: { Head, Pagination, ref },
-    components: { SearchFilter, Icon, Pagination, ref },
+    components: { SearchFilter, Icon, Pagination, ref, ConfirmationModel },
     layout: Layout,
     methods: {
         deleteAcc(acc) {
@@ -275,6 +297,26 @@ export default {
             } else {
                 return num.toFixed(2); // Formats the number to 2 decimal places
             }
+        },
+        showDeleteConfirmation(acc) {
+            this.selectedAcc = acc;
+            this.showDeleteModal = true;
+        },
+        handleDelete() {
+            if (this.selectedAcc) {
+                Inertia.delete(`/lawyer/firm-accounts/${this.selectedAcc.id}`);
+                this.showDeleteModal = false;
+            }
+        },
+        cancelDelete() {
+            this.showDeleteModal = false;
+        },
+        filterByMonth() {
+            // Send the selected month value to the backend
+            Inertia.get(`/lawyer/firm-accounts/${this.bank_accounts[0].id}/detail`, { month: this.selectedMonth }, {
+                preserveState: true,
+                replace: true,
+            });
         },
     },
 };

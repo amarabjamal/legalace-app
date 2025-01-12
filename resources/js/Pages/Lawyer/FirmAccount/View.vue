@@ -130,10 +130,14 @@ export default {
     },
     data() {
         return {
-            page_title: "Transaction",
+            page_title: "View Transaction",
             breadcrumbs: [
                 { link: "/lawyer/dashboard", label: "Lawyer" },
                 { link: "/lawyer/firm-accounts", label: "Firm Account" },
+                // ...this.bank_accounts.map((account) => ({
+                //     link: `/lawyer/firm-accounts/${account.id}/detail`,
+                //     label: account.label,
+                // })),
                 { link: null, label: "View" },
             ],
         };

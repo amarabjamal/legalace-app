@@ -107,7 +107,9 @@
     </div>
 
     <div class="flex items-center justify-between mb-6">
-        <search-filter v-model="form.search" class="mr-4 w-full max-w-md" @reset="reset"></search-filter>   
+        <!-- <search-filter v-model="form.search" class="mr-4 w-full max-w-md" @reset="reset"></search-filter> -->
+         <!-- Spacer to replace search-filter -->
+        <div class="mr-4 w-full max-w-md"></div>
         <div>Filter By:</div>     
         <button class="btn-primary" v-on:click="filterList(0)">
             Funds Out
@@ -184,8 +186,8 @@
                             class="font-medium text-blue-600 hover:underline">View</Link>
                         <Link :href="`/lawyer/client-accounts/${acc_id}/${acc.id}/edit`"
                             class="ml-3 font-medium text-blue-600 hover:underline">Edit</Link>
-                        <Link @click="deleteAcc(acc)" as="button" class="ml-3 font-medium text-red-600 hover:underline">
-                        Delete</Link>
+                        <button @click="showDeleteConfirmation(acc)" as="button" class="ml-3 font-medium text-red-600 hover:underline">
+                        Delete</button>
                     </td>
                 </tr>
             </tbody>
@@ -194,6 +196,10 @@
     <!-- Paginator -->
     <Pagination :links="clientAccounts.links" :total="clientAccounts.total" :from="clientAccounts.from"
         :to="clientAccounts.to" />
+
+    <!-- Modal Component -->
+    <ConfirmationModel :showModal="showDeleteModal" @confirm="handleDelete" @cancel="cancelDelete" />
+
 </template>
 
 <script>
@@ -205,6 +211,8 @@ import Icon from '../../../Shared/Icon';
 import { Inertia } from "@inertiajs/inertia";
 import throttle from 'lodash/throttle';
 import { ref, watch } from "vue";
+import ConfirmationModel from "../../../Shared/ConfirmationModel.vue";
+
 
 
 export default {
@@ -231,6 +239,8 @@ export default {
                 { link: '/lawyer/dashboard', label: 'Lawyer' },
                 { link: null, label: 'Client Accounts' },
             ],
+            showDeleteModal: false,
+            selectedAcc: null,
         }
     },
     props: {
@@ -244,7 +254,7 @@ export default {
         funds_out: Object,
     },
     // components: { Head, Pagination, ref },
-    components: { SearchFilter, Icon, Pagination, ref },
+    components: { SearchFilter, Icon, Pagination, ref, ConfirmationModel },
     layout: Layout,
     methods: {
         deleteAcc(acc) {
@@ -270,6 +280,19 @@ export default {
             } else {
                 return num.toFixed(2); // Formats the number to 2 decimal places
             }
+        },
+        showDeleteConfirmation(acc) {
+            this.selectedAcc = acc;
+            this.showDeleteModal = true;
+        },
+        handleDelete() {
+            if (this.selectedAcc) {
+                Inertia.delete(`/lawyer/firm-accounts/${this.selectedAcc.id}`);
+                this.showDeleteModal = false;
+            }
+        },
+        cancelDelete() {
+            this.showDeleteModal = false;
         },
     },
 };
