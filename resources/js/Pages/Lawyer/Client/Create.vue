@@ -106,13 +106,13 @@
                             label="Outstanding Balance"
                             required
                         /> -->
-                        <div v-if="errors">
+                        <!-- <div v-if="errors">
                             <ul>
                                 <li v-for="(error, key) in errors" :key="key">
                                     {{ error }}
                                 </li>
                             </ul>
-                        </div>
+                        </div> -->
                     </div>
                 </div>
             </div>

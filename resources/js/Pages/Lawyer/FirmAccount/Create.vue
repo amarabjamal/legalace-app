@@ -119,6 +119,13 @@
                             label="Remarks"
                             required
                         />
+                        <!-- <div v-if="errors">
+                            <ul>
+                                <li v-for="(error, key) in errors" :key="key">
+                                    {{ error }}
+                                </li>
+                            </ul>
+                        </div> -->
                     </div>
                 </div>
             </div>
@@ -173,6 +180,7 @@ export default {
     props: {
         firmAccounts: Object,
         acc_number: Object,
+        errors: Object,
     },
     data() {
         return {
