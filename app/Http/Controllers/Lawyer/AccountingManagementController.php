@@ -15,6 +15,7 @@ use App\Models\FirmAccount;
 use App\Notifications\SubmitClaimVoucherNotification;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Request;
+use Illuminate\Http\Request as RequestHTTP;
 use Inertia\Inertia;
 
 class AccountingManagementController extends Controller
@@ -131,12 +132,36 @@ class AccountingManagementController extends Controller
         return back()->with('successMessage', 'The claim voucher has been submitted to ' . $claim_voucher->approver->name . '.');
     }
 
-    public function profitAndLoss()
+    public function profitAndLoss(RequestHTTP $request)
     {
+        // Get the selected period from the request
+        $selectedPeriod = $request->input('period', 'this_month');
+        // dd($selectedPeriod);
+
+        // // Get the request data
+        // $requestData = $request->all();
+
+        // // Check if the period field exists in the request data
+        // if (!isset($requestData['period'])) {
+        //     // If the period field does not exist, use the default value
+        //     $selectedPeriod = 'last_month';
+        // } else {
+        //     // If the period field exists, use its value
+        //     $selectedPeriod = $requestData['period'];
+        // }
+        // dd($request->all());
+        // Get the date range
+        $dateRange = $this->getDateRange($selectedPeriod);
+        $startDate = $dateRange['startDate'];
+        $endDate = $dateRange['endDate'];
+
+        // dd($startDate . ' - ' . $endDate);
+
         $totalOperatingIncome = FirmAccount::query()
             ->where('description', 'like', 'payment_received')
             // ->where('description', 'like', '%payment%')
             ->where('transaction_type', 'like', 'funds in')
+            ->whereBetween('date', [$startDate->format('Y-m-d'), $endDate->format('Y-m-d')])
             ->sum('debit');
 
         $listGroupOperatingIncome = FirmAccount::query()
@@ -152,6 +177,7 @@ class AccountingManagementController extends Controller
             ->where('description', 'like', 'payment_received')
             // ->where('description', 'like', '%payment%')
             ->where('firm_account.transaction_type', 'like', 'funds in')
+            ->whereBetween('date', [$startDate, $endDate])
             ->groupBy('firm_account.bank_account_id', 'b.label', 'firm_account.description', 'firm_account.transaction_type')
             ->get();
 
@@ -165,6 +191,7 @@ class AccountingManagementController extends Controller
                 'details',
                 DB::raw('SUM(amount) AS amount'),
             )
+            ->whereBetween('date', [$startDate, $endDate])
             ->groupby('details')
             ->get();
 
@@ -172,17 +199,21 @@ class AccountingManagementController extends Controller
 
         $totalOperatingExpense = $totalEmployeeSalary + $totalListOperatingExpense;
 
+        //Start of Non-Operating Transaction
         $totalNonOperatingIncome = FirmAccount::query()
             ->where('description', 'like', 'investing')
             ->where('transaction_type', 'like', 'funds in')
+            ->whereBetween('date', [$startDate, $endDate])
             ->groupBy('bank_account_id', 'description', 'transaction_type')
             ->sum('debit');
 
         $totalNonOperatingExpense = FirmAccount::query()
             ->where('description', 'like', 'investing')
             ->where('transaction_type', 'like', 'funds out')
+            ->whereBetween('date', [$startDate, $endDate])
             ->groupBy('bank_account_id', 'description', 'transaction_type')
             ->sum('credit');
+        //End of Non-Operating Transaction
 
         $netProfit = ($totalOperatingIncome + $totalNonOperatingIncome) - ($totalOperatingExpense - $totalNonOperatingExpense);
 
@@ -195,6 +226,9 @@ class AccountingManagementController extends Controller
             'totalNonOperatingIncome' => $totalNonOperatingIncome,
             'totalNonOperatingExpense' => $totalNonOperatingExpense,
             'netProfit' => $netProfit,
+            'selectedPeriod' => $selectedPeriod,
+            'startDate' => $startDate->format('j F Y'),
+            'endDate' => $endDate->format('j F Y'),
         ];
     }
 
@@ -356,11 +390,65 @@ class AccountingManagementController extends Controller
     }
 
 
-    public function profit_and_loss()
+    public function profit_and_loss(RequestHTTP $request)
     {
         return Inertia::render(
             'Lawyer/AccountingManagement/Profit',
-            self::profitAndLoss()
+            self::profitAndLoss($request)
         );
+    }
+
+    private function getDateRange($selectedPeriod)
+    {
+        $startDate = now();
+        $endDate = now();
+
+        switch ($selectedPeriod) {
+            case 'this_month':
+                $startDate = now()->startOfMonth();
+                $endDate = now()->endOfMonth();
+                break;
+            case 'last_month':
+                $startDate = now()->subMonth()->startOfMonth();
+                $endDate = now()->subMonth()->endOfMonth();
+                break;
+            case 'next_month':
+                $startDate = now()->addMonth()->startOfMonth();
+                $endDate = now()->addMonth()->endOfMonth();
+                break;
+            case 'last_3_months':
+                $startDate = now()->subMonths(3)->startOfMonth();
+                $endDate = now()->subMonth()->endOfMonth(); // End of the previous month
+                break;
+            case 'last_6_months':
+                $startDate = now()->subMonths(6)->startOfMonth();
+                $endDate = now()->subMonth()->endOfMonth(); // End of the previous month
+                break;
+            case 'next_3_months':
+                $startDate = now()->startOfMonth();
+                $endDate = now()->addMonths(3)->endOfMonth();
+                break;
+            case 'next_6_months':
+                $startDate = now()->startOfMonth();
+                $endDate = now()->addMonths(6)->endOfMonth();
+                break;
+            case 'last_year':
+                $startDate = now()->subYear()->startOfYear();
+                $endDate = now()->subYear()->endOfYear();
+                break;
+            case 'next_year':
+                $startDate = now()->addYear()->startOfYear();
+                $endDate = now()->addYear()->endOfYear();
+                break;
+            case 'this_year':
+                $startDate = now()->startOfYear();
+                $endDate = now()->endOfYear();
+                break;
+        }
+
+        return [
+            'startDate' => $startDate,
+            'endDate' => $endDate,
+        ];
     }
 }
