@@ -65,6 +65,34 @@ class OperationalCostController extends Controller
             'costs_item' => $costs_item
         ]);
     }
+    public function downloadFile($id)
+    {
+        try {
+            // Find the firm account record
+            $costs_item = OperationalCost::findOrFail($id);
+
+            // Construct the full file path
+            $filePath = storage_path('app/' . $costs_item->upload);
+            $fileName = basename($costs_item->upload);
+
+            // Check if the file exists
+            if (!file_exists($filePath)) {
+                throw new \Exception('File not found');
+            }
+
+            // Return the file as a download response
+            return response()->download($filePath, $fileName);
+        } catch (\Exception $e) {
+            // Log the error
+            // Log::error($e->getMessage());
+
+            // Return a JSON response with the error message
+            // Return an Inertia response with the error message
+            return Inertia::render('Error', [
+                'error' => $e->getMessage(),
+            ]);
+        }
+    }
 
     public function create()
     {

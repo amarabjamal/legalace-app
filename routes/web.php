@@ -114,6 +114,7 @@ Route::group(['middleware' => 'auth'], function () {
         // DOWNLOAD UPLOADED FILE
         Route::get('/firm-account/download/{id}', [FirmAccountController::class, 'downloadFile'])->name('lawyer.firm-account.download');
         Route::get('/client-account/download/{id}', [ClientAccountController::class, 'downloadFile'])->name('lawyer.client-account.download');
+        Route::get('/costs_item/download/{id}', [OperationalCostController::class, 'downloadFile'])->name('lawyer.costs_item.download');
 
         // CLIENT ACCOUNTS
         Route::get('client-accounts/{account_number}/detail', [ClientAccountController::class, 'detail']);

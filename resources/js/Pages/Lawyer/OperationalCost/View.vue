@@ -36,6 +36,24 @@
             <div
                 class="bg-white border-b px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6"
             >
+                <dt class="text-sm font-medium text-gray-500">Document</dt>
+                <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+                    <Link
+                        v-if="
+                            costs_item.upload != null && costs_item.upload != ''
+                        "
+                        class="text-blue-700 btn btn-blue-500 hover:btn-blue-700 transition duration-300 ease-in-out hover:shadow-md hover:shadow-blue-500/50"
+                        :href="`/lawyer/costs_item/download/${costs_item.id}`"
+                        @click.prevent="downloadFile(costs_item.id)"
+                        >Download Document</Link
+                    >
+                    <p v-else>No Document was uploaded</p>
+                    <!-- {{ firmAccounts.upload }} -->
+                </dd>
+            </div>
+            <div
+                class="bg-white border-b px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6"
+            >
                 <dt class="text-sm font-medium text-gray-500">Amount</dt>
                 <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
                     RM {{ formatToTwoDecimal(costs_item.amount) }}
@@ -94,6 +112,7 @@ import FileInput from "../../../Shared/FileInput";
 import { Switch } from "@headlessui/vue";
 import { Head } from "@inertiajs/inertia-vue3";
 import { useForm } from "@inertiajs/inertia-vue3";
+import axios from "axios";
 
 export default {
     components: {
@@ -145,6 +164,31 @@ export default {
             } else {
                 return num.toFixed(2); // Formats the number to 2 decimal places
             }
+        },
+        downloadFile(id) {
+            axios
+                .get(`/lawyer/costs_item/download/${id}`, {
+                    responseType: "blob",
+                })
+                .then((response) => {
+                    const file = new Blob([response.data], {
+                        type: response.headers["content-type"],
+                    });
+                    const fileUrl = URL.createObjectURL(file);
+                    const a = document.createElement("a");
+                    a.href = fileUrl;
+                    a.download = response.headers["content-disposition"]
+                        .split("filename=")[1]
+                        .trim('"');
+                    a.click();
+                    URL.revokeObjectURL(fileUrl);
+                })
+                .catch((error) => {
+                    console.error(`Error downloading file: ${error.message}`);
+                    // Prevent the redirect
+                    window.history.go(-1);
+                    alert(`Error downloading file: ${error.message}`);
+                });
         },
     },
 };
