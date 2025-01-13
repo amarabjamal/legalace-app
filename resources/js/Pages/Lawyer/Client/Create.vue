@@ -46,7 +46,7 @@
                         />
                         <text-input
                             v-model="form.company_address"
-                            :error="form.errors.company_name"
+                            :error="form.errors.company_address"
                             label="Company Address"
                             required
                         />
@@ -57,9 +57,9 @@
                     <h2 class="text-base font-semibold leading-7 text-gray-900">
                         Identity Details
                     </h2>
-                    <p class="mt-1 text-sm leading-6 text-gray-600">
+                    <!-- <p class="mt-1 text-sm leading-6 text-gray-600">
                         This information is only visible to admin.
-                    </p>
+                    </p> -->
 
                     <div
                         class="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 md:grid-cols-2"
@@ -106,6 +106,13 @@
                             label="Outstanding Balance"
                             required
                         /> -->
+                        <div v-if="errors">
+                            <ul>
+                                <li v-for="(error, key) in errors" :key="key">
+                                    {{ error }}
+                                </li>
+                            </ul>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -152,6 +159,7 @@ export default {
     layout: Layout,
     props: {
         clients: Object,
+        errors: Object,
     },
     data() {
         return {
@@ -169,6 +177,7 @@ export default {
                 phone_number: "",
                 company_name: "",
                 company_address: "",
+                address: "",
                 outstanding_balance: "",
                 linked_client_account: "",
             }),

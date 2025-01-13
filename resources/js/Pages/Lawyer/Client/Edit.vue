@@ -46,7 +46,7 @@
                         />
                         <text-input
                             v-model="form.company_address"
-                            :error="form.errors.company_name"
+                            :error="form.errors.company_address"
                             label="Company Address"
                             required
                         />
@@ -57,9 +57,9 @@
                     <h2 class="text-base font-semibold leading-7 text-gray-900">
                         Identity Details
                     </h2>
-                    <p class="mt-1 text-sm leading-6 text-gray-600">
+                    <!-- <p class="mt-1 text-sm leading-6 text-gray-600">
                         This information is only visible to admin.
-                    </p>
+                    </p> -->
 
                     <div
                         class="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 md:grid-cols-2"
@@ -98,12 +98,12 @@
                                 {{ client.label }}
                             </option>
                         </select-input>
-                        <text-input
+                        <!-- <text-input
                             v-model="form.outstanding_balance"
                             :error="form.errors.outstanding_balance"
                             label="Outstanding Balance"
                             required
-                        />
+                        /> -->
                     </div>
                 </div>
             </div>
