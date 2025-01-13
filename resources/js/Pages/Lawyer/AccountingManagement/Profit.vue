@@ -196,6 +196,7 @@ export default {
         return {
             page_title: "Profit and Loss statement",
             breadcrumbs: [
+                { link: "/lawyer", label: "Lawyer" },
                 {
                     link: "/lawyer/accounting-management",
                     label: "Accounting Management",
