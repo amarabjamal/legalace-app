@@ -25,11 +25,12 @@ class ClientAccount extends Model
         'document_number',
         'upload',
         'reference',
+        'transaction_id',
         'created_at',
         'updated_at',
     ];
 
-    public const UPLOAD_PATH = 'files/case-files/document-upload/';
+    public const UPLOAD_PATH = 'files/case-files/document-upload';
 
     protected $hidden = [
         'created_at',

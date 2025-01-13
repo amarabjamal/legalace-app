@@ -48,9 +48,14 @@
                             label="Document number"
                             required
                         />
-                        <div v-if="this.firmAccounts.upload !== null">
+                        <div
+                            v-if="
+                                this.clientAccounts.upload !== null &&
+                                this.clientAccounts.upload !== ''
+                            "
+                        >
                             <text-input
-                                v-model="this.firmAccounts.upload"
+                                v-model="this.clientAccounts.upload"
                                 class="pb-8 pr-6 w-full lg:w-1/2"
                                 value="test"
                                 label="Upload Document"
@@ -119,14 +124,14 @@
                     type="submit"
                     >Update</loading-button
                 >
-                <Button
+                <Link
                     v-on:click="goBack()"
                     as="button"
                     class="btn-cancel"
                     :disabled="form.processing"
                 >
                     Cancel
-                </Button>
+                </Link>
             </div>
         </form>
     </div>
@@ -180,7 +185,7 @@ export default {
                         : this.clientAccounts.credit,
                 payment_method: this.clientAccounts.payment_method,
                 reference: this.clientAccounts.reference,
-                existingDocument: this.firmAccounts.upload,
+                existingDocument: this.clientAccounts.upload,
             }),
         };
     },
@@ -193,7 +198,7 @@ export default {
                 ) {
                     alert("You need to attach the document first.");
                 } else {
-                    this.form.put("/lawyer/client-accounts/update");
+                    this.form.post("/lawyer/client-accounts/update");
                 }
             } else {
                 alert("You need to fill in the form first.");

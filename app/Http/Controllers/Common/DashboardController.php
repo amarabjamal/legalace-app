@@ -68,7 +68,28 @@ class DashboardController extends Controller
             ->get();
 
 
-        $bankAccount = BankAccounts::get();
+        $firmAccounts = BankAccounts::query()
+            ->rightJoin('firm_account as b', 'bank_accounts.id', '=', 'b.bank_account_id')
+            ->select(
+                'label',
+                DB::raw('(IFNULL(SUM(debit), 0) - IFNULL(SUM(credit), 0)) + IFNULL(opening_balance, 0) AS opening_balance'),
+                DB::raw('IFNULL(SUM(debit), 0) AS total_debit'),
+                DB::raw('IFNULL(SUM(credit), 0) AS total_credit')
+            )
+            ->groupBy('label', 'opening_balance');
+
+        $clientAccounts = BankAccounts::query()
+            ->rightJoin('client_accounts as b', 'bank_accounts.id', '=', 'b.bank_account_id')
+            ->select(
+                'label',
+                DB::raw('(IFNULL(SUM(debit), 0) - IFNULL(SUM(credit), 0)) + IFNULL(opening_balance, 0) AS opening_balance'),
+                DB::raw('IFNULL(SUM(debit), 0) AS total_debit'),
+                DB::raw('IFNULL(SUM(credit), 0) AS total_credit')
+            )
+            ->groupBy('label', 'opening_balance');
+
+        // Combine both queries with unionAll
+        $bankAccount = $firmAccounts->unionAll($clientAccounts)->get();
 
         return Inertia::render('Lawyer/Dashboard', [
             'date' => $date,

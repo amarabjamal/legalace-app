@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 use Inertia\Inertia;
 use App\Models\FirmAccount;
 use App\Models\FirmAccountList;
-use App\Models\BankAccount;
+use App\Models\BankAccounts;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Request as FacadesRequest;
@@ -19,20 +19,21 @@ class FirmAccountController extends Controller
     {
         $accList = DB::table('firm_account');
 
-        $firmAccountList = FirmAccountList::query()
-            ->where('bank_account_type_id', 'like', '2')
-            ->paginate(10)
-            ->withQueryString()
-            ->through(fn($accList) => [
-                'id' => $accList->id,
-                'label' => $accList->label,
-                'account_name' => $accList->account_name,
-                'bank_name' => $accList->bank_name,
-                'account_number' => $accList->account_number,
-                'opening_balance' => $accList->opening_balance,
-                'swift_code' => $accList->swift_code,
-            ]);
-
+        $firmAccountList = BankAccounts::query()
+            ->rightJoin('firm_account as b', 'bank_accounts.id', '=', 'b.bank_account_id')
+            ->select(
+                'bank_accounts.id',
+                'label',
+                DB::raw('(IFNULL(SUM(debit), 0) - IFNULL(SUM(credit), 0)) + IFNULL(opening_balance, 0) AS opening_balance'),
+                DB::raw('IFNULL(SUM(debit), 0) AS total_debit'),
+                DB::raw('IFNULL(SUM(credit), 0) AS total_credit'),
+                'account_name',
+                'bank_name',
+                'account_number',
+                'swift_code',
+            )
+            ->groupBy('id', 'label', 'opening_balance', 'account_name', 'bank_name', 'account_number', 'swift_code')
+            ->get();
 
         return Inertia::render('Lawyer/FirmAccount/Index', [
             'firmAccountList' => $firmAccountList,
@@ -161,7 +162,8 @@ class FirmAccountController extends Controller
 
         try {
             $firmAccount = FirmAccount::findOrFail($request->id); // Find the record by ID
-            if ($request->existingDocument != null && $request->upload == null) {
+            // if ($request->existingDocument != null && $request->upload == null) {
+            if ($request->upload == null) {
                 if (str_contains("funds in", $request->transaction_type)) {
                     $firmAccount->update([
                         'date' => $request->date,
@@ -238,23 +240,26 @@ class FirmAccountController extends Controller
         $filters = FacadesRequest::all(['search']);
         $accList = DB::table('firm_account');
 
-        $bankAccount = FirmAccountList::query()
-            ->where('id', 'like', "%{$acc_number}%")
-            ->paginate(10)
-            ->withQueryString()
-            ->through(fn($accList) => [
-                'id' => $accList->id,
-                'label' => $accList->label,
-                'account_name' => $accList->account_name,
-                'bank_name' => $accList->bank_name,
-                'account_number' => $accList->account_number,
-                'opening_balance' => $accList->opening_balance,
-                'swift_code' => $accList->swift_code,
-                'payment_method' => $accList->payment_menthod,
-            ]);
+        $bankAccount = BankAccounts::query()
+            ->rightJoin('firm_account as b', 'bank_account_type_id', '=', 'b.bank_account_id')
+            ->select(
+                'bank_accounts.id',
+                'label',
+                DB::raw('(IFNULL(SUM(debit), 0) - IFNULL(SUM(credit), 0)) + IFNULL(opening_balance, 0) AS opening_balance'),
+                DB::raw('IFNULL(SUM(debit), 0) AS total_debit'),
+                DB::raw('IFNULL(SUM(credit), 0) AS total_credit'),
+                'account_name',
+                'bank_name',
+                'account_number',
+                'swift_code',
+            )
+            ->where('bank_accounts.id', 'like', "%{$acc_number}%")
+            ->groupBy('id', 'label', 'opening_balance', 'account_name', 'bank_name', 'account_number', 'swift_code')
+            ->get();
 
         $firmAccounts = FirmAccount::query()
             ->where('bank_account_id', 'like', "%{$acc_number}%")
+            ->orWhere('description', 'like', "%payment%")
             ->paginate(10)
             ->withQueryString()
             ->through(fn($acc) => [
@@ -267,18 +272,75 @@ class FirmAccountController extends Controller
                 'debit' => $acc->debit,
                 'credit' => $acc->credit,
                 'balance' => $acc->balance,
+                'transaction_id' => $acc->transaction_id,
             ]);
 
 
         $acc = DB::table('firm_account')->sum('balance');
 
+        // Get the selected period from the request
+        $selectedPeriod = $request->input('period', 'this_month'); // Default to 'this_month'
+
+        // Calculate the start and end dates based on the selected period
+        $startDate = now();
+        $endDate = now();
+
+        switch ($selectedPeriod) {
+            case 'this_month':
+                $startDate = now()->startOfMonth();
+                $endDate = now()->endOfMonth();
+                break;
+            case 'last_month':
+                $startDate = now()->subMonth()->startOfMonth();
+                $endDate = now()->subMonth()->endOfMonth();
+                break;
+            case 'next_month':
+                $startDate = now()->addMonth()->startOfMonth();
+                $endDate = now()->addMonth()->endOfMonth();
+                break;
+            case 'last_3_months':
+                $startDate = now()->subMonths(3)->startOfMonth();
+                $endDate = now()->subMonth()->endOfMonth();     // End of the previous month
+                break;
+            case 'last_6_months':
+                $startDate = now()->subMonths(6)->startOfMonth();
+                $endDate = now()->subMonth()->endOfMonth();     // End of the previous month
+                break;
+            case 'next_3_months':
+                $startDate = now()->startOfMonth();
+                $endDate = now()->addMonths(3)->endOfMonth();
+                break;
+            case 'next_6_months':
+                $startDate = now()->startOfMonth();
+                $endDate = now()->addMonths(6)->endOfMonth();
+                break;
+            case 'last_year':
+                $startDate = now()->subYear()->startOfYear();
+                $endDate = now()->subYear()->endOfYear();
+                break;
+            case 'next_year':
+                $startDate = now()->addYear()->startOfYear();
+                $endDate = now()->addYear()->endOfYear();
+                break;
+            case 'this_year':
+                $startDate = now()->startOfYear();
+                $endDate = now()->endOfYear();
+                break;
+        }
+
         $funds_in = DB::table('firm_account')
             ->where('bank_account_id', 'like', "%{$acc_number}")
             ->where('transaction_type', 'like', 'funds in')
+            ->whereBetween('date', [$startDate, $endDate])
+            // ->whereMonth('date', now()->month) // Filter by current month
+            // ->whereYear('date', now()->year)   // Filter by current year
             ->sum('debit');
         $funds_out = DB::table('firm_account')
             ->where('bank_account_id', 'like', "%{$acc_number}")
             ->where('transaction_type', 'like', 'funds out')
+            ->whereBetween('date', [$startDate, $endDate])
+            // ->whereMonth('date', now()->month) // Filter by current month
+            // ->whereYear('date', now()->year)   // Filter by current year
             ->sum('credit');
 
         return Inertia::render('Lawyer/FirmAccount/Details', [
@@ -289,6 +351,7 @@ class FirmAccountController extends Controller
             'bank_accounts' => $bankAccount,
             'funds_in' => $funds_in,
             'funds_out' => $funds_out,
+            'selectedPeriod' => $selectedPeriod,
         ]);
     }
 
@@ -303,19 +366,22 @@ class FirmAccountController extends Controller
             $filter_type = "funds in";
         }
 
-        $bankAccount = FirmAccountList::query()
-            ->where('id', 'like', "%{$acc_number}%")
-            ->paginate(10)
-            ->withQueryString()
-            ->through(fn($accList) => [
-                'id' => $accList->id,
-                'label' => $accList->label,
-                'account_name' => $accList->account_name,
-                'bank_name' => $accList->bank_name,
-                'account_number' => $accList->account_number,
-                'opening_balance' => $accList->opening_balance,
-                'swift_code' => $accList->swift_code,
-            ]);
+        $bankAccount = BankAccounts::query()
+            ->rightJoin('firm_account as b', 'bank_account_type_id', '=', 'b.bank_account_id')
+            ->select(
+                'bank_accounts.id',
+                'label',
+                DB::raw('(IFNULL(SUM(debit), 0) - IFNULL(SUM(credit), 0)) + IFNULL(opening_balance, 0) AS opening_balance'),
+                DB::raw('IFNULL(SUM(debit), 0) AS total_debit'),
+                DB::raw('IFNULL(SUM(credit), 0) AS total_credit'),
+                'account_name',
+                'bank_name',
+                'account_number',
+                'swift_code',
+            )
+            ->where('bank_accounts.id', 'like', "%{$acc_number}%")
+            ->groupBy('id', 'label', 'opening_balance', 'account_name', 'bank_name', 'account_number', 'swift_code')
+            ->get();
 
         $firmAccounts = FirmAccount::query()
             ->where('bank_account_id', 'like', "%{$acc_number}%")
@@ -337,11 +403,13 @@ class FirmAccountController extends Controller
 
         $acc = DB::table('firm_account')->sum('balance');
         $funds_in = DB::table('firm_account')
+            ->where('bank_account_id', 'like', "%{$acc_number}")
             ->where('transaction_type', 'like', 'funds in')
-            ->sum('balance');
+            ->sum('debit');
         $funds_out = DB::table('firm_account')
+            ->where('bank_account_id', 'like', "%{$acc_number}")
             ->where('transaction_type', 'like', 'funds out')
-            ->sum('balance');
+            ->sum('credit');
 
         return Inertia::render('Lawyer/FirmAccount/Details', [
             'firmAccounts' => $firmAccounts,
@@ -366,6 +434,35 @@ class FirmAccountController extends Controller
             'acc_id' => $selected_item,
         ]);
     }
+    public function downloadFile($id)
+    {
+        try {
+            // Find the firm account record
+            $firmAccount = FirmAccount::findOrFail($id);
+
+            // Construct the full file path
+            $filePath = storage_path('app/' . $firmAccount->upload);
+            $fileName = basename($firmAccount->upload);
+
+            // Check if the file exists
+            if (!file_exists($filePath)) {
+                throw new \Exception('File not found');
+            }
+
+            // Return the file as a download response
+            return response()->download($filePath, $fileName);
+        } catch (\Exception $e) {
+            // Log the error
+            // Log::error($e->getMessage());
+
+            // Return a JSON response with the error message
+            // Return an Inertia response with the error message
+            return Inertia::render('Error', [
+                'error' => $e->getMessage(),
+            ]);
+        }
+    }
+
 
     public function edit(Request $request, $acc_number, $selected_item)
     {

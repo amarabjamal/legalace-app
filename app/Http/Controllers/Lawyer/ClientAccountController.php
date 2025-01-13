@@ -7,7 +7,8 @@ use Illuminate\Http\Request;
 use Inertia\Inertia;
 use App\Models\ClientAccount;
 use App\Models\ClientAccountList;
-use App\Models\BankAccount;
+use App\Models\BankAccounts;
+use App\Models\FirmAccount;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Request as FacadesRequest;
@@ -20,19 +21,21 @@ class ClientAccountController extends Controller
     {
         $accList = DB::table(self::DB_NAME);
 
-        $clientAccountList = ClientAccountList::query()
-            ->where('bank_account_type_id', 'like', '1')
-            ->paginate(10)
-            ->withQueryString()
-            ->through(fn($accList) => [
-                'id' => $accList->id,
-                'label' => $accList->label,
-                'account_name' => $accList->account_name,
-                'bank_name' => $accList->bank_name,
-                'account_number' => $accList->account_number,
-                'opening_balance' => $accList->opening_balance,
-                'swift_code' => $accList->swift_code,
-            ]);
+        $clientAccountList = BankAccounts::query()
+            ->rightJoin("client_accounts as b", 'bank_accounts.id', '=', 'b.bank_account_id')
+            ->select(
+                'bank_accounts.id',
+                'label',
+                DB::raw('(IFNULL(SUM(debit), 0) - IFNULL(SUM(credit), 0)) + IFNULL(opening_balance, 0) AS opening_balance'),
+                DB::raw('IFNULL(SUM(debit), 0) AS total_debit'),
+                DB::raw('IFNULL(SUM(credit), 0) AS total_credit'),
+                'account_name',
+                'bank_name',
+                'account_number',
+                'swift_code',
+            )
+            ->groupBy('id', 'label', 'opening_balance', 'account_name', 'bank_name', 'account_number', 'swift_code')
+            ->get();
 
 
         return Inertia::render('Lawyer/ClientAccount/Index', [
@@ -80,6 +83,8 @@ class ClientAccountController extends Controller
         $filePath = null;
 
         try {
+            $uniqueId = date('YmdHis') . uniqid();
+
             if (!$request->hasFile('upload')) {
                 if (str_contains("funds in", $request->transaction_type)) {
                     ClientAccount::create([
@@ -96,6 +101,7 @@ class ClientAccountController extends Controller
                         'created_by' => Auth::id(),
                     ]);
                 } else {
+
                     ClientAccount::create([
                         'date' => $request->date,
                         'bank_account_id' => $request->bank_account_id,
@@ -107,6 +113,21 @@ class ClientAccountController extends Controller
                         'credit' => $request->amount,
                         'payment_method' => $request->payment_method,
                         'reference' => $request->reference,
+                        'transaction_id' => $uniqueId,
+                        'created_by' => Auth::id(),
+                    ]);
+                    FirmAccount::create([
+                        'date' => $request->date,
+                        'bank_account_id' => 2,
+                        'description' => $request->description,
+                        'transaction_type' => 'funds in',
+                        'document_number' => $request->document_number,
+                        'upload' => "",
+                        'debit' => $request->amount,
+                        'credit' => 0,
+                        'payment_method' => $request->payment_method,
+                        'remarks' => $request->reference,
+                        'transaction_id' => $uniqueId,
                         'created_by' => Auth::id(),
                     ]);
                 }
@@ -142,6 +163,21 @@ class ClientAccountController extends Controller
                         'credit' => $request->amount,
                         'payment_method' => $request->payment_method,
                         'reference' => $request->reference,
+                        'transaction_id' => $uniqueId,
+                        'created_by' => Auth::id(),
+                    ]);
+                    FirmAccount::create([
+                        'date' => $request->date,
+                        'bank_account_id' => 2,
+                        'description' => $request->description,
+                        'transaction_type' => 'funds in',
+                        'document_number' => $request->document_number,
+                        'upload' => $filePath,
+                        'debit' => $request->amount,
+                        'credit' => 0,
+                        'payment_method' => $request->payment_method,
+                        'remarks' => $request->reference,
+                        'transaction_id' => $uniqueId,
                         'created_by' => Auth::id(),
                     ]);
                 }
@@ -162,7 +198,8 @@ class ClientAccountController extends Controller
 
         try {
             $clientAccount = ClientAccount::findOrFail($request->id); // Find the record by ID
-            if ($request->existingDocument != null && $request->upload == null) {
+            // if ($request->existingDocument != null && $request->upload == null) {
+            if ($request->upload == null) {
                 if (str_contains("funds in", $request->transaction_type)) {
                     $clientAccount->update([
                         'date' => $request->date,
@@ -187,6 +224,18 @@ class ClientAccountController extends Controller
                         'reference' => $request->reference,
                         'created_by' => Auth::id(),
                     ]);
+                    $itemInFirm = FirmAccount::query()
+                        ->where('transaction_id', 'like', "{$request->transaction_id}")
+                        ->update([
+                            'date' => $request->date,
+                            'description' => $request->description,
+                            'transaction_type' => "funds in",
+                            'document_number' => $request->document_number,
+                            'debit' => $request->amount,
+                            'credit' => 0,
+                            'payment_method' => $request->payment_method,
+                            'remarks' => $request->reference,
+                        ]);
                 }
                 return redirect()->route('lawyer.client-accounts.show', ['client_account' => $request->bank_account_id])->with('successMessage', 'Successfully update the transaction.');
             } else {
@@ -221,6 +270,18 @@ class ClientAccountController extends Controller
                         'reference' => $request->reference,
                         'created_by' => Auth::id(),
                     ]);
+                    $itemInFirm = FirmAccount::query()
+                        ->where('transaction_id', 'like', "{$request->transaction_id}")
+                        ->update([
+                            'date' => $request->date,
+                            'description' => $request->description,
+                            'transaction_type' => "funds in",
+                            'document_number' => $request->document_number,
+                            'debit' => $request->amount,
+                            'credit' => 0,
+                            'payment_method' => $request->payment_method,
+                            'remarks' => $request->reference,
+                        ]);
                 }
 
                 return redirect()->route('lawyer.client-accounts.show', ['client_account' => $request->bank_account_id])->with('successMessage', 'Successfully update the transaction.');
@@ -239,20 +300,22 @@ class ClientAccountController extends Controller
         $filters = FacadesRequest::all(['search']);
         $accList = DB::table(self::DB_NAME);
 
-        $bankAccount = ClientAccountList::query()
-            ->where('id', 'like', "%{$acc_number}%")
-            ->paginate(10)
-            ->withQueryString()
-            ->through(fn($accList) => [
-                'id' => $accList->id,
-                'label' => $accList->label,
-                'account_name' => $accList->account_name,
-                'bank_name' => $accList->bank_name,
-                'account_number' => $accList->account_number,
-                'opening_balance' => $accList->opening_balance,
-                'swift_code' => $accList->swift_code,
-                'payment_method' => $accList->payment_menthod,
-            ]);
+        $bankAccount = BankAccounts::query()
+            ->rightJoin("client_accounts as b", 'bank_accounts.id', '=', 'b.bank_account_id')
+            ->select(
+                'bank_accounts.id',
+                'label',
+                DB::raw('(IFNULL(SUM(debit), 0) - IFNULL(SUM(credit), 0)) + IFNULL(opening_balance, 0) AS opening_balance'),
+                DB::raw('IFNULL(SUM(debit), 0) AS total_debit'),
+                DB::raw('IFNULL(SUM(credit), 0) AS total_credit'),
+                'account_name',
+                'bank_name',
+                'account_number',
+                'swift_code',
+            )
+            ->where('bank_accounts.id', 'like', "%{$acc_number}%")
+            ->groupBy('id', 'label', 'opening_balance', 'account_name', 'bank_name', 'account_number', 'swift_code')
+            ->get();
 
         $clientAccounts = ClientAccount::query()
             ->where('bank_account_id', 'like', "%{$acc_number}%")
@@ -273,13 +336,66 @@ class ClientAccountController extends Controller
 
         $acc = DB::table(self::DB_NAME)->sum('balance');
 
+
+        // Get the selected period from the request
+        $selectedPeriod = $request->input('period', 'this_month'); // Default to 'this_month'
+
+        // Calculate the start and end dates based on the selected period
+        $startDate = now();
+        $endDate = now();
+
+        switch ($selectedPeriod) {
+            case 'this_month':
+                $startDate = now()->startOfMonth();
+                $endDate = now()->endOfMonth();
+                break;
+            case 'last_month':
+                $startDate = now()->subMonth()->startOfMonth();
+                $endDate = now()->subMonth()->endOfMonth();
+                break;
+            case 'next_month':
+                $startDate = now()->addMonth()->startOfMonth();
+                $endDate = now()->addMonth()->endOfMonth();
+                break;
+            case 'last_3_months':
+                $startDate = now()->subMonths(3)->startOfMonth();
+                $endDate = now()->subMonth()->endOfMonth();     // End of the previous month
+                break;
+            case 'last_6_months':
+                $startDate = now()->subMonths(6)->startOfMonth();
+                $endDate = now()->subMonth()->endOfMonth();     // End of the previous month
+                break;
+            case 'next_3_months':
+                $startDate = now()->startOfMonth();
+                $endDate = now()->addMonths(3)->endOfMonth();
+                break;
+            case 'next_6_months':
+                $startDate = now()->startOfMonth();
+                $endDate = now()->addMonths(6)->endOfMonth();
+                break;
+            case 'last_year':
+                $startDate = now()->subYear()->startOfYear();
+                $endDate = now()->subYear()->endOfYear();
+                break;
+            case 'next_year':
+                $startDate = now()->addYear()->startOfYear();
+                $endDate = now()->addYear()->endOfYear();
+                break;
+            case 'this_year':
+                $startDate = now()->startOfYear();
+                $endDate = now()->endOfYear();
+                break;
+        }
+
         $funds_in = DB::table(self::DB_NAME)
             ->where('bank_account_id', 'like', "%{$acc_number}")
             ->where('transaction_type', 'like', 'funds in')
+            ->whereBetween('date', [$startDate, $endDate])
             ->sum('debit');
         $funds_out = DB::table(self::DB_NAME)
             ->where('bank_account_id', 'like', "%{$acc_number}")
             ->where('transaction_type', 'like', 'funds out')
+            ->whereBetween('date', [$startDate, $endDate])
             ->sum('credit');
 
         return Inertia::render('Lawyer/ClientAccount/Details', [
@@ -290,6 +406,7 @@ class ClientAccountController extends Controller
             'bank_accounts' => $bankAccount,
             'funds_in' => $funds_in,
             'funds_out' => $funds_out,
+            'selectedPeriod' => $selectedPeriod,
         ]);
     }
 
@@ -304,19 +421,22 @@ class ClientAccountController extends Controller
             $filter_type = "funds in";
         }
 
-        $bankAccount = ClientAccountList::query()
-            ->where('id', 'like', "%{$acc_number}%")
-            ->paginate(10)
-            ->withQueryString()
-            ->through(fn($accList) => [
-                'id' => $accList->id,
-                'label' => $accList->label,
-                'account_name' => $accList->account_name,
-                'bank_name' => $accList->bank_name,
-                'account_number' => $accList->account_number,
-                'opening_balance' => $accList->opening_balance,
-                'swift_code' => $accList->swift_code,
-            ]);
+        $bankAccount = BankAccounts::query()
+            ->rightJoin("client_accounts as b", 'bank_account_type_id', '=', 'b.bank_account_id')
+            ->select(
+                'bank_accounts.id',
+                'label',
+                DB::raw('(IFNULL(SUM(debit), 0) - IFNULL(SUM(credit), 0)) + IFNULL(opening_balance, 0) AS opening_balance'),
+                DB::raw('IFNULL(SUM(debit), 0) AS total_debit'),
+                DB::raw('IFNULL(SUM(credit), 0) AS total_credit'),
+                'account_name',
+                'bank_name',
+                'account_number',
+                'swift_code',
+            )
+            ->where('bank_accounts.id', 'like', "%{$acc_number}%")
+            ->groupBy('id', 'label', 'opening_balance', 'account_name', 'bank_name', 'account_number', 'swift_code')
+            ->get();
 
         $clientAccounts = ClientAccount::query()
             ->where('bank_account_id', 'like', "%{$acc_number}%")
@@ -338,11 +458,13 @@ class ClientAccountController extends Controller
 
         $acc = DB::table(self::DB_NAME)->sum('balance');
         $funds_in = DB::table(self::DB_NAME)
+            ->where('bank_account_id', 'like', "%{$acc_number}")
             ->where('transaction_type', 'like', 'funds in')
-            ->sum('balance');
+            ->sum('debit');
         $funds_out = DB::table(self::DB_NAME)
+            ->where('bank_account_id', 'like', "%{$acc_number}")
             ->where('transaction_type', 'like', 'funds out')
-            ->sum('balance');
+            ->sum('credit');
 
         return Inertia::render('Lawyer/ClientAccount/Details', [
             'clientAccounts' => $clientAccounts,
@@ -368,6 +490,35 @@ class ClientAccountController extends Controller
         ]);
     }
 
+    public function downloadFile($id)
+    {
+        try {
+            // Find the firm account record
+            $clientAccount = ClientAccount::findOrFail($id);
+
+            // Construct the full file path
+            $filePath = storage_path('app/' . $clientAccount->upload);
+            $fileName = basename($clientAccount->upload);
+
+            // Check if the file exists
+            if (!file_exists($filePath)) {
+                throw new \Exception('File not found');
+            }
+
+            // Return the file as a download response
+            return response()->download($filePath, $fileName);
+        } catch (\Exception $e) {
+            // Log the error
+            // Log::error($e->getMessage());
+
+            // Return a JSON response with the error message
+            // Return an Inertia response with the error message
+            return Inertia::render('Error', [
+                'error' => $e->getMessage(),
+            ]);
+        }
+    }
+
     public function edit(Request $request, $acc_number, $selected_item)
     {
         $clientAccounts = ClientAccount::query()
@@ -385,6 +536,10 @@ class ClientAccountController extends Controller
         $clientAccount = ClientAccount::findOrFail($id);
 
         $bank_account_id = $clientAccount->bank_account_id;
+
+        FirmAccount::query()
+            ->where('transaction_id', '=', $clientAccount->transaction_id)
+            ->delete();
 
         $clientAccount->delete();
 

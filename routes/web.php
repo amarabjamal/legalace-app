@@ -102,7 +102,7 @@ Route::group(['middleware' => 'auth'], function () {
 
         Route::resource('case-files', CaseFileController::class);
 
-        // FIRM ACCOUNTS
+        // FIRM ACCOUNTS    
         Route::get('firm-accounts/{account_number}/detail', [FirmAccountController::class, 'detail']);
         Route::post('firm-accounts/update', [FirmAccountController::class, 'update']);
         Route::get('firm-accounts/{account_number}/{transaction_type}/detail', [FirmAccountController::class, 'detailFilter']);
@@ -111,9 +111,14 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('firm-accounts/{account_number}/{selected_item}/edit', [FirmAccountController::class, 'edit']);
         Route::resource('firm-accounts', FirmAccountController::class);
 
+        // DOWNLOAD UPLOADED FILE
+        Route::get('/firm-account/download/{id}', [FirmAccountController::class, 'downloadFile'])->name('lawyer.firm-account.download');
+        Route::get('/client-account/download/{id}', [ClientAccountController::class, 'downloadFile'])->name('lawyer.client-account.download');
+        Route::get('/costs_item/download/{id}', [OperationalCostController::class, 'downloadFile'])->name('lawyer.costs_item.download');
+
         // CLIENT ACCOUNTS
         Route::get('client-accounts/{account_number}/detail', [ClientAccountController::class, 'detail']);
-        Route::get('client-accounts/update', [ClientAccountController::class, 'update']);
+        Route::post('client-accounts/update', [ClientAccountController::class, 'update']);
         Route::get('client-accounts/{account_number}/{transaction_type}/detail', [ClientAccountController::class, 'detailFilter']);
         Route::get('client-accounts/{account_number}/create', [ClientAccountController::class, 'create']);
         Route::get('client-accounts/{account_number}/{selected_item}/view', [ClientAccountController::class, 'view']);
@@ -125,7 +130,8 @@ Route::group(['middleware' => 'auth'], function () {
 
         // OPERATIONAL COST
         // Route::get('operational-cost/create', [OperationalCostController::class, 'create']);
-        Route::get('operational-cost/update', [OperationalCostController::class, 'update']);
+        Route::get('operational-cost/{id}/view', [OperationalCostController::class, 'view']);
+        Route::post('operational-cost/update', [OperationalCostController::class, 'update']);
         Route::get('operational-cost/{id}/edit', [OperationalCostController::class, 'edit']);
         Route::resource('operational-cost', OperationalCostController::class);
 

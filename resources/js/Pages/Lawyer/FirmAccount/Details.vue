@@ -5,7 +5,7 @@
     <page-heading :page_title="page_title" :breadcrumbs="breadcrumbs" />
 
     <div class="grid gap-6 mb-8 md:grid-cols-3 mt-4">
-        <div v-for="bank_account in bank_accounts.data" :key="bank_account.id"
+        <div v-for="bank_account in bank_accounts" :key="bank_account.id"
             class="min-w-0 bg-white border border-gray-300 rounded-md overflow-hidden ease-in-out duration-300 hover:shadow-md hover:scale-105 hover:-translate-y-5">
             <div class="px-4 mb-2 border-b bg-gray-50 flex justify-between items-center">
                 <h4 class="py-2 text-sm uppercase font-semibold text-gray-500 w-1/2 truncate">{{ bank_account.label }}
@@ -45,14 +45,14 @@
                         {{ bank_account.swift_code }}
                     </td>
                 </tr>
-                <!-- <tr>
+                <tr>
                     <td>
                         Balance
                     </td>
                     <td class="font-bold">
-                        {{ bank_account.opening_balance }}
+                        {{ bank_account.opening_balance.amount }}
                     </td>
-                </tr> -->
+                </tr>
             </table>
             <div class="flex space-x-2 justify-end p-2 pr-4">
                 <!-- <Link :href="`/admin/bank-accounts/${ bank_account.id }`">View</Link>
@@ -62,11 +62,23 @@
             </p>
         </div>
 
-        <div v-for="bank_account in bank_accounts.data" :key="bank_account.id"
-            class="min-w-0 bg-white border border-gray-300 rounded-md overflow-hidden ease-in-out duration-300 hover:shadow-md hover:scale-105 hover:-translate-y-5">
+        <div v-for="bank_account in bank_accounts" :key="bank_account.id"
+            class="min-w-0 bg-white border border-gray-300 rounded-md overflow-hidden ease-in-out duration-300 hover:shadow-md">
             <div class="px-4 mb-2 border-b bg-gray-50 flex justify-between items-center">
-                <h4 class="py-2 text-sm uppercase font-semibold text-gray-500 w-1/2 truncate">This Month
+                <h4 class="py-2 text-sm uppercase font-semibold text-gray-500 w-1/2 truncate">Filter statistics:
                 </h4>
+                <select v-model="selectedPeriod" @change="filterByPeriod" class="m-1 px-4 py-2 border rounded-md hover:cursor-pointer">
+                    <option value="this_month">This Month</option>
+                    <option value="this_year">Current Year</option>
+                    <option value="last_month">Last Month</option>
+                    <option value="last_3_months">Last 3 Months</option>
+                    <option value="last_6_months">Last 6 Months</option>
+                    <option value="last_year">Last Year</option>
+                    <option value="next_month">Next Month</option>
+                    <option value="next_3_months">Next 3 Months</option>
+                    <option value="next_6_months">Next 6 Months</option>
+                    <option value="next_year">Next Year</option>
+                </select>
                 <!-- <span :class="accountTypeClass(bank_account.account_type)">{{ bank_account.account_type }}</span> -->
             </div>
             <p class="text-gray-600 p-2 text-sm">
@@ -99,14 +111,17 @@
 
     <div class="grid gap-6 mb-8 md:grid-cols-3 mt-4">
 
-        <div v-if="bank_accounts.data.length === 0"
+        <div v-if="bank_accounts.length === 0"
             class="md:col-span-3 h-24 flex justify-center items-center border border-gray-300 w-full text-center bg-gray-100 text-gray-500 rounded-md">
             <span>No records found.</span>
         </div>
     </div>
 
     <div class="flex items-center justify-between mb-6">
-        <search-filter v-model="form.search" class="mr-4 w-full max-w-md" @reset="reset"></search-filter>   
+        <!-- <search-filter v-model="form.search" class="mr-4 w-full max-w-md" @reset="reset"></search-filter> -->
+        <!-- Spacer to replace search-filter -->
+        <div class="mr-4 w-full max-w-md"></div>
+        
         <div>Filter By:</div>     
         <button class="btn-primary" v-on:click="filterList(0)">
             Funds Out
@@ -167,7 +182,7 @@
                         {{ formatString(acc.description) }}
                     </th>
                     <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
-                        {{ acc.transaction_type }}
+                        {{ formatString(acc.transaction_type) }}
                     </th>
                     <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
                         {{ formatString(acc.payment_method) }}
@@ -177,14 +192,17 @@
                     </th>
                     <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
                         {{ acc.document_no }}
+                        <!-- {{ acc.transaction_id }} -->
                     </th>
                     <td class="px-6 py-4 text-left">
                         <Link :href="`/lawyer/firm-accounts/${acc_id}/${acc.id}/view`"
                             class="font-medium text-blue-600 hover:underline">View</Link>
+                        <!-- <Link  :href="`/lawyer/firm-accounts/${acc_id}/${acc.id}/edit`"
+                            class="ml-3 font-medium text-blue-600 hover:underline">Edit</Link> -->
                         <Link v-if="acc.transaction_id === '' || acc.transaction_id === null" :href="`/lawyer/firm-accounts/${acc_id}/${acc.id}/edit`"
                             class="ml-3 font-medium text-blue-600 hover:underline">Edit</Link>
-                        <Link @click="deleteAcc(acc)" as="button" class="ml-3 font-medium text-red-600 hover:underline">
-                        Delete</Link>
+                        <button @click="showDeleteConfirmation(acc)" as="button" class="ml-3 font-medium text-red-600 hover:underline">
+                        Delete</button>
                     </td>
                 </tr>
             </tbody>
@@ -193,6 +211,10 @@
     <!-- Paginator -->
     <Pagination :links="firmAccounts.links" :total="firmAccounts.total" :from="firmAccounts.from"
         :to="firmAccounts.to" />
+
+    <!-- Modal Component -->
+    <ConfirmationModel :showModal="showDeleteModal" @confirm="handleDelete" @cancel="cancelDelete" />
+
 </template>
 
 <script>
@@ -204,6 +226,7 @@ import Icon from '../../../Shared/Icon';
 import { Inertia } from "@inertiajs/inertia";
 import throttle from 'lodash/throttle';
 import { ref, watch } from "vue";
+import ConfirmationModel from "../../../Shared/ConfirmationModel.vue";
 
 
 export default {
@@ -225,12 +248,21 @@ export default {
             form: {
                 search: this.filters.search,
             },
-            page_title: 'Firm Accounts',
+            page_title: 'Firm Account',
+            page_subtitle: 'Manage your Firm Account',
             breadcrumbs: [
                 { link: '/lawyer/dashboard', label: 'Lawyer' },
-                { link: null, label: 'Firm Accounts' },
+                { link: '/lawyer/firm-accounts', label: 'Firm Account' },
+                ...this.bank_accounts.map(account => ({
+                link: `/lawyer/firm-accounts/${account.id}/detail`,
+                label: account.label,
+                })),
             ],
+            showDeleteModal: false,
+            selectedAcc: null,
+            selectedPeriod: this.selectedPeriod || 'this_month',
         }
+
     },
     props: {
         firmAccounts: Object,
@@ -241,9 +273,13 @@ export default {
         filters: Object,
         funds_in: Object,
         funds_out: Object,
+        selectedPeriod: String,
+    },
+    mounted() {
+        console.log("Bank Accounts in mounted:", this.bank_accounts);
     },
     // components: { Head, Pagination, ref },
-    components: { SearchFilter, Icon, Pagination, ref },
+    components: { SearchFilter, Icon, Pagination, ref, ConfirmationModel },
     layout: Layout,
     methods: {
         deleteAcc(acc) {
@@ -269,6 +305,26 @@ export default {
             } else {
                 return num.toFixed(2); // Formats the number to 2 decimal places
             }
+        },
+        showDeleteConfirmation(acc) {
+            this.selectedAcc = acc;
+            this.showDeleteModal = true;
+        },
+        handleDelete() {
+            if (this.selectedAcc) {
+                Inertia.delete(`/lawyer/firm-accounts/${this.selectedAcc.id}`);
+                this.showDeleteModal = false;
+            }
+        },
+        cancelDelete() {
+            this.showDeleteModal = false;
+        },
+        filterByPeriod() {
+            // Send the selected month value to the backend
+            Inertia.get(`/lawyer/firm-accounts/${this.bank_accounts[0].id}/detail`, { period: this.selectedPeriod }, {
+                preserveState: true,
+                replace: true,
+            });
         },
     },
 };

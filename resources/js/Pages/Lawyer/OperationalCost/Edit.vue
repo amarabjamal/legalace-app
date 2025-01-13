@@ -69,7 +69,29 @@
                             label="Document Number"
                             required
                         />
+                        <div
+                            v-if="
+                                this.costs_item.upload !== null &&
+                                this.costs_item.upload !== ''
+                            "
+                        >
+                            <text-input
+                                v-model="this.costs_item.upload"
+                                class="pb-8 pr-6 w-full lg:w-1/2"
+                                value="test"
+                                label="Upload Document"
+                                accept=".jpg,.png,.pdf,.doc,.docx"
+                                disabled
+                            />
+                            <Button
+                                v-on:click="remove()"
+                                as="button"
+                                class="font-medium text-red-600 hover:underline"
+                                >Remove</Button
+                            >
+                        </div>
                         <file-input
+                            v-else
                             v-model="form.upload"
                             :errors="form.errors.upload"
                             class="pb-8 pr-6 w-full lg:w-1/2"
@@ -100,7 +122,7 @@
                             <option value="cheque">Cheque</option>
                             <option value="credit_card">Credit Card</option>
                         </select-input>
-                        <select-input
+                        <!-- <select-input
                             v-model="form.is_recurring"
                             :error="form.errors.is_recurring"
                             label="Recurring Transaction"
@@ -111,7 +133,7 @@
                             </option>
                             <option value="1">Yes</option>
                             <option value="0">no</option>
-                        </select-input>
+                        </select-input> -->
 
                         <div v-if="form.is_recurring == 1">
                             <date-input
@@ -230,16 +252,20 @@ export default {
                 frequency: this.costs_item.recurring_period,
                 no_of_payment: this.costs_item.no_of_payment,
                 transaction_id: this.costs_item.transaction_id,
+                existingDocument: this.costs_item.upload,
             }),
         };
     },
     methods: {
         update() {
             if (this.form.isDirty) {
-                this.form.put("/lawyer/operational-cost/update");
+                this.form.post("/lawyer/operational-cost/update");
             } else {
                 alert("You need to fill in the form first.");
             }
+        },
+        remove() {
+            this.costs_item.upload = null;
         },
     },
 };

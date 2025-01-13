@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Enums\BankName;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreBankAccountRequest;
 use App\Http\Requests\UpdateBankAccountRequest;
@@ -42,13 +43,19 @@ class BankAccountController extends Controller
 
     public function create()
     {
-        return Inertia::render('Admin/BankAccount/Create');
+        $bankNames = array_column(BankName::cases(), 'value');
+        return Inertia::render('Admin/BankAccount/Create', ['bankNames' => $bankNames,]);
     }
 
-    public function store(StoreBankAccountRequest $request) 
+    public function store(StoreBankAccountRequest $request)
     {
         $input = $request->all();
         $input['opening_balance'] = Money::of($input['opening_balance'], 'MYR');
+
+        // Check if the user selected "other" and provided a custom bank name
+        if ($input['bank_name'] === 'Other' && $input['custom_bank_name']) {
+            $input['bank_name'] = $input['custom_bank_name'];
+        }
 
         try {
             DB::transaction(function () use ($input) {
@@ -66,16 +73,23 @@ class BankAccountController extends Controller
     public function edit(BankAccount $bank_account)
     {
         $bank_account->bankAccountType;
+        $bankNames = array_column(BankName::cases(), 'value');
 
         return Inertia::render('Admin/BankAccount/Edit', [
             'bankAccount' => $bank_account,
+            'bankNames' => $bankNames,
         ]);
     }
 
-    public function update(UpdateBankAccountRequest $request, BankAccount $bank_account) 
+    public function update(UpdateBankAccountRequest $request, BankAccount $bank_account)
     {
         $input = $request->all();
         $input['opening_balance'] = Money::of($input['opening_balance'], 'MYR');
+
+        // Check if the user selected "other" and provided a custom bank name
+        if ($input['bank_name'] === 'Other' && $input['custom_bank_name']) {
+            $input['bank_name'] = $input['custom_bank_name'];
+        }
 
         try {
             DB::transaction(function () use ($input, $bank_account) {
@@ -86,7 +100,7 @@ class BankAccountController extends Controller
 
             return back()->with('errorMessage', 'Failed to create new bank accounts ');
         }
- 
+
         return redirect()->route('admin.bank-accounts.show', $bank_account)->with('successMessage', 'Successfully updated the bank account.');
     }
 
@@ -113,7 +127,7 @@ class BankAccountController extends Controller
         //Add conditional checking before delete
 
         DB::transaction(function () use ($bank_account) {
-            $bank_account->delete();   
+            $bank_account->delete();
         });
 
         return redirect()->route('admin.bank-accounts.index')->with('successMessage', 'Successfully deleted the bank account.');
@@ -133,7 +147,7 @@ class BankAccountController extends Controller
 
         return array_merge(
             $bank_account->only(['label', 'account_name', 'bank_name', 'account_number', 'swift_code']),
-            [ 'account_type' => $bank_account->bankAccountType->name ]
+            ['account_type' => $bank_account->bankAccountType->name]
         );
     }
 }

@@ -4,7 +4,7 @@
 
     <page-heading :page_title="page_title" :breadcrumbs="breadcrumbs" />
 
-    <div v-for="acc in firmAccountList.data" :key="acc.id" class="grid gap-6 mb-8 md:grid-cols-3 mt-4">
+    <div v-for="acc in firmAccountList" :key="acc.id" class="grid gap-6 mb-8 md:grid-cols-3 mt-4">
 
         <div v-on:click="navigateToDetails(acc.id)"
             class="min-w-0 bg-white border border-gray-300 rounded-md overflow-hidden ease-in-out duration-300 hover:shadow-md hover:scale-105 hover:-translate-y-5">
@@ -56,16 +56,16 @@
                     <td class="font-bold">
                     </td>
                 </tr>
-                <!-- <tr>
+                <tr>
                     <td>
-                        Opening Balance
+                        Balance
                     </td>
                     <td>
-                        RM {{ acc.opening_balance }}
+                        RM {{ acc.opening_balance.amount }}
                     </td>
                     <td class="font-bold">
                     </td>
-                </tr> -->
+                </tr>
             </table>
             <div class="flex justify-end mt-3 p-2 pr-4">
             </div>

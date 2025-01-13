@@ -15,6 +15,7 @@ use App\Models\FirmAccount;
 use App\Notifications\SubmitClaimVoucherNotification;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Request;
+use Illuminate\Http\Request as RequestHTTP;
 use Inertia\Inertia;
 
 class AccountingManagementController extends Controller
@@ -131,11 +132,36 @@ class AccountingManagementController extends Controller
         return back()->with('successMessage', 'The claim voucher has been submitted to ' . $claim_voucher->approver->name . '.');
     }
 
-    public function profitAndLoss()
+    public function profitAndLoss(RequestHTTP $request)
     {
+        // Get the selected period from the request
+        $selectedPeriod = $request->input('period', 'this_year');
+        // dd($selectedPeriod);
+
+        // // Get the request data
+        // $requestData = $request->all();
+
+        // // Check if the period field exists in the request data
+        // if (!isset($requestData['period'])) {
+        //     // If the period field does not exist, use the default value
+        //     $selectedPeriod = 'last_month';
+        // } else {
+        //     // If the period field exists, use its value
+        //     $selectedPeriod = $requestData['period'];
+        // }
+        // dd($request->all());
+        // Get the date range
+        $dateRange = $this->getDateRange($selectedPeriod);
+        $startDate = $dateRange['startDate'];
+        $endDate = $dateRange['endDate'];
+
+        // dd($startDate . ' - ' . $endDate);
+
         $totalOperatingIncome = FirmAccount::query()
             ->where('description', 'like', 'payment_received')
+            // ->where('description', 'like', '%payment%')
             ->where('transaction_type', 'like', 'funds in')
+            ->whereBetween('date', [$startDate->format('Y-m-d'), $endDate->format('Y-m-d')])
             ->sum('debit');
 
         $listGroupOperatingIncome = FirmAccount::query()
@@ -149,83 +175,115 @@ class AccountingManagementController extends Controller
                 DB::raw('SUM(firm_account.credit) AS credit')
             )
             ->where('description', 'like', 'payment_received')
+            // ->where('description', 'like', '%payment%')
             ->where('firm_account.transaction_type', 'like', 'funds in')
+            ->whereBetween('date', [$startDate, $endDate])
             ->groupBy('firm_account.bank_account_id', 'b.label', 'firm_account.description', 'firm_account.transaction_type')
             ->get();
 
-        $totalEmployeeSalary = FirmAccount::query()
-            ->where('description', 'like', 'employee_salary')
-            ->where('transaction_type', 'like', 'funds out')
-            ->sum('credit');
+        // $totalEmployeeSalary = FirmAccount::query()
+        //     ->where('description', 'like', 'employee_salary')
+        //     ->where('transaction_type', 'like', 'funds out')
+        //     ->whereBetween('date', [$startDate, $endDate])
+        //     ->sum('credit');
 
         $ListOperatingExpense = OperationalCost::query()
             ->select(
                 'details',
                 DB::raw('SUM(amount) AS amount'),
             )
+            ->whereBetween('date', [$startDate, $endDate])
             ->groupby('details')
             ->get();
 
         $totalListOperatingExpense = $ListOperatingExpense->sum('amount');
 
-        $totalOperatingExpense = $totalEmployeeSalary + $totalListOperatingExpense;
+        // $totalOperatingExpense = $totalEmployeeSalary + $totalListOperatingExpense;
+        $totalOperatingExpense = $totalListOperatingExpense;
 
+        //Start of Non-Operating Transaction
         $totalNonOperatingIncome = FirmAccount::query()
             ->where('description', 'like', 'investing')
             ->where('transaction_type', 'like', 'funds in')
+            ->whereBetween('date', [$startDate, $endDate])
             ->groupBy('bank_account_id', 'description', 'transaction_type')
             ->sum('debit');
 
         $totalNonOperatingExpense = FirmAccount::query()
             ->where('description', 'like', 'investing')
             ->where('transaction_type', 'like', 'funds out')
+            ->whereBetween('date', [$startDate, $endDate])
             ->groupBy('bank_account_id', 'description', 'transaction_type')
             ->sum('credit');
+        //End of Non-Operating Transaction
 
         $netProfit = ($totalOperatingIncome + $totalNonOperatingIncome) - ($totalOperatingExpense - $totalNonOperatingExpense);
 
         return  [
             'totalOperatingIncome' => $totalOperatingIncome,
             'listGroupOperatingIncome' => $listGroupOperatingIncome,
-            'totalEmployeeSalary' => $totalEmployeeSalary,
+            // 'totalEmployeeSalary' => $totalEmployeeSalary,
             'listOperatingExpense' => $ListOperatingExpense,
             'totalOperatingExpense' => $totalOperatingExpense,
             'totalNonOperatingIncome' => $totalNonOperatingIncome,
             'totalNonOperatingExpense' => $totalNonOperatingExpense,
             'netProfit' => $netProfit,
+            'selectedPeriod' => $selectedPeriod,
+            'startDate' => $startDate->format('j F Y'),
+            'endDate' => $endDate->format('j F Y'),
         ];
     }
 
-    public function balance_sheet()
+    public function balance_sheet(RequestHTTP $request)
     {
+        // Get the selected period from the request
+        $selectedPeriod = $request->input('period', 'this_year');
+
+        $dateRange = $this->getDateRange($selectedPeriod);
+        $startDate = $dateRange['startDate'];
+        $endDate = $dateRange['endDate'];
 
         $cashDebit = FirmAccount::query()
             ->where('payment_method', 'like', 'cash')
+            ->whereBetween('date', [$startDate, $endDate])
             ->sum('debit');
         $cashCredit = FirmAccount::query()
             ->where('payment_method', 'like', 'cash')
+            ->whereBetween('date', [$startDate, $endDate])
             ->sum('credit');
 
         $cash = $cashDebit - $cashCredit;
 
         $bankDebit = FirmAccount::query()
             ->where('payment_method', 'like', 'bank_transfer')
+            ->whereBetween('date', [$startDate, $endDate])
             ->sum('debit');
-
         $bankCredit = FirmAccount::query()
             ->where('payment_method', 'like', 'bank_transfer')
+            ->whereBetween('date', [$startDate, $endDate])
+            ->sum('credit');
+        $chequeDebit = FirmAccount::query()
+            ->where('payment_method', 'like', 'cheque')
+            ->whereBetween('date', [$startDate, $endDate])
+            ->sum('debit');
+
+        $chequeCredit = FirmAccount::query()
+            ->where('payment_method', 'like', 'cheque')
+            ->whereBetween('date', [$startDate, $endDate])
             ->sum('credit');
 
-        $bank = $bankDebit - $bankCredit;
+        $bank = $bankDebit - $bankCredit + $chequeDebit - $chequeCredit;
 
         $acc_receivable = FirmAccount::query()
             ->where('transaction_type', 'like', 'funds in')
             ->where('payment_method', 'like', 'credit_card')
+            ->whereBetween('date', [$startDate, $endDate])
             ->sum('debit');
 
         $acc_receivable = FirmAccount::query()
             ->where('transaction_type', 'like', 'funds in')
             ->where('payment_method', 'like', 'credit_card')
+            ->whereBetween('date', [$startDate, $endDate])
             ->sum('debit');
 
         $total_curr_asset = $cash + $bank + $acc_receivable;
@@ -233,24 +291,28 @@ class AccountingManagementController extends Controller
         $acc_payable = FirmAccount::query()
             ->where('transaction_type', 'like', 'funds out')
             ->where('payment_method', 'like', 'credit_card')
+            ->whereBetween('date', [$startDate, $endDate])
             ->sum('credit');
 
         $acc_payable = FirmAccount::query()
             ->where('transaction_type', 'like', 'funds out')
             ->where('payment_method', 'like', 'credit_card')
+            ->whereBetween('date', [$startDate, $endDate])
             ->sum('credit');
 
         $equities = FirmAccount::query()
             ->where('description', 'like', 'financing')
             ->where('transaction_type', 'like', 'funds in')
+            ->whereBetween('date', [$startDate, $endDate])
             ->sum('debit');
 
         $assetAcquisition = FirmAccount::query()
             ->where('description', 'like', 'asset_acquisition')
             ->where('transaction_type', 'like', 'funds out')
+            ->whereBetween('date', [$startDate, $endDate])
             ->sum('credit');
 
-        $profit_and_loss = self::profitAndLoss();
+        $profit_and_loss = self::profitAndLoss($request);
         $netProfit = $profit_and_loss['netProfit'];
 
         $total_equities = $equities + $netProfit;
@@ -273,28 +335,67 @@ class AccountingManagementController extends Controller
                 'total_liabities_and_equities' => $total_liabities_and_equities,
                 'assetAcquisition' => $assetAcquisition,
                 'profit_and_loss' => $profit_and_loss,
+                'selectedPeriod' => $selectedPeriod,
+                'startDate' => $startDate->format('j F Y'),
+                'endDate' => $endDate->format('j F Y'),
             ]
         );
     }
 
-    public function cash_flow()
+    public function cash_flow(RequestHTTP $request)
     {
-        ///
-        $InvestingCash = FirmAccount::query()
+        // Get the selected period from the request
+        $selectedPeriod = $request->input('period', 'this_year');
+
+        $dateRange = $this->getDateRange($selectedPeriod);
+        $startDate = $dateRange['startDate'];
+        $endDate = $dateRange['endDate'];
+
+        /// Start of Investing Calculation
+        $InvestingInCash = FirmAccount::query()
             ->where('description', 'like', 'investing')
             ->where('payment_method', 'like', 'cash')
+            ->whereBetween('date', [$startDate, $endDate])
             ->sum('debit');
+        $InvestingOutCash = FirmAccount::query()
+            ->where('description', 'like', 'investing')
+            ->where('payment_method', 'like', 'cash')
+            ->whereBetween('date', [$startDate, $endDate])
+            ->sum('credit');
+        $InvestingCash = $InvestingInCash - $InvestingOutCash;
 
-        $InvestingBank = FirmAccount::query()
+        $InvestingInCheque = FirmAccount::query()
+            ->where('description', 'like', 'investing')
+            ->where('payment_method', 'like', 'cheque')
+            ->whereBetween('date', [$startDate, $endDate])
+            ->sum('debit');
+        $InvestingOutCheque = FirmAccount::query()
+            ->where('description', 'like', 'investing')
+            ->where('payment_method', 'like', 'cheque')
+            ->whereBetween('date', [$startDate, $endDate])
+            ->sum('credit');
+        $InvestingCheque = $InvestingInCheque - $InvestingOutCheque;
+
+        $InvestingInBank = FirmAccount::query()
             ->where('description', 'like', 'investing')
             ->where('payment_method', 'like', 'bank_transfer')
+            ->whereBetween('date', [$startDate, $endDate])
             ->sum('debit');
+        $InvestingOutBank = FirmAccount::query()
+            ->where('description', 'like', 'investing')
+            ->where('payment_method', 'like', 'bank_transfer')
+            ->whereBetween('date', [$startDate, $endDate])
+            ->sum('credit');
+
+        $InvestingBank = $InvestingInBank - $InvestingOutBank + $InvestingCheque;
 
         $assetAcquisition = FirmAccount::query()
             ->where('description', 'like', 'asset_acquisition')
+            ->whereBetween('date', [$startDate, $endDate])
             ->sum('credit');
 
         $InvestingTotal = $InvestingCash + $InvestingBank - $assetAcquisition;
+        /// End of Investing Calculation
 
         ///
         $operatingCash = FirmAccount::query()
@@ -315,16 +416,25 @@ class AccountingManagementController extends Controller
         $financingCash = FirmAccount::query()
             ->where('description', 'like', 'financing')
             ->where('payment_method', 'like', 'cash')
+            ->whereBetween('date', [$startDate, $endDate])
             ->sum('debit');
 
         $financingBank = FirmAccount::query()
             ->where('description', 'like', 'financing')
             ->where('payment_method', 'like', 'bank_transfer')
+            ->whereBetween('date', [$startDate, $endDate])
             ->sum('debit');
 
+        $financingCheque = FirmAccount::query()
+            ->where('description', 'like', 'financing')
+            ->where('payment_method', 'like', 'cheque')
+            ->whereBetween('date', [$startDate, $endDate])
+            ->sum('debit');
+
+        $financingBank = $financingBank + $financingCheque;
         $financingTotal = $financingCash + $financingBank;
 
-        $profit_and_loss = self::profitAndLoss();
+        $profit_and_loss = self::profitAndLoss($request);
         $netProfit = $profit_and_loss['netProfit'];
 
         $operatingTotal = $netProfit;
@@ -339,6 +449,7 @@ class AccountingManagementController extends Controller
             [
                 'InvestingCash' => $InvestingCash,
                 'InvestingBank' => $InvestingBank,
+                'InvestingCheque' => $InvestingCheque,
                 'assetAcquisition' => $assetAcquisition,
                 'InvestingTotal' => $InvestingTotal,
                 'operatingCash' => $operatingCash,
@@ -348,17 +459,74 @@ class AccountingManagementController extends Controller
                 'financingBank' => $financingBank,
                 'financingTotal' => $financingTotal,
                 'netProfit' => $netProfit,
-                'endingCashBalance' => $endingCashBalance
+                'endingCashBalance' => $endingCashBalance,
+                'selectedPeriod' => $selectedPeriod,
+                'startDate' => $startDate->format('j F Y'),
+                'endDate' => $endDate->format('j F Y'),
             ]
         );
     }
 
 
-    public function profit_and_loss()
+    public function profit_and_loss(RequestHTTP $request)
     {
         return Inertia::render(
             'Lawyer/AccountingManagement/Profit',
-            self::profitAndLoss()
+            self::profitAndLoss($request)
         );
+    }
+
+    private function getDateRange($selectedPeriod)
+    {
+        $startDate = now();
+        $endDate = now();
+
+        switch ($selectedPeriod) {
+            case 'this_month':
+                $startDate = now()->startOfMonth();
+                $endDate = now()->endOfMonth();
+                break;
+            case 'last_month':
+                $startDate = now()->subMonth()->startOfMonth();
+                $endDate = now()->subMonth()->endOfMonth();
+                break;
+            case 'next_month':
+                $startDate = now()->addMonth()->startOfMonth();
+                $endDate = now()->addMonth()->endOfMonth();
+                break;
+            case 'last_3_months':
+                $startDate = now()->subMonths(3)->startOfMonth();
+                $endDate = now()->subMonth()->endOfMonth(); // End of the previous month
+                break;
+            case 'last_6_months':
+                $startDate = now()->subMonths(6)->startOfMonth();
+                $endDate = now()->subMonth()->endOfMonth(); // End of the previous month
+                break;
+            case 'next_3_months':
+                $startDate = now()->startOfMonth();
+                $endDate = now()->addMonths(3)->endOfMonth();
+                break;
+            case 'next_6_months':
+                $startDate = now()->startOfMonth();
+                $endDate = now()->addMonths(6)->endOfMonth();
+                break;
+            case 'last_year':
+                $startDate = now()->subYear()->startOfYear();
+                $endDate = now()->subYear()->endOfYear();
+                break;
+            case 'next_year':
+                $startDate = now()->addYear()->startOfYear();
+                $endDate = now()->addYear()->endOfYear();
+                break;
+            case 'this_year':
+                $startDate = now()->startOfYear();
+                $endDate = now()->endOfYear();
+                break;
+        }
+
+        return [
+            'startDate' => $startDate,
+            'endDate' => $endDate,
+        ];
     }
 }
