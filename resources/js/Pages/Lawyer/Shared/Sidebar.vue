@@ -4,7 +4,11 @@
             <ul class="nav-links">
                 <li class="logo-container"><div class="logo"></div></li>
 
-                <li v-for="(navigation, index) in navigations" :key="index">
+                <li
+                    v-for="(navigation, index) in navigations"
+                    :key="index"
+                    :title="navigation.description"
+                >
                     <div>
                         <Link :href="navigation.href">
                             <icon-sidebar
@@ -53,18 +57,21 @@ export default {
                     label: "Dashboard",
                     icon: "home-smile-line",
                     isActive: this.$page.url.startsWith("/lawyer"),
+                    description: "Dashboard",
                 },
                 {
                     href: "/lawyer/client",
                     label: "Client Profiles",
                     icon: "group-line",
                     isActive: this.$page.url.startsWith("/lawyer/client"),
+                    description: "Client Profile",
                 },
                 {
                     href: "/lawyer/case-files",
                     label: "My Cases",
                     icon: "folder-5-line",
                     isActive: this.$page.url.startsWith("/lawyer/case-files"),
+                    description: "My Cases",
                 },
                 {
                     href: "/lawyer/claim-vouchers",
@@ -73,6 +80,7 @@ export default {
                     isActive: this.$page.url.startsWith(
                         "/lawyer/claim-vouchers",
                     ),
+                    description: "Claim Vouchers",
                 },
                 {
                     href: "/lawyer/client-accounts",
@@ -81,6 +89,7 @@ export default {
                     isActive: this.$page.url.startsWith(
                         "/lawyer/client-accounts",
                     ),
+                    description: "Client Accounts",
                 },
                 {
                     href: "/lawyer/firm-accounts",
@@ -89,6 +98,7 @@ export default {
                     isActive: this.$page.url.startsWith(
                         "/lawyer/firm-accounts",
                     ),
+                    description: "Firm Accounts",
                 },
                 {
                     href: "/lawyer/operational-cost",
@@ -97,6 +107,7 @@ export default {
                     isActive: this.$page.url.startsWith(
                         "/lawyer/operational-cost",
                     ),
+                    description: "Operational Cost",
                 },
                 {
                     href: "/lawyer/accounting-management",
@@ -105,6 +116,7 @@ export default {
                     isActive: this.$page.url.startsWith(
                         "/lawyer/accounting-management",
                     ),
+                    description: "Accounting Management",
                 },
             ],
         };

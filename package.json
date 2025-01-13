@@ -39,6 +39,7 @@
         "v-money": "^0.8.1",
         "vue": "^3.2.36",
         "vue-chartjs": "^5.3.2",
-        "vue-multiselect": "^2.1.7"
+        "vue-multiselect": "^2.1.7",
+        "vue-tooltip": "^0.1.0"
     }
 }

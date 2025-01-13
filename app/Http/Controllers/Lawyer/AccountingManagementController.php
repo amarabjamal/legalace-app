@@ -135,7 +135,7 @@ class AccountingManagementController extends Controller
     public function profitAndLoss(RequestHTTP $request)
     {
         // Get the selected period from the request
-        $selectedPeriod = $request->input('period', 'this_month');
+        $selectedPeriod = $request->input('period', 'this_year');
         // dd($selectedPeriod);
 
         // // Get the request data
@@ -234,36 +234,56 @@ class AccountingManagementController extends Controller
         ];
     }
 
-    public function balance_sheet()
+    public function balance_sheet(RequestHTTP $request)
     {
+        // Get the selected period from the request
+        $selectedPeriod = $request->input('period', 'this_year');
+
+        $dateRange = $this->getDateRange($selectedPeriod);
+        $startDate = $dateRange['startDate'];
+        $endDate = $dateRange['endDate'];
 
         $cashDebit = FirmAccount::query()
             ->where('payment_method', 'like', 'cash')
+            ->whereBetween('date', [$startDate, $endDate])
             ->sum('debit');
         $cashCredit = FirmAccount::query()
             ->where('payment_method', 'like', 'cash')
+            ->whereBetween('date', [$startDate, $endDate])
             ->sum('credit');
 
         $cash = $cashDebit - $cashCredit;
 
         $bankDebit = FirmAccount::query()
             ->where('payment_method', 'like', 'bank_transfer')
+            ->whereBetween('date', [$startDate, $endDate])
             ->sum('debit');
-
         $bankCredit = FirmAccount::query()
             ->where('payment_method', 'like', 'bank_transfer')
+            ->whereBetween('date', [$startDate, $endDate])
+            ->sum('credit');
+        $chequeDebit = FirmAccount::query()
+            ->where('payment_method', 'like', 'cheque')
+            ->whereBetween('date', [$startDate, $endDate])
+            ->sum('debit');
+
+        $chequeCredit = FirmAccount::query()
+            ->where('payment_method', 'like', 'cheque')
+            ->whereBetween('date', [$startDate, $endDate])
             ->sum('credit');
 
-        $bank = $bankDebit - $bankCredit;
+        $bank = $bankDebit - $bankCredit + $chequeDebit - $chequeCredit;
 
         $acc_receivable = FirmAccount::query()
             ->where('transaction_type', 'like', 'funds in')
             ->where('payment_method', 'like', 'credit_card')
+            ->whereBetween('date', [$startDate, $endDate])
             ->sum('debit');
 
         $acc_receivable = FirmAccount::query()
             ->where('transaction_type', 'like', 'funds in')
             ->where('payment_method', 'like', 'credit_card')
+            ->whereBetween('date', [$startDate, $endDate])
             ->sum('debit');
 
         $total_curr_asset = $cash + $bank + $acc_receivable;
@@ -271,24 +291,28 @@ class AccountingManagementController extends Controller
         $acc_payable = FirmAccount::query()
             ->where('transaction_type', 'like', 'funds out')
             ->where('payment_method', 'like', 'credit_card')
+            ->whereBetween('date', [$startDate, $endDate])
             ->sum('credit');
 
         $acc_payable = FirmAccount::query()
             ->where('transaction_type', 'like', 'funds out')
             ->where('payment_method', 'like', 'credit_card')
+            ->whereBetween('date', [$startDate, $endDate])
             ->sum('credit');
 
         $equities = FirmAccount::query()
             ->where('description', 'like', 'financing')
             ->where('transaction_type', 'like', 'funds in')
+            ->whereBetween('date', [$startDate, $endDate])
             ->sum('debit');
 
         $assetAcquisition = FirmAccount::query()
             ->where('description', 'like', 'asset_acquisition')
             ->where('transaction_type', 'like', 'funds out')
+            ->whereBetween('date', [$startDate, $endDate])
             ->sum('credit');
 
-        $profit_and_loss = self::profitAndLoss();
+        $profit_and_loss = self::profitAndLoss($request);
         $netProfit = $profit_and_loss['netProfit'];
 
         $total_equities = $equities + $netProfit;
@@ -311,6 +335,9 @@ class AccountingManagementController extends Controller
                 'total_liabities_and_equities' => $total_liabities_and_equities,
                 'assetAcquisition' => $assetAcquisition,
                 'profit_and_loss' => $profit_and_loss,
+                'selectedPeriod' => $selectedPeriod,
+                'startDate' => $startDate->format('j F Y'),
+                'endDate' => $endDate->format('j F Y'),
             ]
         );
     }
@@ -318,7 +345,7 @@ class AccountingManagementController extends Controller
     public function cash_flow(RequestHTTP $request)
     {
         // Get the selected period from the request
-        $selectedPeriod = $request->input('period', 'this_month');
+        $selectedPeriod = $request->input('period', 'this_year');
 
         $dateRange = $this->getDateRange($selectedPeriod);
         $startDate = $dateRange['startDate'];
@@ -328,30 +355,36 @@ class AccountingManagementController extends Controller
         $InvestingInCash = FirmAccount::query()
             ->where('description', 'like', 'investing')
             ->where('payment_method', 'like', 'cash')
+            ->whereBetween('date', [$startDate, $endDate])
             ->sum('debit');
         $InvestingOutCash = FirmAccount::query()
             ->where('description', 'like', 'investing')
             ->where('payment_method', 'like', 'cash')
+            ->whereBetween('date', [$startDate, $endDate])
             ->sum('credit');
         $InvestingCash = $InvestingInCash - $InvestingOutCash;
 
         $InvestingInCheque = FirmAccount::query()
             ->where('description', 'like', 'investing')
             ->where('payment_method', 'like', 'cheque')
+            ->whereBetween('date', [$startDate, $endDate])
             ->sum('debit');
         $InvestingOutCheque = FirmAccount::query()
             ->where('description', 'like', 'investing')
             ->where('payment_method', 'like', 'cheque')
+            ->whereBetween('date', [$startDate, $endDate])
             ->sum('credit');
         $InvestingCheque = $InvestingInCheque - $InvestingOutCheque;
 
         $InvestingInBank = FirmAccount::query()
             ->where('description', 'like', 'investing')
             ->where('payment_method', 'like', 'bank_transfer')
+            ->whereBetween('date', [$startDate, $endDate])
             ->sum('debit');
         $InvestingOutBank = FirmAccount::query()
             ->where('description', 'like', 'investing')
             ->where('payment_method', 'like', 'bank_transfer')
+            ->whereBetween('date', [$startDate, $endDate])
             ->sum('credit');
 
         $InvestingBank = $InvestingInBank - $InvestingOutBank + $InvestingCheque;
