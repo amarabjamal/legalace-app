@@ -198,7 +198,8 @@ class ClientAccountController extends Controller
 
         try {
             $clientAccount = ClientAccount::findOrFail($request->id); // Find the record by ID
-            if ($request->existingDocument != null && $request->upload == null) {
+            // if ($request->existingDocument != null && $request->upload == null) {
+            if ($request->upload == null) {
                 if (str_contains("funds in", $request->transaction_type)) {
                     $clientAccount->update([
                         'date' => $request->date,

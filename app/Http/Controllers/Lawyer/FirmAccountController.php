@@ -162,7 +162,8 @@ class FirmAccountController extends Controller
 
         try {
             $firmAccount = FirmAccount::findOrFail($request->id); // Find the record by ID
-            if ($request->existingDocument != null && $request->upload == null) {
+            // if ($request->existingDocument != null && $request->upload == null) {
+            if ($request->upload == null) {
                 if (str_contains("funds in", $request->transaction_type)) {
                     $firmAccount->update([
                         'date' => $request->date,

@@ -143,7 +143,8 @@ class OperationalCostController extends Controller
         $filePath = null;
 
         $item = OperationalCost::findOrFail($request->id); // Find the record by ID
-        if ($request->existingDocument != null && $request->upload == null) {
+        // if ($request->existingDocument != null && $request->upload == null) {
+        if ($request->upload == null) {
             $item->update([
                 'date' => $request->date,
                 'details' => $request->description,
