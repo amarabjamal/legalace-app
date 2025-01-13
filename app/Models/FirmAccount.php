@@ -38,7 +38,7 @@ class FirmAccount extends Model
         'updated_at'
     ];
 
-    public const UPLOAD_PATH = 'files/case-files/document-upload/';
+    public const UPLOAD_PATH = 'files/case-files/document-upload';
 
     public function createdBy()
     {

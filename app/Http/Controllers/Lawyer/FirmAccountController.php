@@ -434,6 +434,35 @@ class FirmAccountController extends Controller
             'acc_id' => $selected_item,
         ]);
     }
+    public function downloadFile($id)
+    {
+        try {
+            // Find the firm account record
+            $firmAccount = FirmAccount::findOrFail($id);
+
+            // Construct the full file path
+            $filePath = storage_path('app/' . $firmAccount->upload);
+            $fileName = basename($firmAccount->upload);
+
+            // Check if the file exists
+            if (!file_exists($filePath)) {
+                throw new \Exception('File not found');
+            }
+
+            // Return the file as a download response
+            return response()->download($filePath, $fileName);
+        } catch (\Exception $e) {
+            // Log the error
+            // Log::error($e->getMessage());
+
+            // Return a JSON response with the error message
+            // Return an Inertia response with the error message
+            return Inertia::render('Error', [
+                'error' => $e->getMessage(),
+            ]);
+        }
+    }
+
 
     public function edit(Request $request, $acc_number, $selected_item)
     {

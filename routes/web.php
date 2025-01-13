@@ -102,7 +102,7 @@ Route::group(['middleware' => 'auth'], function () {
 
         Route::resource('case-files', CaseFileController::class);
 
-        // FIRM ACCOUNTS
+        // FIRM ACCOUNTS    
         Route::get('firm-accounts/{account_number}/detail', [FirmAccountController::class, 'detail']);
         Route::post('firm-accounts/update', [FirmAccountController::class, 'update']);
         Route::get('firm-accounts/{account_number}/{transaction_type}/detail', [FirmAccountController::class, 'detailFilter']);
@@ -110,6 +110,10 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('firm-accounts/{account_number}/{selected_item}/view', [FirmAccountController::class, 'view']);
         Route::get('firm-accounts/{account_number}/{selected_item}/edit', [FirmAccountController::class, 'edit']);
         Route::resource('firm-accounts', FirmAccountController::class);
+
+        // DOWNLOAD UPLOADED FILE
+        Route::get('/firm-account/download/{id}', [FirmAccountController::class, 'downloadFile'])->name('lawyer.firm-account.download');
+        Route::get('/client-account/download/{id}', [ClientAccountController::class, 'downloadFile'])->name('lawyer.client-account.download');
 
         // CLIENT ACCOUNTS
         Route::get('client-accounts/{account_number}/detail', [ClientAccountController::class, 'detail']);

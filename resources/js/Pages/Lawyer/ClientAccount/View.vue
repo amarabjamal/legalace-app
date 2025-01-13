@@ -48,7 +48,18 @@
             >
                 <dt class="text-sm font-medium text-gray-500">Document</dt>
                 <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-                    {{ clientAccounts.upload }}
+                    <Link
+                        v-if="
+                            clientAccounts.upload != null &&
+                            clientAccounts.upload != ''
+                        "
+                        class="text-blue-700 btn btn-blue-500 hover:btn-blue-700 transition duration-300 ease-in-out hover:shadow-md hover:shadow-blue-500/50"
+                        :href="`/lawyer/client-account/download/${clientAccounts.id}`"
+                        @click.prevent="downloadFile(clientAccounts.id)"
+                        >Download Document</Link
+                    >
+                    <p v-else>No Document was uploaded</p>
+                    <!-- {{ clientAccounts.upload }} -->
                 </dd>
             </div>
             <div
@@ -110,6 +121,7 @@ import FileInput from "../../../Shared/FileInput";
 import { Switch } from "@headlessui/vue";
 import { Head } from "@inertiajs/inertia-vue3";
 import { useForm } from "@inertiajs/inertia-vue3";
+import axios from "axios";
 
 export default {
     components: {
@@ -159,6 +171,35 @@ export default {
             } else {
                 return num.toFixed(2); // Formats the number to 2 decimal places
             }
+        },
+        downloadFileNative(id) {
+            // window.open(`/lawyer/firm-account/download/${id}`, "_blank");
+            window.location.href = `/lawyer/client-account/download/${id}`;
+        },
+        downloadFile(id) {
+            axios
+                .get(`/lawyer/client-account/download/${id}`, {
+                    responseType: "blob",
+                })
+                .then((response) => {
+                    const file = new Blob([response.data], {
+                        type: response.headers["content-type"],
+                    });
+                    const fileUrl = URL.createObjectURL(file);
+                    const a = document.createElement("a");
+                    a.href = fileUrl;
+                    a.download = response.headers["content-disposition"]
+                        .split("filename=")[1]
+                        .trim('"');
+                    a.click();
+                    URL.revokeObjectURL(fileUrl);
+                })
+                .catch((error) => {
+                    console.error(`Error downloading file: ${error.message}`);
+                    // Prevent the redirect
+                    window.history.go(-1);
+                    alert(`Error downloading file: ${error.message}`);
+                });
         },
     },
 };
