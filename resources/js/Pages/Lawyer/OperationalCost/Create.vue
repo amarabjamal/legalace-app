@@ -26,8 +26,8 @@
                             required
                         />
                         <select-input
-                            v-model="form.description"
-                            :error="form.errors.description"
+                            v-model="form.details"
+                            :error="form.errors.details"
                             label="Description"
                             required
                         >
@@ -157,6 +157,13 @@
                                 <option value="7">7</option>
                             </select-input>
                         </div>
+                        <!-- <div v-if="errors">
+                            <ul>
+                                <li v-for="(error, key) in errors" :key="key">
+                                    {{ error }}
+                                </li>
+                            </ul>
+                        </div> -->
                     </div>
                 </div>
             </div>
@@ -198,6 +205,7 @@ import { Switch } from "@headlessui/vue";
 export default {
     props: {
         firmAccounts: Object,
+        errors: Object,
     },
     components: {
         Head,
@@ -217,7 +225,7 @@ export default {
             ],
             form: this.$inertia.form({
                 date: "",
-                description: "",
+                details: "",
                 account: "",
                 is_recurring: "",
                 document_number: "",

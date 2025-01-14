@@ -45,9 +45,7 @@
                                 <option disabled value="">
                                     Select Description
                                 </option>
-                                <option value="payment_received">
-                                    Deposit
-                                </option>
+                                <option value="deposit">Deposit</option>
                             </select-input>
                         </div>
                         <div v-if="form.transaction_type == 'funds out'">

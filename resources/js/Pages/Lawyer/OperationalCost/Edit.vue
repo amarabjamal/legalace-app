@@ -26,8 +26,8 @@
                             required
                         />
                         <select-input
-                            v-model="form.description"
-                            :error="form.errors.description"
+                            v-model="form.details"
+                            :error="form.errors.details"
                             label="Description"
                             required
                         >
@@ -111,7 +111,7 @@
                         <select-input
                             v-model="form.payment_method"
                             :error="form.errors.payment_method"
-                            label="Payment Menthod"
+                            label="Payment Method"
                             required
                         >
                             <option disabled value="">
@@ -180,6 +180,13 @@
                                 <option value="7">7</option>
                             </select-input>
                         </div>
+                        <!-- <div v-if="errors">
+                            <ul>
+                                <li v-for="(error, key) in errors" :key="key">
+                                    {{ error }}
+                                </li>
+                            </ul>
+                        </div> -->
                     </div>
                 </div>
             </div>
@@ -221,6 +228,7 @@ import { Switch } from "@headlessui/vue";
 export default {
     props: {
         costs_item: Object,
+        errors: Object,
     },
     components: {
         Head,
@@ -241,11 +249,11 @@ export default {
             form: this.$inertia.form({
                 id: this.costs_item.id,
                 date: this.costs_item.date,
-                description: this.costs_item.details,
+                details: this.costs_item.details,
                 account: this.costs_item.bank_account_id,
                 is_recurring: this.costs_item.is_recurring,
                 document_number: this.costs_item.document_number,
-                upload: this.costs_item.upload,
+                upload: null,
                 amount: this.costs_item.amount,
                 payment_method: this.costs_item.payment_method,
                 first_payment_date: this.costs_item.first_payment_date,
@@ -259,7 +267,14 @@ export default {
     methods: {
         update() {
             if (this.form.isDirty) {
-                this.form.post("/lawyer/operational-cost/update");
+                if (
+                    this.costs_item.upload == null &&
+                    this.form.upload == null
+                ) {
+                    alert("You need to attach the document first.");
+                } else {
+                    this.form.post("/lawyer/operational-cost/update");
+                }
             } else {
                 alert("You need to fill in the form first.");
             }
