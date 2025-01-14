@@ -133,6 +133,13 @@
                             label="Reference"
                             required
                         />
+                        <!-- <div v-if="errors">
+                            <ul>
+                                <li v-for="(error, key) in errors" :key="key">
+                                    {{ error }}
+                                </li>
+                            </ul>
+                        </div> -->
                     </div>
                 </div>
             </div>
@@ -185,6 +192,7 @@ export default {
     props: {
         clientAccounts: Object,
         acc_id: Object,
+        errors: Object,
     },
     data() {
         return {
@@ -215,14 +223,14 @@ export default {
     methods: {
         update() {
             if (this.form.isDirty) {
-                // if (
-                //     this.clientAccounts.upload == null &&
-                //     this.form.upload == null
-                // ) {
-                //     alert("You need to attach the document first.");
-                // } else {
-                this.form.post("/lawyer/client-accounts/update");
-                // }
+                if (
+                    this.clientAccounts.upload == null &&
+                    this.form.upload == null
+                ) {
+                    alert("You need to attach the document first.");
+                } else {
+                    this.form.post("/lawyer/client-accounts/update");
+                }
             } else {
                 alert("You need to fill in the form first.");
             }
