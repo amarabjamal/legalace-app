@@ -32,7 +32,6 @@ class UpdateFirmAccountRequest extends FormRequest
             'document_number' => ['required', 'string', 'max:50'], // Document number is required and limited to 50 characters
             'upload' => ['nullable', 'file', 'mimes:pdf,jpg,png,doc,docx', 'max:2048'], // Optional file upload with specific formats and size limit
             'amount' => ['required', 'numeric', 'min:0'], // Amount is required and must be a positive number
-            // 'credit' => ['required', 'numeric', 'min:0'], // Amount is required and must be a positive number
             'payment_method' => ['required', 'string', 'max:50'], // Payment method is required and limited to 50 characters
             'remarks' => ['nullable', 'string', 'max:255'], // Remarks are optional and limited to 255 characters
         ];

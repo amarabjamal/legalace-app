@@ -474,6 +474,9 @@ class ClientAccountController extends Controller
             if ($filePath != null && Storage::exists($filePath)) {
                 Storage::delete($filePath);
             }
+            if ($request->fails()) {
+                return Inertia::render('Lawyer/ClientAccount/Edit', ['errors' => $request->errors()]);
+            }
 
             return back()->with('errorMessage', 'Failed to update transaction records.' . $e->getMessage());
         }
