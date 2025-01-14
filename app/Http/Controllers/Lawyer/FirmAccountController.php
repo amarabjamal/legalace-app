@@ -216,7 +216,7 @@ class FirmAccountController extends Controller
         }
     }
 
-    public function updateLama(Request $request)
+    public function updateLama1(Request $request)
     {
         $filePath = null;
 
@@ -291,10 +291,10 @@ class FirmAccountController extends Controller
                 Storage::delete($filePath);
             }
 
-            return back()->with('errorMessage', 'Failed to update invoice payment.' . $e->getMessage());
+            return back()->with('errorMessage', 'Failed to update transaction record.' . $e->getMessage());
         }
     }
-    public function update(UpdateFirmAccountRequest $request)
+    public function updateLama2(UpdateFirmAccountRequest $request)
     {
         $filePath = null;
         $input = $request->all();
@@ -317,28 +317,71 @@ class FirmAccountController extends Controller
                         $firmAccount->update($input);
                     });
                 }
-            } else {
-                $filePath = null;
+            }
+            // else {
+            //     $filePath = null;
 
-                $fileName = uniqid('TRANSACTION_') . '_' . date('Ymd') . '_' . time() . '.' . $request->file('upload')->extension();
-                $filePath = $request->file('upload')->storeAs(FirmAccount::UPLOAD_PATH, $fileName);
+            //     $fileName = uniqid('TRANSACTION_') . '_' . date('Ymd') . '_' . time() . '.' . $request->file('upload')->extension();
+            //     $filePath = $request->file('upload')->storeAs(FirmAccount::UPLOAD_PATH, $fileName);
 
-                $request->merge(['upload_filename' => $fileName]);
+            //     $request->merge(['upload_filename' => $fileName]);
 
-                if (str_contains("funds in", $request->transaction_type)) {
-                    $input['upload'] = $filePath;
-                    $input['debit'] = $request->amount;
-                    $input['credit'] = 0;
-                    DB::transaction(function () use ($input, $firmAccount) {
-                        $firmAccount->update($input);
-                    });
+            //     if (str_contains("funds in", $request->transaction_type)) {
+            //         $input['upload'] = $filePath;
+            //         $input['debit'] = $request->amount;
+            //         $input['credit'] = 0;
+            //         DB::transaction(function () use ($input, $firmAccount) {
+            //             $firmAccount->update($input);
+            //         });
+            //     } else {
+            //         $input['upload'] = $filePath;
+            //         $input['debit'] = 0;
+            //         $input['credit'] = $request->amount;
+            //         DB::transaction(function () use ($input, $firmAccount) {
+            //             $firmAccount->update($input);
+            //         });
+            //     }
+            // }
+            else {
+                // New file uploaded, process the file
+                if ($request->hasFile('upload')) {
+                    $filePath = null;
+                    $fileName = uniqid('TRANSACTION_') . '_' . date('Ymd') . '_' . time() . '.' . $request->file('upload')->extension();
+                    $filePath = $request->file('upload')->storeAs(FirmAccount::UPLOAD_PATH, $fileName);
+
+                    $request->merge(['upload_filename' => $fileName]);
+
+                    if (str_contains("funds in", $request->transaction_type)) {
+                        $input['upload'] = $filePath;
+                        $input['debit'] = $request->amount;
+                        $input['credit'] = 0;
+                        DB::transaction(function () use ($input, $firmAccount) {
+                            $firmAccount->update($input);
+                        });
+                    } else {
+                        $input['upload'] = $filePath;
+                        $input['debit'] = 0;
+                        $input['credit'] = $request->amount;
+                        DB::transaction(function () use ($input, $firmAccount) {
+                            $firmAccount->update($input);
+                        });
+                    }
                 } else {
-                    $input['upload'] = $filePath;
-                    $input['debit'] = 0;
-                    $input['credit'] = $request->amount;
-                    DB::transaction(function () use ($input, $firmAccount) {
-                        $firmAccount->update($input);
-                    });
+                    // No new file uploaded, retain the existing file path
+                    $input['upload'] = $firmAccount->upload; // Retain the existing file path
+                    if (str_contains("funds in", $request->transaction_type)) {
+                        $input['debit'] = $request->amount;
+                        $input['credit'] = 0;
+                        DB::transaction(function () use ($input, $firmAccount) {
+                            $firmAccount->update($input);
+                        });
+                    } else {
+                        $input['debit'] = 0;
+                        $input['credit'] = $request->amount;
+                        DB::transaction(function () use ($input, $firmAccount) {
+                            $firmAccount->update($input);
+                        });
+                    }
                 }
             }
             return redirect()->route('lawyer.firm-accounts.show', ['firm_account' => $request->bank_account_id])->with('successMessage', 'Successfully update the transaction.');
@@ -354,6 +397,57 @@ class FirmAccountController extends Controller
         }
     }
 
+    public function update(UpdateFirmAccountRequest $request)
+    {
+        $filePath = null;
+        $input = $request->all();
+
+        try {
+            $firmAccount = FirmAccount::findOrFail($request->id); // Find the record by ID
+
+            // Handle file upload logic
+            if ($request->hasFile('upload')) {
+                // New file uploaded: process and store the new file
+                $fileName = uniqid('TRANSACTION_') . '_' . date('Ymd') . '_' . time() . '.' . $request->file('upload')->extension();
+                $filePath = $request->file('upload')->storeAs(FirmAccount::UPLOAD_PATH, $fileName);
+
+                // Update the upload field with the new file path
+                $input['upload'] = $filePath;
+            } else {
+                // No new file uploaded: retain the existing file path from existingDocument
+                $input['upload'] = $request->existingDocument;
+            }
+
+            // Update the firm account record based on transaction type
+            if (str_contains("funds in", $request->transaction_type)) {
+                $input['debit'] = $request->amount;
+                $input['credit'] = 0;
+            } else {
+                $input['debit'] = 0;
+                $input['credit'] = $request->amount;
+            }
+
+            // Update the firm account record
+            DB::transaction(function () use ($input, $firmAccount) {
+                $firmAccount->update($input);
+            });
+
+            return redirect()->route('lawyer.firm-accounts.show', ['firm_account' => $request->bank_account_id])
+                ->with('successMessage', 'Successfully updated the transaction.');
+        } catch (\Exception $e) {
+            // Clean up the uploaded file if an error occurs
+            if ($filePath != null && Storage::exists($filePath)) {
+                Storage::delete($filePath);
+            }
+
+            // Handle validation errors
+            if ($request->fails()) {
+                return Inertia::render('Lawyer/FirmAccount/Edit', ['errors' => $request->errors()]);
+            }
+
+            return back()->with('errorMessage', 'Failed to update invoice payment: ' . $e->getMessage());
+        }
+    }
     public function detail(Request $request, $acc_number)
     {
         $filters = FacadesRequest::all(['search']);
