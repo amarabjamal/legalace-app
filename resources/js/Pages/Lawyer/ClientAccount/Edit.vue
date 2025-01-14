@@ -23,13 +23,6 @@
                             label="Date"
                             required
                         />
-                        <text-input
-                            v-model="form.description"
-                            type="description"
-                            :error="form.errors.description"
-                            label="Description"
-                            required
-                        />
                         <select-input
                             v-model="form.transaction_type"
                             :error="form.errors.transaction_type"
@@ -42,6 +35,36 @@
                             <option value="funds in">Funds In</option>
                             <option value="funds out">Funds Out</option>
                         </select-input>
+                        <div v-if="form.transaction_type == 'funds in'">
+                            <select-input
+                                v-model="form.description"
+                                :error="form.errors.description"
+                                label="Description"
+                                required
+                            >
+                                <option disabled value="">
+                                    Select Description
+                                </option>
+                                <option value="payment_received">
+                                    Deposit
+                                </option>
+                            </select-input>
+                        </div>
+                        <div v-if="form.transaction_type == 'funds out'">
+                            <select-input
+                                v-model="form.description"
+                                :error="form.errors.description"
+                                label="Description"
+                                required
+                            >
+                                <option disabled value="">
+                                    Select Description
+                                </option>
+                                <option value="payment_received">
+                                    Payment
+                                </option>
+                            </select-input>
+                        </div>
                         <text-input
                             v-model="form.document_number"
                             :error="form.errors.document_number"
@@ -192,14 +215,14 @@ export default {
     methods: {
         update() {
             if (this.form.isDirty) {
-                if (
-                    this.clientAccounts.upload == null &&
-                    this.form.upload == null
-                ) {
-                    alert("You need to attach the document first.");
-                } else {
-                    this.form.post("/lawyer/client-accounts/update");
-                }
+                // if (
+                //     this.clientAccounts.upload == null &&
+                //     this.form.upload == null
+                // ) {
+                //     alert("You need to attach the document first.");
+                // } else {
+                this.form.post("/lawyer/client-accounts/update");
+                // }
             } else {
                 alert("You need to fill in the form first.");
             }

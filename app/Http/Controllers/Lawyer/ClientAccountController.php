@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Lawyer;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\StoreClientAccountRequest;
+use App\Http\Requests\UpdateClientAccountRequest;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use App\Models\ClientAccount;
@@ -78,9 +80,10 @@ class ClientAccountController extends Controller
         ]);
     }
 
-    public function store(Request $request)
+    public function storeLama(Request $request)
     {
         $filePath = null;
+        // $filePath = "";
 
         try {
             $uniqueId = date('YmdHis') . uniqid();
@@ -187,12 +190,113 @@ class ClientAccountController extends Controller
             if (Storage::exists($filePath)) {
                 Storage::delete($filePath);
             }
+            if ($request->fails()) {
+                return Inertia::render('Lawyer/ClientAccount/Create', ['errors' => $request->errors()]);
+            }
+
+            return back()->with('errorMessage', 'Failed to add transactions.' . $e->getMessage());
+        }
+    }
+    public function store(StoreClientAccountRequest $request)
+    {
+        $filePath = null;
+        $input1 = $request->all();
+        // $input2 = $request->all();
+
+        try {
+            $uniqueId = date('YmdHis') . uniqid();
+
+            if (!$request->hasFile('upload')) {
+                if (str_contains("funds in", $request->transaction_type)) {
+                    $input1['upload'] = "";
+                    $input1['debit'] = $request->amount;
+                    $input1['credit'] = 0;
+                    DB::transaction(function () use ($input1) {
+                        ClientAccount::create($input1);
+                    });
+                } else {
+                    $input1['upload'] = "";
+                    $input1['debit'] = 0;
+                    $input1['credit'] = $request->amount;
+                    $input1['transaction_id'] = $uniqueId;
+                    DB::transaction(function () use ($input1) {
+                        ClientAccount::create($input1);
+                    });
+                    // $input2['upload'] = "";
+                    // $input2['debit'] = 0;
+                    // $input2['credit'] = $request->amount;
+                    // $input2['bank_account_id'] = 2;
+                    // $input2['transaction_type'] = 'funds in';
+                    // $input2['transaction_id'] = $uniqueId;
+                    // DB::transaction(function () use ($input2) {
+                    //     FirmAccount::create($input2);
+                    // });
+                    FirmAccount::create([
+                        'date' => $request->date,
+                        'bank_account_id' => 2,
+                        'description' => $request->description,
+                        'transaction_type' => 'funds in',
+                        'document_number' => $request->document_number,
+                        'upload' => "",
+                        'debit' => $request->amount,
+                        'credit' => 0,
+                        'payment_method' => $request->payment_method,
+                        'remarks' => $request->reference,
+                        'transaction_id' => $uniqueId,
+                        'created_by' => Auth::id(),
+                    ]);
+                }
+            } else {
+                $fileName = uniqid('TRANSACTION_') . '_' . date('Ymd') . '_' . time() . '.' . $request->file('upload')->extension();
+                $filePath = $request->file('upload')->storeAs(ClientAccount::UPLOAD_PATH, $fileName);
+
+                $request->merge(['upload_filename' => $fileName]);
+
+                if (str_contains("funds in", $request->transaction_type)) {
+                    $input1['upload'] = $filePath;
+                    $input1['debit'] = $request->amount;
+                    $input1['credit'] = 0;
+                    DB::transaction(function () use ($input1) {
+                        ClientAccount::create($input1);
+                    });
+                } else {
+                    $input1['upload'] = $filePath;
+                    $input1['debit'] = 0;
+                    $input1['credit'] = $request->amount;
+                    $input1['transaction_id'] = $uniqueId;
+                    DB::transaction(function () use ($input1) {
+                        ClientAccount::create($input1);
+                    });
+                    FirmAccount::create([
+                        'date' => $request->date,
+                        'bank_account_id' => 2,
+                        'description' => $request->description,
+                        'transaction_type' => 'funds in',
+                        'document_number' => $request->document_number,
+                        'upload' => $filePath,
+                        'debit' => $request->amount,
+                        'credit' => 0,
+                        'payment_method' => $request->payment_method,
+                        'remarks' => $request->reference,
+                        'transaction_id' => $uniqueId,
+                        'created_by' => Auth::id(),
+                    ]);
+                }
+            }
+            return redirect()->route('lawyer.client-accounts.show', ['client_account' => $request->bank_account_id])->with('successMessage', 'Successfully added new transaction.');
+        } catch (\Exception $e) {
+            if (Storage::exists($filePath)) {
+                Storage::delete($filePath);
+            }
+            if ($request->fails()) {
+                return Inertia::render('Lawyer/ClientAccount/Create', ['errors' => $request->errors()]);
+            }
 
             return back()->with('errorMessage', 'Failed to update invoice payment.' . $e->getMessage());
         }
     }
 
-    public function update(Request $request)
+    public function updateLama(Request $request)
     {
         $filePath = null;
 
@@ -292,6 +396,86 @@ class ClientAccountController extends Controller
             }
 
             return back()->with('errorMessage', 'Failed to update invoice payment.' . $e->getMessage());
+        }
+    }
+    public function update(UpdateClientAccountRequest $request)
+    {
+        $filePath = null;
+        $input1 = $request->all();
+
+        try {
+            $clientAccount = ClientAccount::findOrFail($request->id); // Find the record by ID
+            // if ($request->existingDocument != null && $request->upload == null) {
+            if ($request->upload == null) {
+                if (str_contains("funds in", $request->transaction_type)) {
+
+                    $input1['debit'] = $request->amount;
+                    $input1['credit'] = 0;
+                    DB::transaction(function () use ($input1, $clientAccount) {
+                        $clientAccount->update($input1);
+                    });
+                } else {
+                    $input1['debit'] = 0;
+                    $input1['credit'] = $request->amount;
+                    DB::transaction(function () use ($input1, $clientAccount) {
+                        $clientAccount->update($input1);
+                    });
+                    $itemFirm = FirmAccount::query()
+                        ->where('transaction_id', 'like', "{$clientAccount->transaction_id}")
+                        ->update([
+                            'date' => $request->date,
+                            'description' => $request->description,
+                            'transaction_type' => "funds in",
+                            'document_number' => $request->document_number,
+                            'debit' => $request->amount,
+                            'credit' => 0,
+                            'payment_method' => $request->payment_method,
+                            'remarks' => $request->reference,
+                        ]);
+                }
+                return redirect()->route('lawyer.client-accounts.show', ['client_account' => $request->bank_account_id])->with('successMessage', 'Successfully update the transaction.');
+            } else {
+                $fileName = uniqid('TRANSACTION_') . '_' . date('Ymd') . '_' . time() . '.' . $request->file('upload')->extension();
+                $filePath = $request->file('upload')->storeAs(ClientAccount::UPLOAD_PATH, $fileName);
+
+                $request->merge(['upload_filename' => $fileName]);
+
+                if (str_contains("funds in", $request->transaction_type)) {
+                    $input['upload'] = $filePath;
+                    $input1['debit'] = $request->amount;
+                    $input1['credit'] = 0;
+                    DB::transaction(function () use ($input1, $clientAccount) {
+                        $clientAccount->update($input1);
+                    });
+                } else {
+                    $input['upload'] = $filePath;
+                    $input1['debit'] = 0;
+                    $input1['credit'] = $request->amount;
+                    DB::transaction(function () use ($input1, $clientAccount) {
+                        $clientAccount->update($input1);
+                    });
+                    $itemFirm = FirmAccount::query()
+                        ->where('transaction_id', 'like', "{$clientAccount->transaction_id}")
+                        ->update([
+                            'date' => $request->date,
+                            'description' => $request->description,
+                            'transaction_type' => "funds in",
+                            'document_number' => $request->document_number,
+                            'debit' => $request->amount,
+                            'credit' => 0,
+                            'payment_method' => $request->payment_method,
+                            'remarks' => $request->reference,
+                        ]);
+                }
+
+                return redirect()->route('lawyer.client-accounts.show', ['client_account' => $request->bank_account_id])->with('successMessage', 'Successfully update the transaction.');
+            }
+        } catch (\Exception $e) {
+            if ($filePath != null && Storage::exists($filePath)) {
+                Storage::delete($filePath);
+            }
+
+            return back()->with('errorMessage', 'Failed to update transaction records.' . $e->getMessage());
         }
     }
 
@@ -537,9 +721,11 @@ class ClientAccountController extends Controller
 
         $bank_account_id = $clientAccount->bank_account_id;
 
-        FirmAccount::query()
-            ->where('transaction_id', '=', $clientAccount->transaction_id)
-            ->delete();
+        if ($clientAccount->transaction_id != null) {
+            FirmAccount::query()
+                ->where('transaction_id', $clientAccount->transaction_id)
+                ->delete();
+        }
 
         $clientAccount->delete();
 

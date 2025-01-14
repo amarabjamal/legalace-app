@@ -10,6 +10,7 @@ use Inertia\Inertia;
 use App\Models\FirmAccount;
 use App\Models\FirmAccountList;
 use App\Models\BankAccounts;
+use App\Models\ClientAccount;
 use App\Models\OperationalCost;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -603,6 +604,12 @@ class FirmAccountController extends Controller
         OperationalCost::query()
             ->where('transaction_id', 'like', '%' . $firmAccount->transaction_id . '%')
             ->delete();
+
+        if ($firmAccount->transaction_id != null) {
+            ClientAccount::query()
+                ->where('transaction_id', $firmAccount->transaction_id)
+                ->delete();
+        }
 
         $firmAccount->delete();
 

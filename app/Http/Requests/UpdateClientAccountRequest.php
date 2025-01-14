@@ -5,7 +5,7 @@ namespace App\Http\Requests;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Auth;
 
-class StoreFirmAccountRequest extends FormRequest
+class UpdateClientAccountRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -16,17 +16,7 @@ class StoreFirmAccountRequest extends FormRequest
     {
         return true;
     }
-    /**
-     * Prepare the data for validation.
-     *
-     * @return void
-     */
-    protected function prepareForValidation()
-    {
-        $this->merge([
-            'created_by' => auth()->id(),
-        ]);
-    }
+
     /**
      * Get the validation rules that apply to the request.
      *
@@ -42,9 +32,10 @@ class StoreFirmAccountRequest extends FormRequest
             'document_number' => ['required', 'string', 'max:50'], // Document number is required and limited to 50 characters
             'upload' => ['nullable', 'file', 'mimes:pdf,jpg,png,doc,docx', 'max:2048'], // Optional file upload with specific formats and size limit
             'amount' => ['required', 'numeric', 'min:0'], // Amount is required and must be a positive number
-            // 'credit' => ['required', 'numeric', 'min:0'], // Amount is required and must be a positive number
             'payment_method' => ['required', 'string', 'max:50'], // Payment method is required and limited to 50 characters
-            'remarks' => ['nullable', 'string', 'max:255'], // Remarks are optional and limited to 255 characters
+            'reference' => ['required', 'string', 'max:255'], // Reference is required and limited to 255 characters
+            'transaction_id' => ['nullable', 'string', 'max:255'], // Transaction ID is optional and limited to 255 characters
+            // 'created_by' => ['required', 'exists:users,id'], // Ensure the created by user exists
         ];
     }
     public function fails() {}
