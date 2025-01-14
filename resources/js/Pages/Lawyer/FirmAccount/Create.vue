@@ -72,7 +72,7 @@
                                 <option value="asset_acquisition">
                                     Asset acquisition
                                 </option>
-                                <option value="other">Other</option>
+                                <!-- <option value="other">Other</option> -->
                             </select-input>
                         </div>
 
