@@ -28,11 +28,56 @@ class DashboardController extends Controller
 
     public function indexAdmin()
     {
+        $bankAccount = DB::table(DB::raw("(
+            SELECT 
+                label,
+                opening_balance,
+                (IFNULL(SUM(debit), 0) - IFNULL(SUM(credit), 0)) + IFNULL(opening_balance, 0) AS balance,
+                IFNULL(SUM(debit), 0) AS total_debit,
+                IFNULL(SUM(credit), 0) AS total_credit
+            FROM 
+                (
+                    SELECT 
+                        'firm_account' AS type,
+                        b.bank_account_id,
+                        b.debit,
+                        b.credit,
+                        ba.label,
+                        ba.opening_balance
+                    FROM 
+                        firm_account b
+                    INNER JOIN 
+                        bank_accounts ba ON b.bank_account_id = ba.id
+        
+                    UNION ALL
+        
+                    SELECT 
+                        'client_account' AS type,
+                        b.bank_account_id,
+                        b.debit,
+                        b.credit,
+                        ba.label,
+                        ba.opening_balance
+                    FROM 
+                        client_accounts b
+                    INNER JOIN 
+                        bank_accounts ba ON b.bank_account_id = ba.id
+                ) AS subquery
+            GROUP BY 
+                label, opening_balance
+        ) AS subquery"))
+            ->paginate(4)
+            ->withQueryString();
+
+        $clientProfile = Client::query()->paginate(4);
+
         return Inertia::render('Admin/Dashboard', [
             'total_users' => User::all()->count(),
             'total_clients' => Client::all()->count(),
             'total_vouchers' => ClaimVoucher::all()->count(),
             'total_accounts' => BankAccount::all()->count(),
+            'bankAccount' => $bankAccount,
+            'clientProfile' => $clientProfile,
         ]);
     }
 

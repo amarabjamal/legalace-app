@@ -35,9 +35,6 @@ class UpdateClientRequest extends FormRequest
             'address' => ['nullable', 'string'],
             'outstanding_balance' => ['nullable', 'numeric'],
             'linked_client_account' => ['nullable'],
-            // 'id_type_id' => 'required|exists:id_types,id',
-            // 'linked_client_account' => 'nullable|exists:clients,id',
-
         ];
     }
 
