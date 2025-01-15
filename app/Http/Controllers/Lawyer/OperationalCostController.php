@@ -22,39 +22,56 @@ class OperationalCostController extends Controller
             ->select('operational_costs.*', 'bank_accounts.account_name', 'bank_accounts.bank_name', 'bank_accounts.label')
             ->rightJoin('bank_accounts', 'operational_costs.bank_account_id', '=', 'bank_accounts.id')
             ->when($request->input('search'), function ($query, $search) {
-                $query->where('name', 'like', "%{$search}%");
+                $amount = (int) $search;
+                if ($amount) {
+                    $query->where('operational_costs.amount', '>=', $amount);
+                } else {
+
+                    $query->where('operational_costs.details', 'like', "%{$search}%")
+                        ->orWhere('bank_accounts.label', 'like', "%{$search}%")
+                        ->orWhereDate('operational_costs.date', $search);
+                    // ->orWhere('operational_costs.amount', '=', $search);
+                }
             })
             ->where('is_recurring', 'like', "0")
             ->whereNotNull('operational_costs.id')
             ->paginate(10)
-            ->withQueryString();
-
-        $recurring = OperationalCost::query()
-            ->select('operational_costs.*', 'bank_accounts.account_name', 'bank_accounts.label')
-            ->rightJoin('bank_accounts', 'operational_costs.bank_account_id', '=', 'bank_accounts.id')
-            ->when($request->input('search'), function ($query, $search) {
-                $query->where('name', 'like', "%{$search}%");
-            })
-            ->where('is_recurring', 'like', "1")
-            ->whereNotNull('operational_costs.id')
-            ->paginate(10)
             ->withQueryString()
             ->through(fn($cost) => [
-                'id' => $cost->id,
                 'details' => $cost->details,
                 'amount' => $cost->amount,
-                'is_recurring' => $cost->is_recurring,
-                'recurring_period' => $cost->recurring_period,
-                'is_paid' => $cost->is_paid,
-                'label' => $cost->label,
+                'payment_method' => $cost->payment_method,
+                'document_number' => $cost->document_number,
                 'date' => $cost->date,
+                'label' => $cost->label,
             ]);
+
+        // $recurring = OperationalCost::query()
+        //     ->select('operational_costs.*', 'bank_accounts.account_name', 'bank_accounts.label')
+        //     ->rightJoin('bank_accounts', 'operational_costs.bank_account_id', '=', 'bank_accounts.id')
+        //     ->when($request->input('search'), function ($query, $search) {
+        //         $query->where('name', 'like', "%{$search}%");
+        //     })
+        //     ->where('is_recurring', 'like', "1")
+        //     ->whereNotNull('operational_costs.id')
+        //     ->paginate(10)
+        //     ->withQueryString()
+        //     ->through(fn($cost) => [
+        //         'id' => $cost->id,
+        //         'details' => $cost->details,
+        //         'amount' => $cost->amount,
+        //         'is_recurring' => $cost->is_recurring,
+        //         'recurring_period' => $cost->recurring_period,
+        //         'is_paid' => $cost->is_paid,
+        //         'label' => $cost->label,
+        //         'date' => $cost->date,
+        //     ]);
 
         $filters = $request->only(['search']);
 
         return Inertia::render('Lawyer/OperationalCost/Index', [
             'non_recurring' => $non_recurring,
-            'recurring' => $recurring,
+            // 'recurring' => $recurring,
             'filters' => $filters,
 
         ]);

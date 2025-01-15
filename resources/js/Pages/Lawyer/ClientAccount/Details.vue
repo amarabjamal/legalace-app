@@ -119,9 +119,10 @@
     </div>
 
     <div class="flex items-center justify-between mb-6">
-        <!-- <search-filter v-model="form.search" class="mr-4 w-full max-w-md" @reset="reset"></search-filter> -->
+        <search-filter v-model="form.search" class="mr-4 w-full max-w-md" @reset="reset"></search-filter>
          <!-- Spacer to replace search-filter -->
-        <div class="mr-4 w-full max-w-md"></div>
+        <!-- <div class="mr-4 w-full max-w-md"></div> -->
+        
         <div>Filter By:</div>     
         <button class="btn-primary" v-on:click="filterList(0)">
             Funds Out
@@ -222,6 +223,8 @@ import Pagination from "../../../Shared/Pagination.vue";
 import Icon from '../../../Shared/Icon';
 import { Inertia } from "@inertiajs/inertia";
 import throttle from 'lodash/throttle';
+import pickBy from "lodash/pickBy";
+import mapValues from "lodash/mapValues";
 import { ref, watch } from "vue";
 import ConfirmationModel from "../../../Shared/ConfirmationModel.vue";
 
@@ -231,13 +234,19 @@ export default {
     setup(props) {
         let searchAccount = ref(props.filters.search);
 
-        watch(searchAccount, throttle(value => {
-            
-            Inertia.get('/lawyer/client-account', { search: value }, {
-                preserveState: true,
-                replace: true,
-            });
-        }, 500));
+        watch(
+            searchAccount,
+            throttle((value) => {
+                Inertia.get(
+                    `/lawyer/client-accounts/${props.acc_id}`,
+                    { search: value },
+                    {
+                        preserveState: true,
+                        replace: true,
+                    },
+                );
+            }, 500),
+        );
 
         return { searchAccount };
     },
@@ -259,6 +268,20 @@ export default {
             selectedAcc: null,
             selectedPeriod: this.selectedPeriod || 'this_month',
         }
+    },
+    watch: {
+        form: {
+            deep: true,
+            handler: throttle(function () {
+                this.$inertia.get(
+                    `/lawyer/client-accounts/${this.acc_id}`,
+                    pickBy(this.form),
+                    {
+                        preserveState: true,
+                    },
+                );
+            }, 150),
+        },
     },
     props: {
         clientAccounts: Object,
@@ -328,6 +351,9 @@ export default {
                 preserveState: true,
                 replace: true,
             });
+        },
+        reset() {
+            this.form = mapValues(this.form, () => null);
         },
     },
 };

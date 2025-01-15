@@ -14,7 +14,12 @@
             <div class="container px-6 mx-auto grid">
                 <!-- <h4 class="my-6 text-2xl font-semibold">Non-Recurring</h4> -->
 
-                <div class="flex items-center mb-4">
+                <div class="flex items-center justify-between mb-4">
+                    <search-filter
+                        v-model="form.search"
+                        class="mr-4 w-full max-w-md"
+                        @reset="reset"
+                    ></search-filter>
                     <Link href="/lawyer/operational-cost/create">
                         <button
                             class="px-4 py-2 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-blue-800 border border-transparent rounded-lg active:bg-blue-900 hover:bg-blue-900 focus:outline-none focus:shadow-outline-blue"
@@ -122,15 +127,18 @@ import Layout from "../Shared/Layout";
 import Pagination from "../../../Shared/Pagination.vue";
 import { Inertia } from "@inertiajs/inertia";
 import throttle from "lodash/throttle";
+import pickBy from "lodash/pickBy";
+import mapValues from "lodash/mapValues";
 import { ref, watch } from "vue";
 import ConfirmationModel from "../../../Shared/ConfirmationModel.vue";
+import SearchFilter from "../../../Shared/SearchFilter";
 
 export default {
     setup(props) {
-        let searchClients = ref(props.filters.search);
+        let searchOperationalCost = ref(props.filters.search);
 
         watch(
-            searchClients,
+            searchOperationalCost,
             throttle((value) => {
                 Inertia.get(
                     "/operational-cost",
@@ -143,10 +151,13 @@ export default {
             }, 500),
         );
 
-        return { searchClients };
+        return { searchOperationalCost };
     },
     data() {
         return {
+            form: {
+                search: this.filters.search,
+            },
             page_title: "Operational Cost",
             page_subtitle: "Manage your Operational Cost",
             breadcrumbs: [
@@ -161,12 +172,26 @@ export default {
             selectedAcc: null,
         };
     },
+    watch: {
+        form: {
+            deep: true,
+            handler: throttle(function () {
+                this.$inertia.get(
+                    `/lawyer/operational-cost`,
+                    pickBy(this.form),
+                    {
+                        preserveState: true,
+                    },
+                );
+            }, 150),
+        },
+    },
     props: {
         recurring: Object,
         non_recurring: Object,
         filters: Object,
     },
-    components: { Head, Pagination, ref, ConfirmationModel },
+    components: { Head, Pagination, ref, ConfirmationModel, SearchFilter },
     layout: Layout,
     methods: {
         deleteAcc(acc) {
@@ -201,6 +226,9 @@ export default {
         },
         cancelDelete() {
             this.showDeleteModal = false;
+        },
+        reset() {
+            this.form = mapValues(this.form, () => null);
         },
     },
 };

@@ -94,6 +94,7 @@ class FirmAccountController extends Controller
         return Inertia::render('Lawyer/FirmAccount/Create', [
             'acc_number' => $acc_number,
             'bank_accounts' => $bankAccount,
+
         ]);
     }
 
@@ -528,6 +529,20 @@ class FirmAccountController extends Controller
             ->get();
 
         $firmAccounts = FirmAccount::query()
+            ->when($request->input('search'), function ($query, $search) {
+                $amount = (int) $search;
+                if ($amount) {
+                    $query->where('debit', '>=', $amount);
+                } else {
+
+                    $query->where('description', 'like', "%{$search}%")
+                        ->orWhere('transaction_type', 'like', "%{$search}%")
+                        ->orWhere('payment_method', 'like', "%{$search}%")
+                        ->orWhere('document_number', 'like', "%{$search}%")
+                        ->orWhere('remarks', 'like', "%{$search}%")
+                        ->orwhereDate('date', $search);
+                }
+            })
             ->where('bank_account_id', 'like', "%{$acc_number}%")
             ->orWhere('description', 'like', "%payment%")
             ->paginate(10)
@@ -543,6 +558,7 @@ class FirmAccountController extends Controller
                 'credit' => $acc->credit,
                 'balance' => $acc->balance,
                 'transaction_id' => $acc->transaction_id,
+                'remarks' => $acc->remarks,
             ]);
 
 

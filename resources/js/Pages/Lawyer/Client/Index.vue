@@ -88,6 +88,7 @@ lawyer/client
 </template>
 
 <script>
+import { Head } from "@inertiajs/inertia-vue3";
 import Layout from "../Shared/Layout";
 import SearchFilter from "../../../Shared/SearchFilter";
 import Icon from "../../../Shared/Icon";

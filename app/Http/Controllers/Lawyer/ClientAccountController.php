@@ -648,6 +648,19 @@ class ClientAccountController extends Controller
             ->get();
 
         $clientAccounts = ClientAccount::query()
+            ->when($request->input('search'), function ($query, $search) {
+                $amount = (int) $search;
+                if ($amount) {
+                    $query->where('debit', '>=', $amount);
+                } else {
+                    $query->where('description', 'like', "%{$search}%")
+                        ->orWhere('transaction_type', 'like', "%{$search}%")
+                        ->orWhere('payment_method', 'like', "%{$search}%")
+                        ->orWhere('document_number', 'like', "%{$search}%")
+                        ->orWhere('reference', 'like', "%{$search}%")
+                        ->orWhereDate('date', $search);
+                }
+            })
             ->where('bank_account_id', 'like', "%{$acc_number}%")
             ->paginate(10)
             ->withQueryString()
@@ -661,6 +674,7 @@ class ClientAccountController extends Controller
                 'debit' => $acc->debit,
                 'credit' => $acc->credit,
                 'balance' => $acc->balance,
+                'reference' => $acc->reference,
             ]);
 
 
