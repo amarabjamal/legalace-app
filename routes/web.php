@@ -27,6 +27,7 @@ use App\Http\Controllers\Lawyer\OperationalCostController;
 use App\Http\Controllers\Lawyer\QuotationPaymentController;
 use App\Http\Controllers\Lawyer\ReceiptController;
 use App\Http\Controllers\Lawyer\AccountingManagementController;
+use App\Http\Controllers\Lawyer\OperationalCostTypesController;
 
 /*
 |--------------------------------------------------------------------------
@@ -134,6 +135,8 @@ Route::group(['middleware' => 'auth'], function () {
         Route::post('operational-cost/update', [OperationalCostController::class, 'update']);
         Route::get('operational-cost/{id}/edit', [OperationalCostController::class, 'edit']);
         Route::resource('operational-cost', OperationalCostController::class);
+        Route::post('operational-cost-types', [OperationalCostTypesController::class, 'store'])
+            ->name('operational-cost-types.store');
 
         // BALANCE SHEET
         Route::get('accounting-management/cash', [AccountingManagementController::class, 'cash_flow']);
