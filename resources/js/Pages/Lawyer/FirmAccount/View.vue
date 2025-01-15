@@ -107,6 +107,10 @@
                 Back
             </Link>
             <Link
+                v-if="
+                    firmAccounts.transaction_id === '' ||
+                    firmAccounts.transaction_id === null
+                "
                 :href="`/lawyer/firm-accounts/${acc_id}/${firmAccounts.id}/edit`"
                 class="font-medium text-blue-600 hover:underline btn-primary"
                 >Edit</Link

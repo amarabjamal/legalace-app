@@ -66,9 +66,9 @@
         <div v-for="bank_account in bank_accounts" :key="bank_account.id"
             class="min-w-0 bg-white border border-gray-300 rounded-md overflow-hidden ease-in-out duration-300 hover:shadow-md">
             <div class="px-4 mb-2 border-b bg-gray-50 flex justify-between items-center">
-                <h4 class="py-2 text-sm uppercase font-semibold text-gray-500 w-1/2 truncate">Filter statistics:
+                <h4 class="py-2 text-sm uppercase font-semibold text-gray-500 w-1/2 truncate">In/Out Statistics:
                 </h4>
-                <select v-model="selectedPeriod" @change="filterByPeriod" class="m-1 px-4 py-2 border rounded-md hover:cursor-pointer">
+                <select v-model="selectedPeriod" @change="filterByPeriod" class="m-1 px-4 py-2 border rounded-md hover:cursor-pointer" style="appearance: none; background-image: url('data:image/svg+xml;utf8,<svg xmlns=&quot;http://www.w3.org/2000/svg&quot; width=&quot;14&quot; height=&quot;12&quot; viewBox=&quot;0 0 14 12&quot;>&lt;polyline points=&quot;1 7 7 12 13 7&quot;/&gt;&lt;/svg&gt;'); background-position: right 10px top 50%; background-repeat: no-repeat; padding-right: 20px;">
                     <option value="this_month">This Month</option>
                     <option value="this_year">Current Year</option>
                     <option value="last_month">Last Month</option>
@@ -101,6 +101,11 @@
                     </td>
                 </tr>    
             </table>
+            <div class="flex justify-center p-2">
+                <p class="py-2 text-l font-medium mt-5">
+                    Period: {{ startDate }} - {{ endDate }}
+                </p>
+            </div>
             <div class="flex space-x-2 justify-end p-2 pr-4">
                 <!-- <Link :href="`/admin/bank-accounts/${ bank_account.id }`">View</Link>
                     <Link :href="`/admin/bank-accounts/${ bank_account.id }/edit`">Edit</Link>
@@ -293,6 +298,8 @@ export default {
         funds_in: Object,
         funds_out: Object,
         selectedPeriod: String,
+        startDate: String,
+        endDate: String,
     },
     // components: { Head, Pagination, ref },
     components: { SearchFilter, Icon, Pagination, ref, ConfirmationModel },

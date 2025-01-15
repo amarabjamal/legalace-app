@@ -38,6 +38,7 @@ class OperationalCostController extends Controller
             ->paginate(10)
             ->withQueryString()
             ->through(fn($cost) => [
+                'id' => $cost->id,
                 'details' => $cost->details,
                 'amount' => $cost->amount,
                 'payment_method' => $cost->payment_method,

@@ -2,7 +2,9 @@
     <Head :title="page_title" />
 
     <page-heading :page_title="page_title" :breadcrumbs="breadcrumbs" />
-    <p>Period: {{ startDate }} - {{ endDate }}</p>
+    <p class="py-2 text-l font-semibold">
+        Period: {{ startDate }} - {{ endDate }}
+    </p>
     <div
         class="flex flex-row-reverse space-x-2 space-x-reverse items-center justify-start"
     >
@@ -13,6 +15,13 @@
             v-model="selectedPeriod"
             @change="filterByPeriod"
             class="m-1 px-4 py-2 border rounded-md hover:cursor-pointer"
+            style="
+                appearance: none;
+                background-image: url('data:image/svg+xml;utf8,<svg xmlns=&quot;http://www.w3.org/2000/svg&quot; width=&quot;14&quot; height=&quot;12&quot; viewBox=&quot;0 0 14 12&quot;>&lt;polyline points=&quot;1 7 7 12 13 7&quot;/&gt;&lt;/svg&gt;');
+                background-position: right 10px top 50%;
+                background-repeat: no-repeat;
+                padding-right: 20px;
+            "
         >
             <option value="this_year">Current Year</option>
             <option value="this_month">This Month</option>

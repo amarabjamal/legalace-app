@@ -65,7 +65,12 @@ class DashboardController extends Controller
             ->get();
 
         $caseFile = CaseFiles::query()
-            ->get();
+            ->paginate(4) // Paginate the caseFile data
+            ->withQueryString() // Preserve the query string
+            ->through(fn($caseFile) => [
+                'id' => $caseFile->id,
+                'matter' => $caseFile->matter,
+            ]);
 
 
         $firmAccounts = BankAccounts::query()
@@ -90,6 +95,49 @@ class DashboardController extends Controller
 
         // Combine both queries with unionAll
         $bankAccount = $firmAccounts->unionAll($clientAccounts)->get();
+
+
+        //for pagination
+        $bankAccount = DB::table(DB::raw("(
+                SELECT 
+                    label,
+                    opening_balance,
+                    (IFNULL(SUM(debit), 0) - IFNULL(SUM(credit), 0)) + IFNULL(opening_balance, 0) AS balance,
+                    IFNULL(SUM(debit), 0) AS total_debit,
+                    IFNULL(SUM(credit), 0) AS total_credit
+                FROM 
+                    (
+                        SELECT 
+                            'firm_account' AS type,
+                            b.bank_account_id,
+                            b.debit,
+                            b.credit,
+                            ba.label,
+                            ba.opening_balance
+                        FROM 
+                            firm_account b
+                        INNER JOIN 
+                            bank_accounts ba ON b.bank_account_id = ba.id
+            
+                        UNION ALL
+            
+                        SELECT 
+                            'client_account' AS type,
+                            b.bank_account_id,
+                            b.debit,
+                            b.credit,
+                            ba.label,
+                            ba.opening_balance
+                        FROM 
+                            client_accounts b
+                        INNER JOIN 
+                            bank_accounts ba ON b.bank_account_id = ba.id
+                    ) AS subquery
+                GROUP BY 
+                    label, opening_balance
+            ) AS subquery"))
+            ->paginate(4)
+            ->withQueryString();
 
         return Inertia::render('Lawyer/Dashboard', [
             'date' => $date,

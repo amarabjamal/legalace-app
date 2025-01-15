@@ -751,6 +751,8 @@ class ClientAccountController extends Controller
             'funds_in' => $funds_in,
             'funds_out' => $funds_out,
             'selectedPeriod' => $selectedPeriod,
+            'startDate' => $startDate->format('j F Y'),
+            'endDate' => $endDate->format('j F Y'),
         ]);
     }
 
