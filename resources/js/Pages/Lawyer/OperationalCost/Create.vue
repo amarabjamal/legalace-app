@@ -1,7 +1,7 @@
 <template>
-    <Head title="Add new operational cost" />
+    <Head :title="page_title" />
 
-    <page-heading :breadcrumbs="breadcrumbs" />
+    <page-heading :page_title="page_title" :breadcrumbs="breadcrumbs" />
 
     <div
         class="max-w-3xl bg-white rounded-md border border-gray-300 overflow-hidden"
@@ -255,7 +255,10 @@ export default {
     layout: Layout,
     data() {
         return {
+            page_title: "Add new operational cost",
+            page_subtitle: "Manage your Operational Cost",
             breadcrumbs: [
+                { link: "/lawyer/dashboard", label: "Lawyer" },
                 { link: "/lawyer/operational-cost", label: "Operational Cost" },
                 { link: null, label: "Create" },
             ],

@@ -92,12 +92,14 @@
         <div
             class="flex items-center justify-end px-8 py-4 bg-gray-50 border-t border-gray-100"
         >
-            <!-- <Link as="button" :href="`/admin/bank-accounts/${bank_account.id}/edit`" class="btn-primary">
-                Edit
-            </Link>  -->
             <Link v-on:click="goBack()" as="button" class="btn-cancel">
                 Back
             </Link>
+            <Link
+                :href="`/lawyer/operational-cost/${costs_item.id}/edit`"
+                class="font-medium text-blue-600 hover:underline btn-primary"
+                >Edit</Link
+            >
         </div>
     </div>
 </template>
@@ -137,20 +139,18 @@ export default {
                     link: "/lawyer/operational-cost",
                     label: "Operational Costs",
                 },
+                {
+                    link: null,
+                    label: this.formatString(this.costs_item.details),
+                },
                 { link: null, label: "View" },
             ],
         };
     },
     methods: {
-        // store() {
-        //     if (this.form.isDirty) {
-        //         this.form.post("/lawyer/firm-accounts");
-        //     } else {
-        //         alert("You need to fill in the form first.");
-        //     }
-        // },
         goBack() {
-            window.history.go(-1);
+            // window.history.go(-1);
+            this.$inertia.visit("/lawyer/operational-cost");
         },
         formatString(str) {
             return str

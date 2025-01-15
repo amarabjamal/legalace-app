@@ -61,12 +61,13 @@ lawyer/client
                             class="font-medium text-blue-600 hover:underline"
                             >Edit</Link
                         >
-                        <Link
-                            @click="deleteUser(user)"
+                        <button
+                            @click="showDeleteConfirmation(user)"
                             as="button"
                             class="ml-3 font-medium text-red-600 hover:underline"
-                            >Delete</Link
                         >
+                            Delete
+                        </button>
                     </td>
                 </tr>
             </tbody>
@@ -78,6 +79,11 @@ lawyer/client
         :total="clients.total"
         :from="clients.from"
         :to="clients.to"
+    />
+    <ConfirmationModel
+        :showModal="showDeleteModal"
+        @confirm="handleDelete"
+        @cancel="cancelDelete"
     />
 </template>
 
@@ -91,6 +97,7 @@ import pickBy from "lodash/pickBy";
 import mapValues from "lodash/mapValues";
 import { Inertia } from "@inertiajs/inertia";
 import { ref, watch } from "vue";
+import ConfirmationModel from "../../../Shared/ConfirmationModel.vue";
 
 export default {
     setup(props) {
@@ -117,6 +124,7 @@ export default {
         Icon,
         Pagination,
         ref,
+        ConfirmationModel,
     },
     layout: Layout,
     props: {
@@ -133,6 +141,8 @@ export default {
                 { link: "/lawyer/dashboard", label: "Lawyer" },
                 { link: null, label: "Clients" },
             ],
+            showDeleteModal: false,
+            selectedClient: null,
         };
     },
     watch: {
@@ -153,6 +163,19 @@ export default {
         },
         reset() {
             this.form = mapValues(this.form, () => null);
+        },
+        showDeleteConfirmation(client) {
+            this.selectedClient = client;
+            this.showDeleteModal = true;
+        },
+        handleDelete() {
+            if (this.selectedClient) {
+                Inertia.delete(`/lawyer/client/${this.selectedClient.id}`);
+                this.showDeleteModal = false;
+            }
+        },
+        cancelDelete() {
+            this.showDeleteModal = false;
         },
     },
 };

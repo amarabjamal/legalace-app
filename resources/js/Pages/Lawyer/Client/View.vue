@@ -72,12 +72,14 @@
         <div
             class="flex items-center justify-end px-8 py-4 bg-gray-50 border-t border-gray-100"
         >
-            <!-- <Link as="button" :href="`/admin/bank-accounts/${bank_account.id}/edit`" class="btn-primary">
-                Edit
-            </Link>  -->
             <Link v-on:click="goBack()" as="button" class="btn-cancel">
                 Back
             </Link>
+            <Link
+                :href="`/lawyer/client/${clientProfile.id}/edit`"
+                class="font-medium text-blue-600 hover:underline btn-primary"
+                >Edit</Link
+            >
         </div>
     </div>
 </template>
@@ -126,7 +128,8 @@ export default {
             }
         },
         goBack() {
-            window.history.go(-1);
+            // window.history.go(-1);
+            this.$inertia.visit("/lawyer/client");
         },
     },
 };

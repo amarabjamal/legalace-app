@@ -25,31 +25,32 @@
                             label="Date"
                             required
                         />
-                        <select-input
-                            v-model="form.details"
-                            :error="form.errors.details"
-                            label="Description"
-                            required
-                        >
-                            <option disabled value="">
-                                Select Description
-                            </option>
-                            <option value="insurance">Insurance</option>
-                            <option value="photocopy">Photocopy</option>
-                            <option value="rental">Rental</option>
-                            <option value="electric">Electric</option>
-                            <option value="membership_bar_council">
-                                Membership Bar Council
-                            </option>
-                            <option value="audit_fee">Audit Fee</option>
-                            <option value="employee_salary">
-                                Employee Salary
-                            </option>
-                            <option value="subscripton_fee">
-                                Subscription Fee
-                            </option>
-                            <option value="other">others</option>
-                        </select-input>
+                        <div class="flex flex-col">
+                            <select-input
+                                v-model="form.details"
+                                :error="form.errors.details"
+                                label="Description"
+                                required
+                            >
+                                <option disabled value="">
+                                    Select Description
+                                </option>
+                                <option
+                                    v-for="cost_type in cost_types"
+                                    :key="cost_type.id"
+                                    :value="cost_type.name"
+                                >
+                                    {{ formatString(cost_type.name) }}
+                                </option>
+                            </select-input>
+                            <a
+                                href="#"
+                                @click.prevent="showModal = true"
+                                class="text-sm text-blue-500 hover:text-blue-700 mt-2"
+                            >
+                                Add Cost Type
+                            </a>
+                        </div>
                         <select-input
                             v-model="form.account"
                             :error="form.errors.account"
@@ -212,6 +213,37 @@
             </div>
         </form>
     </div>
+    <!-- Modal for adding new cost type -->
+    <AddCostModal v-if="showModal" @close="showModal = false">
+        <template #header>
+            <h2>Add New Cost Type</h2>
+        </template>
+        <template #body>
+            <form @submit.prevent="addCostType">
+                <text-input
+                    v-model="newCostType.name"
+                    label="Name"
+                    required
+                    :error="form.errors.name"
+                />
+                <text-input
+                    v-model="newCostType.description"
+                    label="Description"
+                    :error="form.errors.description"
+                />
+                <div class="mt-4">
+                    <button type="submit" class="btn-primary">Save</button>
+                    <button
+                        type="button"
+                        class="btn-cancel"
+                        @click="showModal = false"
+                    >
+                        Cancel
+                    </button>
+                </div>
+            </form>
+        </template>
+    </AddCostModal>
 </template>
 
 <script>
@@ -223,11 +255,13 @@ import SelectInput from "../../../Shared/SelectInput";
 import DateInput from "../../../Shared/DateInput";
 import LoadingButton from "../../../Shared/LoadingButton";
 import FileInput from "../../../Shared/FileInput";
+import AddCostModal from "../../../Shared/AddCostModal.vue";
 import { Switch } from "@headlessui/vue";
 
 export default {
     props: {
         costs_item: Object,
+        cost_types: Object,
         errors: Object,
     },
     components: {
@@ -238,12 +272,18 @@ export default {
         LoadingButton,
         FileInput,
         Switch,
+        AddCostModal,
     },
     layout: Layout,
     data() {
         return {
             breadcrumbs: [
+                { link: "/lawyer/dashboard", label: "Lawyer" },
                 { link: "/lawyer/operational-cost", label: "Operational Cost" },
+                {
+                    link: null,
+                    label: this.formatString(this.costs_item.details),
+                },
                 { link: null, label: "Edit" },
             ],
             form: this.$inertia.form({
@@ -262,6 +302,11 @@ export default {
                 transaction_id: this.costs_item.transaction_id,
                 existingDocument: this.costs_item.upload,
             }),
+            showModal: false, // Control modal visibility
+            newCostType: {
+                name: "",
+                description: "",
+            },
         };
     },
     methods: {
@@ -281,6 +326,33 @@ export default {
         },
         remove() {
             this.costs_item.upload = null;
+        },
+        formatString(str) {
+            return str
+                .split("_") // Split by underscores
+                .map((word) => word.charAt(0).toUpperCase() + word.slice(1)) // Capitalize the first letter of each word
+                .join(" "); // Join the words with spaces
+        },
+        async addCostType() {
+            try {
+                const response = await this.$inertia.post(
+                    "/lawyer/operational-cost-types",
+                    this.newCostType,
+                );
+                this.showModal = false; // Close the modal
+                this.newCostType = { name: "", description: "" }; // Reset the form
+                console.log(response);
+                if (response.flash.successMessage) {
+                    console.log("Cost type added successfully!");
+                }
+                this.$inertia.reload(); // Reload the page to fetch the updated cost types
+            } catch (error) {
+                console.error("Error adding cost type:", error);
+                // Handle validation errors (if any)
+                if (error.response && error.response.data.errors) {
+                    this.form.errors = error.response.data.errors;
+                }
+            }
         },
     },
 };

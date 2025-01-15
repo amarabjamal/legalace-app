@@ -225,8 +225,12 @@ class OperationalCostController extends Controller
         $costs_item = OperationalCost::query()
             ->where('id', 'like', "%{$id}%")
             ->first();
+
+        $cost_types = OperationalCostTypes::all();
+
         return Inertia::render('Lawyer/OperationalCost/Edit', [
-            'costs_item' => $costs_item
+            'costs_item' => $costs_item,
+            'cost_types' => $cost_types
         ]);
     }
 

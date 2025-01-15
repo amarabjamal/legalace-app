@@ -95,7 +95,7 @@
                                 v-for="client in clients"
                                 :value="client.account_name"
                             >
-                                {{ client.label }}
+                                {{ client.account_name }}
                             </option>
                         </select-input>
                         <!-- <text-input
