@@ -34,8 +34,6 @@ class UpdateOperationalCostRequest extends FormRequest
             'no_of_payment' => ['nullable', 'numeric', 'min:1'],
             'upload' => ['nullable', 'file', 'mimes:pdf,jpg,png,doc,docx', 'max:2048'],
             'document_number' => ['required', 'string', 'max:50'],
-            // 'bank_account_id' => ['required', 'exists:bank_accounts,id'],
-            // 'company_id' => ['required', 'exists:companies,id'],
         ];
     }
     public function fails() {}

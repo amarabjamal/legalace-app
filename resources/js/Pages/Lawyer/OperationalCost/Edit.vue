@@ -60,8 +60,8 @@
                             <option disabled value="">
                                 Please select account type
                             </option>
-                            <option value="1">Client</option>
-                            <option value="2">Firm</option>
+                            <!-- <option value="1">Client</option> -->
+                            <option value="2">Firm Account</option>
                         </select-input>
 
                         <text-input

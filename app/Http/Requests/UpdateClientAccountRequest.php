@@ -35,7 +35,6 @@ class UpdateClientAccountRequest extends FormRequest
             'payment_method' => ['required', 'string', 'max:50'], // Payment method is required and limited to 50 characters
             'reference' => ['required', 'string', 'max:255'], // Reference is required and limited to 255 characters
             'transaction_id' => ['nullable', 'string', 'max:255'], // Transaction ID is optional and limited to 255 characters
-            // 'created_by' => ['required', 'exists:users,id'], // Ensure the created by user exists
         ];
     }
     public function fails() {}
