@@ -103,13 +103,18 @@
         <div
             class="flex items-center justify-end px-8 py-4 bg-gray-50 border-t border-gray-100"
         >
-            <!-- <Link as="button" :href="`/admin/bank-accounts/${bank_account.id}/edit`" class="btn-primary">
-                Edit
-            </Link>  -->
-            <!-- <Link v-on:click="goBack()" as="button" class="btn-cancel">
+            <Link v-on:click="goBack()" as="button" class="btn-cancel">
                 Back
-            </Link> -->
-            <button @click="goBack">Back</button>
+            </Link>
+            <Link
+                v-if="
+                    firmAccounts.transaction_id === '' ||
+                    firmAccounts.transaction_id === null
+                "
+                :href="`/lawyer/firm-accounts/${acc_id}/${firmAccounts.id}/edit`"
+                class="font-medium text-blue-600 hover:underline btn-primary"
+                >Edit</Link
+            >
         </div>
     </div>
 </template>
@@ -140,6 +145,7 @@ export default {
     props: {
         firmAccounts: Object,
         acc_id: Object,
+        bank_accounts: Object,
     },
     data() {
         return {
@@ -147,10 +153,10 @@ export default {
             breadcrumbs: [
                 { link: "/lawyer/dashboard", label: "Lawyer" },
                 { link: "/lawyer/firm-accounts", label: "Firm Account" },
-                // ...this.bank_accounts.map((account) => ({
-                //     link: `/lawyer/firm-accounts/${account.id}/detail`,
-                //     label: account.label,
-                // })),
+                ...this.bank_accounts.map((account) => ({
+                    link: `/lawyer/firm-accounts/${account.id}/detail`,
+                    label: account.label,
+                })),
                 { link: null, label: "View" },
             ],
         };
@@ -164,7 +170,15 @@ export default {
             }
         },
         goBack() {
-            window.history.go(-1);
+            // window.history.go(-1);
+            if (this.bank_accounts.length > 0) {
+                const accountId = this.bank_accounts[0].id;
+                this.$inertia.visit(
+                    `/lawyer/firm-accounts/${accountId}/detail`,
+                );
+            } else {
+                console.error("No bank accounts available.");
+            }
         },
         formatString(str) {
             return str

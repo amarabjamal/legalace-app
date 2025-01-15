@@ -31,15 +31,6 @@
                             required
                         /> -->
                         <select-input
-                            v-model="form.description"
-                            :error="form.errors.description"
-                            label="Description"
-                            required
-                        >
-                            <option value="payment_received">Payment</option>
-                            <option value="deposit">Deposit</option>
-                        </select-input>
-                        <select-input
                             v-model="form.transaction_type"
                             :error="form.errors.transaction_type"
                             label="Transaction Type"
@@ -51,6 +42,36 @@
                             <option value="funds in">Funds In</option>
                             <option value="funds out">Funds Out</option>
                         </select-input>
+                        <div v-if="form.transaction_type == 'funds in'">
+                            <select-input
+                                v-model="form.description"
+                                :error="form.errors.description"
+                                label="Description"
+                                required
+                            >
+                                <option disabled value="">
+                                    Select Description
+                                </option>
+                                <option value="payment_received">
+                                    Deposit
+                                </option>
+                            </select-input>
+                        </div>
+                        <div v-if="form.transaction_type == 'funds out'">
+                            <select-input
+                                v-model="form.description"
+                                :error="form.errors.description"
+                                label="Description"
+                                required
+                            >
+                                <option disabled value="">
+                                    Select Description
+                                </option>
+                                <option value="payment_received">
+                                    Payment
+                                </option>
+                            </select-input>
+                        </div>
                         <text-input
                             v-model="form.document_number"
                             :error="form.errors.document_number"
@@ -93,6 +114,13 @@
                             label="Reference"
                             required
                         />
+                        <!-- <div v-if="errors">
+                            <ul>
+                                <li v-for="(error, key) in errors" :key="key">
+                                    {{ error }}
+                                </li>
+                            </ul>
+                        </div> -->
                     </div>
                 </div>
             </div>
@@ -145,6 +173,8 @@ export default {
     props: {
         clientAccounts: Object,
         acc_number: Object,
+        bank_accounts: Object,
+        errors: Object,
     },
     data() {
         return {
@@ -152,6 +182,10 @@ export default {
             breadcrumbs: [
                 { link: "/lawyer/dashboard", label: "Lawyer" },
                 { link: "/lawyer/client-accounts", label: "Client Account" },
+                ...this.bank_accounts.map((account) => ({
+                    link: `/lawyer/client-accounts/${account.id}/detail`,
+                    label: account.label,
+                })),
                 { link: null, label: "Create" },
             ],
             form: this.$inertia.form({
@@ -176,7 +210,15 @@ export default {
             }
         },
         goBack() {
-            window.history.go(-1);
+            // window.history.go(-1);
+            if (this.bank_accounts.length > 0) {
+                const accountId = this.bank_accounts[0].id;
+                this.$inertia.visit(
+                    `/lawyer/client-accounts/${accountId}/detail`,
+                );
+            } else {
+                console.error("No bank accounts available.");
+            }
         },
     },
 };

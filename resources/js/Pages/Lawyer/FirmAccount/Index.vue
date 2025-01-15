@@ -88,7 +88,7 @@ import { ref, watch } from "vue";
 export default {
     data() {
         return {
-            page_title: 'Firm Accounts',
+            page_title: 'Firm Account',
             breadcrumbs: [
                 { link: '/lawyer/dashboard', label: 'Lawyer' },
                 { link: null, label: 'Firm Accounts' },

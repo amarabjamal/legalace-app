@@ -96,8 +96,8 @@
                                 v-for="client in clients"
                                 :value="client.account_name"
                             >
-                                <!-- {{ client.account_name }} -->
-                                {{ client.label }}
+                                {{ client.account_name }}
+                                <!-- {{ client.label }} -->
                             </option>
                         </select-input>
                         <!-- <text-input
@@ -106,13 +106,13 @@
                             label="Outstanding Balance"
                             required
                         /> -->
-                        <div v-if="errors">
+                        <!-- <div v-if="errors">
                             <ul>
                                 <li v-for="(error, key) in errors" :key="key">
                                     {{ error }}
                                 </li>
                             </ul>
-                        </div>
+                        </div> -->
                     </div>
                 </div>
             </div>

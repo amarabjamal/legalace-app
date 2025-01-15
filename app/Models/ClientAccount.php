@@ -30,7 +30,8 @@ class ClientAccount extends Model
         'updated_at',
     ];
 
-    public const UPLOAD_PATH = 'files/case-files/document-upload';
+    // public const UPLOAD_PATH = 'files/case-files/document-upload';
+    public const UPLOAD_PATH = 'files/accounting/client-accounts';
 
     protected $hidden = [
         'created_at',

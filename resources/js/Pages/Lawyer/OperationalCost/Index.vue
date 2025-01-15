@@ -3,106 +3,23 @@
 
     <div class="flex flex-col flex-1">
         <main class="h-full pb-16 overflow-y-auto mx-3 my-4">
-            <div class="container px-6 mx-auto grid">
-                <h2 class="my-6 text-2xl font-semibold">
-                    Operational Cost/Bills
-                </h2>
+            <Head :title="page_title" />
 
-                <!-- <h4 class="my-6 text-2xl font-semibold">Recurring</h4>
-
-                <div class="flex items-center mb-4">
-                    <Link href="/lawyer/operational-cost/create">
-                        <button
-                            class="px-4 py-2 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-blue-800 border border-transparent rounded-lg active:bg-blue-900 hover:bg-blue-900 focus:outline-none focus:shadow-outline-blue"
-                        >
-                            Add Expense
-                        </button>
-                    </Link>
-                </div>
-                <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
-                    <table class="w-full text-sm text-left text-gray-500">
-                        <thead
-                            class="text-xs text-gray-700 uppercase bg-gray-50"
-                        >
-                            <tr>
-                                <th scope="col" class="px-6 py-3">DATE</th>
-                                <th scope="col" class="px-6 py-3">
-                                    DESCRIPTION
-                                </th>
-                                <th scope="col" class="px-6 py-3">ACCOUNT</th>
-                                <th scope="col" class="px-6 py-3">AMOUNT</th>
-                                <th scope="col" class="px-6 py-3">
-                                    Balance
-                                </th>
-                                <th scope="col" class="px-6 py-3">
-                                    ACTION
-                                    <span class="sr-only">Edit</span>
-                                </th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr
-                                v-for="cost in recurring.data"
-                                :key="cost.id"
-                                class="bg-white border-b"
-                            >
-                                <th
-                                    scope="row"
-                                    class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap"
-                                >
-                                    {{ cost.date }}
-                                </th>
-                                <th
-                                    scope="row"
-                                    class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap"
-                                >
-                                    {{ cost.details }}
-                                </th>
-                                <th
-                                    scope="row"
-                                    class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap"
-                                >
-                                    {{ cost.label }}
-                                </th>
-                                <th
-                                    scope="row"
-                                    class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap"
-                                >
-                                    {{ cost.amount }}
-                                </th>
-                                <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
-                                    {{ cost.balance }}
-                                </th>
-                                <td class="px-6 py-4 text-left">
-                                    <Link
-                                        :href="`/lawyer/operational-cost/${cost.id}/edit`"
-                                        class="font-medium text-blue-600 hover:underline"
-                                        >Edit</Link
-                                    >
-                                    <Link
-                                        @click="deleteAcc(cost)"
-                                        as="button"
-                                        class="ml-3 font-medium text-red-600 hover:underline"
-                                        >Delete</Link
-                                    >
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-                Paginator
-                <Pagination
-                    :links="recurring.links"
-                    :total="recurring.total"
-                    :from="recurring.from"
-                    :to="recurring.to"
-                /> -->
-            </div>
+            <page-heading
+                :page_title="page_title"
+                :page_subtitle="page_subtitle"
+                :breadcrumbs="breadcrumbs"
+            />
 
             <div class="container px-6 mx-auto grid">
                 <!-- <h4 class="my-6 text-2xl font-semibold">Non-Recurring</h4> -->
 
-                <div class="flex items-center mb-4">
+                <div class="flex items-center justify-between mb-4">
+                    <search-filter
+                        v-model="form.search"
+                        class="mr-4 w-full max-w-md"
+                        @reset="reset"
+                    ></search-filter>
                     <Link href="/lawyer/operational-cost/create">
                         <button
                             class="px-4 py-2 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-blue-800 border border-transparent rounded-lg active:bg-blue-900 hover:bg-blue-900 focus:outline-none focus:shadow-outline-blue"
@@ -177,7 +94,7 @@
                                         >Edit</Link
                                     >
                                     <Link
-                                        @click="deleteAcc(cost)"
+                                        @click="showDeleteConfirmation(cost)"
                                         as="button"
                                         class="ml-3 font-medium text-red-600 hover:underline"
                                         >Delete</Link
@@ -194,6 +111,11 @@
                     :from="non_recurring.from"
                     :to="non_recurring.to"
                 />
+                <ConfirmationModel
+                    :showModal="showDeleteModal"
+                    @confirm="handleDelete"
+                    @cancel="cancelDelete"
+                />
             </div>
         </main>
     </div>
@@ -205,14 +127,18 @@ import Layout from "../Shared/Layout";
 import Pagination from "../../../Shared/Pagination.vue";
 import { Inertia } from "@inertiajs/inertia";
 import throttle from "lodash/throttle";
+import pickBy from "lodash/pickBy";
+import mapValues from "lodash/mapValues";
 import { ref, watch } from "vue";
+import ConfirmationModel from "../../../Shared/ConfirmationModel.vue";
+import SearchFilter from "../../../Shared/SearchFilter";
 
 export default {
     setup(props) {
-        let searchClients = ref(props.filters.search);
+        let searchOperationalCost = ref(props.filters.search);
 
         watch(
-            searchClients,
+            searchOperationalCost,
             throttle((value) => {
                 Inertia.get(
                     "/operational-cost",
@@ -225,14 +151,47 @@ export default {
             }, 500),
         );
 
-        return { searchClients };
+        return { searchOperationalCost };
+    },
+    data() {
+        return {
+            form: {
+                search: this.filters.search,
+            },
+            page_title: "Operational Cost",
+            page_subtitle: "Manage your Operational Cost",
+            breadcrumbs: [
+                { link: "/lawyer/dashboard", label: "Lawyer" },
+                { link: "/lawyer/operational-cost", label: "Operational Cost" },
+                // ...this.bank_accounts.map((account) => ({
+                //     link: `/lawyer/firm-accounts/${account.id}/detail`,
+                //     label: account.label,
+                // })),
+            ],
+            showDeleteModal: false,
+            selectedAcc: null,
+        };
+    },
+    watch: {
+        form: {
+            deep: true,
+            handler: throttle(function () {
+                this.$inertia.get(
+                    `/lawyer/operational-cost`,
+                    pickBy(this.form),
+                    {
+                        preserveState: true,
+                    },
+                );
+            }, 150),
+        },
     },
     props: {
         recurring: Object,
         non_recurring: Object,
         filters: Object,
     },
-    components: { Head, Pagination, ref },
+    components: { Head, Pagination, ref, ConfirmationModel, SearchFilter },
     layout: Layout,
     methods: {
         deleteAcc(acc) {
@@ -252,6 +211,24 @@ export default {
                 .split("_") // Split by underscores
                 .map((word) => word.charAt(0).toUpperCase() + word.slice(1)) // Capitalize the first letter of each word
                 .join(" "); // Join the words with spaces
+        },
+        showDeleteConfirmation(acc) {
+            this.selectedAcc = acc;
+            this.showDeleteModal = true;
+        },
+        handleDelete() {
+            if (this.selectedAcc) {
+                Inertia.delete(
+                    `/lawyer/operational-cost/${this.selectedAcc.id}`,
+                );
+                this.showDeleteModal = false;
+            }
+        },
+        cancelDelete() {
+            this.showDeleteModal = false;
+        },
+        reset() {
+            this.form = mapValues(this.form, () => null);
         },
     },
 };

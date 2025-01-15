@@ -65,9 +65,9 @@
         <div v-for="bank_account in bank_accounts" :key="bank_account.id"
             class="min-w-0 bg-white border border-gray-300 rounded-md overflow-hidden ease-in-out duration-300 hover:shadow-md">
             <div class="px-4 mb-2 border-b bg-gray-50 flex justify-between items-center">
-                <h4 class="py-2 text-sm uppercase font-semibold text-gray-500 w-1/2 truncate">Filter statistics:
+                <h4 class="py-2 text-sm uppercase font-semibold text-gray-500 w-1/2 truncate">In/Out Statistics:
                 </h4>
-                <select v-model="selectedPeriod" @change="filterByPeriod" class="m-1 px-4 py-2 border rounded-md hover:cursor-pointer">
+                <select v-model="selectedPeriod" @change="filterByPeriod" class="m-1 px-4 py-2 border rounded-md hover:cursor-pointer" style="appearance: none; background-image: url('data:image/svg+xml;utf8,<svg xmlns=&quot;http://www.w3.org/2000/svg&quot; width=&quot;14&quot; height=&quot;12&quot; viewBox=&quot;0 0 14 12&quot;>&lt;polyline points=&quot;1 7 7 12 13 7&quot;/&gt;&lt;/svg&gt;'); background-position: right 10px top 50%; background-repeat: no-repeat; padding-right: 20px;">
                     <option value="this_month">This Month</option>
                     <option value="this_year">Current Year</option>
                     <option value="last_month">Last Month</option>
@@ -100,6 +100,11 @@
                     </td>
                 </tr>    
             </table>
+            <div class="flex justify-center p-2">
+                <p class="py-2 text-l font-medium mt-5">
+                    Period: {{ startDate }} - {{ endDate }}
+                </p>
+            </div>
             <div class="flex space-x-2 justify-end p-2 pr-4">
                 <!-- <Link :href="`/admin/bank-accounts/${ bank_account.id }`">View</Link>
                     <Link :href="`/admin/bank-accounts/${ bank_account.id }/edit`">Edit</Link>
@@ -118,9 +123,9 @@
     </div>
 
     <div class="flex items-center justify-between mb-6">
-        <!-- <search-filter v-model="form.search" class="mr-4 w-full max-w-md" @reset="reset"></search-filter> -->
+        <search-filter v-model="form.search" class="mr-4 w-full max-w-md" @reset="reset"></search-filter>
         <!-- Spacer to replace search-filter -->
-        <div class="mr-4 w-full max-w-md"></div>
+        <!-- <div class="mr-4 w-full max-w-md"></div> -->
         
         <div>Filter By:</div>     
         <button class="btn-primary" v-on:click="filterList(0)">
@@ -225,21 +230,28 @@ import Pagination from "../../../Shared/Pagination.vue";
 import Icon from '../../../Shared/Icon';
 import { Inertia } from "@inertiajs/inertia";
 import throttle from 'lodash/throttle';
+import pickBy from "lodash/pickBy";
+import mapValues from "lodash/mapValues";
 import { ref, watch } from "vue";
 import ConfirmationModel from "../../../Shared/ConfirmationModel.vue";
-
 
 export default {
     setup(props) {
         let searchAccount = ref(props.filters.search);
 
-        watch(searchAccount, throttle(value => {
-            
-            Inertia.get('/lawyer/firm-account', { search: value }, {
-                preserveState: true,
-                replace: true,
-            });
-        }, 500));
+        watch(
+            searchAccount,
+            throttle((value) => {
+                Inertia.get(
+                    `/lawyer/firm-accounts/${props.acc_id}`,
+                    { search: value },
+                    {
+                        preserveState: true,
+                        replace: true,
+                    },
+                );
+            }, 500),
+        );
 
         return { searchAccount };
     },
@@ -248,7 +260,7 @@ export default {
             form: {
                 search: this.filters.search,
             },
-            page_title: 'Firm Account',
+            page_title: this.generatePageTitle(),
             page_subtitle: 'Manage your Firm Account',
             breadcrumbs: [
                 { link: '/lawyer/dashboard', label: 'Lawyer' },
@@ -264,6 +276,20 @@ export default {
         }
 
     },
+    watch: {
+        form: {
+            deep: true,
+            handler: throttle(function () {
+                this.$inertia.get(
+                    `/lawyer/firm-accounts/${this.acc_id}`,
+                    pickBy(this.form),
+                    {
+                        preserveState: true,
+                    },
+                );
+            }, 150),
+        },
+    },
     props: {
         firmAccounts: Object,
         filters: Object,
@@ -274,6 +300,8 @@ export default {
         funds_in: Object,
         funds_out: Object,
         selectedPeriod: String,
+        startDate: String,
+        endDate: String,
     },
     mounted() {
         console.log("Bank Accounts in mounted:", this.bank_accounts);
@@ -282,6 +310,16 @@ export default {
     components: { SearchFilter, Icon, Pagination, ref, ConfirmationModel },
     layout: Layout,
     methods: {
+        generatePageTitle() {
+        // If there are bank accounts, include their labels in the page title
+        if (this.bank_accounts.length > 0) {
+            const accountLabels = this.bank_accounts.map(account => account.label).join(', ');
+            return `${accountLabels}`;
+            // return `Firm Account - ${accountLabels}`;
+        } else {
+            return 'Firm Account'; // Fallback title if no bank accounts are available
+        }
+        },
         deleteAcc(acc) {
             if (confirm('Are you sure you want to delete this client?')) {
                 Inertia.delete(`/lawyer/firm-accounts/${acc.id}`);
@@ -325,6 +363,9 @@ export default {
                 preserveState: true,
                 replace: true,
             });
+        },
+        reset() {
+            this.form = mapValues(this.form, () => null);
         },
     },
 };

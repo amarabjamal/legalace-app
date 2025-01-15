@@ -40,7 +40,7 @@
                     </thead>
                     <tbody>
                         <tr
-                            v-for="item in bankAccount"
+                            v-for="item in bankAccount.data"
                             class="bg-white border-b"
                         >
                             <th
@@ -53,12 +53,20 @@
                                 scope="row"
                                 class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap"
                             >
-                                MYR {{ item.opening_balance.amount }}
+                                <!-- MYR {{ item.opening_balance.amount }} -->
+                                MYR {{ formatToTwoDecimal(item.balance) }}
                             </th>
                         </tr>
                     </tbody>
                 </table>
             </div>
+            <!-- Paginator -->
+            <Pagination
+                :links="bankAccount.links"
+                :total="bankAccount.total"
+                :from="bankAccount.from"
+                :to="bankAccount.to"
+            />
         </div>
         <!-- Card -->
         <div class="card flex items-center p-8 bg-white rounded-lg">
@@ -76,7 +84,7 @@
                         </thead>
                         <tbody>
                             <tr
-                                v-for="(item, index) in caseFile"
+                                v-for="(item, index) in caseFile.data"
                                 :key="index"
                                 class="bg-white border-b"
                             >
@@ -97,6 +105,12 @@
                     </table>
                 </div>
             </div>
+            <Pagination
+                :links="caseFile.links"
+                :total="caseFile.total"
+                :from="caseFile.from"
+                :to="caseFile.to"
+            />
         </div>
     </div>
 </template>
@@ -104,6 +118,8 @@
 <script>
 import Layout from "./Shared/Layout";
 import { Bar, Line, Pie } from "vue-chartjs";
+import Pagination from "../../Shared/Pagination.vue";
+
 import {
     Chart as ChartJS,
     Title,
@@ -134,6 +150,7 @@ export default {
         Bar,
         Line,
         Pie,
+        Pagination,
     },
     layout: Layout,
     props: {
@@ -218,6 +235,13 @@ export default {
                 .split("_") // Split by underscores
                 .map((word) => word.charAt(0).toUpperCase() + word.slice(1)) // Capitalize the first letter of each word
                 .join(" "); // Join the words with spaces
+        },
+        formatToTwoDecimal(num) {
+            if (num == null) {
+                return "0.00";
+            } else {
+                return num.toFixed(2); // Formats the number to 2 decimal places
+            }
         },
     },
 };

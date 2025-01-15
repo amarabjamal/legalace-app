@@ -35,7 +35,8 @@ class OperationalCost extends Model
         'updated_at'
     ];
 
-    public const UPLOAD_PATH = 'files/case-files/document-upload/operational-cost/';
+    // public const UPLOAD_PATH = 'files/case-files/document-upload/operational-cost/';
+    public const UPLOAD_PATH = 'files/accounting/operational-cost';
 
     public function recordAmount() {}
     public function getUpcomingRecurring() {}
