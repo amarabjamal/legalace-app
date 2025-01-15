@@ -7,6 +7,7 @@ use App\Http\Requests\StoreOperationalCostRequest;
 use App\Http\Requests\UpdateOperationalCostRequest;
 use App\Models\OperationalCost;
 use App\Models\FirmAccount;
+use App\Models\OperationalCostTypes;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Illuminate\Support\Facades\Auth;
@@ -99,7 +100,12 @@ class OperationalCostController extends Controller
 
     public function create()
     {
-        return Inertia::render('Lawyer/OperationalCost/Create');
+        // $cost_types = OperationalCostTypes::find($id);
+        $cost_types = OperationalCostTypes::all();
+
+        return Inertia::render('Lawyer/OperationalCost/Create', [
+            'cost_types' => $cost_types,
+        ]);
     }
 
     public function storelama(Request $request)
