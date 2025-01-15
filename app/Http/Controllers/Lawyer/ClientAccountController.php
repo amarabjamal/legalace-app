@@ -75,8 +75,26 @@ class ClientAccountController extends Controller
 
     public function create($acc_number)
     {
+        $bankAccount = BankAccounts::query()
+            ->rightJoin("client_accounts as b", 'bank_accounts.id', '=', 'b.bank_account_id')
+            ->select(
+                'bank_accounts.id',
+                'label',
+                DB::raw('(IFNULL(SUM(debit), 0) - IFNULL(SUM(credit), 0)) + IFNULL(opening_balance, 0) AS opening_balance'),
+                DB::raw('IFNULL(SUM(debit), 0) AS total_debit'),
+                DB::raw('IFNULL(SUM(credit), 0) AS total_credit'),
+                'account_name',
+                'bank_name',
+                'account_number',
+                'swift_code',
+            )
+            ->where('bank_accounts.id', 'like', "%{$acc_number}%")
+            ->groupBy('id', 'label', 'opening_balance', 'account_name', 'bank_name', 'account_number', 'swift_code')
+            ->get();
+
         return Inertia::render('Lawyer/ClientAccount/Create', [
             'acc_number' => $acc_number,
+            'bank_accounts' => $bankAccount,
         ]);
     }
 
@@ -796,9 +814,27 @@ class ClientAccountController extends Controller
             ->where('id', 'like', "%{$selected_item}%")
             ->first();;
 
+        $bankAccount = BankAccounts::query()
+            ->rightJoin("client_accounts as b", 'bank_accounts.id', '=', 'b.bank_account_id')
+            ->select(
+                'bank_accounts.id',
+                'label',
+                DB::raw('(IFNULL(SUM(debit), 0) - IFNULL(SUM(credit), 0)) + IFNULL(opening_balance, 0) AS opening_balance'),
+                DB::raw('IFNULL(SUM(debit), 0) AS total_debit'),
+                DB::raw('IFNULL(SUM(credit), 0) AS total_credit'),
+                'account_name',
+                'bank_name',
+                'account_number',
+                'swift_code',
+            )
+            ->where('bank_accounts.id', 'like', "%{$acc_number}%")
+            ->groupBy('id', 'label', 'opening_balance', 'account_name', 'bank_name', 'account_number', 'swift_code')
+            ->get();
+
         return Inertia::render('Lawyer/ClientAccount/View', [
             'clientAccounts' => $clientAccounts,
             'acc_id' => $selected_item,
+            'bank_accounts' => $bankAccount,
         ]);
     }
 
@@ -837,9 +873,27 @@ class ClientAccountController extends Controller
             ->where('id', 'like', "%{$selected_item}%")
             ->first();;
 
+        $bankAccount = BankAccounts::query()
+            ->rightJoin("client_accounts as b", 'bank_accounts.id', '=', 'b.bank_account_id')
+            ->select(
+                'bank_accounts.id',
+                'label',
+                DB::raw('(IFNULL(SUM(debit), 0) - IFNULL(SUM(credit), 0)) + IFNULL(opening_balance, 0) AS opening_balance'),
+                DB::raw('IFNULL(SUM(debit), 0) AS total_debit'),
+                DB::raw('IFNULL(SUM(credit), 0) AS total_credit'),
+                'account_name',
+                'bank_name',
+                'account_number',
+                'swift_code',
+            )
+            ->where('bank_accounts.id', 'like', "%{$acc_number}%")
+            ->groupBy('id', 'label', 'opening_balance', 'account_name', 'bank_name', 'account_number', 'swift_code')
+            ->get();
+
         return Inertia::render('Lawyer/ClientAccount/Edit', [
             'clientAccounts' => $clientAccounts,
             'acc_id' => $selected_item,
+            'bank_accounts' => $bankAccount,
         ]);
     }
 

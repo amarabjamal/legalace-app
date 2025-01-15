@@ -90,7 +90,7 @@ import { ref, watch } from "vue";
 export default {
     data() {
         return {
-            page_title: 'Client Accounts',
+            page_title: 'Client Account',
             breadcrumbs: [
                 { link: '/lawyer/dashboard', label: 'Lawyer' },
                 { link: null, label: 'Client Accounts' },

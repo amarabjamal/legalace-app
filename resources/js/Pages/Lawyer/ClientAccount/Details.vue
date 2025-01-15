@@ -246,10 +246,14 @@ export default {
             form: {
                 search: this.filters.search,
             },
-            page_title: 'Client Accounts',
+            page_title: this.generatePageTitle(),
             breadcrumbs: [
                 { link: '/lawyer/dashboard', label: 'Lawyer' },
-                { link: null, label: 'Client Accounts' },
+                { link: '/lawyer/client-accounts', label: 'Client Accounts' },
+                ...this.bank_accounts.map(account => ({
+                link: `/lawyer/client-accounts/${account.id}/detail`,
+                label: account.label,
+                })),
             ],
             showDeleteModal: false,
             selectedAcc: null,
@@ -271,6 +275,16 @@ export default {
     components: { SearchFilter, Icon, Pagination, ref, ConfirmationModel },
     layout: Layout,
     methods: {
+        generatePageTitle() {
+        // If there are bank accounts, include their labels in the page title
+        if (this.bank_accounts.length > 0) {
+            const accountLabels = this.bank_accounts.map(account => account.label).join(', ');
+            return `${accountLabels}`;
+            // return `Firm Account - ${accountLabels}`;
+        } else {
+            return 'Client Account'; // Fallback title if no bank accounts are available
+        }
+        },
         deleteAcc(acc) {
             if (confirm('Are you sure you want to delete this client?')) {
                 Inertia.delete(`/lawyer/client-accounts/${acc.id}`);

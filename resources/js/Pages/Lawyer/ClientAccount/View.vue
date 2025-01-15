@@ -137,6 +137,7 @@ export default {
     props: {
         clientAccounts: Object,
         acc_id: Object,
+        bank_accounts: Object,
     },
     data() {
         return {
@@ -144,6 +145,10 @@ export default {
             breadcrumbs: [
                 { link: "/lawyer/dashboard", label: "Lawyer" },
                 { link: "/lawyer/client-accounts", label: "Client Account" },
+                ...this.bank_accounts.map((account) => ({
+                    link: `/lawyer/client-accounts/${account.id}/detail`,
+                    label: account.label,
+                })),
                 { link: null, label: "View" },
             ],
         };
@@ -157,7 +162,15 @@ export default {
             }
         },
         goBack() {
-            window.history.go(-1);
+            // window.history.go(-1);
+            if (this.bank_accounts.length > 0) {
+                const accountId = this.bank_accounts[0].id;
+                this.$inertia.visit(
+                    `/lawyer/client-accounts/${accountId}/detail`,
+                );
+            } else {
+                console.error("No bank accounts available.");
+            }
         },
         formatString(str) {
             return str

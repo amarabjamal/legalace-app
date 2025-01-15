@@ -248,7 +248,7 @@ export default {
             form: {
                 search: this.filters.search,
             },
-            page_title: 'Firm Account',
+            page_title: this.generatePageTitle(),
             page_subtitle: 'Manage your Firm Account',
             breadcrumbs: [
                 { link: '/lawyer/dashboard', label: 'Lawyer' },
@@ -282,6 +282,16 @@ export default {
     components: { SearchFilter, Icon, Pagination, ref, ConfirmationModel },
     layout: Layout,
     methods: {
+        generatePageTitle() {
+        // If there are bank accounts, include their labels in the page title
+        if (this.bank_accounts.length > 0) {
+            const accountLabels = this.bank_accounts.map(account => account.label).join(', ');
+            return `${accountLabels}`;
+            // return `Firm Account - ${accountLabels}`;
+        } else {
+            return 'Firm Account'; // Fallback title if no bank accounts are available
+        }
+        },
         deleteAcc(acc) {
             if (confirm('Are you sure you want to delete this client?')) {
                 Inertia.delete(`/lawyer/firm-accounts/${acc.id}`);

@@ -199,6 +199,7 @@ export default {
     props: {
         firmAccounts: Object,
         acc_id: Object,
+        bank_accounts: Object,
         errors: Object,
     },
     data() {
@@ -207,6 +208,10 @@ export default {
             breadcrumbs: [
                 { link: "/lawyer/dashboard", label: "Lawyer" },
                 { link: "/lawyer/firm-accounts", label: "Firm Account" },
+                ...this.bank_accounts.map((account) => ({
+                    link: `/lawyer/firm-accounts/${account.id}/detail`,
+                    label: account.label,
+                })),
                 { link: null, label: "Edit" },
             ],
             form: this.$inertia.form({
@@ -244,7 +249,15 @@ export default {
             }
         },
         goBack() {
-            window.history.go(-1);
+            // window.history.go(-1);
+            if (this.bank_accounts.length > 0) {
+                const accountId = this.bank_accounts[0].id;
+                this.$inertia.visit(
+                    `/lawyer/firm-accounts/${accountId}/detail`,
+                );
+            } else {
+                console.error("No bank accounts available.");
+            }
         },
         remove() {
             this.firmAccounts.upload = null;
