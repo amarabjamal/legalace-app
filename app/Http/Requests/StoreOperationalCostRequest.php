@@ -37,7 +37,7 @@ class StoreOperationalCostRequest extends FormRequest
         return [
             'date' => ['required', 'date'],
             'details' => ['required', 'string', 'max:255'],
-            'amount' => ['required', 'numeric', 'min:0'],
+            'amount' => ['required', 'numeric', 'min:0.01'],
             'payment_method' => ['required', 'string', 'max:50'],
             'recurring_period' => ['nullable', 'string', 'max:50'],
             'first_payment_date' => ['nullable', 'date'],

@@ -63,9 +63,9 @@
                                 <option disabled value="">
                                     Select Description
                                 </option>
-                                <option value="operating_expense">
+                                <!-- <option value="operating_expense">
                                     Operating expense
-                                </option>
+                                </option> -->
                                 <option value="investing_loss">
                                     Investing loss
                                 </option>

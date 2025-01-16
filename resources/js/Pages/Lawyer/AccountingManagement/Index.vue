@@ -21,7 +21,10 @@
                     <td class="border-t px-6 py-4 whitespace-nowrap">
                         Balance Sheet
                     </td>
-                    <td class="border-t px-6 py-4 whitespace-nowrap"></td>
+                    <td class="border-t px-6 py-4 whitespace-nowrap">
+                        A financial statement that provides a snapshot of
+                        financial position at a specific point in time
+                    </td>
                     <td class="border-t px-6 py-4 whitespace-nowrap text-right">
                         <Link
                             class="btn-primary"
@@ -36,7 +39,11 @@
                     <td class="border-t px-6 py-4 whitespace-nowrap">
                         Cash Flow Statement
                     </td>
-                    <td class="border-t px-6 py-4 whitespace-nowrap"></td>
+                    <td class="border-t px-6 py-4 whitespace-nowrap">
+                        A financial statement that tracks the inflows and
+                        outflows of cash and cash equivalents over a specific
+                        period of time
+                    </td>
                     <td class="border-t px-6 py-4 whitespace-nowrap text-right">
                         <Link
                             class="btn-primary"
@@ -51,7 +58,10 @@
                     <td class="border-t px-6 py-4 whitespace-nowrap">
                         Profit and Loss
                     </td>
-                    <td class="border-t px-6 py-4 whitespace-nowrap"></td>
+                    <td class="border-t px-6 py-4 whitespace-nowrap">
+                        A financial statement that summarizes the revenues,
+                        expenses, and net income over a specific period of time
+                    </td>
                     <td class="border-t px-6 py-4 whitespace-nowrap text-right">
                         <Link
                             class="btn-primary"

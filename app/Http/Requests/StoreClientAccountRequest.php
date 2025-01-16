@@ -41,7 +41,7 @@ class StoreClientAccountRequest extends FormRequest
             'transaction_type' => ['required', 'string', 'in:funds in,funds out'], // Ensure the transaction type is valid
             'document_number' => ['required', 'string', 'max:50'], // Document number is required and limited to 50 characters
             'upload' => ['required', 'file', 'mimes:pdf,jpg,png,doc,docx', 'max:2048'], // Optional file upload with specific formats and size limit
-            'amount' => ['required', 'numeric', 'min:0'], // Amount is required and must be a positive number
+            'amount' => ['required', 'numeric', 'min:0.01'], // Amount is required and must be a positive number
             'payment_method' => ['required', 'string', 'max:50'], // Payment method is required and limited to 50 characters
             'reference' => ['required', 'string', 'max:255'], // Reference is required and limited to 255 characters
             'transaction_id' => ['nullable', 'string', 'max:255'], // Transaction ID is optional and limited to 255 characters

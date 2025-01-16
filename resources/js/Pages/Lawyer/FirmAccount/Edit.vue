@@ -49,7 +49,7 @@
                                 </option>
                                 <option value="financing">Financing</option>
                                 <option value="investing">Investing</option>
-                                <option value="other">Other</option>
+                                <!-- <option value="other">Other</option> -->
                             </select-input>
                         </div>
                         <div v-if="form.transaction_type == 'funds out'">
@@ -62,16 +62,16 @@
                                 <option disabled value="">
                                     Select Description
                                 </option>
-                                <option value="operating_expense">
+                                <!-- <option value="operating_expense">
                                     Operating expense
-                                </option>
+                                </option> -->
                                 <option value="investing_loss">
                                     Investing loss
                                 </option>
                                 <option value="asset_acquisition">
                                     Asset acquisition
                                 </option>
-                                <option value="other">Other</option>
+                                <!-- <option value="other">Other</option> -->
                             </select-input>
                         </div>
                         <text-input
