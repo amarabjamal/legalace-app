@@ -85,7 +85,7 @@ export default {
                 {
                     href: "/lawyer/client-accounts",
                     label: "Client Accounts",
-                    icon: "increase-decrease-line",
+                    icon: "client-account-v1",
                     isActive: this.$page.url.startsWith(
                         "/lawyer/client-accounts",
                     ),
