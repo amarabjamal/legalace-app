@@ -27,6 +27,10 @@
                             v-model="form.transaction_type"
                             :error="form.errors.transaction_type"
                             label="Transaction Type"
+                            :disabled="
+                                clientAccounts.transaction_id !== null &&
+                                clientAccounts.transaction_id !== ''
+                            "
                             required
                         >
                             <option disabled value="">

@@ -71,6 +71,8 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('/', [DashboardController::class, 'indexAdmin']);
         Route::get('/dashboard', [DashboardController::class, 'indexAdmin'])->name('dashboard');
         Route::get('/profile', [ProfileController::class, 'indexAdmin'])->name('profile');
+        Route::get('/profile/edit', [ProfileController::class, 'editAdmin'])->name('profile.edit');
+        Route::post('/profile/update', [ProfileController::class, 'updateAdmin'])->name('profile.update');
 
         // Voucher Request Approvals
         Route::post('/voucher-requests/{voucher_request}/approve', [VoucherRequestController::class, 'approveVoucher']);

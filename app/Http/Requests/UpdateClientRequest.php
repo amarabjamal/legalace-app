@@ -28,7 +28,7 @@ class UpdateClientRequest extends FormRequest
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'email'],
             'id_type_id' => ['required'],
-            'id_number' => ['required', 'string', 'max:50'],
+            'id_number' => ['required', 'string', 'min:9', 'max:13'],
             'phone_number' => ['required', 'numeric', 'digits_between:9,12'],
             'company_name' => ['required', 'string', 'max:255'],
             'company_address' => ['required', 'string', 'max:255'],
